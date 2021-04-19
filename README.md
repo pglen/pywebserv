@@ -1,6 +1,6 @@
 # wsgi webserver
 
- WSGI compliant web server, initial steps.
+## WSGI compliant web server, initial steps.
 
  Nothing useful, but first steps are successful.
 
@@ -8,17 +8,17 @@
 
  What works:
 
-   First page delivered
-   Dynamic page gen
-   Template expansion { vars } are substituted recursively
-   connected to apache2 (tests OK)
+   * First page delivered
+   * Dynamic page gen
+   * Template expansion { vars } are substituted recursively
+   * connected to apache2 (tests OK)
 
  ![screen shot for template](initial.png)
 
  On the screen shot above, the recursive substitution is shown, including
  an undefined variable; (surrounded by question marks)
 
- Variable regex: "{ .*? }"
+ Variable subst regex: "{ .*? }"  (example: { header } )
 
     Files:
         _global for url to function mapping

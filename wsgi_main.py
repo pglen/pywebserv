@@ -75,7 +75,7 @@ def application(environ, respond):
     if not type:
         type = "text/plain"
 
-    #// Dynamic content - overrides static
+    #  Dynamic content - overrides static
     callme = translate_url(fn)
     if(callme):
         respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
@@ -87,15 +87,15 @@ def application(environ, respond):
     # Static content
     elif os.path.exists(fn2):
         respond('200 OK', [('Content-Type', type + ';charset=UTF-8')])
-        #respond('200 OK', [('Content-Type', type)])
         fp = util.FileWrapper(open(fn2, "rb"))
         return fp
+    # Error content
     else:
         respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
         fn4 = mypath + os.sep + "404.html"
         if os.path.exists(fn4):
-            fp = util.FileWrapper(open(fn4, "rb"))
-            return fp
+            content = wsgi_content.got_404(config, "404.html", query)
+            return [bytes(content, "utf-8")]
         else:
             return [b"URL not found and 404 file does not exist."]
 

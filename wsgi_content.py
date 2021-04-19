@@ -36,26 +36,32 @@ def got_index(config, url, query):
 
     fn2 = config.mypath + os.sep + url
     if  os.path.exists(fn2):
-        content = "Index file exists " + url + " " +  str(query) + " " + str(myglobal)
+        #content = "Index file exists " + url + " " +  str(query) + " " + str(myglobal)
         with open(fn2, 'r') as fh:
             buff = fh.read()
 
         #print("buff", buff)
         # Recursively process
-        content = buff
-        while(True):
-            arr, cnt = parse_buffer(content)
-            content = ""
-            for aa in arr:
-                content += aa
-
-            print("recursive", cnt)
-            if cnt <= 1:
-                break
-
+        content = recursive_parse(buff)
     else:
         content = "Index file (dyn) " + url + " " +  str(query) + " " + str(myglobal)
     return content
+
+
+def got_404(config, url, query):
+
+    fn2 = config.mypath + os.sep + url
+    if  os.path.exists(fn2):
+        with open(fn2, 'r') as fh:
+            buff = fh.read()
+
+        # Recursively process
+        content = recursive_parse(buff)
+    else:
+        content = "Index file (dyn) " + url + " " +  str(query) + " " + str(myglobal)
+
+    return content
+
 
 # ------------------------------------------------------------------------
 

@@ -1,5 +1,7 @@
 ''' The simplest web server '''
 
+# These strin resources are the macro bodies
+
 mystyle = '''
 <style>
 .container {
@@ -35,21 +37,22 @@ header = '''
     <table width=100% { mycolor } border=0>
     <tr  height=36>
     <td align=left width=22%> &nbsp; &nbsp; <font size=+2> <b>Company Name</b> </font>
-            <td width=60%>
+            <td>
                 <table width=100% border=0>
                     <tr align=center>
                         <td>
                         <td> <a href=index.html>
-                            <img src=icons/go-home.png class=image title="Back to home page"> </a>
-                        <td> <img src=icons/emblem-default.png class=image title="Blah Blah / Contact us">
-                        <td> <img src=icons/emblem-unreadable.png class=image title="Blah Blah / Contact us">
-                        <td> <img src=icons/emblem-favorite.png class=image title="Favioroute">
+                            <img src=siteicons/go-home.png class=image title="Back to home page"> </a>
+                        <td> <img src=siteicons/emblem-default.png class=image title="Go forward">
+                        <td> <img src=siteicons/emblem-unreadable.png class=image title="Blah Blah">
+                        <td> <img src=siteicons/emblem-favorite.png class=image title="Favorite">
                         <td>
                 </table>
-                <td align=right>
-                <img src=icons/mail-forward.png class=image title="Mail / Contact Us">
-                <img src=icons/address-book-new.png class=image title="Address Book">
-                <img src=icons/application-exit.png title="Exit /  Log Out">
+                <td align=right width=18%>
+                Search: &nbsp; <input type=text value="" size=12>
+                <td align=right width=7% >
+                <img src=siteicons/mail-forward.png class=image title="Mail / Contact Us">
+                <img src=siteicons/application-exit.png title="Exit /  Log Out">
     </table>
 '''
 
@@ -59,7 +62,7 @@ footer = '''
     &nbsp; &nbsp; <font size=+2> <b>Contact</b> </font><b>peterglen99@gmail.com</b>
             <td> Copyright (C) Open Source
             <td align=right>
-                <img src=icons/system-log-out.png class=image title="Mail / Contact us">
+                <img src=siteicons/system-log-out.png class=image title="Log Out / Leave">
                 &nbsp; &nbsp;
 '''
 
@@ -87,7 +90,7 @@ bigtext = '''
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
+                { var } substitution is { no problem } here.                `
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.

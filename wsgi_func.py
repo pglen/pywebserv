@@ -2,11 +2,11 @@
 
 ''' The simplest web server '''
 
+# These are the functions that get called from macro expansion
+# add trailing the '_func' as convention
+
 import os, sys
 from PIL import Image
-
-# These are the functions that cgt called from macro expansion
-# add trailing _func as convention
 
 import wsgi_util
 

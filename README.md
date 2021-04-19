@@ -31,6 +31,10 @@
         _content for stuff
         _globals for static stuff and { var }  definitions
 
+History:
+
+Mon 19.Apr.2021 turnes icons to siteicons (for apache not to redirect)
+
  Open source.
 
  PG

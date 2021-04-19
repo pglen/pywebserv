@@ -41,6 +41,34 @@ class UrlMap():
                 return aa[1]
         return None
 
+def global_items(item):
+
+    #print("item", "'" + item + "'")
+    for aa in global_table:
+        if item[2:-2] == aa[0]:
+            if type(aa[1]) == str:
+                return aa[1]
+            if type(aa[1]) == type(global_items):
+                return aa[1](item)
+
+    # "??" #return str(item[2:-2]) + "??"
+    return item
+
+# Parameterized last
+
+def global_para_items(item):
+
+    #print("item", "'" + item + "'")
+
+    # rescan for parameterized
+    for aa in global_table:
+        if item[2:-2].split()[0] == aa[0]:
+            if type(aa[1]) == type(global_items):
+                return aa[1](item)
+
+    return "!!" + str(item[2:-2]) + "!!"
+
+
 # Parse buffer
 
 def parse_buffer(buff, flag, regex):

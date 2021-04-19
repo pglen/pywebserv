@@ -46,7 +46,7 @@ def application(environ, respond):
     #print("mypath", mypath)
     #printenv(environ)
 
-    print("-----------------------------------------------")
+    #print("-----------------------------------------------")
     #print("query_string", environ['QUERY_STRING'])
     #print("path_info", environ['PATH_INFO'])
 

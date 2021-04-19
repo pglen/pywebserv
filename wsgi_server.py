@@ -76,9 +76,9 @@ if __name__ == '__main__':
             fnamearr.append(fnamearr2[aa])
             statarr.append(fff)
 
-    print("fnamearr", fnamearr)
+    #print("fnamearr", fnamearr)
 
-    th = re_serve()
+    th = re_serve();  time.sleep(.1);  re_open()
     while True:
 
         flag = False
@@ -90,10 +90,12 @@ if __name__ == '__main__':
 
         if flag:
             th.terminate()
-            print("Restarted server:")
-            th = re_serve()
             time.sleep(.5)
-            re_open()
+            th.kill()
+            time.sleep(.5)
+
+            print("Restarted server:")
+            th = re_serve() ; time.sleep(.1);  re_open()
 
         time.sleep(.5)
 

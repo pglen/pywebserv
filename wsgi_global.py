@@ -2,6 +2,9 @@
 
 # These tags are global to the site
 
+import os
+from PIL import Image
+
 import wsgi_res
 
 def     deep_func(strx):
@@ -12,16 +15,29 @@ def     crap_func(strx):
 
 def     image_func(strx):
     sss = strx.split()
+
     print("Image func:", sss)
 
     if len(sss) == 4:
         return "<img src=" + sss[2] + ">"
 
     if len(sss) == 5:
-        return "<img src=" + sss[2] + " height=" + sss[3] + " >"
+        basewidth =  int(sss[3])
+        nnn = "res_" + sss[3] + "_" + str(sss[2])
+        if not os.path.exists(nnn) or os.stat(nnn).st_mtime < os.stat(sss[2]).st_mtime:
+            img = Image.open(sss[2])
+            wpercent = (basewidth / float(img.size[0]))
+            hsize = int((float(img.size[1]) * float(wpercent)))
+            img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+            print("new name", nnn)
+            img.save(nnn)
+        else:
+            print("Using cached version", nnn)
+        return "<img src=" + nnn + " >"
 
     if len(sss) == 6:
         return "<img src=" + sss[2] + " height=" + sss[3] + " width= " + sss[4] + " >"
+
 
     return "Put image heree"
 
@@ -40,10 +56,9 @@ global_table = \
     ["mystyle", wsgi_res.mystyle],
     ["spacer", "<table><tr><td></table>"],
     ["mycolor", "bgcolor=#aaffbb"],
-    ["thumbwidth", "150"],
+    ["thumbwidth", "200"],
     ["imgrow", wsgi_res.imgrow],
   ]
-
 
 def global_items(item):
 

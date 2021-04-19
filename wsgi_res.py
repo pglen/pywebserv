@@ -50,7 +50,7 @@ footer = '''
 
 imgrow = '''
   <tr><td>
-     { image beach-hd.jpeg 100 }
+     { image beach-hd.jpeg 150 }
       <td width=10>
       <td> Image description Image description
       Image description

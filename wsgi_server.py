@@ -47,27 +47,36 @@ def serve():
         #    print("Shutting down.")
         #    httpd.server_close()
 
-fnamearr = ["wsgi_main.py", "wsgi_content.py", "wsgi_util.py", "wsgi_global.py", "index.html"]
+
+    #["wsgi_main.py", "wsgi_content.py", "wsgi_util.py", "wsgi_global.py", "index.html"]
 
 def re_open():
     th = subprocess.Popen(["/usr/bin/env", "firefox", "localhost:8000"])
     return th
 
 def re_serve():
-    th = subprocess.Popen(["/usr/bin/env", "python", fnamearr[0]] + sys.argv[1:])
+    th = subprocess.Popen(["/usr/bin/env", "python", "wsgi_main.py"] + sys.argv[1:])
     return th
 
 statarr = []
+fnamearr = []
 
 if __name__ == '__main__':
 
     #path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     #port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
 
+    fnamearr2 = os.listdir()
+    #print("fnamearr2", fnamearr2)
+
     # Build reference
-    for aa in range(len(fnamearr)):
-        fff = os.stat(fnamearr[aa]).st_mtime
-        statarr.append(fff)
+    for aa in range(len(fnamearr2)):
+        if os.path.isfile(fnamearr2[aa]):
+            fff = os.stat(fnamearr2[aa]).st_mtime
+            fnamearr.append(fnamearr2[aa])
+            statarr.append(fff)
+
+    print("fnamearr", fnamearr)
 
     th = re_serve()
     while True:

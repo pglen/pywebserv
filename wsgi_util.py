@@ -43,10 +43,10 @@ class UrlMap():
 
 # Parse buffer
 
-def parse_buffer(buff, flag):
+def parse_buffer(buff, flag, regex):
 
     count = 0 ;     prog = 0
-    rrr = re.compile("{ .*? }", )
+    rrr = re.compile(regex)
     arr = []
     while(True):
         frag = re.search(rrr, buff[prog:])
@@ -66,17 +66,17 @@ def parse_buffer(buff, flag):
         prog += frag.end()
         count += 1
 
-    print("parsed", count)
+    #print("parsed", count)
     #print ("arr", arr)
     return arr, count
 
-def     recursive_parse(buff):
+def     recursive_parse(buff, regex = "{ .*? }"):
 
         # Recursively process
         cnt2 = 4; old_cnt = 0
         content = buff
         while(True):
-            arr, cnt = parse_buffer(content, False)
+            arr, cnt = parse_buffer(content, False, regex)
             content = ""
             for aa in arr:
                 content += aa
@@ -93,7 +93,7 @@ def     recursive_parse(buff):
 
         cnt3 = 4
         while(True):
-            arr, cnt = parse_buffer(content, True)
+            arr, cnt = parse_buffer(content, True, regex)
             content = ""
             for aa in arr:
                 content += aa

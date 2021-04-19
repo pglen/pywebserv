@@ -33,9 +33,9 @@ header = '''
     <tr  height=36>
     <td Align=left> &nbsp; &nbsp; <font size=+2> <b>Company name</b> </font>
             <td> &nbsp Icon Here<td align=right>
-                <img src=mail-forward.png class=image title="Mail / Contacr us">
-                <img src=address-book-new.png class=image title="Address book">
-                <img src=application-exit.png title="Exit /  Log out">
+                <img src=icons/mail-forward.png class=image title="Mail / Contacr us">
+                <img src=icons/address-book-new.png class=image title="Address book">
+                <img src=icons/application-exit.png title="Exit /  Log out">
                 &nbsp; &nbsp;
 '''
 
@@ -43,14 +43,14 @@ footer = '''
     <tr  height=48>
     <td Align=left> &nbsp; &nbsp; <font size=+2> <b>Contact</b> </font>
             <td> &nbsp Icon Here<td align=right>
-                <img src=mail-forward.png class=image title="Mail / Contacr us">
+                <img src=icons/mail-forward.png class=image title="Mail / Contacr us">
                 &nbsp; &nbsp;
 '''
 
 
 imgrow = '''
   <tr><td>
-     { image beach-hd.jpeg 150 }
+     { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
       <td width=10>
       <td> Image description Image description
       Image description
@@ -66,7 +66,7 @@ bigtext = '''
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
-                { image beach-hd.jpeg 100 100 }   <p>
+                { image beach-hd.jpeg 100 }   <p>
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.

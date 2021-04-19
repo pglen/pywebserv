@@ -12,13 +12,14 @@
    * Dynamic page gen
    * Template expansion { vars } are substituted recursively
    * connected to apache2 (tests OK)
+   * image re-size from { vars } arguments ex: { image any.png 800 }
 
  ![screen shot for template](initial.png)
 
  On the screen shot above, the recursive substitution is shown, including
  an undefined variable; (surrounded by question marks)
 
- On the screen shot below, images are added, images are dy=namically resized with the PIL
+ On the screen shot below, images are added, images are dynamically resized with the PIL
  library;
 
   ![screen shot of image processing](next_step.png)

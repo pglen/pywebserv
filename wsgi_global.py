@@ -2,10 +2,12 @@
 
 # These tags are global to the site
 
-import os
+import os, sys
 from PIL import Image
 
 import wsgi_res
+
+import wsgi_util
 
 def     deep_func(strx):
     return "Deep from code"
@@ -14,33 +16,55 @@ def     crap_func(strx):
     return "<b>crap</b> from code"
 
 def     image_func(strx):
-    sss = strx.split()
 
-    print("Image func:", sss)
+    # Expand arguments
+    ssss = wsgi_util.recursive_parse(strx,  "\[ .*? \]")
+    sss = ssss.split()
+    #print("Image func:", sss)
 
+    iname = "media/" + sss[2]
     if len(sss) == 4:
-        return "<img src=" + sss[2] + ">"
+        return "<img src=media/" + iname + ">"
 
-    if len(sss) == 5:
+    elif len(sss) == 5:
         basewidth =  int(sss[3])
-        nnn = "res_" + sss[3] + "_" + str(sss[2])
-        if not os.path.exists(nnn) or os.stat(nnn).st_mtime < os.stat(sss[2]).st_mtime:
-            img = Image.open(sss[2])
-            wpercent = (basewidth / float(img.size[0]))
-            hsize = int((float(img.size[1]) * float(wpercent)))
-            img = img.resize((basewidth, hsize), Image.ANTIALIAS)
-            print("new name", nnn)
-            img.save(nnn)
+        nnn = "media/res_" + sss[3] + "_" + str(sss[2])
+        # Note: If resized is older, we generate
+        if not os.path.exists(nnn) or os.stat(nnn).st_mtime < os.stat(iname).st_mtime:
+            try:
+                img = Image.open(iname)
+                wpercent = (basewidth / float(img.size[0]))
+                hsize = int((float(img.size[1]) * float(wpercent)))
+                img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+                #print("new name", nnn)
+                img.save(nnn)
+            except:
+                print("Image process", sys.exc_info())
         else:
-            print("Using cached version", nnn)
+            #print("Using cached version", nnn)
+            pass
         return "<img src=" + nnn + " >"
 
-    if len(sss) == 6:
-        return "<img src=" + sss[2] + " height=" + sss[3] + " width= " + sss[4] + " >"
+    elif len(sss) == 6:
+        basewidth  =  int(sss[3])
+        baseheight =  int(sss[4])
+        nnn = "media/res_" + sss[3] + "x" + sss[4] + "_" + str(sss[2])
+        # Note: If resized is older, we generate
+        try:
+            if not os.path.exists(nnn) or os.stat(nnn).st_mtime < os.stat(iname).st_mtime:
+                img = Image.open(iname)
+                img = img.resize((basewidth, baseheight), Image.ANTIALIAS)
+                #print("new name", nnn)
+                img.save(nnn)
+        except:
+            print("Image process", sss[2], sys.exc_info()[1])
+        else:
+            #print("Using cached version", nnn)
+            pass
+        #return "<img src=" + sss[2] + " height=" + sss[3] + " width= " + sss[4] + " >"
+        return "<img src=" + nnn + " >"
 
-
-    return "Put image heree"
-
+    return "<img src=media/broken.png>"
 
 global_table = \
   [
@@ -56,7 +80,8 @@ global_table = \
     ["mystyle", wsgi_res.mystyle],
     ["spacer", "<table><tr><td></table>"],
     ["mycolor", "bgcolor=#aaffbb"],
-    ["thumbwidth", "200"],
+    ["thumbwidth", "120"],
+    ["thumbheight", "80"],
     ["imgrow", wsgi_res.imgrow],
   ]
 

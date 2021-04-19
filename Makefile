@@ -14,8 +14,8 @@ init:
 git:
 	git add .
 	git commit -m auto
-	git push
-	git push local
+	#git push
+	#git push local
 
 build:
 	#obsolete, build for py3 only

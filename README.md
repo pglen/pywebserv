@@ -31,9 +31,11 @@
         _content for stuff
         _globals for static stuff and { var }  definitions
 
-History:
+###History:
 
-Mon 19.Apr.2021 turnes icons to siteicons (for apache not to redirect)
+    Fri 16.Apr.2021 Skeleton project
+    Sun 18.Apr.2021 Apache tests OK
+    Mon 19.Apr.2021 turned icons/ to siteicons/ (for apache not to redirect)
 
  Open source.
 

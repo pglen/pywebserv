@@ -18,7 +18,10 @@
  On the screen shot above, the recursive substitution is shown, including
  an undefined variable; (surrounded by question marks)
 
- ![screen shot of image processing](next_step.png)
+ On the screen shot below, images are added, images are dy=namically resized with the PIL
+ library;
+
+  ![screen shot of image processing](next_step.png)
 
   Variable subst regex: "{ .*? }"  (example: { header } )
 

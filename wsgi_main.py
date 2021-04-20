@@ -7,18 +7,20 @@ import multiprocessing
 from urllib.parse import urlparse, unquote, parse_qs
 from wsgiref import simple_server, util
 
-#mypath = ""
 urlmap = None
 
-def     translate_url(url):
+class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
+    def log_message(self, format, *args):
+        if "siteicons" not in args[0]:
+            print(args[0])
+        pass
 
-    global mypath
+# ------------------------------------------------------------------------
 
+def     translate_url(config, url):
     par = urlparse(url)
-    #print(par)
-    #url2 =  par.path[len(mypath):]
-    #print("Looking up", url)
-    return urlmap.lookup(url)
+    #print("Looking up", par)
+    return urlmap.lookup(par.path)
 
 # ------------------------------------------------------------------------
 # WSGI main entry point
@@ -32,7 +34,7 @@ def application(environ, respond):
     sys.path.append(mypath)
     os.chdir(mypath)
 
-    import wsgi_util, wsgi_content
+    import wsgi_util, wsgi_content, wsgi_style
 
     config = Config()
     config.mypath = mypath
@@ -76,7 +78,7 @@ def application(environ, respond):
         type = "text/plain"
 
     #  Dynamic content - overrides static
-    callme = translate_url(fn)
+    callme = translate_url(config, fn)
     if(callme):
         respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
         content = callme(config, fn, query)
@@ -113,7 +115,8 @@ if __name__ == '__main__':
     mypath = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
 
-    httpd = simple_server.make_server('', port, application)
+    httpd = simple_server.make_server('', port, application, handler_class=NoLoggingWSGIRequestHandler)
+
     print("Serving {} on port {}, control-C to stop".format(mypath, port))
 
     while True:

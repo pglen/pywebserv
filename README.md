@@ -42,6 +42,7 @@
                 expand macro -> present page
             else
                 call function in url table
+                function fills in everything -> present
         else
             if static file ->
                 present it

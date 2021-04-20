@@ -1,42 +1,11 @@
+#!/usr/bin/env python3
+
 ''' The simplest web server '''
-
-# These strin resources are the macro bodies
-
-mystyle = '''
-<style>
-.container {
-  position: relative;
-  width: 50%;
-}
-
-.image {
-  opacity: 1;
-  display: inline;
-  height: auto;
-  transition: .5s ease;
-  backface-visibility: hidden;
-}
-
-.container {
-  position: relative;
-  width: 50%;
-}
-
-.container:hover .image {
-  opacity: 0.3;
-}
-
-.container:hover .middle {
-  opacity: 1;
-}
-
-</style>
-'''
 
 header = '''
     <table width=100% { mycolor } border=0>
     <tr  height=36>
-    <td align=left width=22%> &nbsp; &nbsp; <font size=+2> <b>Company Name</b> </font>
+    <td align=left width=22%> &nbsp; &nbsp; <font size=+2> <b>{ Company Name }</b> </font>
             <td>
                 <table width=100% border=0>
                     <tr align=center>
@@ -133,3 +102,4 @@ bigtext = '''
                 { var } substitution is { no problem } here.
 '''
 
+# EOF

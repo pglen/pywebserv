@@ -8,6 +8,8 @@ from wsgiref import simple_server, util
 
 from wsgi_global import *
 
+# These are ENV items we want to skip for our display
+
 nogo = ("OPENHAB", "XDG_", "LS_", "SHELL", "SESSION", "QT",
              "LESS", "SSH", "GTK", "SHLVL", )
 
@@ -23,7 +25,6 @@ def printenv(environ):
 
         if "HTTP" in aa:
             print(aa, environ[aa])
-
 
 # URL to function mapping
 
@@ -59,15 +60,17 @@ def global_items(item):
 def global_para_items(item):
 
     #print("item", "'" + item + "'")
-
     # rescan for parameterized
     for aa in global_table:
         if item[2:-2].split()[0] == aa[0]:
             if type(aa[1]) == type(global_items):
                 return aa[1](item)
-
+    erritem = str(item[2:-2])
+    #print("erritem", erritem)
+    if erritem[0] == '#':
+           print("Ignoring commented:", erritem)
+           return ""
     return "!!" + str(item[2:-2]) + "!!"
-
 
 # Parse buffer
 

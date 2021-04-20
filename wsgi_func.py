@@ -16,6 +16,25 @@ def     deep_func(strx):
 def     crap_func(strx):
     return "<b>crap</b> from code"
 
+def     app_one_func(strx):
+
+    content = '''<table width=100% border=0>
+        <tr><td align=center bgcolor=#cccccc><b>APP ONE</b><br>
+        <tr><td>code comes here
+        </table>
+        '''
+    return content
+
+def     app_two_func(strx):
+
+    content = '''<table width=100% border=0>
+        <tr><td align=center bgcolor=#cccccc><b>APP TWO</b><br>
+        <tr><td>code comes here
+        </table>
+        '''
+    return content
+
+
 def     image_func(strx):
 
     # Expand arguments

@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
+
 '''
-Small wsgiref based web server. Takes a path to serve from and an
-optional port number (defaults to 8000), then tries to serve files.
-Mime types are guessed from the file names, 404 errors are raised
-if the file is not found. Used for the make serve target in Doc.
+    Small wsgiref based web server. Takes a path to serve from and an
+    optional port number (defaults to 8000), then tries to serve files.
+
+    Mime types are guessed from the file names, 404 errors are raised
+    if the file is not found. Used for the make serve target in Doc.
+
+    Restarts if any of the files in current dir changed
+
 '''
-import sys
-import os
-import mimetypes
-import time
-import subprocess
+
+import sys, os, time
+import mimetypes, subprocess
+
 from wsgiref import simple_server, util
 
 def app(environ, respond):
@@ -79,8 +83,8 @@ if __name__ == '__main__':
     #print("fnamearr", fnamearr)
 
     th = re_serve();  time.sleep(.1);  re_open()
-    while True:
 
+    while True:
         flag = False
         for aa in range(len(fnamearr)):
             stat = os.stat(fnamearr[aa])

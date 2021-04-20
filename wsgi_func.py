@@ -5,10 +5,12 @@
 # These are the functions that get called from macro expansion
 # add trailing the '_func' as convention
 
-import os, sys
+import os, sys, random, datetime
+
 from PIL import Image
 
 import wsgi_util
+import wsgi_style
 
 def     deep_func(strx):
     return "Deep from code"
@@ -20,18 +22,40 @@ def     app_one_func(strx):
 
     content = '''<table width=100% border=0>
         <tr><td align=center bgcolor=#cccccc><b>APP ONE</b><br>
-        <tr><td>code comes here
+        <tr><td>
+        <tr><td>code for app 1 comes here
+        <tr><td>code for app 1 comes here
+        <tr><td>code for app 1 comes here
+        <tr><td>code for app 1 comes here
+        <tr><td>code for app 1 comes here
+        <tr><td>
         </table>
         '''
     return content
 
 def     app_two_func(strx):
 
-    content = '''<table width=100% border=0>
-        <tr><td align=center bgcolor=#cccccc><b>APP TWO</b><br>
-        <tr><td>code comes here
-        </table>
-        '''
+    content = '''<table width=100% border=1>
+        <tr><td align=center bgcolor=#cccccc colspan=7><b>APP TWO (Calendar?)</b><br>
+    '''
+    #        <tr><td>code for app 2 comes here
+
+    dt = datetime.datetime.now()
+    anchor = dt.day // 7;
+    print("dt", dt.weekday(), dt.day, anchor)
+    content += "<tr><td colspan=5>"
+    for aa in range(7):
+        content += "<tr>"
+        for bb in range(5):
+            content += "<td> <font size=-1>" + str(aa*7 + bb + 1)
+            if random.randint(0, 255) % 4 == 0:
+                content += "*"
+            else:
+                content += "&nbsp;"
+
+
+    content += "</table>"
+
     return content
 
 

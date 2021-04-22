@@ -1,7 +1,7 @@
  { mystyle }
     { header }
     { spacer }
-    <table width=100%  cellspacing=2 cellpadding=0>
+    <table width=100%  cellspacing=2 cellpadding=0 border=0>
         <tr><td bgcolor=#eeeeee width=15% valign=top>
         <table width=100% border=0>
             <tr><td align=center bgcolor=#cccccc colspan=2 height=48>
@@ -28,40 +28,35 @@
             This is the index file. { crap }
         </table>
         <br>
-
          <td valign=top>
-         <table width=100%>
+         <table width=100% border=0>
             <td align=center>
             <font size=+2><b>{ header2 } </b></font>
-        </table>
             <table width=100% border=0>
-            { imgrow }
-            { imgrow }
-            { imgrow }
-            { imgrow }
-            { imgrow }
-            { imgrow }
-            { imgrow }
-            { imgrow }
-            <br>
-            { #xbigtext }
+                <tr valign=top>
+                { article } { article } { article2 } { article }
+                { article }
+             </table>
+            <table width=100% border=0>
+                <tr valign=top>
+                { article } { article } { article } { article2 }
+                { article }
+             </table>
 
-            <tr align=center>
-            <td bgcolor=#eeeeee colspan=3>
-            <table width=100% border=0>
+             <tr align=center>
+             <table width=100%>
+             <td bgcolor=#eeeeee colspan=1>
                 <tr align=center>
                 <td align=right>
-                &nbsp <img src=siteicons/media-skip-backward.png title="Backward Front">
-                &nbsp <img src=siteicons/media-seek-backward.png title=Backward>
-                <td width=20%>
-                &nbsp; Navigation &nbsp;
-                <td align=left>
-                &nbsp <img src=siteicons/media-seek-forward.png title=Forward>
-                &nbsp <img src=siteicons/media-skip-forward.png title="Forward Front">
-                </table>
+                    &nbsp <img src=siteicons/media-skip-backward.png title="Backward Front">
+                    &nbsp <img src=siteicons/media-seek-backward.png title=Backward>
+                    <td width=20%>
+                    &nbsp; Navigation &nbsp;
+                    <td align=left>
+                    &nbsp <img src=siteicons/media-seek-forward.png title=Forward>
+                    &nbsp <img src=siteicons/media-skip-forward.png title="Forward Front">
             </table>
-
-        <td bgcolor=#eeeeee width=15% valign=top>
+         <td bgcolor=#eeeeee width=15% valign=top>
             <table border=0 width=100% cellpadding=3>
                 <tr><td bgcolor=#cccccc height=36 align=center>
                     <font size=+1> Right Side
@@ -73,9 +68,10 @@
                     last column, maybe ads
                     last column, maybe ads
                     { deep }<br>
-                    { app_one } { app2 }
+                    { app_one } <p>
+                    { app2 } <p>
+                    { app3 }
             </table>
-
       <tr><td>
       <tr><td>
       <tr><td>

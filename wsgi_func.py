@@ -33,29 +33,44 @@ def     app_one_func(strx):
         '''
     return content
 
+# ------------------------------------------------------------------------
+# Faugh calendar
+
 def     app_two_func(strx):
 
-    content = '''<table width=100% border=1>
-        <tr><td align=center bgcolor=#cccccc colspan=7><b>APP TWO (Calendar?)</b><br>
-    '''
-    #        <tr><td>code for app 2 comes here
-
-    dt = datetime.datetime.now()
-    anchor = dt.day // 7;
-    print("dt", dt.weekday(), dt.day, anchor)
-    content += "<tr><td colspan=5>"
-    for aa in range(7):
+    try:
+        content = '''<table width=100% border=1>
+            <tr><td align=center bgcolor=#cccccc colspan=7><b>APP TWO (Calendar?)</b><br>
+        '''
+        #        <tr><td>code for app 2 comes here
+        dt = datetime.datetime.now()
+        anchor = dt.day % 7;
+        mon = anchor - dt.weekday()
+        #print("dt", dt.weekday(), dt.day, mon, anchor)
+        content += "<tr><td colspan=5>"
+        cnt = 0; cnt2 = 0;
+        wday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         content += "<tr>"
-        for bb in range(5):
-            content += "<td> <font size=-1>" + str(aa*7 + bb + 1)
-            if random.randint(0, 255) % 4 == 0:
-                content += "*"
-            else:
-                content += "&nbsp;"
+        for cc in range(7):
+            content += "<td> <font size=-1>" + wday[cc]
+        for aa in range(5):
+            content += "<tr>"
+            for bb in range(7):
+                #aa*7 + bb + 1
+                cnt += 1
+                if cnt > mon:
+                    content += "<td> <font size=-1>" + str(cnt2+1)
+                    cnt2 += 1
+                    if random.randint(0, 255) % 4 == 0:
+                        content += "*"
+                    else:
+                        content += "&nbsp;"
+                else:
+                    content += "<td> <font size=-1>" + "&nbsp;"
 
-
-    content += "</table>"
-
+        content += "</table>"
+    except:
+        print("Exception on two", sys.exc_info())
     return content
 
 
@@ -110,3 +125,4 @@ def     image_func(strx):
 
     return "<img src=media/broken.png>"
 
+# EOF

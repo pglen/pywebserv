@@ -6,7 +6,11 @@ import sys, os, mimetypes, time, re
 import multiprocessing
 from wsgiref import simple_server, util
 
-from wsgi_global import *
+try:
+    from wsgi_global import *
+except:
+    print("Cannot import", sys.exc_info())
+    pass
 
 # These are ENV items we want to skip for our display
 
@@ -26,21 +30,6 @@ def printenv(environ):
         if "HTTP" in aa:
             print(aa, environ[aa])
 
-# URL to function mapping
-
-class UrlMap():
-
-    def __init__(self):
-        self.urls = []
-
-    def add(self, url, func):
-        self.urls.append((url, func))
-
-    def lookup(self, url):
-        for aa in self.urls:
-            if aa[0] == url:
-                return aa[1]
-        return None
 
 def global_items(item):
 
@@ -50,7 +39,11 @@ def global_items(item):
             if type(aa[1]) == str:
                 return aa[1]
             if type(aa[1]) == type(global_items):
-                return aa[1](item)
+                try:
+                    cccc = aa[1](item)
+                except:
+                    print(sys.exc_info())
+                return cccc
 
     # "??" #return str(item[2:-2]) + "??"
     return item
@@ -63,13 +56,17 @@ def global_para_items(item):
     # rescan for parameterized
     for aa in global_table:
         if item[2:-2].split()[0] == aa[0]:
-            if type(aa[1]) == type(global_items):
-                return aa[1](item)
+            if type(aa[1]) == type(global_para_items):
+                try:
+                    cccc = aa[1](item)
+                except:
+                    print(sys.exc_info())
+                return cccc
+
     erritem = str(item[2:-2])
-    #print("erritem", erritem)
     if erritem[0] == '#':
-           print("Ignoring commented:", erritem)
-           return ""
+        #print("Ignoring commented:", erritem)
+        return ""
     return "!!" + str(item[2:-2]) + "!!"
 
 # Parse buffer

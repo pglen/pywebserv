@@ -10,25 +10,13 @@ from wsgiref import simple_server, util
 
 myglobal = 1234
 
-from wsgi_global import *
-from wsgi_util import *
+import wsgi_util
 
 local_table = [
                 ["crap", "Just a crappy message"],
               ]
 
 # No tag found, search local items
-#    for aa in local_table:
-#        if item[2:-2] == aa[0]:
-#            return aa[1]
-
-def got_aa(config, url, query):
-    content = "AA file " + url + str(query) + " " + str(myglobal)
-    return content
-
-def got_bb(config, url, query):
-    content = "bb file " + url + str(query) + " " + str(myglobal)
-    return content
 
 def got_index(config, url, query):
 
@@ -39,14 +27,12 @@ def got_index(config, url, query):
         #content = "Index file exists " + url + " " +  str(query) + " " + str(myglobal)
         with open(fn2, 'r') as fh:
             buff = fh.read()
-
         #print("buff", buff)
         # Recursively process
-        content = recursive_parse(buff)
+        content = wsgi_util.recursive_parse(buff)
     else:
         content = "Index file (dyn) " + url + " " +  str(query) + " " + str(myglobal)
     return content
-
 
 def got_404(config, url, query):
 
@@ -54,33 +40,25 @@ def got_404(config, url, query):
     if  os.path.exists(fn2):
         with open(fn2, 'r') as fh:
             buff = fh.read()
-
         # Recursively process
-        content = recursive_parse(buff)
+        content = wsgi_util.recursive_parse(buff)
     else:
         content = "Index file (dyn) " + url + " " +  str(query) + " " + str(myglobal)
 
     return content
 
+def got_500(config, url, query):
 
-# ------------------------------------------------------------------------
+    fn2 = config.mypath + os.sep + url
+    if  os.path.exists(fn2):
+        with open(fn2, 'r') as fh:
+            buff = fh.read()
+        # Recursively process
+        content = wsgi_util.recursive_parse(buff)
+    else:
+        content = "Index file (dyn) " + url + " " +  str(query) + " " + str(myglobal)
+    return content
 
-def     generate_content(url, query):
-
-    print("Request:",  url)
-    translate_url(url)
-    content = "hello world, url="  + url
-    return [bytes(content, "utf-8")]
-
-# ------------------------------------------------------------------------
-# Add functions to URL map
-# One may override any file; in that case the values are filled in
-
-def reg_all(urlmap):
-
-    urlmap.add("/aa", got_aa)
-    urlmap.add("/bb", got_bb)
-    urlmap.add("/index.html", got_index)
 
 # EOF
 

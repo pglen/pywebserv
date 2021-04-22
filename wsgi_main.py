@@ -7,41 +7,45 @@ import multiprocessing
 from urllib.parse import urlparse, unquote, parse_qs
 from wsgiref import simple_server, util
 
-urlmap = None
+#urlmap = None
+config = None
 
 class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
     def log_message(self, format, *args):
-        if "siteicons" not in args[0]:
+        # Do just a little bit of logging
+        if "siteicons" not in args[0] and "media" not in args[0]:
             print(args[0])
         pass
 
 # ------------------------------------------------------------------------
 
-def     translate_url(config, url):
+def     translate_url(config, url, urlmap):
     par = urlparse(url)
-    #print("Looking up", par)
-    return urlmap.lookup(par.path)
+    #print("Looking up", par.path)
+    got = urlmap.lookup(par.path)
+    return got
+
+def mod_callb():
+    print("mod_callb")
 
 # ------------------------------------------------------------------------
 # WSGI main entry point
 
 def application(environ, respond):
 
-    global urlmap, mypath, query, config
+    global mypath, query, config
 
     # Make sure we are landing here
     mypath = os.path.dirname(os.path.realpath(__file__));
     sys.path.append(mypath)
     os.chdir(mypath)
 
-    import wsgi_util, wsgi_content, wsgi_style
+    import wsgi_util, wsgi_content, wsgi_style, wsgi_global
+
+    wsgi_global.add_one_url("/index.html", wsgi_content.got_index)
 
     config = Config()
     config.mypath = mypath
-
-    # URL to function table
-    urlmap =  wsgi_util.UrlMap()
-    wsgi_content.reg_all(urlmap)
 
     #print("pwd", os.getcwd());
     #print("Starting in pwd", os.getcwd())
@@ -70,20 +74,31 @@ def application(environ, respond):
             if splitx[aa] != os.sep:
                 fn += os.sep + splitx[aa]
 
-    #print("table", urlmap.urls)
-
     fn2 = mypath + os.sep + fn
     type = mimetypes.guess_type(fn2)[0]
     if not type:
         type = "text/plain"
 
+    #print(fn2)
+
     #  Dynamic content - overrides static
-    callme = translate_url(config, fn)
+    callme = translate_url(config, fn, wsgi_global.urlmap)
     if(callme):
+        content = ""
+        try:
+            content = callme(config, fn, query)
+        except:
+            print("exc from translate url", sys.exc_info())
+            respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
+
+            fn5 = mypath + os.sep + "500.html"
+            if os.path.exists(fn5):
+                content = wsgi_content.got_500(config, "500.html", query)
+            else:
+                content = "Empty results from page assembly."
+            return [bytes(content, "utf-8")]
+
         respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
-        content = callme(config, fn, query)
-        if not content:
-            content = "Empty results from page assembly."
         return [bytes(content, "utf-8")]
 
     # Static content

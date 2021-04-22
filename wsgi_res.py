@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 
 ''' The simplest web server '''
 
@@ -35,7 +35,6 @@ footer = '''
                 &nbsp; &nbsp;
 '''
 
-
 imgrow = '''
   <tr><td>
      { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
@@ -43,6 +42,56 @@ imgrow = '''
       <td> Image description Image description3
       Image description
       Image description Image description Image description Image description Image description
+'''
+
+article = '''
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, longer one
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+'''
+
+article2 = '''
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, longer one
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+                Article / Image description detail
+                Article / Image description detail
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
 '''
 
 bigtext = '''

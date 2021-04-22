@@ -62,8 +62,8 @@ def re_serve():
     th = subprocess.Popen(["/usr/bin/env", "python", "wsgi_main.py"] + sys.argv[1:])
     return th
 
-statarr = []
 fnamearr = []
+statarr = []
 
 if __name__ == '__main__':
 
@@ -78,6 +78,16 @@ if __name__ == '__main__':
         if os.path.isfile(fnamearr2[aa]):
             fff = os.stat(fnamearr2[aa]).st_mtime
             fnamearr.append(fnamearr2[aa])
+            statarr.append(fff)
+
+    ddd = "projects"
+    fnamearr3 = os.listdir(ddd)
+    #print("fnamearr3", fnamearr3)
+    for aa in range(len(fnamearr3)):
+        aaa = ddd + os.sep + fnamearr3[aa]
+        if os.path.isfile(aaa):
+            fff = os.stat(aaa).st_mtime
+            fnamearr.append(aaa)
             statarr.append(fff)
 
     #print("fnamearr", fnamearr)

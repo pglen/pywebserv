@@ -62,8 +62,6 @@ article = '''
                 Article / Image description detail <br>
                 Article / Image description detail
                 Article / Image description detail
-                Article / Image description detail
-                Article / Image description detail
             </table>
         </table>
 '''
@@ -84,10 +82,6 @@ article2 = '''
                 <tr><td colspan=2> Article Title
                 <tr><td colspan=2 style="text-alignment:justify"> Image description3
                 Article / Image description detail <br>
-                Article / Image description detail
-                Article / Image description detail
-                Article / Image description detail
-                Article / Image description detail
                 Article / Image description detail
                 Article / Image description detail
             </table>

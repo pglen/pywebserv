@@ -13,7 +13,7 @@ from wsgi_func  import *
 # A list of variables and strings / functions
 
 global_table = [
-    ["header2", " <font size=+2>Sub Header here</font>"],
+    ["header2", header2],
     ["var", "<font size=+1>variable { deep } </font>"],
     ["no problem", "recursive expansion is not even a <b>little</b> problem ... "],
     ["spacer", "<table><tr><td></table>"],

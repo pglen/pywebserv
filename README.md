@@ -39,6 +39,11 @@
         _content for stuff
         _globals for static stuff and { var }  definitions
 
+   Directories:
+        projects for application projects
+        siteicons for icons
+        media for image content
+
  Flow of presenting:
 
     url lookup in main ->

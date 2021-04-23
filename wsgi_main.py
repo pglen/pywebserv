@@ -7,7 +7,6 @@ import multiprocessing
 from urllib.parse import urlparse, unquote, parse_qs
 from wsgiref import simple_server, util
 
-#urlmap = None
 config = None
 
 class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
@@ -20,13 +19,10 @@ class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
 # ------------------------------------------------------------------------
 
 def     translate_url(config, url, urlmap):
+    #print("Looking up", url)
     par = urlparse(url)
-    #print("Looking up", par.path)
     got = urlmap.lookup(par.path)
     return got
-
-def mod_callb():
-    print("mod_callb")
 
 # ------------------------------------------------------------------------
 # WSGI main entry point
@@ -49,15 +45,32 @@ def application(environ, respond):
 
     #print("pwd", os.getcwd());
     #print("Starting in pwd", os.getcwd())
-    #print("mypath", mypath)
-    #printenv(environ)
+
+    #'''print("mypath", mypath)
 
     #print("-----------------------------------------------")
     #print("query_string", environ['QUERY_STRING'])
     #print("path_info", environ['PATH_INFO'])
 
     query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
-    #print("query", query)
+    if(query):
+        print("query", query)
+
+    if "POST" in environ['REQUEST_METHOD']:
+        try:
+            content_length = int(environ['CONTENT_LENGTH']) # <--- Gets the size of data
+            print("content_length", content_length)
+            print(environ['wsgi.version'])
+            sub = environ['wsgi.input'].read(content_length)
+            print("sub", sub)
+
+            #post_data = environ[sys.stdin.read(10) # <--- Gets the data itself
+            #print("post_data", post_data)
+            #wsgi_util.printenv(environ)
+
+        except:
+            print("No post data", sys.exc_info())
+            pass
 
     splitx = os.path.split(environ['PATH_INFO'])
     fn = ""

@@ -2,6 +2,14 @@
 
 ''' The simplest web server '''
 
+header2 = '''
+<form method=post action="">
+    <font size=+2>Sub Header here.</font>
+        <input type=text name=textx value="hellox">
+        <input type=submit name='hello' value='Submit'>
+</form>
+'''
+
 header = '''
     <table width=100% { mycolor } border=0>
     <tr  height=36>

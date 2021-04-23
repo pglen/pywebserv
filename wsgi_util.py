@@ -15,7 +15,8 @@ except:
 # These are ENV items we want to skip for our display
 
 nogo = ("OPENHAB", "XDG_", "LS_", "SHELL", "SESSION", "QT",
-             "LESS", "SSH", "GTK", "SHLVL", )
+             "LESS", "SSH", "GTK", "SHLVL", "XAUTH", "PANEL", "PATH", "DISPLAY",
+                "MANDAT", "WINDOW", "TERM", "GDM", "VIRT", "HUB", "VTE")
 
 def printenv(environ):
     for aa in environ.keys():
@@ -24,12 +25,12 @@ def printenv(environ):
         for cc in nogo:
             if cc in aa:
                 fff = False
-        #if fff:
-        #    print(aa, environ[aa])
-
-        if "HTTP" in aa:
+        if fff:
             print(aa, environ[aa])
 
+        #if "HTTP_" in aa:
+        #    print(aa, environ[aa])
+    print()
 
 def global_items(item):
 

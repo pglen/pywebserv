@@ -2,7 +2,7 @@
 
 ''' The simplest web server '''
 
-import sys, os, mimetypes, time, re
+import sys, os, mimetypes, time, re, traceback
 import multiprocessing
 from wsgiref import simple_server, util
 
@@ -18,14 +18,15 @@ nogo = ("OPENHAB", "XDG_", "LS_", "SHELL", "SESSION", "QT",
              "LESS", "SSH", "GTK", "SHLVL", "XAUTH", "PANEL", "PATH", "DISPLAY",
                 "MANDAT", "WINDOW", "TERM", "GDM", "VIRT", "HUB", "VTE")
 
-def printenv(environ):
+def printenv(environ, all=False):
     for aa in environ.keys():
         #print("aa", aa)
         fff = True
         for cc in nogo:
             if cc in aa:
                 fff = False
-        if fff:
+
+        if fff or all:
             print(aa, environ[aa])
 
         #if "HTTP_" in aa:
@@ -139,4 +140,24 @@ def     recursive_parse(buff, regex = "{ .*? }"):
             old_cnt = cnt
 
         return content
+
+def put_exception(xstr):
+
+    cumm = xstr + " "
+    a,b,c = sys.exc_info()
+    if a != None:
+        cumm += str(a) + " " + str(b) + "\n"
+        try:
+            #cumm += str(traceback.format_tb(c, 10))
+            ttt = traceback.extract_tb(c)
+            for aa in ttt:
+                cumm += "File: " + os.path.basename(aa[0]) + \
+                        " Line: " + str(aa[1]) + "\n" +  \
+                    "   Context: " + aa[2] + " -> " + aa[3] + "\n"
+        except:
+            print( "Could not print trace stack. ", sys.exc_info())
+
+    print(cumm)
+    #syslog.syslog("%s %s %s" % (xstr, a, b))
+
 

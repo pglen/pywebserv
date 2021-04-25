@@ -3,10 +3,15 @@
 ''' The simplest web server '''
 
 header2 = '''
-<form method=post action="">
-    <font size=+2>Sub Header here.</font>
-        <input type=text name=textx value="hellox">
-        <input type=submit name='hello' value='Submit'>
+<form method=post>
+    <table width=100% border=0>
+        <tr><td>
+        <font size=+2><b>Sub Header here.</b></font>
+        <td align=right>
+            <input type=text name=textx value="Submit Feedback">
+            <input type=submit name='hello' value='Submit'>
+        <td>
+        </table>
 </form>
 '''
 

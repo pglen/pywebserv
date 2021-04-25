@@ -18,95 +18,112 @@ class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
 
 # ------------------------------------------------------------------------
 
-def     translate_url(config, url, urlmap):
-    #print("Looking up", url)
-    par = urlparse(url)
-    got = urlmap.lookup(par.path)
-    return got
+class Config():
+    def __init(self):
+        self.mypath = ""
+        self.server = None
+
+# ------------------------------------------------------------------------
+# Endow this class with all the info a page would need to complete
+
+class xWebServer():
+
+    def __init__(self, environ, respond):
+
+        import wsgi_util, wsgi_content, wsgi_style, wsgi_global
+
+        #wsgi_util.printenv(environ, True)
+
+        self.mypath = os.path.dirname(os.path.realpath(__file__));
+        sys.path.append(self.mypath)
+
+        # Make sure we are landing here
+        os.chdir(self.mypath)
+        #print("Loaded in ", self.mypath)
+        self.query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
+
+        if(self.query):
+            print("Query", self.query)
+
+        if "POST" in environ['REQUEST_METHOD']:
+            try:
+                content_length = int(environ['CONTENT_LENGTH']) # <--- Gets the size of data
+                print("content_length", content_length) # <--- Gets the data itself
+                #print(environ['wsgi.version'])
+                self.request = environ['wsgi.input'].read(content_length)
+                print("Request", self.request )
+            except:
+                print("No post data", sys.exc_info())
+                pass
+
+        self.url = environ['PATH_INFO']
+        splitx = os.path.split(self.url)
+        tmpname = self.assem_path(splitx)
+        #print("tmpname", tmpname, "self.mypath", self.mypath)
+        self.fn = self.mypath +  tmpname
+        #print("self.fn", self.fn)
+        self.mtype = mimetypes.guess_type(self.fn)[0]
+        if not self.mtype:
+            self.mtype = "text/plain"
+
+        # Add default enties to table
+        wsgi_global.add_one_url("/", wsgi_content.got_index)
+        wsgi_global.add_one_url("/index.html", wsgi_content.got_index)
+        self.urlmap = wsgi_global.urlmap
+
+    def translate_url(self, config, url):
+        #print("Looking up", url)
+        par = urlparse(url)
+        got = self.urlmap.lookup(par.path)
+        return got
+
+    def assem_path(self, splitx):
+        ppp = ""
+        for aa in range(len(splitx)):
+            #print("re-assemble", splitx[aa])
+            if aa == len(splitx)-1:
+                # Empty last file name, index wanted
+                if splitx[aa] == "":
+                    ppp = os.path.join(ppp, "/index.html")
+                else:
+                    if splitx[aa] != os.sep:
+                        ppp = os.path.join(ppp, splitx[aa])
+            else:
+                if splitx[aa] != os.sep:
+                    ppp = os.path.join(ppp, splitx[aa])
+        return ppp
 
 # ------------------------------------------------------------------------
 # WSGI main entry point
 
 def application(environ, respond):
 
-    global mypath, query, config
-
-    # Make sure we are landing here
-    mypath = os.path.dirname(os.path.realpath(__file__));
-    sys.path.append(mypath)
-    os.chdir(mypath)
-
     import wsgi_util, wsgi_content, wsgi_style, wsgi_global
 
-    wsgi_global.add_one_url("/index.html", wsgi_content.got_index)
-
     config = Config()
-    config.mypath = mypath
+    mainclass = xWebServer(environ, respond)
 
-    #print("pwd", os.getcwd());
-    #print("Starting in pwd", os.getcwd())
+    config.mypath = mainclass.mypath
+    config.mainclass = mainclass
 
-    #'''print("mypath", mypath)
-
-    #print("-----------------------------------------------")
-    #print("query_string", environ['QUERY_STRING'])
-    #print("path_info", environ['PATH_INFO'])
-
-    query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
-    if(query):
-        print("query", query)
-
-    if "POST" in environ['REQUEST_METHOD']:
-        try:
-            content_length = int(environ['CONTENT_LENGTH']) # <--- Gets the size of data
-            print("content_length", content_length)
-            print(environ['wsgi.version'])
-            sub = environ['wsgi.input'].read(content_length)
-            print("sub", sub)
-
-            #post_data = environ[sys.stdin.read(10) # <--- Gets the data itself
-            #print("post_data", post_data)
-            #wsgi_util.printenv(environ)
-
-        except:
-            print("No post data", sys.exc_info())
-            pass
-
-    splitx = os.path.split(environ['PATH_INFO'])
-    fn = ""
-    for aa in range(len(splitx)):
-        #print("re-assemble", splitx[aa])
-        if aa == len(splitx)-1:
-            # Empty file name, index wanted
-            if splitx[aa] == "":
-                fn += os.sep + "index.html"
-            else:
-                if splitx[aa] != os.sep:
-                    fn += os.sep + splitx[aa]
-        else:
-            if splitx[aa] != os.sep:
-                fn += os.sep + splitx[aa]
-
-    fn2 = mypath + os.sep + fn
-    type = mimetypes.guess_type(fn2)[0]
-    if not type:
-        type = "text/plain"
-
-    #print(fn2)
+    #print("translated: ",  mainclass.fn)
 
     #  Dynamic content - overrides static
-    callme = translate_url(config, fn, wsgi_global.urlmap)
+    callme = mainclass.translate_url(config, mainclass.url)
+
     if(callme):
         content = ""
         try:
-            content = callme(config, fn, query)
+            print("Attemp callback",  mainclass.fn, mainclass.url)
+            content = callme(config, mainclass.url, mainclass.query)
         except:
             print("exc from translate url", sys.exc_info())
+            wsgi_util.put_exception("tr url")
             respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
 
-            fn5 = mypath + os.sep + "500.html"
+            fn5 = mainclass.mypath + os.sep + "500.html"
             if os.path.exists(fn5):
-                content = wsgi_content.got_500(config, "500.html", query)
+                content = wsgi_content.got_500(config, "500.html", mainclass.query)
             else:
                 content = "Empty results from page assembly."
             return [bytes(content, "utf-8")]
@@ -115,30 +132,25 @@ def application(environ, respond):
         return [bytes(content, "utf-8")]
 
     # Static content
-    elif os.path.exists(fn2):
-        respond('200 OK', [('Content-Type', type + ';charset=UTF-8')])
-        fp = util.FileWrapper(open(fn2, "rb"))
+    elif os.path.exists(mainclass.fn):
+        respond('200 OK', [('Content-Type', mainclass.mtype + ';charset=UTF-8')])
+        fp = util.FileWrapper(open(mainclass.fn, "rb"))
         return fp
     # Error content
     else:
         respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
-        fn4 = mypath + os.sep + "404.html"
+        fn4 = mainclass.mypath + os.sep + "404.html"
         if os.path.exists(fn4):
-            content = wsgi_content.got_404(config, "404.html", query)
+            content = wsgi_content.got_404(config, "404.html", mainclass.query)
             return [bytes(content, "utf-8")]
         else:
             return [b"URL not found and 404 file does not exist."]
-
-class Config():
-    def __init(self):
-        self.mypath = ""
 
 # ------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
     #print("Args", sys.argv)
-    global mypath
 
     mypath = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000

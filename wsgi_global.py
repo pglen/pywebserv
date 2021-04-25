@@ -50,8 +50,9 @@ class UrlMap():
         self.urls.append((url, func))
 
     def lookup(self, url):
+        #print("Looking up url", url)
         for aa in self.urls:
-            #print("urls", aa[0], aa[1])
+            #print("src url", aa[0], aa[1])
             if aa[0] == url:
                 return aa[1]
         return None
@@ -72,6 +73,7 @@ def add_one_url(url, mfunc, mpage = None):
         urlmap.add(url, mfunc)
     except:
         print("Cannot add url map", sys.exc_info())
+
     #print("urlmap", urlmap.urls)
 
 def build_table():

@@ -20,8 +20,10 @@ local_table = [
 
 def got_index(config, url, query):
 
-    #print("conf", config.mypath)
+    print("got_index() conf", config.mypath, "url", url, "query", query)
 
+    if url == "/":
+        url = "/index.html"
     fn2 = config.mypath + os.sep + url
     if  os.path.exists(fn2):
         #content = "Index file exists " + url + " " +  str(query) + " " + str(myglobal)

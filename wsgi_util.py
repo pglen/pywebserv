@@ -102,6 +102,8 @@ def parse_buffer(buff, flag, regex):
 
 def     recursive_parse(buff, regex = "{ .*? }"):
 
+    content = ""
+    try:
         # Recursively process
         cnt2 = 4; old_cnt = 0
         content = buff
@@ -109,7 +111,7 @@ def     recursive_parse(buff, regex = "{ .*? }"):
             arr, cnt = parse_buffer(content, False, regex)
             content = ""
             for aa in arr:
-                content += aa
+                content += str(aa)
 
             #print("recursive", cnt)
             if cnt <= 1:
@@ -126,7 +128,7 @@ def     recursive_parse(buff, regex = "{ .*? }"):
             arr, cnt = parse_buffer(content, True, regex)
             content = ""
             for aa in arr:
-                content += aa
+                content += str(aa)
 
             #print("recursive", cnt)
             if cnt <= 1:
@@ -139,7 +141,10 @@ def     recursive_parse(buff, regex = "{ .*? }"):
                 break
             old_cnt = cnt
 
-        return content
+    except:
+        put_exception("in parser")
+
+    return content
 
 def put_exception(xstr):
 

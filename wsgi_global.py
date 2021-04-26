@@ -85,7 +85,7 @@ def build_table():
         add_one_func("deep", deep_func)
         add_one_func("crap", crap_func)
         add_one_func("app_one", app_one_func)
-        add_one_func("app2", app_two_func)
+        add_one_func("app2x", app_two_func)
         add_one_func("image", image_func)
         add_one_func("mystyle", mystyle)
         add_one_func("imgrow", imgrow)
@@ -100,18 +100,27 @@ build_table()
 # ------------------------------------------------------------------------
 # Add projects here
 
-#def getproject(proj):
+def     getprojects():
 
-try:
-    from projects.wsgi_proj import *
-except:
-    print("Cannot import guest project", sys.exc_info())
+    ret = []
+    try:
+        from importlib import import_module
+
+        pdir = "projects"
+        sys.path.append(pdir)
+        files = os.listdir(pdir)
+        for aa in files:
+            if aa[-3:] == ".py" and aa != "__init__.py":
+                if os.path.exists(pdir + os.sep + aa):
+                    #print("importing", aa)
+                    import_module( aa[:-3])
+
+    except:
+        #print("Cannot import guest project", sys.exc_info())
+        wsgi_util.put_exception("Cannot import")
+        ret = [b"Some modules failed to load"]
+
+    return ret
 
 # EOF
-
-
-
-
-
-
 

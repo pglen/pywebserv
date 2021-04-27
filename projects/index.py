@@ -12,29 +12,33 @@ from urllib.parse import urlparse, unquote, parse_qs
 
 import wsgi_util, wsgi_func
 
-def got_resp(config, url, query, template = ""):
+def got_index(config, url, query, template = ""):
 
-    #print("got_resp() config.mypath", config.mypath, "url", url, "query", query)
-    found = ""
-    fn = urlparse(url).path
+    #print("got_index() conf", config.mypath, "url", url, "query", query, "template", template)
+    #print("request", str(config.mainclass.request))
+
+    if url == "/":
+        url = "/index.html"
 
     if not template:
-        template = resolve_template(config, __file__)
+        template = wsgi_util.resolve_template(config, url, __file__)
+    else:
+        template = config.mypath + os.sep + os.path.dirname(__file__) + os.sep + template
 
-    #print("found local file", found)
-    if  template:
-        #content = "Index file exists " + url + " " +  str(query) +
+    #print("using template", template)
+
+    if template and os.path.exists(template):
+        #content = "Index file exists " + url + " " +  str(query) + " "
         with open(template, 'r') as fh:
             buff = fh.read()
+
         #print("buff", buff)
         # Recursively process
-        content = wsgi_util.recursive_parse(buff)
+        content = "" #str(config.mainclass.request)
+        content += wsgi_util.recursive_parse(buff)
     else:
-        content = "Index file (dyn) " + url + " " +  str(query) + " "
+        content = "Index file (dyn) " + url + " " +  template + " " + str(query) + " "
     return content
-
-def     my_img_func(arg):
-        print("my_img_func", arg)
 
 # ------------------------------------------------------------------------
 # Add all the functions for the urls; this function is called
@@ -44,16 +48,7 @@ sys.path.append("../")
 
 from wsgi_global import add_one_url
 
-add_one_url("/responsive", got_resp)
-add_one_url("/rr", got_resp)
+# Add default enties to table
+add_one_url("/", got_index, "index.html")
+add_one_url("/index.html", got_index, "index.html")
 
-# ------------------------------------------------------------------------
-# Add all the functions and the macro names here
-# Simply refer to the macro in the html temple, and it will get called
-# and the output substituted
-
-from wsgi_global import add_one_func
-
-add_one_func("image2", my_img_func)
-
-# EOF

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# These tags are global to the site
+''' These tags / funtions / tables are global to the site '''
 
 import sys
 
@@ -28,6 +28,11 @@ global_table = [
 
 def add_one_func(mname, mfunc, mpage = None):
 
+    '''
+        Add a macro function here. The macro is substituted
+        by the output of the function. Macro syntax is words sourrounded by
+        '{ ' and ' }' as in { macro }
+    '''
     try:
         global_table.append([mname, mfunc])
     except:
@@ -39,23 +44,26 @@ def add_one_func(mname, mfunc, mpage = None):
 
 class UrlMap():
 
+    ''' This calss stores the URL to function mapping '''
+
     def __init__(self):
+
         self.urls = []
 
-    def add(self, url, func):
+    def add(self, url, func, page):
         # Got one already?
         for aa in self.urls:
             if aa[0] == url:
                 return
-        self.urls.append((url, func))
+        self.urls.append((url, func, page))
 
     def lookup(self, url):
         #print("Looking up url", url)
         for aa in self.urls:
             #print("src url", aa[0], aa[1])
             if aa[0] == url:
-                return aa[1]
-        return None
+                return aa[1], aa[2]
+        return None, None
 
 # URL to function table
 urlmap =  UrlMap()
@@ -68,9 +76,16 @@ urlmap =  UrlMap()
 
 def add_one_url(url, mfunc, mpage = None):
 
+    ''' Add a url and a function here. Also an optional template. The template is assumed
+    to be in the same directory as the script. If no template is added, the following
+    places will be searched: the project "./" directory,  the /static/ directory.
+    If the template cannot be found, the return of the function output is delivered as
+    it was generated.
+    '''
+
     global urlmap
     try:
-        urlmap.add(url, mfunc)
+        urlmap.add(url, mfunc, mpage)
     except:
         print("Cannot add url map", sys.exc_info())
 
@@ -78,6 +93,7 @@ def add_one_url(url, mfunc, mpage = None):
 
 def build_table():
 
+    ''' The initial table for the global items '''
     try:
         add_one_func("header", header)
         add_one_func("footer", footer)
@@ -97,10 +113,12 @@ def build_table():
 
 build_table()
 
-# ------------------------------------------------------------------------
-# Add projects here
-
 def     getprojects():
+
+    '''
+        Add projects in this directory for automatic inclusion into the site.
+        The initial project dir is called 'projects'
+    '''
 
     ret = []
     try:
@@ -113,8 +131,13 @@ def     getprojects():
             if aa[-3:] == ".py" and aa != "__init__.py":
                 if os.path.exists(pdir + os.sep + aa):
                     #print("importing", aa)
-                    import_module( aa[:-3])
-
+                    try:
+                        import_module( aa[:-3])
+                    except:
+                        wsgi_util.put_exception("Cannot import module: '%s' " % aa)
+                        msg = "Module %s failed to load" % aa
+                        #print("msg", msg)
+                        ret = [msg.encode("utf-8"),]
     except:
         #print("Cannot import guest project", sys.exc_info())
         wsgi_util.put_exception("Cannot import")

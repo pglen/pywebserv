@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module wsgi_util</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>wsgi_util</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/peterglen/pgpygtk/webserver/wsgi_util.py">/home/peterglen/pgpygtk/webserver/wsgi_util.py</a></font></td></tr></table>
+    <p><tt>The&nbsp;simplest&nbsp;web&nbsp;server,&nbsp;utilities&nbsp;module</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="PIL.Image.html">PIL.Image</a><br>
+<a href="datetime.html">datetime</a><br>
+<a href="mimetypes.html">mimetypes</a><br>
+<a href="multiprocessing.html">multiprocessing</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="random.html">random</a><br>
+<a href="re.html">re</a><br>
+<a href="wsgiref.simple_server.html">wsgiref.simple_server</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="time.html">time</a><br>
+<a href="traceback.html">traceback</a><br>
+<a href="wsgiref.util.html">wsgiref.util</a><br>
+</td><td width="25%" valign=top><a href="wsgi_style.html">wsgi_style</a><br>
+<a href="wsgi_util.html">wsgi_util</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-global_items"><strong>global_items</strong></a>(item)</dt></dl>
+ <dl><dt><a name="-global_para_items"><strong>global_para_items</strong></a>(item)</dt></dl>
+ <dl><dt><a name="-parse_buffer"><strong>parse_buffer</strong></a>(buff, flag, regex)</dt></dl>
+ <dl><dt><a name="-printenv"><strong>printenv</strong></a>(environ, all=False)</dt></dl>
+ <dl><dt><a name="-put_exception"><strong>put_exception</strong></a>(xstr)</dt></dl>
+ <dl><dt><a name="-recursive_parse"><strong>recursive_parse</strong></a>(buff, regex='{ .*? }')</dt></dl>
+ <dl><dt><a name="-resolve_template"><strong>resolve_template</strong></a>(config, fn, name)</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>article</strong> = '<font color="#c040c0">\n</font>    &lt;td&gt;<font color="#c040c0">\n</font>        &lt;table border=0 bgcolor=#ddddd...ion detail<font color="#c040c0">\n</font>            &lt;/table&gt;<font color="#c040c0">\n</font>        &lt;/table&gt;<font color="#c040c0">\n</font>'<br>
+<strong>article2</strong> = '<font color="#c040c0">\n</font>    &lt;td&gt;<font color="#c040c0">\n</font>        &lt;table border=0 bgcolor=#ddddd...ion detail<font color="#c040c0">\n</font>            &lt;/table&gt;<font color="#c040c0">\n</font>        &lt;/table&gt;<font color="#c040c0">\n</font>'<br>
+<strong>bigtext</strong> = '<font color="#c040c0">\n</font>                { var } substitution is { no pr...    { var } substitution is { no problem } here.<font color="#c040c0">\n</font>'<br>
+<strong>footer</strong> = '<font color="#c040c0">\n</font>    &lt;tr  height=48&gt;<font color="#c040c0">\n</font>    &lt;td align=left width=45..."Log Out / Leave"&gt;<font color="#c040c0">\n</font>                &amp;nbsp; &amp;nbsp;<font color="#c040c0">\n</font>'<br>
+<strong>global_table</strong> = [['header2', "<font color="#c040c0">\n</font>&lt;form method=post&gt;<font color="#c040c0">\n</font>    &lt;table width=100% border...='Submit'&gt;<font color="#c040c0">\n</font>        &lt;td&gt;<font color="#c040c0">\n</font>        &lt;/table&gt;<font color="#c040c0">\n</font>&lt;/form&gt;<font color="#c040c0">\n</font>"], ['var', '&lt;font size=+1&gt;variable { deep } &lt;/font&gt;'], ['no problem', 'recursive expansion is not even a &lt;b&gt;little&lt;/b&gt; problem ... '], ['spacer', '&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;/table&gt;'], ['mycolor', 'bgcolor=#aaffbb'], ['thumbwidth', '120'], ['thumbheight', '80'], ['Company Name', 'PGlen Computing'], ['header', '<font color="#c040c0">\n</font>    &lt;table width=100% { mycolor } border=0&gt;<font color="#c040c0">\n</font>   ...n-exit.png title="Exit /  Log Out"&gt;<font color="#c040c0">\n</font>    &lt;/table&gt;<font color="#c040c0">\n</font>'], ['footer', '<font color="#c040c0">\n</font>    &lt;tr  height=48&gt;<font color="#c040c0">\n</font>    &lt;td align=left width=45..."Log Out / Leave"&gt;<font color="#c040c0">\n</font>                &amp;nbsp; &amp;nbsp;<font color="#c040c0">\n</font>'], ['bigtext', '<font color="#c040c0">\n</font>                { var } substitution is { no pr...    { var } substitution is { no problem } here.<font color="#c040c0">\n</font>'], ['deep', &lt;function deep_func&gt;], ['crap', &lt;function crap_func&gt;], ['app_one', &lt;function app_one_func&gt;], ['app2x', &lt;function app_two_func&gt;], ['image', &lt;function image_func&gt;], ['mystyle', '<font color="#c040c0">\n</font>&lt;style&gt;<font color="#c040c0">\n</font>.container {<font color="#c040c0">\n</font>  position: relative;<font color="#c040c0">\n</font>  wi...tainer:hover .middle {<font color="#c040c0">\n</font>  opacity: 1;<font color="#c040c0">\n</font>}<font color="#c040c0">\n\n</font>&lt;/style&gt;<font color="#c040c0">\n</font>'], ['imgrow', '<font color="#c040c0">\n</font>  &lt;tr&gt;&lt;td&gt;<font color="#c040c0">\n</font>     { image beach-hd.jpeg [ thumbwi... description Image description Image description<font color="#c040c0">\n</font>'], ['article', '<font color="#c040c0">\n</font>    &lt;td&gt;<font color="#c040c0">\n</font>        &lt;table border=0 bgcolor=#ddddd...ion detail<font color="#c040c0">\n</font>            &lt;/table&gt;<font color="#c040c0">\n</font>        &lt;/table&gt;<font color="#c040c0">\n</font>'], ['article2', '<font color="#c040c0">\n</font>    &lt;td&gt;<font color="#c040c0">\n</font>        &lt;table border=0 bgcolor=#ddddd...ion detail<font color="#c040c0">\n</font>            &lt;/table&gt;<font color="#c040c0">\n</font>        &lt;/table&gt;<font color="#c040c0">\n</font>'], ...]<br>
+<strong>header</strong> = '<font color="#c040c0">\n</font>    &lt;table width=100% { mycolor } border=0&gt;<font color="#c040c0">\n</font>   ...n-exit.png title="Exit /  Log Out"&gt;<font color="#c040c0">\n</font>    &lt;/table&gt;<font color="#c040c0">\n</font>'<br>
+<strong>header2</strong> = "<font color="#c040c0">\n</font>&lt;form method=post&gt;<font color="#c040c0">\n</font>    &lt;table width=100% border...='Submit'&gt;<font color="#c040c0">\n</font>        &lt;td&gt;<font color="#c040c0">\n</font>        &lt;/table&gt;<font color="#c040c0">\n</font>&lt;/form&gt;<font color="#c040c0">\n</font>"<br>
+<strong>imgrow</strong> = '<font color="#c040c0">\n</font>  &lt;tr&gt;&lt;td&gt;<font color="#c040c0">\n</font>     { image beach-hd.jpeg [ thumbwi... description Image description Image description<font color="#c040c0">\n</font>'<br>
+<strong>mystyle</strong> = '<font color="#c040c0">\n</font>&lt;style&gt;<font color="#c040c0">\n</font>.container {<font color="#c040c0">\n</font>  position: relative;<font color="#c040c0">\n</font>  wi...tainer:hover .middle {<font color="#c040c0">\n</font>  opacity: 1;<font color="#c040c0">\n</font>}<font color="#c040c0">\n\n</font>&lt;/style&gt;<font color="#c040c0">\n</font>'<br>
+<strong>nogo</strong> = ('OPENHAB', 'XDG_', 'LS_', 'SHELL', 'SESSION', 'QT', 'LESS', 'SSH', 'GTK', 'SHLVL', 'XAUTH', 'PANEL', 'PATH', 'DISPLAY', 'MANDAT', 'WINDOW', 'TERM', 'GDM', 'VIRT', 'HUB', ...)<br>
+<strong>urlmap</strong> = &lt;wsgi_global.UrlMap object&gt;</td></tr></table>
+</body></html>

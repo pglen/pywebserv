@@ -55,31 +55,25 @@ def serve():
     #["wsgi_main.py", "wsgi_content.py", "wsgi_util.py", "wsgi_global.py", "index.html"]
 
 def re_open():
-    th = subprocess.Popen(["/usr/bin/env", "firefox", "localhost:8000"])
+    th = subprocess.Popen(["/usr/bin/env", "firefox", "localhost:8000"], close_fds=True)
     return th
 
 def re_serve():
     th = subprocess.Popen(["/usr/bin/env", "python", "wsgi_main.py"] + sys.argv[1:])
     return th
 
-fnamearr = []
-statarr = []
+def  rescan():
 
-if __name__ == '__main__':
-
-    #path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
-    #port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
-
+    global fnamearr, statarr
+    fnamearr = []; statarr = []
     fnamearr2 = os.listdir()
     #print("fnamearr2", fnamearr2)
-
     # Build reference
     for aa in range(len(fnamearr2)):
         if os.path.isfile(fnamearr2[aa]):
             fff = os.stat(fnamearr2[aa]).st_mtime
             fnamearr.append(fnamearr2[aa])
             statarr.append(fff)
-
     ddd = "projects"
     fnamearr3 = os.listdir(ddd)
     #print("fnamearr3", fnamearr3)
@@ -89,8 +83,15 @@ if __name__ == '__main__':
             fff = os.stat(aaa).st_mtime
             fnamearr.append(aaa)
             statarr.append(fff)
-
     #print("fnamearr", fnamearr)
+
+if __name__ == '__main__':
+
+    #path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
+    #port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
+
+    global fnamearr, statarr
+    rescan()
 
     th = re_serve();  time.sleep(.1);  re_open()
 
@@ -107,11 +108,10 @@ if __name__ == '__main__':
             time.sleep(.5)
             th.kill()
             time.sleep(.5)
-
+            rescan()
             print("Restarted server:")
             th = re_serve() ; time.sleep(.1);  re_open()
 
         time.sleep(.5)
-
 
 # EOF

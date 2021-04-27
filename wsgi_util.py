@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-''' The simplest web server '''
+''' The simplest web server, utilities module '''
 
 import sys, os, mimetypes, time, re, traceback
 import multiprocessing
@@ -165,4 +165,31 @@ def put_exception(xstr):
     print(cumm)
     #syslog.syslog("%s %s %s" % (xstr, a, b))
 
+# ------------------------------------------------------------------------
+
+def  resolve_template(config, fn, name):
+
+    # Iterate 'lookfor' combos; the html template can be local, html static,
+    found = ""
+    while True:
+        fn1 = config.mypath + os.sep  + name[:-3] + ".html"
+        print("test fn1", fn1)
+        if  os.path.exists(fn1):
+            found = fn1
+            break
+
+        fn2 = config.mypath + os.sep + "html"  + fn
+        print("test fn2", fn2)
+        if  os.path.exists(fn2):
+            found = fn2
+            break
+
+        fn3 = config.mypath + os.sep + "html" + fn + ".html"
+        print("test fn3", fn3)
+        if  os.path.exists(fn3):
+            found = fn3
+            break
+        break;
+
+    return found
 

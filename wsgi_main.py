@@ -16,16 +16,16 @@ URL registration function and macro registration function.
 
  To create a new 'macro' use the add function with the macro name
 and the name of the function that is executed by the macro. The macro
-will be replaced by the return value of the function. The macro syntax
-is created by surrounding braces wit a space. Like: { macro }
+will be replaced by the return value of the function. (syntax) The macro
+is created by surrounding braces with a space. Like: { mymacro }
 
  add_one_func("mymacro", my_img_func)
 
  Builtin macros:
 
- { image }          --  Put an image tag in the output
- { image www }      --  Put an image tag in the output, resize width to requested
- { image www hhh }  --  Put an image tag in the output, resize to parm
+ { image nnn }          --  Put an image tag nnn in the output
+ { image nnn www }      --  Put an image tag in the output, resize width to requested
+ { image nnn www hhh }  --  Put an image tag in the output, resize to parm
 
 The first two forms of the { image } function will preserve the image's aspect ratio.
 
@@ -51,10 +51,12 @@ class Config():
 
 
 class xWebServer():
+
     '''
-     This class has all the info a page would need. Add
-     urls and functions to complete the reply.
+     This class has all the info a page would need. Add urls and functions to complete the reply.
+     The return value of the process_rq function is output to the client.
     '''
+
     def __init__(self, environ, respond):
 
         ''' Deocrate the class instance with data from the environment '''

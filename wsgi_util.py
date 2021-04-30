@@ -173,19 +173,19 @@ def  resolve_template(config, fn, name):
     found = ""
     while True:
         fn1 = config.mypath + os.sep  + name[:-3] + ".html"
-        print("test fn1", fn1)
+        #print("test fn1", fn1)
         if  os.path.exists(fn1):
             found = fn1
             break
 
         fn2 = config.mypath + os.sep + "html"  + fn
-        print("test fn2", fn2)
+        #print("test fn2", fn2)
         if  os.path.exists(fn2):
             found = fn2
             break
 
         fn3 = config.mypath + os.sep + "html" + fn + ".html"
-        print("test fn3", fn3)
+        #print("test fn3", fn3)
         if  os.path.exists(fn3):
             found = fn3
             break

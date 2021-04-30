@@ -3,14 +3,11 @@
 ''' The simplest web server '''
 
 # These are the functions that get called from macro expansion
-# add trailing the '_func' as convention
+# add trailing '_func' to the name as a convention
 
 import os, sys, random, datetime
-
 from PIL import Image
-
-import wsgi_util
-import wsgi_style
+import wsgi_util, wsgi_style
 
 def     deep_func(strx):
     return "Deep from code"
@@ -38,6 +35,10 @@ def     app_one_func(strx):
 
 def     app_two_func(strx):
 
+    '''
+    Mock calendar. Does nothing but presents a calendar looking user interface
+    '''
+
     try:
         content = '''<table width=100% border=1>
             <tr><td align=center bgcolor=#cccccc colspan=7><b>APP TWO (Calendar?)</b><br>
@@ -46,7 +47,10 @@ def     app_two_func(strx):
         dt = datetime.datetime.now()
         anchor = dt.day % 7;
         mon = anchor - dt.weekday()
-        #print("dt", dt.weekday(), dt.day, mon, anchor)
+
+        rrr = monthrange(dt2.year, dt2.month)
+        print("dt", dt.weekday(), dt.day, mon, anchor, "rrr", rrr)
+
         content += "<tr><td colspan=5>"
         cnt = 0; cnt2 = 0;
         wday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -57,6 +61,9 @@ def     app_two_func(strx):
             content += "<tr>"
             for bb in range(7):
                 #aa*7 + bb + 1
+                if cnt > rrr:
+                    break
+
                 cnt += 1
                 if cnt > mon:
                     content += "<td> <font size=-1>" + str(cnt2+1)
@@ -68,13 +75,22 @@ def     app_two_func(strx):
                 else:
                     content += "<td> <font size=-1>" + "&nbsp;"
 
+
         content += "</table>"
     except:
-        print("Exception on two", sys.exc_info())
+        print("Exception on app_two_func", sys.exc_info())
     return content
 
-
 def     image_func(strx):
+
+    '''
+     { image nnn }          --  Put an image tag nnn in the output
+     { image nnn www }      --  Put an image tag in the output, resize width to requested
+     { image nnn www hhh }  --  Put an image tag in the output, resize to parm
+
+    The first two forms of the { image } function will preserve the image's aspect ratio.
+
+    '''
 
     # Expand arguments
     ssss = wsgi_util.recursive_parse(strx,  "\[ .*? \]")

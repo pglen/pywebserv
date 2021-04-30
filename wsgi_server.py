@@ -45,17 +45,12 @@ def serve():
                 raise
                 break
 
-        #try:
-        #    httpd.serve_forever()
-        #except KeyboardInterrupt:
-        #    print("Shutting down.")
-        #    httpd.server_close()
-
-
     #["wsgi_main.py", "wsgi_content.py", "wsgi_util.py", "wsgi_global.py", "index.html"]
 
 def re_open():
-    th = subprocess.Popen(["/usr/bin/env", "firefox", "localhost:8000"], close_fds=True)
+    #th = subprocess.Popen(["firefox", "localhost:8000"], close_fds=True)
+    #th = subprocess.Popen(["xvkbd", "-window", "Firefox", "-text", "\Cr"])
+    th = subprocess.Popen(["./bringfocus.sh"], shell=True)
     return th
 
 def re_serve():
@@ -110,7 +105,7 @@ if __name__ == '__main__':
             time.sleep(.5)
             rescan()
             print("Restarted server:")
-            th = re_serve() ; time.sleep(.1);  re_open()
+            th = re_serve() ; time.sleep(.2);  re_open()
 
         time.sleep(.5)
 

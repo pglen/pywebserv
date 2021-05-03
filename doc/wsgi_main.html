@@ -25,16 +25,16 @@ URL&nbsp;registration&nbsp;function&nbsp;and&nbsp;macro&nbsp;registration&nbsp;f
 &nbsp;<br>
 &nbsp;To&nbsp;create&nbsp;a&nbsp;new&nbsp;'macro'&nbsp;use&nbsp;the&nbsp;add&nbsp;function&nbsp;with&nbsp;the&nbsp;macro&nbsp;name<br>
 and&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;function&nbsp;that&nbsp;is&nbsp;executed&nbsp;by&nbsp;the&nbsp;macro.&nbsp;The&nbsp;macro<br>
-will&nbsp;be&nbsp;replaced&nbsp;by&nbsp;the&nbsp;return&nbsp;value&nbsp;of&nbsp;the&nbsp;function.&nbsp;The&nbsp;macro&nbsp;syntax<br>
-is&nbsp;created&nbsp;by&nbsp;surrounding&nbsp;braces&nbsp;wit&nbsp;a&nbsp;space.&nbsp;Like:&nbsp;{&nbsp;macro&nbsp;}<br>
+will&nbsp;be&nbsp;replaced&nbsp;by&nbsp;the&nbsp;return&nbsp;value&nbsp;of&nbsp;the&nbsp;function.&nbsp;(syntax)&nbsp;The&nbsp;macro<br>
+is&nbsp;created&nbsp;by&nbsp;surrounding&nbsp;braces&nbsp;with&nbsp;a&nbsp;space.&nbsp;Like:&nbsp;{&nbsp;mymacro&nbsp;}<br>
 &nbsp;<br>
 &nbsp;add_one_func("mymacro",&nbsp;my_img_func)<br>
 &nbsp;<br>
 &nbsp;Builtin&nbsp;macros:<br>
 &nbsp;<br>
-&nbsp;{&nbsp;image&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;Put&nbsp;an&nbsp;image&nbsp;tag&nbsp;in&nbsp;the&nbsp;output<br>
-&nbsp;{&nbsp;image&nbsp;www&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;Put&nbsp;an&nbsp;image&nbsp;tag&nbsp;in&nbsp;the&nbsp;output,&nbsp;resize&nbsp;width&nbsp;to&nbsp;requested<br>
-&nbsp;{&nbsp;image&nbsp;www&nbsp;hhh&nbsp;}&nbsp;&nbsp;--&nbsp;&nbsp;Put&nbsp;an&nbsp;image&nbsp;tag&nbsp;in&nbsp;the&nbsp;output,&nbsp;resize&nbsp;to&nbsp;parm<br>
+&nbsp;{&nbsp;image&nbsp;nnn&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;Put&nbsp;an&nbsp;image&nbsp;tag&nbsp;nnn&nbsp;in&nbsp;the&nbsp;output<br>
+&nbsp;{&nbsp;image&nbsp;nnn&nbsp;www&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;Put&nbsp;an&nbsp;image&nbsp;tag&nbsp;in&nbsp;the&nbsp;output,&nbsp;resize&nbsp;width&nbsp;to&nbsp;requested<br>
+&nbsp;{&nbsp;image&nbsp;nnn&nbsp;www&nbsp;hhh&nbsp;}&nbsp;&nbsp;--&nbsp;&nbsp;Put&nbsp;an&nbsp;image&nbsp;tag&nbsp;in&nbsp;the&nbsp;output,&nbsp;resize&nbsp;to&nbsp;parm<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;two&nbsp;forms&nbsp;of&nbsp;the&nbsp;{&nbsp;image&nbsp;}&nbsp;function&nbsp;will&nbsp;preserve&nbsp;the&nbsp;image's&nbsp;aspect&nbsp;ratio.</tt></p>
 <p>
@@ -93,8 +93,8 @@ The&nbsp;first&nbsp;two&nbsp;forms&nbsp;of&nbsp;the&nbsp;{&nbsp;image&nbsp;}&nbs
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt><a href="#xWebServer">xWebServer</a>(environ,&nbsp;respond)<br>
 &nbsp;<br>
-This&nbsp;class&nbsp;has&nbsp;all&nbsp;the&nbsp;info&nbsp;a&nbsp;page&nbsp;would&nbsp;need.&nbsp;Add<br>
-urls&nbsp;and&nbsp;functions&nbsp;to&nbsp;complete&nbsp;the&nbsp;reply<br>&nbsp;</tt></td></tr>
+This&nbsp;class&nbsp;has&nbsp;all&nbsp;the&nbsp;info&nbsp;a&nbsp;page&nbsp;would&nbsp;need.&nbsp;Add&nbsp;urls&nbsp;and&nbsp;functions&nbsp;to&nbsp;complete&nbsp;the&nbsp;reply.<br>
+The&nbsp;return&nbsp;value&nbsp;of&nbsp;the&nbsp;process_rq&nbsp;function&nbsp;is&nbsp;the&nbsp;output&nbsp;to&nbsp;the&nbsp;client.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="xWebServer-__init__"><strong>__init__</strong></a>(self, environ, respond)</dt><dd><tt>Deocrate&nbsp;the&nbsp;class&nbsp;instance&nbsp;with&nbsp;data&nbsp;from&nbsp;the&nbsp;environment</tt></dd></dl>
@@ -118,5 +118,12 @@ Data descriptors defined here:<br>
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt><a name="-application"><strong>application</strong></a>(environ, respond)</dt><dd><tt>WSGI&nbsp;main&nbsp;entry&nbsp;point.&nbsp;The&nbsp;web&nbsp;server&nbsp;(like&nbsp;apache)<br>
 will&nbsp;call&nbsp;this.</tt></dd></dl>
-</td></tr></table>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>VERBOSE</strong> = 0</td></tr></table>
 </body></html>

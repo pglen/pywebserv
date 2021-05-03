@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 '''
+
     Small wsgiref based web server. Takes a path to serve from and an
     optional port number (defaults to 8000), then tries to serve files.
 
     Mime types are guessed from the file names, 404 errors are raised
     if the file is not found. Used for the make serve target in Doc.
 
-    Restarts if any of the files in current dir changed
+    Restarts if any of the files in current dir changed and project dir
+    changed; calls the bringfocus batch job to refresh browser
 
 '''
 
@@ -35,7 +37,6 @@ def app(environ, respond):
 def serve():
         httpd = simple_server.make_server('', port, app)
         print("Serving {} on port {}, control-C to stop".format(path, port))
-
         while True:
             try:
                 httpd.handle_request()
@@ -45,17 +46,19 @@ def serve():
                 raise
                 break
 
-    #["wsgi_main.py", "wsgi_content.py", "wsgi_util.py", "wsgi_global.py", "index.html"]
-
 def re_open():
     #th = subprocess.Popen(["firefox", "localhost:8000"], close_fds=True)
     #th = subprocess.Popen(["xvkbd", "-window", "Firefox", "-text", "\Cr"])
     th = subprocess.Popen(["./bringfocus.sh"], shell=True)
-    return th
+    #return th
+    pass
 
 def re_serve():
     th = subprocess.Popen(["/usr/bin/env", "python", "wsgi_main.py"] + sys.argv[1:])
     return th
+
+def waitx():
+    time.sleep(.2)
 
 def  rescan():
 
@@ -86,9 +89,10 @@ if __name__ == '__main__':
     #port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
 
     global fnamearr, statarr
+
     rescan()
 
-    th = re_serve();  time.sleep(.1);  re_open()
+    th = re_serve();  waitx();  re_open()
 
     while True:
         flag = False
@@ -99,14 +103,12 @@ if __name__ == '__main__':
                 flag = True
 
         if flag:
-            th.terminate()
-            time.sleep(.5)
-            th.kill()
-            time.sleep(.5)
+            th.terminate(); waitx()
+            th.kill();      waitx()
             rescan()
             print("Restarted server:")
-            th = re_serve() ; time.sleep(.2);  re_open()
-
+            th = re_serve() ; waitx();
+            re_open()
         time.sleep(.5)
 
 # EOF

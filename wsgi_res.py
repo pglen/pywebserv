@@ -34,7 +34,7 @@ header = '''
                 Search: &nbsp; <input type=text value="" size=12>
                 <td align=right width=7% >
                 <img src=siteicons/mail-forward.png class=image title="Mail / Contact Us">
-                <img src=siteicons/application-exit.png title="Exit /  Log Out">
+                <img src=siteicons/application-exit.png title="Enter / Log In">
     </table>
 '''
 

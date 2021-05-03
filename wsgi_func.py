@@ -7,7 +7,8 @@
 
 import os, sys, random, datetime
 from PIL import Image
-import wsgi_util, wsgi_style
+
+import wsgi_util, wsgi_style, wsgi_res, wsgi_global
 
 def     deep_func(strx):
     return "Deep from code"
@@ -140,5 +141,36 @@ def     image_func(strx):
         return "<img src=" + nnn + " >"
 
     return "<img src=media/broken.png>"
+
+def     build_initial_table():
+
+    ''' The initial table for the global items '''
+    try:
+        wsgi_global.add_one_func("app_one", app_one_func)
+        wsgi_global.add_one_func("app2x",   app_two_func)
+        wsgi_global.add_one_func("image",   image_func)
+        wsgi_global.add_one_func("deep",    deep_func)
+        wsgi_global.add_one_func("crap",    crap_func)
+
+    except:
+        #print("Cannot build global table", sys.exc_info())
+        wsgi_util.put_exception("Cannot build global table")
+
+def     build_initial_rc():
+
+    ''' The initial table for the global resource items '''
+    try:
+        wsgi_global.add_one_func("header",   wsgi_res.header)
+        wsgi_global.add_one_func("footer",   wsgi_res.footer)
+        wsgi_global.add_one_func("bigtext",  wsgi_res.bigtext)
+        wsgi_global.add_one_func("imgrow",   wsgi_res.imgrow)
+        wsgi_global.add_one_func("article",  wsgi_res.article)
+        wsgi_global.add_one_func("article2", wsgi_res.article2)
+
+        wsgi_global.add_one_func("mystyle",  wsgi_style.mystyle)
+
+    except:
+        #print("Cannot build global rc", sys.exc_info())
+        wsgi_util.put_exception("Cannot build global resources")
 
 # EOF

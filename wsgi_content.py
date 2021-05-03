@@ -3,8 +3,6 @@
 ''' The simplest web server '''
 
 import sys, os, mimetypes, time, re
-import multiprocessing
-from wsgiref import simple_server, util
 
 # Persitent info here
 

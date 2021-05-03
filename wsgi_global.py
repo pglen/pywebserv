@@ -20,24 +20,8 @@ global_table = [
     ["mycolor", "bgcolor=#aaffbb"],
     ["thumbwidth", "120"],
     ["thumbheight", "80"],
-    ["Company Name", "PGlen Computing"],
+    ["Company Name", "PGlen.com"],
   ]
-
-# ------------------------------------------------------------------------
-# Add a new project;
-
-def add_one_func(mname, mfunc, mpage = None):
-
-    '''
-        Add a macro function here. The macro is substituted
-        by the output of the function. Macro syntax is words sourrounded by
-        '{ ' and ' }' as in { macro }
-    '''
-    try:
-        global_table.append([mname, mfunc])
-    except:
-        print("Cannot add global table item", sys.exc_info())
-
 
 # ------------------------------------------------------------------------
 # URL to function mapping
@@ -69,14 +53,30 @@ class UrlMap():
 urlmap =  UrlMap()
 
 # ------------------------------------------------------------------------
+# Add a new project function;
+
+def     add_one_func(mname, mfunc, mpage = None):
+
+    '''
+        Add a macro function here. The macro is substituted
+        by the output of the function. Macro syntax is words sourrounded by
+        '{ ' and ' }' as in { macro }
+    '''
+    try:
+        global_table.append([mname, mfunc])
+    except:
+        print("Cannot add global table item", sys.exc_info())
+
+# ------------------------------------------------------------------------
 # Add functions to URL map
 # One may override any file; in that case the values are filled in
 
 # We build it dynamically, so error is flagged
 
-def add_one_url(url, mfunc, mpage = None):
+def     add_one_url(url, mfunc, mpage = None):
 
-    ''' Add a url and a function here. Also an optional template. The template is assumed
+    '''
+    Add a url and a function here. Also, an optional template. The template is assumed
     to be in the same directory as the script. If no template is added, the following
     places will be searched: the project "./" directory,  the /static/ directory.
     If the template cannot be found, the return of the function output is delivered as
@@ -90,28 +90,6 @@ def add_one_url(url, mfunc, mpage = None):
         print("Cannot add url map", sys.exc_info())
 
     #print("urlmap", urlmap.urls)
-
-def build_table():
-
-    ''' The initial table for the global items '''
-    try:
-        add_one_func("header", header)
-        add_one_func("footer", footer)
-        add_one_func("bigtext", bigtext)
-        add_one_func("deep", deep_func)
-        add_one_func("crap", crap_func)
-        add_one_func("app_one", app_one_func)
-        add_one_func("app2x", app_two_func)
-        add_one_func("image", image_func)
-        add_one_func("mystyle", mystyle)
-        add_one_func("imgrow", imgrow)
-        add_one_func("article", article)
-        add_one_func("article2", article2)
-
-    except:
-        print("Cannot build global table", sys.exc_info())
-
-build_table()
 
 def     getprojects():
 

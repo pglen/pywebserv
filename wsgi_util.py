@@ -2,9 +2,7 @@
 
 ''' The simplest web server, utilities module '''
 
-import sys, os, mimetypes, time, re, traceback
-import multiprocessing
-from wsgiref import simple_server, util
+import sys, os, time, re, traceback
 
 try:
     from wsgi_global import *
@@ -25,13 +23,18 @@ def printenv(environ, all=False):
         for cc in nogo:
             if cc in aa:
                 fff = False
-
         if fff or all:
             print(aa, environ[aa])
 
         #if "HTTP_" in aa:
         #    print(aa, environ[aa])
     print()
+
+def print_httpenv(environ):
+    for aa in environ.keys():
+        if "HTTP_" in aa[:5]:
+            print(aa, "'" + environ[aa] + "'")
+    print(" --- end env")
 
 def global_items(item):
 
@@ -140,13 +143,15 @@ def     recursive_parse(buff, regex = "{ .*? }"):
             if old_cnt == cnt:
                 break
             old_cnt = cnt
-
     except:
         put_exception("in parser")
-
     return content
 
-def put_exception(xstr):
+# ------------------------------------------------------------------------
+
+def     put_exception(xstr):
+
+    ''' Give some indication of exceptions '''
 
     cumm = xstr + " "
     a,b,c = sys.exc_info()
@@ -177,19 +182,16 @@ def  resolve_template(config, fn, name):
         if  os.path.exists(fn1):
             found = fn1
             break
-
         fn2 = config.mypath + os.sep + "html"  + fn
         #print("test fn2", fn2)
         if  os.path.exists(fn2):
             found = fn2
             break
-
         fn3 = config.mypath + os.sep + "html" + fn + ".html"
         #print("test fn3", fn3)
         if  os.path.exists(fn3):
             found = fn3
             break
         break;
-
     return found
 

@@ -4,20 +4,21 @@
 of the web server, and sub directories may assume the following functions:
 
     data            for database related
-    siteicons       icond for this site
+    siteicons       icons for this site
     media           images, media
     static          files that may be presented as is
     projects        python files that make up the site
 
   To create a <b>new page</b>, add a new python file, and call the
-URL registration function and macro registration function.
+URL registration function.
 
   add_one_url("/", got_index, "index.html")
 
- To create a new 'macro' use the add function with the macro name
+ To create a new 'macro' use the add macro function with the macro name
 and the name of the function that is executed by the macro. The macro
-will be replaced by the return value of the function. (syntax) The macro
+will be replaced by the return value of the function. The macro
 is created by surrounding braces with a space. Like: { mymacro }
+The macro regex is '{ .*? }' [the '?' is for non greedy wild card)
 
  add_one_func("mymacro", my_img_func)
 
@@ -31,10 +32,11 @@ The first two forms of the { image } function will preserve the image's aspect r
 
 '''
 
-import sys, os, mimetypes, time, sqlite3
-import multiprocessing
+import sys, os, mimetypes, time, datetime
 from urllib.parse import urlparse, unquote, parse_qs
 from wsgiref import simple_server, util
+
+VERBOSE = 0
 
 # ------------------------------------------------------------------------
 
@@ -49,12 +51,12 @@ class Config():
         self.server = None
         self.mainclass = None
 
-
 class xWebServer():
 
     '''
-     This class has all the info a page would need. Add urls and functions to complete the reply.
-     The return value of the process_rq function is output to the client.
+     This class has all the info we would need for page generation. Add urls and functions
+     to complete the reply. The return value of the process_rq function is the
+     output to the client.
     '''
 
     def __init__(self, environ, respond):
@@ -62,38 +64,62 @@ class xWebServer():
         ''' Deocrate the class instance with data from the environment '''
 
         # import here so apache wsgi interface gets the files
-        import wsgi_global, wsgi_content, wsgi_util, wsgi_data
+        import wsgi_global, wsgi_content, wsgi_util, wsgi_data, wsgi_func
 
         self.respond = respond
         self.environ = environ
         self.config = Config()
         self.config.mainclass = self
         self.config.mypath = os.path.dirname(os.path.realpath(__file__));
-        self.config.verbose = 0
+        self.config.verbose = VERBOSE
         self.sql = wsgi_data.wsgiSql("data/wsgi_main.sqlt")
+        self.stime = datetime.datetime.now()
+        try:
+            self.logfp = open("/var/log/wsgi_log", "a+")
+        except:
+            print("Cannot open log", sys.exc_info())
+            self.logfp = None
+
+        if self.logfp:
+            sss = [environ['REQUEST_METHOD'], environ['PATH_INFO']]
+            #print( str(self.stime), *sss )
+            print( str(self.stime), *sss, file=self.logfp, flush=True)
 
         #wsgi_util.printenv(environ, True)
         #print(environ['wsgi.version'])
         #print("Loaded in ", self.mypath)
+        #wsgi_util.print_httpenv(environ)
 
-        self.request = ""
-        self.query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
-        #print("Query", self.query)
+        wsgi_func.build_initial_table()
+        wsgi_func.build_initial_rc()
 
-        self.method = environ['REQUEST_METHOD']
-        #print("REQUEST_METHOD", self.method)
+        self.query = ""
+        if 'QUERY_STRING' in environ:
+            self.query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
+            #print("QUERY_STRING", self.query)
 
-        if "POST" in self.method:
-            try:
-                content_length = int(environ['CONTENT_LENGTH']) # <--- Gets the size of data
-                #print("content_length", content_length) # <--- Gets the data itself
-                self.request_org = environ['wsgi.input'].read(content_length)
-                #print("Request", self.request_org)
-                self.request = parse_qs(self.request_org, keep_blank_values=True)
-                print("Request", self.request)
-            except:
-                print("No post data", sys.exc_info())
-                pass
+        self.cookie = ""
+        if 'HTTP_COOKIE' in environ:
+            self.cookie = environ['HTTP_COOKIE'].split("=")
+            #print("HTTP_COOKIE", self.cookie)
+
+        self.method = ""
+        if 'REQUEST_METHOD' in environ:
+            self.method = environ['REQUEST_METHOD']
+            #print("REQUEST_METHOD", self.method)
+
+        self.request = {}
+        if 'CONTENT_LENGTH' in environ:
+            if self.method == 'POST':
+                try:
+                    content_length = int(environ['CONTENT_LENGTH']) # <--- Gets the size of data
+                    #print("content_length", content_length) # <--- Gets the data itself
+                    self.request_org = environ['wsgi.input'].read(content_length)
+                    self.request = parse_qs(self.request_org, keep_blank_values=True)
+                    #print("Request", self.request)
+                except:
+                    print("No post data", sys.exc_info())
+                    pass
 
         self.url = environ['PATH_INFO']
         splitx = os.path.split(self.url)
@@ -126,7 +152,7 @@ class xWebServer():
             content = ""
             try:
                 #print("Callback",  self.fn, self.url)
-                content = callme(self.config, self.url, self.query, tmpl)
+                content = callme(self.config, self.url, self.query, self.request, tmpl)
             except:
                 wsgi_util.put_exception("translate url")
                 self.respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
@@ -215,7 +241,6 @@ def application(environ, respond):
 
 # ------------------------------------------------------------------------
 
-
 if __name__ == '__main__':
 
     class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
@@ -223,7 +248,7 @@ if __name__ == '__main__':
         ''' Override parent's logging '''
 
         def log_message(self, format, *args):
-            # Do just a little bit of logging
+            # Do just a little bit of logging on stdout
             if "siteicons" not in args[0] and "media" not in args[0]:
                 print(args[0])
             pass
@@ -242,3 +267,5 @@ if __name__ == '__main__':
             httpd.server_close()
             raise
             break
+
+# EOF

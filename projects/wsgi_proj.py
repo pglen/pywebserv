@@ -52,10 +52,10 @@ def     mock_cal_func(strx):
 
         dt2 = datetime.datetime.now()
         dt = datetime.datetime(dt2.year, dt2.month, 1)
-        print("dt", dt, "wd:", dt.weekday())
+        #print("dt", dt, "wd:", dt.weekday())
         mon = dt.weekday()
         rrr = monthrange(dt2.year, dt2.month)[1]
-        print("mock_cal_func() wd:", dt.weekday(), "rrr", rrr)
+        #print("mock_cal_func() wd:", dt.weekday(), "rrr", rrr)
 
         content += "<tr><td colspan=7>"
         cnt = 0; cnt2 = 0;
@@ -68,7 +68,7 @@ def     mock_cal_func(strx):
             colx = "#ffffff"
             for bb in range(7):
                 if dt.year == dt2.year and dt.month == dt.month and dt2.day == cnt:
-                    print("today", dt2.day)
+                    #print("today", dt2.day)
                     colx = "#dddddd"
                 #aa*7 + bb + 1
                 cnt += 1

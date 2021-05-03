@@ -3,9 +3,6 @@
 ''' The simplest web server '''
 
 import sys, os, mimetypes, time, sqlite3
-import multiprocessing
-from urllib.parse import urlparse, unquote, parse_qs
-from wsgiref import simple_server, util
 
 class wsgiSql():
 

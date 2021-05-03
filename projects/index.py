@@ -1,24 +1,40 @@
 #!/usr/bin/env python3
 
-# ------------------------------------------------------------------------
-# This is a sample project that is added to the site. The idea here is
-# that nothing in this project can syntax error (down) the site, as it is
-# imported under a try: except clause, and it is calling only the
-# URL registration functions
-# ------------------------------------------------------------------------
+'''
+    This is a sample project that is added to the site. The idea here is
+    that nothing in this project can syntax error (down) the site, as it is
+    imported under a try: except clause, and it is calling only the
+    URL registration functions
+    Also, included a default web page function as index.html or as '/'
+'''
 
 import os, sys, random, datetime, time
-from urllib.parse import urlparse, unquote, parse_qs
-
 import wsgi_util, wsgi_func
 
-def got_index(config, url, query, template = ""):
+def fill_data(strx):
+    global configx
 
-    #print("got_index() conf", config.mypath, "url", url, "query", query, "template", template)
-    #print("request", str(config.mainclass.request))
+    print("strx", strx)
+    out = ""
+    res = configx.mainclass.sql.getall()
+    for aa in res:
+        out += str(aa) + "<br> "
+    return out
+
+def got_index(config, url, query, request, template = ""):
+
+    global configx
+    configx = config
+    print("got_index() url", url, "query", query, "request", request, "template", template)
+    #print("got_index() request=", request)
 
     if url == "/":
         url = "/index.html"
+
+    if request:
+        # Save it
+        sss = str(request[b'textx'])
+        config.mainclass.sql.put("key_" + sss, sss, "", "", "")
 
     if not template:
         template = wsgi_util.resolve_template(config, url, __file__)
@@ -31,11 +47,8 @@ def got_index(config, url, query, template = ""):
         #content = "Index file exists " + url + " " +  str(query) + " "
         with open(template, 'r') as fh:
             buff = fh.read()
-
-        #print("buff", buff)
         # Recursively process
-        content = "" #str(config.mainclass.request)
-        content += wsgi_util.recursive_parse(buff)
+        content = wsgi_util.recursive_parse(buff)
     else:
         content = "Index file (dyn) " + url + " " +  template + " " + str(query) + " "
     return content
@@ -52,3 +65,8 @@ from wsgi_global import add_one_url
 add_one_url("/", got_index, "index.html")
 add_one_url("/index.html", got_index, "index.html")
 
+from wsgi_global import add_one_func
+
+add_one_func("data", fill_data)
+
+# EOF

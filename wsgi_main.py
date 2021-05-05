@@ -33,7 +33,7 @@ The first two forms of the { image } function will preserve the image's aspect r
 '''
 
 import sys, os, mimetypes, time, datetime
-from urllib.parse import urlparse, unquote, parse_qs
+from urllib.parse import urlparse, unquote, parse_qs, parse_qsl
 from wsgiref import simple_server, util
 
 VERBOSE = 0
@@ -108,14 +108,16 @@ class xWebServer():
             self.method = environ['REQUEST_METHOD']
             #print("REQUEST_METHOD", self.method)
 
+        self.request_org = ""
         self.request = {}
         if 'CONTENT_LENGTH' in environ:
             if self.method == 'POST':
                 try:
                     content_length = int(environ['CONTENT_LENGTH']) # <--- Gets the size of data
                     #print("content_length", content_length) # <--- Gets the data itself
-                    self.request_org = environ['wsgi.input'].read(content_length)
-                    self.request = parse_qs(self.request_org, keep_blank_values=True)
+                    self.request_org = environ['wsgi.input'].read(content_length).decode()
+                    #print("Request_org", self.request_org)
+                    self.request = parse_qsl(str(self.request_org), keep_blank_values=True)
                     #print("Request", self.request)
                 except:
                     print("No post data", sys.exc_info())

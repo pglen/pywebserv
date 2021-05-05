@@ -8,7 +8,8 @@ header2 = '''
         <tr><td>
         <font size=+2><b>Sub Header here.</b></font>
         <td align=right>
-            <input type=text name=textx value="Submit Feedback">
+            <input type=text name="hell" value="Feed back">
+            <input type=text name="textx" value="Submit Feedback">
             <input type=submit name='hello' value='Submit'>
         <td>
         </table>

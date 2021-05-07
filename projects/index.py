@@ -17,7 +17,8 @@ def fill_data(strx):
     out = ""
     res = configx.mainclass.sql.getall()
     for aa in res:
-        out += aa[2][3:-2] + " &nbsp; "
+        #out += aa[2][3:-2] + " &nbsp; "
+        out += str(aa) + " &nbsp; "
     return out
 
 def got_index(config, url, query, request, template = ""):
@@ -42,6 +43,7 @@ def got_index(config, url, query, request, template = ""):
                 break
         print("raw data", sss, type(sss))
         config.mainclass.sql.put("key_" + sss, sss, "", "", "")
+        config.mainclass.sql.putlog("log_" + sss, sss, "", "", "")
 
     if not template:
         template = wsgi_util.resolve_template(config, url, __file__)

@@ -39,8 +39,8 @@ class wsgiSql():
             # Create table
             self.c.execute("create table if not exists " + self.table2 + "\
              (pri INTEGER PRIMARY KEY, key text, val text, val2 text, val3 text, val4 text)")
-            self.c.execute("create index if not exists iconfig on " + self.table2 + " (key)")
-            self.c.execute("create index if not exists pconfig on " + self.table2 + " (pri)")
+            self.c.execute("create index if not exists ilogconfig on " + self.table2 + " (key)")
+            self.c.execute("create index if not exists plogconfig on " + self.table2 + " (pri)")
             self.c.execute("PRAGMA synchronous=OFF")
             # Save (commit) the changes
             self.conn.commit()
@@ -96,6 +96,43 @@ class wsgiSql():
             self.conn.commit()
         except:
             print("Cannot put sql data", sys.exc_info())
+            ret = False
+        finally:
+            #c.close
+            pass
+
+        #self.take += time.clock() - got_clock
+
+        return ret
+
+    # --------------------------------------------------------------------
+    # Return False if cannot put data
+
+    def   putlog(self, key, val, val2, val3, val4):
+
+        #got_clock = time.clock()
+
+        ret = True
+        try:
+            if os.name == "nt":
+                self.c.execute("select * from " + self.table2 + " where key == ?", (key,))
+            else:
+                self.c.execute("select * from " + self.table2 + " indexed by ilogconfig where key == ?", (key,))
+            rr = self.c.fetchall()
+            if rr == []:
+                #print( "inserting")
+                self.c.execute("insert into " + self.table2 + " (key, val, val2, val3, val4) values (?, ?, ?, ?, ?)", (key, val, val2, val3, val4))
+            else:
+                #print ("updating")
+                if os.name == "nt":
+                    self.c.execute("update " + self.table2 + " set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
+                                     (val, val2, val3, val4, key))
+                else:
+                    self.c.execute("update " + self.table2 + " indexed by ilogconfig set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
+                                     (val, val2, val3, val4, key))
+            self.conn.commit()
+        except:
+            print("Cannot put sql log data", sys.exc_info())
             ret = False
         finally:
             #c.close

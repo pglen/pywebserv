@@ -123,7 +123,10 @@ class xWebServer():
                     print("No post data", sys.exc_info())
                     pass
 
-        self.url = environ['PATH_INFO']
+        self.url = ""
+        if 'PATH_INFO' in environ:
+            self.url = environ['PATH_INFO']
+
         splitx = os.path.split(self.url)
         tmpname = self._assem_path(splitx)
         self.fn = self.config.mypath +  tmpname
@@ -172,18 +175,29 @@ class xWebServer():
         # Static content
         else:
             found_file = ""
-            if os.path.exists(self.fn):
-                found_file = self.fn
-            else:
-                fn2 = self._pad_path(self.fn, "/html")
-                #print("fn2", fn2)
+            while 1:
+                if os.path.exists(self.fn):
+                    found_file = self.fn
+                    break
+                fn2 = self._pad_path(self.fn, "static")
                 if os.path.exists(fn2):
                     found_file = fn2
+                    break
+                fn2 = self._pad_path(self.fn, "html")
+                if os.path.exists(fn2):
+                    found_file = fn2
+                    break
+                break
 
+            #print("found_file", found_file)
             if found_file:
+                self.mtype = mimetypes.guess_type(found_file)[0]
+                if not self.mtype:
+                    self.mtype = "text/plain"
                 self.respond('200 OK', [('Content-Type', self.mtype + ';charset=UTF-8')])
-                fp = util.FileWrapper(open(self.fn, "rb"))
+                fp = util.FileWrapper(open(found_file, "rb"))
                 return fp
+
             else:       # Error content
                 self.respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
                 fn4 = self.config.mypath + os.sep + "html/404.html"
@@ -210,7 +224,9 @@ class xWebServer():
         #print("ppp", ppp)
         return ppp
 
-    def _pad_path(self, splitx, padname):
+    def _pad_path(self, fnorg, padname):
+        ''' inject last dirname '''
+        splitx = os.path.split(fnorg)
         #print("splitx", splitx)
         ppp = ""
         for aa in range(len(splitx)):
@@ -218,7 +234,6 @@ class xWebServer():
             if aa == len(splitx)-1:
                 ppp = os.path.join(ppp, padname)
             ppp = os.path.join(ppp, splitx[aa])
-
         #print("ppp", ppp)
         return ppp
 
@@ -235,6 +250,7 @@ def application(environ, respond):
     mypath = os.path.dirname(os.path.realpath(__file__));
     os.chdir(mypath); sys.path.append(mypath)
 
+    sys.path.append("common")
     import wsgi_util, wsgi_content, wsgi_global
 
     mainclass = xWebServer(environ, respond)

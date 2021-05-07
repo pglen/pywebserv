@@ -6,6 +6,8 @@ mkdir ./projects
 mkdir ./html
 mkdir ./siteicons
 mkdir ./media
+mkdir ./static
+mkdir ./common
 
 
 

@@ -12,14 +12,14 @@ from urllib.parse import urlparse, unquote, parse_qs
 
 import wsgi_util, wsgi_func
 
-def got_resp(config, url, query, template = ""):
+def got_resp(config, url, query, request, template = ""):
 
     #print("got_resp() config.mypath", config.mypath, "url", url, "query", query)
     found = ""
     fn = urlparse(url).path
 
     if not template:
-        template = resolve_template(config, __file__)
+        template = wsgi_util.resolve_template(config, url, __file__)
 
     #print("found local file", found)
     if  template:
@@ -45,6 +45,7 @@ sys.path.append("../")
 from wsgi_global import add_one_url
 
 add_one_url("/responsive", got_resp)
+add_one_url("/responsive.html", got_resp)
 add_one_url("/rr", got_resp)
 
 # ------------------------------------------------------------------------

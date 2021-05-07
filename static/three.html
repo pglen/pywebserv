@@ -1,0 +1,137 @@
+<html>
+ <head>
+    <style>
+
+    * {
+       /* padding: 10px; */
+    }
+    {
+        box-sizing: border-box;
+        padding: 10px;
+    }
+
+    /* Set additional styling options for the columns */
+    .column {
+    float: left;
+    }
+
+    /* Set width length for the left, right and middle columns */
+    .left {
+    width: 20%;
+    }
+    .middle {
+    width: 60%;
+    }
+    .right {
+    width: 20%;
+    }
+    .row:after {
+    content: "";
+    /*display: table;*/
+    clear: both;
+    }
+
+/* Style the top navigation bar */
+.topnav {
+  overflow: auto;
+  background-color: #aaaaaaaa;
+  color: #aa000000;
+}
+
+/* Style the topnav links */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f20;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  overflow: auto;
+}
+
+/* Change color on hover */
+.topnav a:hover {
+  background-color: #eeeeee;
+  color: black;
+}
+
+@media screen and (max-width: 900px) {
+    .middle {
+    width: 80%;
+    }
+     .right {
+     float: none;
+    width: 100%;
+    }
+    .cut {
+    display: none;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .left {
+    width: 100%;
+    }
+    .middle {
+     float: none;
+    width: 100%;
+    }
+     .right {
+     float: none;
+    width: 100%;
+    }
+}
+</style>
+
+</head>
+
+<body>
+  <div class="topnav">
+      <a href="#">Link</a>
+      <a href="#">Link2</a>
+      <a href="#">Link3</a>
+        <div class="cut">
+          <a href="#">Link4</a>
+          <a href="#">Link5</a>
+          <a href="#">Link6</a>
+          <a href="#">Link7</a>
+        </div>
+    <a href="#" style="float:right">Link</a>
+
+</div>
+
+    <div class="row">
+        <div class="column left" style="background-color:#FFB695;">
+            <h2>Column 1</h2>
+            <p>Data..</p>
+               <p>Data..</p>
+            <p>Data..</p>
+            <p>Data..</p>
+            <p>Data..</p>
+            <p>Data..</p>
+
+        </div>
+        <div class="column middle" style="background-color:#96D1CD;">
+            <h2>Column 2</h2>
+            <p>Data..</p>
+            IOCOM4 txrx device ready, version: 1.0 build: Thu 29.Apr.2021
+Type 'help' to get the list of commands.
+Use UP/DOWN arrows to navigate through command history.
+Press TAB when typing command name to auto-complete.
+            IOCOM4 txrx device ready, version: 1.0 build: Thu 29.Apr.2021
+Type 'help' to get the list of commands.
+Use UP/DOWN arrows to navigate through command history.
+Press TAB when typing command name to auto-complete.
+            IOCOM4 txrx device ready, version: 1.0 build: Thu 29.Apr.2021
+Type 'help' to get the list of commands.
+Use UP/DOWN arrows to navigate through command history.
+Press TAB when typing command name to auto-complete.
+
+        </div>
+        <div class="column right" style="background-color:#74C3E1;">
+            <h2>Column 3</h2>
+            <p>Data..</p>
+        </div>
+    </div>
+ </body>
+</html>

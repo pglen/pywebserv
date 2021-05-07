@@ -10,7 +10,7 @@ from wsgi_style import *
 from wsgi_res   import *
 from wsgi_func  import *
 
-# A list of variables and strings / functions
+# A list of variables and strings
 
 global_table = [
     ["header2", header2],
@@ -91,10 +91,11 @@ def     add_one_url(url, mfunc, mpage = None):
 
     #print("urlmap", urlmap.urls)
 
+
 def     getprojects():
 
     '''
-        Add projects in this directory for automatic inclusion into the site.
+        Add (import) projects in this directory for automatic inclusion into the site.
         The initial project dir is called 'projects'
     '''
 
@@ -116,6 +117,7 @@ def     getprojects():
                         msg = "Module %s failed to load" % aa
                         #print("msg", msg)
                         ret = [msg.encode("utf-8"),]
+                        return ret
     except:
         #print("Cannot import guest project", sys.exc_info())
         wsgi_util.put_exception("Cannot import")

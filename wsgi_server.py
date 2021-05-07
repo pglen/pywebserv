@@ -58,30 +58,46 @@ def re_serve():
     return th
 
 def waitx():
-    time.sleep(.2)
+    time.sleep(.1)
+
+def append_file(nnn):
+    global fnamearr, statarr
+
+    if os.path.isfile(nnn):
+        fff = os.stat(nnn).st_mtime
+        fnamearr.append(nnn)
+        statarr.append(fff)
+
+# Scan all files in one deep directory
 
 def  rescan():
-
     global fnamearr, statarr
+
     fnamearr = []; statarr = []
-    fnamearr2 = os.listdir()
-    #print("fnamearr2", fnamearr2)
-    # Build reference
-    for aa in range(len(fnamearr2)):
-        if os.path.isfile(fnamearr2[aa]):
-            fff = os.stat(fnamearr2[aa]).st_mtime
-            fnamearr.append(fnamearr2[aa])
-            statarr.append(fff)
-    ddd = "projects"
-    fnamearr3 = os.listdir(ddd)
-    #print("fnamearr3", fnamearr3)
-    for aa in range(len(fnamearr3)):
-        aaa = ddd + os.sep + fnamearr3[aa]
+    fnamearr2a = os.listdir()
+    #print("fnamearr2a", fnamearr2a)
+
+    for aaa in fnamearr2a:
+        if os.path.isdir(aaa):
+            # No need for these files
+            if "__" in aaa:
+                continue
+            if ".git" in aaa:
+                continue
+            if "data" in aaa:
+                continue
+            _rescan(aaa)
         if os.path.isfile(aaa):
-            fff = os.stat(aaa).st_mtime
-            fnamearr.append(aaa)
-            statarr.append(fff)
+             append_file(aaa)
     #print("fnamearr", fnamearr)
+
+def _rescan(dirx):
+    fnamearr2 = os.listdir(dirx)
+    for aa in range(len(fnamearr2)):
+        nnn = dirx + os.sep + fnamearr2[aa]
+        #print("nnn", nnn)
+        if os.path.isfile(nnn):
+             append_file(nnn)
 
 if __name__ == '__main__':
 
@@ -109,6 +125,6 @@ if __name__ == '__main__':
             print("Restarted server:")
             th = re_serve() ; waitx();
             re_open()
-        time.sleep(.5)
+        time.sleep(.2)
 
 # EOF

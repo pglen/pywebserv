@@ -1,0 +1,95 @@
+<style>
+
+body {
+  padding: 0;
+  margin: 0;
+  /* background: #ccc url(beach-hd.jpeg) repeat-y 50% 0;  */
+}
+.shadowbox {
+  width: 15em;
+  border: 1px solid #333;
+  box-shadow: 8px 8px 5px #444;
+  padding: 8px 12px;
+  /* background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc); */
+}
+
+#col_container {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    background: lightgrey;
+}
+#col1 {
+    float: left;
+    width: 35%;
+    overflow: scroll;
+    /*background: blue;*/
+    display: table-cell;
+}
+
+#col2 {
+  float: left;
+  /*flex-grow: 1;*/
+  overflow: hidden;
+  background: green;
+}
+
+#col1, #col2 {
+  width: 50%;
+  height: 100%;
+  overflow: auto;
+  /*background: green;*/
+
+}
+.col-content {
+  position: relative;
+  height: 500px;
+}
+
+.col-content > div {
+  width: 60%;
+  margin: auto;
+  background-color: rgb(200,200,200);
+}
+
+.col-content p {
+  text-align: center;
+  margin: 0 auto;
+}
+</style>
+
+<body>
+<div>
+before cols
+</div>
+
+<div>
+  <div id="col_container">
+    <div id="col1">
+      <div class="col-content">
+        before
+        <div>
+          <p>Hxllo World Here!</p>
+        </div>
+        after
+      </div>
+    </div>
+
+    <div id="col2">
+      <div class="col-content">
+        before2
+        <div>
+          <p>Hello World!</p>
+        </div>
+      after2
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+after cols
+</div>
+
+</body>
+

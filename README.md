@@ -62,6 +62,17 @@
                 else
                     404 message
 
+ To create a new project:
+
+    Add a directory to the web server that starts with 'proj'
+    (like proj-hello or proj-sales)
+    fill in the directory with content
+        o Initial py file to configure the project
+        o Content that respond to the callbacks
+
+    See proj-index for an example.
+
+
 ### History:
 
     Fri 16.Apr.2021 Skeleton project

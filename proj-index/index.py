@@ -21,14 +21,13 @@ def fill_data(strx):
         out += str(aa) + " &nbsp; "
     return out
 
-def got_index(config, url, query, request, template = ""):
+def got_index(config, url, query, request, template = "", fname = ""):
 
     global configx
     configx = config
-    #print("got_index() url", url, "query", query, "request", request, "template", template)
+    print("got_index() url", url, "query", query, "request", request, "template", template, "fname", fname)
     #print("got_index() request_org=", config.mainclass.request_org)
-
-    print("got_index() request", request)
+    #print("got_index() request", request)
 
     if url == "/":
         url = "/index.html"
@@ -48,9 +47,9 @@ def got_index(config, url, query, request, template = ""):
     if not template:
         template = wsgi_util.resolve_template(config, url, __file__)
     else:
-        template = config.mypath + os.sep + os.path.dirname(__file__) + os.sep + template
+        template = os.path.dirname(__file__) + os.sep + template
 
-    #print("using template", template)
+    print("using template", template)
 
     if template and os.path.exists(template):
         #content = "Index file exists " + url + " " +  str(query) + " "
@@ -63,19 +62,26 @@ def got_index(config, url, query, request, template = ""):
     return content
 
 # ------------------------------------------------------------------------
-# Add all the functions for the urls; this function is called
-# When the url is accessed
-
-sys.path.append("../")
+# Add all the functions for the urls;
+# This function is called when the module is loaded
+#
 
 from wsgi_global import add_one_url
 
-# Add default enties to table
-add_one_url("/", got_index, "index.html")
-add_one_url("/index.html", got_index, "index.html")
+def initialize():
+    print("called initialization")
+    pass
 
-from wsgi_global import add_one_func
-
-add_one_func("feed_data", fill_data)
+modfname = os.path.basename(__file__)
+try:
+    #print("initiaizing", modfname)
+    sys.path.append("../")
+    # Add default enties to table
+    add_one_url("/", got_index, "index.html", __file__)
+    add_one_url("/index.html", got_index, "index.html", __file__)
+    from wsgi_global import add_one_func
+    add_one_func("feed_data", fill_data)
+except:
+    print("Cannot initialize", modfname, sys.exc_info())
 
 # EOF

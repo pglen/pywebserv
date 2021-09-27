@@ -13,11 +13,11 @@ import os, sys, random, datetime, time
 
 # Add URL; too simple, but is communicates the idea
 
-def got_aa(config, url, query):
+def got_aa(config, url, query, req, templ):
     content = "AA file " + url + " " + str(query) + " "
     return content
 
-def got_bb(config, url, query):
+def got_bb(config, url, query, req, templ):
     content = "bb file " + url + " " + str(query) + " "
     return content
 

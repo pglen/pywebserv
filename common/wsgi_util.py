@@ -175,10 +175,17 @@ def     put_exception(xstr):
 def  resolve_template(config, fn, name):
 
     # Iterate 'lookfor' combos; the html template can be local, html static,
+
+    #print("resolve_template()", config.mypath, fn, name)
+
+    fname = os.path.basename(name)
+    fname2 = os.path.splitext(fname)[0] + ".html"
+    #print("respath", os.path.dirname(name) + os.sep + fname2)
+
     found = ""
     while True:
-        fn1 = config.mypath + os.sep  + name[:-3] + ".html"
-        #print("test fn1", fn1)
+        fn1 =  os.path.dirname(name) + os.sep + fname2
+        print("test fn1", fn1)
         if  os.path.exists(fn1):
             found = fn1
             break
@@ -193,5 +200,8 @@ def  resolve_template(config, fn, name):
             found = fn3
             break
         break;
+
+    #print("resolve_template(), found: ", found)
+
     return found
 

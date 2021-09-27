@@ -34,28 +34,30 @@ class UrlMap():
 
         self.urls = []
 
-    def add(self, url, func, page):
+    def add(self, url, func, page, fname):
         # Got one already?
-        for aa in self.urls:
-            if aa[0] == url:
-                return
-        self.urls.append((url, func, page))
+        #for aa in self.urls:
+        #    if aa[0] == url:
+        #        return
+        self.urls.append((url, func, page, fname))
 
     def lookup(self, url):
         #print("Looking up url", url)
         for aa in self.urls:
             #print("src url", aa[0], aa[1])
             if aa[0] == url:
-                return aa[1], aa[2]
-        return None, None
+                return aa[1], aa[2], aa[3]
+        return None, None, None
 
-# URL to function table
+# ------------------------------------------------------------------------
+# URL to function table, global
+
 urlmap =  UrlMap()
 
 # ------------------------------------------------------------------------
 # Add a new project function;
 
-def     add_one_func(mname, mfunc, mpage = None):
+def     add_one_func(mname, mfunc, mpage = None, fname=None):
 
     '''
         Add a macro function here. The macro is substituted
@@ -76,7 +78,7 @@ def     add_one_func(mname, mfunc, mpage = None):
 
 # We build it dynamically, so error is flagged
 
-def     add_one_url(url, mfunc, mpage = None):
+def     add_one_url(url, mfunc, mpage = None, fname=""):
 
     '''
     Add a url and a function here. Also, an optional template. The template is assumed
@@ -88,7 +90,7 @@ def     add_one_url(url, mfunc, mpage = None):
 
     global urlmap
     try:
-        urlmap.add(url, mfunc, mpage)
+        urlmap.add(url, mfunc, mpage, fname)
     except:
         print("Cannot add url map", sys.exc_info())
 
@@ -98,7 +100,7 @@ def     add_one_url(url, mfunc, mpage = None):
 
 def  _load_project(pdir):
 
-    #print("Loading project from", "'" + pdir + "'")
+    print("Loading project from", "'" + pdir + "'")
 
     ret = []
     try:
@@ -109,14 +111,28 @@ def  _load_project(pdir):
             if aa[-3:] == ".py" and aa != "__init__.py":
                 if os.path.exists(pdir + os.sep + aa):
                     #print("importing", aa)
+                    mod = ""
                     try:
-                        import_module( aa[:-3])
+                        mod = import_module( aa[:-3], aa[:-3] + ".mod")
+                        #print("Module:", aa[:-3], mod)
                     except:
                         wsgi_util.put_exception("Cannot import module: '%s' " % aa)
                         msg = "Module %s failed to load" % aa
                         #print("msg", msg)
                         ret = [msg.encode("utf-8"),]
                         return ret
+                    ''' did not work
+                    try:
+                        cmd = mod.__name__ + ".initialize()"
+                        print("init", cmd)
+                        xx = compile(cmd, "<string>", 'exec')
+                        exec(xx)
+                    except:
+                        wsgi_util.put_exception("Cannot initialize module: '%s' " % aa)
+                        msg = "Module %s failed to init" % aa
+                        ret = [msg.encode("utf-8"),]
+                        return ret
+                    '''
     except:
         #print("Cannot import guest project", sys.exc_info())
         wsgi_util.put_exception("Cannot import")
@@ -129,13 +145,13 @@ def  _load_project(pdir):
 
 def     getprojects(mainclass):
 
-    #print("pl beg", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
     '''
         Add (import) projects in directories starting with 'proj'
         for automatic inclusion into the site.
         The initial project dir was called 'projects'
     '''
 
+    print("getprojects beg", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
     pdir = "proj"
     dirs = os.listdir(".")
     for aa in dirs:
@@ -145,5 +161,27 @@ def     getprojects(mainclass):
 
     #print("pl delta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
 
-# EOF
+    # Print all URLS
+    '''print("Dumping urlmap")
+    for aa in urlmap.urls:
+       print("     ", aa[0])
+       #print("     ", aa)
+    print("End urlmap")
+    '''
 
+    cnt = 0
+    for aa in urlmap.urls:
+        # check for duplicate
+        ddd = 0; url = ""; xcnt = 0
+        for bb in urlmap.urls:
+            if aa[0] == bb[0]:
+                ddd += 1
+                url = bb[0]
+                xcnt = cnt
+        cnt += 1
+        if ddd > 1:
+            print("   ** Warn: Duplicate URL", xcnt, url)
+
+    #print("getprojects end", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
+
+# EOF

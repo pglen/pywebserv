@@ -37,6 +37,7 @@ from urllib.parse import urlparse, unquote, parse_qs, parse_qsl
 from wsgiref import simple_server, util
 
 VERBOSE = 0
+verbose = 0
 
 # ------------------------------------------------------------------------
 
@@ -144,8 +145,9 @@ class xWebServer():
     def _translate_url(self, config, url):
         #print("Looking up", url)
         par = urlparse(url)
-        got, tmpl = self.urlmap.lookup(par.path)
-        return got, tmpl
+        got, tmpl, filen = self.urlmap.lookup(par.path)
+        #print("Got ", got, tmpl, filen)
+        return got, tmpl, filen
 
     # --------------------------------------------------------------------
     #  Dynamic content - overrides static
@@ -157,14 +159,14 @@ class xWebServer():
         import wsgi_content, wsgi_util
 
         #print("serving", self.url, self.fn)
-        callme, tmpl = self._translate_url(self.config, self.url)
+        callme, tmpl, filen = self._translate_url(self.config, self.url)
         if(callme):
             content = ""
             try:
                 #print("Callback",  self.fn, self.url)
-                content = callme(self.config, self.url, self.query, self.request, tmpl)
+                content = callme(self.config, self.url, self.query, self.request, tmpl, filen)
             except:
-                wsgi_util.put_exception("translate url")
+                wsgi_util.put_exception("process_req")
                 self.respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
 
                 fn5 = self.config.mypath + os.sep + "html/500.html"
@@ -194,7 +196,7 @@ class xWebServer():
                     break
                 break
 
-            print("found_file", found_file)
+            #print("found_file", found_file)
             if found_file:
                 self.mtype = mimetypes.guess_type(found_file)[0]
                 if not self.mtype:
@@ -242,6 +244,9 @@ class xWebServer():
         #print("ppp", ppp)
         return ppp
 
+usr_cnt = 0
+mainclass = None
+
 # ------------------------------------------------------------------------
 # WSGI main entry point
 
@@ -250,18 +255,29 @@ def application(environ, respond):
     '''
     WSGI main entry point. The web server (like apache) will call this.
     '''
+
+    sys.path.append("common")
     # Make sure we are landing here
     mypath = os.path.dirname(os.path.realpath(__file__));
     os.chdir(mypath); sys.path.append(mypath)
 
-    sys.path.append("common")
     import wsgi_util, wsgi_content, wsgi_global
 
+    global usr_cnt, mainclass
+
+    usr_cnt += 1
+    #print("Query arrived", os.getpid(), usr_cnt)
+
+    #if not mainclass:
     mainclass = xWebServer(environ, respond)
-    wsgi_global.getprojects(mainclass)
+
+    # Only do it one time
+    if usr_cnt == 1:
+        wsgi_global.getprojects(mainclass)
+
     wdata = mainclass.process_req()
 
-    print("tdelta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
+    #print("tdelta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
 
     return wdata
 
@@ -269,12 +285,15 @@ def application(environ, respond):
 
 if __name__ == '__main__':
 
-    global verbose
+    #global mainclass
 
-    print("args", sys.argv)
+    print("Begin main args", sys.argv)
+
     for aa in sys.argv:
         if aa == "-v":
             verbose = True
+
+    #mainclass = None
 
     class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
 
@@ -296,7 +315,7 @@ if __name__ == '__main__':
         try:
             httpd.handle_request()
         except KeyboardInterrupt:
-            print("\nShutting down web server.")
+            print("\nShutting down web server.\n")
             httpd.server_close()
             raise
             break

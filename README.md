@@ -64,21 +64,23 @@
 
  To create a new project:
 
-    Add a directory to the web server that starts with 'proj'
-    (like proj-hello or proj-sales)
+    Add a directory to the web server content directory
+        that starts with 'proj' (like proj-hello or proj-sales)
     fill in the directory with content
-        o Initial py file to configure the project
-        o Content that respond to the callbacks
+        o Initial .py file to configure the project (any name)
+        o Content that responds to the callbacks, or presented as is
 
     See proj-index for an example.
-
 
 ### History:
 
     Fri 16.Apr.2021 Skeleton project
     Sun 18.Apr.2021 Apache tests OK
-    Mon 19.Apr.2021 turned icons/ to siteicons/ (for apache not to redirect)
-    Thu 22.Apr.2021 projects in separate dir, reverse isolation
+    Mon 19.Apr.2021 Turned icons/ to siteicons/ (for apache not to redirect)
+    Thu 22.Apr.2021 Projects in separate dir, reverse isolation
+    Mon 27.Sep.2021 Moved user contents to the subdir 'content' (more isolation)
+
+## Licence
 
  Open source.
 

@@ -1,8 +1,8 @@
-# wsgi webserver
+# Wsgi Web Server
 
 ## WSGI compliant web server, initial steps.
 
- Nothing useful, but first steps are successful.
+ Mon 27.Sep.2021 first steps are successful.
 
  Web server with no dependencies (for security). One might say this is a framework-less framework.
 

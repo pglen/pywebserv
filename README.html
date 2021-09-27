@@ -270,11 +270,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px
 
 <div class="container" id="body">
 
-<h1>wsgi webserver</h1>
+<h1>Wsgi Web Server</h1>
 
 <h2>WSGI compliant web server, initial steps.</h2>
 
-<p>Nothing useful, but first steps are successful.</p>
+<p>Mon 27.Sep.2021 first steps are successful.</p>
 
 <p>Web server with no dependencies (for security). One might say this is a framework-less framework.</p>
 
@@ -287,7 +287,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px
 <li>connected to apache2 (tests OK)</li>
 <li><p>image re-size from { vars } arguments ex: { image any.png 800 }</p>
 
-<p><img src="initial.png" alt="screen shot for template" /></p>
+<p><img src="content/siteicons/initial.png" alt="screen shot for template" /></p>
 
 <p>On the screen shot above, the recursive substitution is shown, including
 an undefined variable; (surrounded by question marks)</p>
@@ -295,12 +295,12 @@ an undefined variable; (surrounded by question marks)</p>
 <p>On the screen shot below, images are added, images are dynamically re sized with the PIL
 library;</p>
 
-<p><img src="siteicons/next_step.png" alt="screen shot of image processing" /></p>
+<p><img src="content/siteicons/next_step.png" alt="screen shot of image processing" /></p>
 
 <p>On the screen shot below, projects is added in a separate directory; The project is isolated,
 errors in the project do not influence the site; only an error message shows.</p>
 
-<p><img src="siteicons/tiles.png" alt="screen shot of project and tiles processing" /></p>
+<p><img src="content/siteicons/tiles.png" alt="screen shot of project and tiles processing" /></p>
 
 <p>Variable subst regex: "{ .<em>? }"  (example: { header } )
 Command parameter subst regex: "[ .</em>? ]"  (example: [ value_one ] )</p>
@@ -333,7 +333,17 @@ Command parameter subst regex: "[ .</em>? ]"  (example: [ value_one ] )</p>
             if 404 file
                 present it
             else
-                404 message</p></li>
+                404 message</p>
+
+<p>To create a new project:</p>
+
+<p>Add a directory to the web server that starts with 'proj'
+(like proj-hello or proj-sales)
+fill in the directory with content
+    o Initial py file to configure the project
+    o Content that respond to the callbacks</p>
+
+<p>See proj-index for an example.</p></li>
 </ul>
 
 <h3>History:</h3>

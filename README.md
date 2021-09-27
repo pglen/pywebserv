@@ -14,7 +14,7 @@
    * connected to apache2 (tests OK)
    * image re-size from { vars } arguments ex: { image any.png 800 }
 
- ![screen shot for template](initial.png)
+ ![screen shot for template](siteicons/initial.png)
 
  On the screen shot above, the recursive substitution is shown, including
  an undefined variable; (surrounded by question marks)
@@ -22,12 +22,12 @@
  On the screen shot below, images are added, images are dynamically re sized with the PIL
  library;
 
-  ![screen shot of image processing](next_step.png)
+  ![screen shot of image processing](siteicons/next_step.png)
 
  On the screen shot below, projects is added in a separate directory; The project is isolated,
  errors in the project do not influence the site; only an error message shows.
 
-  ![screen shot of project and tiles processing](tiles.png)
+  ![screen shot of project and tiles processing](siteicons/tiles.png)
 
   Variable subst regex: "{ .*? }"  (example: { header } )
   Command parameter subst regex: "\[ .*? \]"  (example: [ value_one ] )

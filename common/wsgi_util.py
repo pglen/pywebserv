@@ -108,7 +108,7 @@ def     recursive_parse(buff, regex = "{ .*? }"):
     content = ""
     try:
         # Recursively process
-        cnt2 = 4; old_cnt = 0
+        cnt2 = 10; old_cnt = 0
         content = buff
         while(True):
             arr, cnt = parse_buffer(content, False, regex)
@@ -126,7 +126,7 @@ def     recursive_parse(buff, regex = "{ .*? }"):
                 break
             old_cnt = cnt
 
-        cnt3 = 4
+        cnt3 = 10
         while(True):
             arr, cnt = parse_buffer(content, True, regex)
             content = ""

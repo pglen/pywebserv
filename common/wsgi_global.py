@@ -2,7 +2,7 @@
 
 ''' These tags / funtions / tables are global to the site '''
 
-import sys
+import sys, time
 
 # Get strings and functions
 
@@ -28,7 +28,7 @@ global_table = [
 
 class UrlMap():
 
-    ''' This calss stores the URL to function mapping '''
+    ''' This class stores the URL to function mapping '''
 
     def __init__(self):
 
@@ -61,6 +61,9 @@ def     add_one_func(mname, mfunc, mpage = None):
         Add a macro function here. The macro is substituted
         by the output of the function. Macro syntax is words sourrounded by
         '{ ' and ' }' as in { macro }
+        It is also permissible to add a python variable as the value for
+        substitution. It is substituted recursively, so variables in
+        variables are permitted. The max nesting depth is 10.
     '''
     try:
         global_table.append([mname, mfunc])
@@ -79,8 +82,8 @@ def     add_one_url(url, mfunc, mpage = None):
     Add a url and a function here. Also, an optional template. The template is assumed
     to be in the same directory as the script. If no template is added, the following
     places will be searched: the project "./" directory,  the /static/ directory.
-    If the template cannot be found, the return of the function output is delivered as
-    it was generated.
+    If the template cannot be found, the return value of the function output is delivered as
+    it was generated without template substitution.
     '''
 
     global urlmap
@@ -91,19 +94,15 @@ def     add_one_url(url, mfunc, mpage = None):
 
     #print("urlmap", urlmap.urls)
 
+# ------------------------------------------------------------------------
 
-def     getprojects():
+def  _load_project(pdir):
 
-    '''
-        Add (import) projects in this directory for automatic inclusion into the site.
-        The initial project dir is called 'projects'
-    '''
+    #print("Loading project from", "'" + pdir + "'")
 
     ret = []
     try:
         from importlib import import_module
-
-        pdir = "projects"
         sys.path.append(pdir)
         files = os.listdir(pdir)
         for aa in files:
@@ -124,6 +123,27 @@ def     getprojects():
         ret = [b"Some modules failed to load"]
 
     return ret
+
+# ------------------------------------------------------------------------
+# Load all projects from dirs starting with "proj"
+
+def     getprojects(mainclass):
+
+    #print("pl beg", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
+    '''
+        Add (import) projects in directories starting with 'proj'
+        for automatic inclusion into the site.
+        The initial project dir was called 'projects'
+    '''
+
+    pdir = "proj"
+    dirs = os.listdir(".")
+    for aa in dirs:
+        if os.path.isdir(aa):
+            if aa[:4] == pdir:
+                _load_project(aa)
+
+    #print("pl delta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
 
 # EOF
 

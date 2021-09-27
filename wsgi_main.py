@@ -66,6 +66,9 @@ class xWebServer():
         # import here so apache wsgi interface gets the files
         import wsgi_global, wsgi_content, wsgi_util, wsgi_data, wsgi_func
 
+        global verbose
+
+        self.mark = time.perf_counter()
         self.respond = respond
         self.environ = environ
         self.config = Config()
@@ -96,12 +99,14 @@ class xWebServer():
         self.query = ""
         if 'QUERY_STRING' in environ:
             self.query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
-            #print("QUERY_STRING", self.query)
+            if verbose:
+                print("QUERY_STRING", self.query)
 
         self.cookie = ""
         if 'HTTP_COOKIE' in environ:
             self.cookie = environ['HTTP_COOKIE'].split("=")
-            #print("HTTP_COOKIE", self.cookie)
+            if verbose:
+                print("HTTP_COOKIE", self.cookie)
 
         self.method = ""
         if 'REQUEST_METHOD' in environ:
@@ -189,7 +194,7 @@ class xWebServer():
                     break
                 break
 
-            #print("found_file", found_file)
+            print("found_file", found_file)
             if found_file:
                 self.mtype = mimetypes.guess_type(found_file)[0]
                 if not self.mtype:
@@ -243,8 +248,7 @@ class xWebServer():
 def application(environ, respond):
 
     '''
-    WSGI main entry point. The web server (like apache)
-    will call this.
+    WSGI main entry point. The web server (like apache) will call this.
     '''
     # Make sure we are landing here
     mypath = os.path.dirname(os.path.realpath(__file__));
@@ -254,12 +258,23 @@ def application(environ, respond):
     import wsgi_util, wsgi_content, wsgi_global
 
     mainclass = xWebServer(environ, respond)
-    err = wsgi_global.getprojects()
-    return mainclass.process_req()
+    wsgi_global.getprojects(mainclass)
+    wdata = mainclass.process_req()
+
+    print("tdelta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
+
+    return wdata
 
 # ------------------------------------------------------------------------
 
 if __name__ == '__main__':
+
+    global verbose
+
+    print("args", sys.argv)
+    for aa in sys.argv:
+        if aa == "-v":
+            verbose = True
 
     class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
 
@@ -281,7 +296,7 @@ if __name__ == '__main__':
         try:
             httpd.handle_request()
         except KeyboardInterrupt:
-            print("Shutting down.")
+            print("\nShutting down web server.")
             httpd.server_close()
             raise
             break

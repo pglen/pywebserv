@@ -68,6 +68,7 @@ def append_file(nnn):
         fnamearr.append(nnn)
         statarr.append(fff)
 
+# ------------------------------------------------------------------------
 # Scan all files in one deep directory
 
 def  rescan():

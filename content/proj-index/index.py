@@ -25,7 +25,7 @@ def got_index(config, url, query, request, template = "", fname = ""):
 
     global configx
     configx = config
-    print("got_index() url", url, "query", query, "request", request, "template", template, "fname", fname)
+    #print("got_index() url", url, "query", query, "request", request, "template", template, "fname", fname)
     #print("got_index() request_org=", config.mainclass.request_org)
     #print("got_index() request", request)
 
@@ -40,6 +40,7 @@ def got_index(config, url, query, request, template = "", fname = ""):
             if aa[0] == "textx":
                 sss = aa[1]
                 break
+
         print("raw data", sss, type(sss))
         config.mainclass.sql.put("key_" + sss, sss, "", "", "")
         config.mainclass.sql.putlog("log_" + sss, sss, "", "", "")
@@ -49,7 +50,7 @@ def got_index(config, url, query, request, template = "", fname = ""):
     else:
         template = os.path.dirname(__file__) + os.sep + template
 
-    print("using template", template)
+    #print("using template", template)
 
     if template and os.path.exists(template):
         #content = "Index file exists " + url + " " +  str(query) + " "

@@ -4,13 +4,19 @@
 of the web server, and sub directories may assume the following functions:
 
     data            for database related
-    siteicons       icons for this site
-    media           images, media
-    static          files that may be presented as is
-    projects        python files that make up the site
+    content         where the files live
+        siteicons       icons for this site
+        media           images, media
+        static          files that may be presented as is
+        proj*           python and html / css files that make up the site
 
-  To create a <b>new page</b>, add a new python file, and call the
-URL registration function.
+
+  To create a <b>new project</b>, add a new directory that starts with "proj"
+ (like "proj-000") and populate the files. At least one puthon file is needed.
+
+    To create a <b>new page</b>, add a new python file, and call the
+URL registration function(s) within. The server redirects the url
+to the function you specify.
 
   add_one_url("/", got_index, "index.html")
 
@@ -26,7 +32,7 @@ The macro regex is '{ .*? }' [the '?' is for non greedy wild card)
 
  { image nnn }          --  Put an image tag nnn in the output
  { image nnn www }      --  Put an image tag in the output, resize width to requested
- { image nnn www hhh }  --  Put an image tag in the output, resize to parm
+ { image nnn www hhh }  --  Put an image tag in the output, resize to width / height
 
 The first two forms of the { image } function will preserve the image's aspect ratio.
 
@@ -38,6 +44,7 @@ from wsgiref import simple_server, util
 
 VERBOSE = 0
 verbose = 0
+debug   = 0
 
 # ------------------------------------------------------------------------
 
@@ -49,6 +56,7 @@ class Config():
 
     def __init(self):
         self.mypath = ""
+        self.datapath = ""
         self.server = None
         self.mainclass = None
 
@@ -62,7 +70,7 @@ class xWebServer():
 
     def __init__(self, environ, respond):
 
-        ''' Deocrate the class instance with data from the environment '''
+        ''' Decorate the class instance with data from the environment '''
 
         # import here so apache wsgi interface gets the files
         import wsgi_global, wsgi_content, wsgi_util, wsgi_data, wsgi_func
@@ -74,9 +82,13 @@ class xWebServer():
         self.environ = environ
         self.config = Config()
         self.config.mainclass = self
-        self.config.mypath = os.path.dirname(os.path.realpath(__file__));
+        self.config.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
+        self.config.datapath = self.config.mypath + "content" + os.sep
+
+        #print("self.config.mypath", self.config.mypath, "self.config.datapath", self.config.datapath)
+
         self.config.verbose = VERBOSE
-        self.sql = wsgi_data.wsgiSql("data/wsgi_main.sqlt")
+        self.sql = wsgi_data.wsgiSql(self.config.mypath + "data/wsgi_main.sqlt")
         self.stime = datetime.datetime.now()
         try:
             self.logfp = open("/var/log/wsgi_log", "a+")
@@ -135,7 +147,7 @@ class xWebServer():
 
         splitx = os.path.split(self.url)
         tmpname = self._assem_path(splitx)
-        self.fn = self.config.mypath +  tmpname
+        self.fn = self.config.datapath +  tmpname
         #print("self.fn", self.fn)
         self.mtype = mimetypes.guess_type(self.fn)[0]
         if not self.mtype:
@@ -169,9 +181,9 @@ class xWebServer():
                 wsgi_util.put_exception("process_req")
                 self.respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
 
-                fn5 = self.config.mypath + os.sep + "html/500.html"
+                fn5 = self.config.datapath + os.sep + "html/500.html"
                 if os.path.exists(fn5):
-                    content = wsgi_content.got_500(self.config, "html/500.html", self.query)
+                    content = wsgi_content.got_500(self.config, fn5, self.query)
                 else:
                     content = "Empty results from page assembly."
                 return [bytes(content, "utf-8")]
@@ -207,9 +219,9 @@ class xWebServer():
 
             else:       # Error content
                 self.respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
-                fn4 = self.config.mypath + os.sep + "html/404.html"
+                fn4 = self.config.datapath + os.sep + "html/404.html"
                 if os.path.exists(fn4):
-                    content = wsgi_content.got_404(self.config, "html/404.html", self.query)
+                    content = wsgi_content.got_404(self.config, fn4, self.query)
                     return [bytes(content, "utf-8")]
                 else:
                     return [b"URL not found. (and 404 file does not exist)."]
@@ -256,10 +268,12 @@ def application(environ, respond):
     WSGI main entry point. The web server (like apache) will call this.
     '''
 
-    sys.path.append("common")
     # Make sure we are landing here
     mypath = os.path.dirname(os.path.realpath(__file__));
-    os.chdir(mypath); sys.path.append(mypath)
+    sys.path.append(mypath)
+    sys.path.append(mypath + os.sep + "common")
+    os.chdir(mypath + os.sep + "content");
+    sys.path.append(mypath + os.sep + "content")
 
     import wsgi_util, wsgi_content, wsgi_global
 
@@ -268,7 +282,7 @@ def application(environ, respond):
     usr_cnt += 1
     #print("Query arrived", os.getpid(), usr_cnt)
 
-    #if not mainclass:
+    # if not mainclass:
     mainclass = xWebServer(environ, respond)
 
     # Only do it one time

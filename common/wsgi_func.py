@@ -10,13 +10,13 @@ from PIL import Image
 
 import wsgi_util, wsgi_style, wsgi_res, wsgi_global
 
-def     deep_func(strx):
+def     deep_func(strx, context):
     return "Deep from code"
 
-def     crap_func(strx):
+def     crap_func(strx, context):
     return "<b>crap</b> from code"
 
-def     app_one_func(strx):
+def     app_one_func(strx, context):
 
     content = '''<table width=100% border=0>
         <tr><td align=center bgcolor=#cccccc><b>APP ONE</b><br>
@@ -34,7 +34,7 @@ def     app_one_func(strx):
 # ------------------------------------------------------------------------
 # Faugh calendar
 
-def     app_two_func(strx):
+def     app_two_func(strx, context):
 
     '''
     Mock calendar. Does nothing but presents a calendar looking user interface
@@ -82,7 +82,7 @@ def     app_two_func(strx):
         print("Exception on app_two_func", sys.exc_info())
     return content
 
-def     image_func(strx):
+def     image_func(strx, context):
 
     '''
      { image nnn }          --  Put an image tag nnn in the output
@@ -94,7 +94,7 @@ def     image_func(strx):
     '''
 
     # Expand arguments
-    ssss = wsgi_util.recursive_parse(strx,  "\[ .*? \]")
+    ssss = wsgi_util.recursive_parse(strx, context,  "\[ .*? \]")
     sss = ssss.split()
     #print("Image func:", sss)
 
@@ -142,6 +142,41 @@ def     image_func(strx):
 
     return "<img src=media/broken.png>"
 
+# ------------------------------------------------------------------------
+# I wish the http standard had this one command
+
+def     include_func(arg, context):
+
+    #print("include_function called", arg, os.getcwd(), context, __file__)
+
+    # Expand arguments
+    ssss = wsgi_util.recursive_parse(arg, context, "\[ .*? \]")
+    sss = ssss.split()
+
+    # Travel down the dependency list
+    while True:
+        fname = os.path.dirname(context) + os.sep + sss[2]
+        if os.path.isfile(fname):
+            break
+        fname = os.path.dirname(os.getcwd()) + os.sep + "content/static" + os.sep + sss[2]
+        if os.path.isfile(fname):
+            break
+        fname = os.path.dirname(os.getcwd()) + os.sep + "content/html" + os.sep + sss[2]
+        if os.path.isfile(fname):
+            break
+        break
+
+    #print("trying fname", fname)
+    try:
+        with open(fname, 'r') as fh:
+            buff = fh.read()
+        #print("buff", buff)
+    except:
+        return "Warn: include macro cannot read file '%s'" % sss[2]
+
+    return buff
+
+
 def     build_initial_table():
 
     ''' The initial table for the global items '''
@@ -149,6 +184,7 @@ def     build_initial_table():
         wsgi_global.add_one_func("app_one", app_one_func)
         wsgi_global.add_one_func("app2x",   app_two_func)
         wsgi_global.add_one_func("image",   image_func)
+        wsgi_global.add_one_func("include", include_func)
         wsgi_global.add_one_func("deep",    deep_func)
         wsgi_global.add_one_func("crap",    crap_func)
 

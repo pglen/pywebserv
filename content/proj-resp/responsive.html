@@ -1,175 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-* {
-  box-sizing: border-box;
-}
-
-.col-content {
-  position: relative;
-  height: 2000px;
-}
-
-#col_container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-#col1 {
-  float: left;
-}
-
-body {
-  font-family: Arial;
-  padding: 10px;
-  background: #f1f1f1;
-}
-
-/* Header/Blog Title */
-.header {
-  /*padding: 30px;*/
-  text-align: center;
-  background: white;
-}
-
-.header h1 {
-  font-size: 50px;
-}
-
-/* Style the top navigation bar */
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-
-/* Style the topnav links */
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-/* Change color on hover */
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-/* div {
- float: none
-}
-*/
-
-/* Create two unequal columns that floats next to each other */
-/* Left column */
-.leftcolumn {
-  float: left;
-  width: 15%;
-}
-
-/* Create  unequal columns that floats next to each other */
-/* Left column */
-.midcolumn {
-  float: left;
-  width: 70%;
-  padding-left: 20px;
-}
-
-/* Right column */
-.rightcolumn {
-  float: right;
-  width: 15%;
-  background-color: #f1f1f1;
-  padding-left: 20px;
-}
-
-/* Fake image */
-.fakeimg {
-  background-color: #aaa;
-  width: 100%;
-  padding: 20px;
-}
-
-/* Add a card effect for articles */
-.card {
-  background-color: white;
-  padding: 20px;
-  margin-top: 20px;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Footer */
-.footer {
-  padding: 20px;
-  text-align: center;
-  background: #ddd;
-  margin-top: 20px;
-}
-
-/*
-
-@media screen and (max-width: 900px) {
-   .leftcolumn,  .midcolumn, .rightcolumn {
-    width: 100%;
-    padding: 0;
-  }
-}
-*/
-
-/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other
-instead of next to each other  */
-
-@media screen and (max-width: 700px) {
-  .leftcolumn,  .midcolumn {
-    width: 100%;
-    padding: 0;
-  }
-  .rightcolumn {
-  float: none
-  }
-}
-
-/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each
-other instead of next to each other */
-@media screen and (max-width: 400px) {
-  .topnav a {
-    float: none;
-    width: 100%;
-  }
-}
-
-</style>
+{ include style.css }
 </head>
-<body>
 
+<body>
 <div class="header">
   <h1>PGLEN project website</h1>
   <br>Resize the browser window to see the effect.</p>
 </div>
 
 <div class="topnav">
-  <a href="#">Link</a>
-  <a href="#">Link</a>
-  <a href="#">Link</a>
+  <a href="#">Link 1</a>
+  <a href="#">Link 2</a>
+  <a href="#">Link 3</a>
   <a href="#" style="float:right">Link</a>
 </div>
+
+<table>
+    <tr>
+     <td bgcolor=#eeeeee colspan=1>
+        <tr align=center>
+        <td align=right>
+            &nbsp { siteicon media-skip-backward.png Backward Frontx  }
+            &nbsp { siteicon [ forw ] Backward Frontx  }
+
+            &nbsp <img src=/siteicons/media-skip-backward.png title="Backward Front">
+            &nbsp <img src=/siteicons/media-seek-backward.png title=Backward>
+            <td width=20%>
+            &nbsp; Navigation &nbsp;
+            <td align=left>
+            &nbsp <img src=/siteicons/media-seek-forward.png title=Forward>
+            &nbsp <img src=/siteicons/media-skip-forward.png title="Fast Forward">
+</table>
 
 <div class="row">
 
     <div class="leftcolumn">
         <div class="card">
         <h2>LEFT HEADING</h2>
+
         content left
         </div>
     </div>
@@ -216,4 +86,3 @@ other instead of next to each other */
 
 </body>
 </html>
-

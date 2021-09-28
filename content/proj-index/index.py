@@ -13,7 +13,7 @@ import wsgi_util, wsgi_func, wsgi_data
 
 localdb = None
 
-def fill_data(strx):
+def fill_data(strx, context):
     global configx, localdb
 
     if not localdb:
@@ -74,7 +74,7 @@ def got_index(config, url, query, request, template = "", fname = ""):
         with open(template, 'r') as fh:
             buff = fh.read()
         # Recursively process
-        content = wsgi_util.recursive_parse(buff)
+        content = wsgi_util.recursive_parse(buff, __file__)
     else:
         content = "Index file (dyn) " + url + " " +  template + " " + str(query) + " "
     return content

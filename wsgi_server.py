@@ -139,12 +139,13 @@ if __name__ == '__main__':
                 #print("would restart on", fnamearr[aa])
 
         if flag:
+            time.sleep(.4)
             th.terminate(); waitx()
             th.kill();      waitx()
             rescan()
             print("Restarted server:")
             th = re_serve() ; waitx();
             re_open()
-        time.sleep(.2)
+        time.sleep(.4)
 
 # EOF

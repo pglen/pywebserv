@@ -24,7 +24,7 @@ def got_bb(config, url, query, req, templ):
 # ------------------------------------------------------------------------
 # Add Mock calendar
 
-def     mock_cal_func(strx):
+def     mock_cal_func(strx, context):
 
     '''
     Mock calendar. Does nothing but presents a calendar looking user interface

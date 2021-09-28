@@ -16,7 +16,7 @@ def got_404(config, url, query):
         with open(url, 'r') as fh:
             buff = fh.read()
         # Recursively process
-        content = wsgi_util.recursive_parse(buff)
+        content = wsgi_util.recursive_parse(buff, __file__)
     else:
         content = "Index file (dyn) " + url + " " +  str(query) + " "
     return content
@@ -28,7 +28,7 @@ def got_500(config, url, query):
         with open(fn2, 'r') as fh:
             buff = fh.read()
         # Recursively process
-        content = wsgi_util.recursive_parse(buff)
+        content = wsgi_util.recursive_parse(buff, __file__)
     else:
         content = "Index file (dyn) " + url + " " +  str(query) + " "
     return content

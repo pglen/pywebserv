@@ -36,17 +36,17 @@ def print_httpenv(environ):
             print(aa, "'" + environ[aa] + "'")
     print(" --- end env")
 
-def global_items(item):
+def _global_items(item, context):
 
     #print("item", "'" + item + "'")
     for aa in global_table:
         if item[2:-2] == aa[0]:
             if type(aa[1]) == str:
                 return aa[1]
-            if type(aa[1]) == type(global_items):
+            if type(aa[1]) == type(_global_items):
                 cccc = ""
                 try:
-                    cccc = aa[1](item)
+                    cccc = aa[1](item, context)
                 except:
                     print(sys.exc_info())
                 return cccc
@@ -56,15 +56,15 @@ def global_items(item):
 
 # Parameterized last
 
-def global_para_items(item):
+def _global_para_items(item, context):
 
     #print("item", "'" + item + "'")
     # rescan for parameterized
     for aa in global_table:
         if item[2:-2].split()[0] == aa[0]:
-            if type(aa[1]) == type(global_para_items):
+            if type(aa[1]) == type(_global_para_items):
                 try:
-                    cccc = aa[1](item)
+                    cccc = aa[1](item, context)
                 except:
                     print(sys.exc_info())
                 return cccc
@@ -77,7 +77,7 @@ def global_para_items(item):
 
 # Parse buffer
 
-def parse_buffer(buff, flag, regex):
+def _parse_buffer(buff, flag, regex, context):
 
     count = 0 ;     prog = 0
     rrr = re.compile(regex)
@@ -93,9 +93,9 @@ def parse_buffer(buff, flag, regex):
         arr.append(buff[prog:bbb])
         #print("match", buff[bbb:eee])
         if flag:
-            conv = global_para_items(buff[bbb:eee])
+            conv = _global_para_items(buff[bbb:eee], context)
         else:
-            conv = global_items(buff[bbb:eee])
+            conv = _global_items(buff[bbb:eee], context)
         arr.append(conv)
         prog += frag.end()
         count += 1
@@ -104,7 +104,7 @@ def parse_buffer(buff, flag, regex):
     #print ("arr", arr)
     return arr, count
 
-def     recursive_parse(buff, regex = "{ .*? }"):
+def     recursive_parse(buff, context, regex = "{ .*? }"):
 
     content = ""
     try:
@@ -112,7 +112,7 @@ def     recursive_parse(buff, regex = "{ .*? }"):
         cnt2 = 10; old_cnt = 0
         content = buff
         while(True):
-            arr, cnt = parse_buffer(content, False, regex)
+            arr, cnt = _parse_buffer(content, False, regex, context)
             content = ""
             for aa in arr:
                 content += str(aa)
@@ -129,7 +129,7 @@ def     recursive_parse(buff, regex = "{ .*? }"):
 
         cnt3 = 10
         while(True):
-            arr, cnt = parse_buffer(content, True, regex)
+            arr, cnt = _parse_buffer(content, True, regex, context)
             content = ""
             for aa in arr:
                 content += str(aa)
@@ -145,7 +145,7 @@ def     recursive_parse(buff, regex = "{ .*? }"):
                 break
             old_cnt = cnt
     except:
-        put_exception("in parser")
+        put_exception("exception in parser")
     return content
 
 # ------------------------------------------------------------------------
@@ -186,7 +186,7 @@ def  resolve_template(config, fn, name):
     found = ""
     while True:
         fn1 =  os.path.dirname(name) + os.sep + fname2
-        print("test fn1", fn1)
+        #print("test fn1", fn1)
         if  os.path.exists(fn1):
             found = fn1
             break

@@ -63,9 +63,13 @@ def     add_one_func(mname, mfunc, mpage = None, fname=None):
         Add a macro function here. The macro is substituted
         by the output of the function. Macro syntax is words sourrounded by
         '{ ' and ' }' as in { macro }
+        if macro is a string, substitution is mafe in line.
         It is also permissible to add a python variable as the value for
         substitution. It is substituted recursively, so variables in
         variables are permitted. The max nesting depth is 10.
+        The arguments to a macro are expanded when enclosed in  '[ arg ']'
+        like: { mymacro [ arg_one ] two three }
+        The macro (after substution) recives the argument string verbatim.
     '''
     try:
         global_table.append([mname, mfunc])

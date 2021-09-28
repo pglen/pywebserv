@@ -98,9 +98,10 @@ def     add_one_url(url, mfunc, mpage = None, fname=""):
 
 # ------------------------------------------------------------------------
 
-def  _load_project(pdir):
+def  _load_project(pdir, mainclass):
 
-    print("Loading project from", "'" + pdir + "'")
+    if mainclass.config.conf.verbose:
+        print("Loading project from", "'" + pdir + "'")
 
     ret = []
     try:
@@ -120,7 +121,10 @@ def  _load_project(pdir):
                         msg = "Module %s failed to load" % aa
                         #print("msg", msg)
                         ret = [msg.encode("utf-8"),]
-                        return ret
+                        # Keep loading
+                        #return ret
+
+
                     ''' did not work
                     try:
                         cmd = mod.__name__ + ".initialize()"
@@ -151,27 +155,30 @@ def     getprojects(mainclass):
         The initial project dir was called 'projects'
     '''
 
-    print("getprojects beg", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
+    if mainclass.config.conf.pgdebug > 2:
+        print("getprojects beg", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
+
     pdir = "proj"
     dirs = os.listdir(".")
     for aa in dirs:
         if os.path.isdir(aa):
             if aa[:4] == pdir:
-                _load_project(aa)
+                _load_project(aa, mainclass)
 
     #print("pl delta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
 
     # Print all URLS
-    '''print("Dumping urlmap")
-    for aa in urlmap.urls:
-       print("     ", aa[0])
-       #print("     ", aa)
-    print("End urlmap")
-    '''
+
+    if mainclass.config.conf.pgdebug > 3:
+        print("Dumping urlmap")
+        for aa in urlmap.urls:
+           print("     ", aa[0])
+           #print("     ", aa)
+        print("End urlmap")
 
     cnt = 0
     for aa in urlmap.urls:
-        # check for duplicate
+        # Check for duplicate
         ddd = 0; url = ""; xcnt = 0
         for bb in urlmap.urls:
             if aa[0] == bb[0]:
@@ -182,6 +189,7 @@ def     getprojects(mainclass):
         if ddd > 1:
             print("   ** Warn: Duplicate URL", xcnt, url)
 
-    #print("getprojects end", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
+    if mainclass.config.conf.pgdebug > 2:
+        print("getprojects end", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
 
 # EOF

@@ -38,27 +38,54 @@ The first two forms of the { image } function will preserve the image's aspect r
 
 '''
 
-import sys, os, mimetypes, time, datetime
+import sys, os, mimetypes, time, datetime, getopt
 from urllib.parse import urlparse, unquote, parse_qs, parse_qsl
 from wsgiref import simple_server, util
 
 VERBOSE = 0
-verbose = 0
-debug   = 0
+config = None
+
+import gettext
+gettext.bindtextdomain('pyedpro', './locale/')
+gettext.textdomain('pyedpro')
+_ = gettext.gettext
 
 # ------------------------------------------------------------------------
 
-class Config():
+class subConfig:
+
+    def __init__(self):
+        self.verbose = 0
+        self.pgdebug = 0
+        self.port = 8000
+
+class Config:
 
     '''
     Parameters are going around with this class
     '''
 
-    def __init(self):
-        self.mypath = ""
-        self.datapath = ""
-        self.server = None
-        self.mainclass = None
+    def __init__(self):
+        self.mypath     = ""
+        self.datapath   = ""
+        self.server     = None
+        self.mainclass  = None
+        #self.verbose    = 0
+        #self.debug      = 0
+        self.conf       = subConfig()
+
+    def showvals(self):
+        strx = "Properties: "
+        for aa in dir(self):
+            if "__" not in aa:
+                #strx += aa + " = " + self.__getattribute__(aa)
+                strx += aa + " "
+        strx += " Conf properties: "
+        for aa in dir(self.conf):
+            if "__" not in aa:
+                strx += aa + " "
+        strx += "\n"
+        return strx
 
 class xWebServer():
 
@@ -68,40 +95,44 @@ class xWebServer():
      output to the client.
     '''
 
-    def __init__(self, environ, respond):
+    def __init__(self, environ, respond, config):
 
         ''' Decorate the class instance with data from the environment '''
 
         # import here so apache wsgi interface gets the files
         import wsgi_global, wsgi_content, wsgi_util, wsgi_data, wsgi_func
 
-        global verbose
-
         self.mark = time.perf_counter()
         self.respond = respond
         self.environ = environ
-        self.config = Config()
+        self.config = config
+
         self.config.mainclass = self
         self.config.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
         self.config.datapath = self.config.mypath + "content" + os.sep
 
-        #print("self.config.mypath", self.config.mypath, "self.config.datapath", self.config.datapath)
+        if self.config.conf.pgdebug > 6:
+            print("self.config.mypath", self.config.mypath, "self.config.datapath", self.config.datapath)
 
         self.config.verbose = VERBOSE
-        self.sql = wsgi_data.wsgiSql(self.config.mypath + "data/wsgi_main.sqlt")
         self.stime = datetime.datetime.now()
         try:
-            self.logfp = open("/var/log/wsgi_log", "a+")
+            self.sql = wsgi_data.wsgiSql(self.config.datapath + "data/wsgi_main.sqlt")
+        except:
+            print("Warn: Cannot create database", sys.exc_info())
+        try:
+            self.logfp = open(self.config.datapath + "data/wsgi_main.log", "a+")
         except:
             print("Cannot open log", sys.exc_info())
             self.logfp = None
 
         if self.logfp:
             sss = [environ['REQUEST_METHOD'], environ['PATH_INFO']]
-            #print( str(self.stime), *sss )
             print( str(self.stime), *sss, file=self.logfp, flush=True)
 
-        #wsgi_util.printenv(environ, True)
+        if self.config.conf.pgdebug > 8:
+            wsgi_util.printenv(environ, True)
+
         #print(environ['wsgi.version'])
         #print("Loaded in ", self.mypath)
         #wsgi_util.print_httpenv(environ)
@@ -112,19 +143,20 @@ class xWebServer():
         self.query = ""
         if 'QUERY_STRING' in environ:
             self.query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
-            if verbose:
+            if self.config.conf.pgdebug > 4:
                 print("QUERY_STRING", self.query)
 
         self.cookie = ""
         if 'HTTP_COOKIE' in environ:
             self.cookie = environ['HTTP_COOKIE'].split("=")
-            if verbose:
+            if self.config.conf.pgdebug > 4:
                 print("HTTP_COOKIE", self.cookie)
 
         self.method = ""
         if 'REQUEST_METHOD' in environ:
             self.method = environ['REQUEST_METHOD']
-            #print("REQUEST_METHOD", self.method)
+            if self.config.conf.pgdebug > 4:
+                print("REQUEST_METHOD", self.method)
 
         self.request_org = ""
         self.request = {}
@@ -136,7 +168,8 @@ class xWebServer():
                     self.request_org = environ['wsgi.input'].read(content_length).decode()
                     #print("Request_org", self.request_org)
                     self.request = parse_qsl(str(self.request_org), keep_blank_values=True)
-                    #print("Request", self.request)
+                    if self.config.conf.pgdebug > 5:
+                        print("Request", self.request)
                 except:
                     print("No post data", sys.exc_info())
                     pass
@@ -282,8 +315,14 @@ def application(environ, respond):
     usr_cnt += 1
     #print("Query arrived", os.getpid(), usr_cnt)
 
+    global config
+    if config:
+        configx = config
+    else:
+        configx = Config()
+
     # if not mainclass:
-    mainclass = xWebServer(environ, respond)
+    mainclass = xWebServer(environ, respond, configx)
 
     # Only do it one time
     if usr_cnt == 1:
@@ -295,19 +334,67 @@ def application(environ, respond):
 
     return wdata
 
+def xversion():
+    print("Version 1.0")
+    #sys.exit(0)
+
+def xhelp():
+    print("Helping 1.0")
+    #sys.exit(0)
+
 # ------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
-    #global mainclass
+    #global config
 
-    print("Begin main args", sys.argv)
+    config = Config()
 
-    for aa in sys.argv:
-        if aa == "-v":
-            verbose = True
+    opts = []; args = []
 
-    #mainclass = None
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "d:h?vV:fxctokt",
+                        ["debug=", "help", "help", "verbose", "version", ])
+
+    except getopt.GetoptError as err:
+        print(_("Invalid option(s) on command line:"), err)
+        sys.exit(1)
+
+    # Outdated parsing ... for now, leave it as is
+    for aa in opts:
+        #print("opt", aa[0], aa[1])
+        if aa[0] == "-d" or aa[0] == "--debug":
+            try:
+                config.conf.pgdebug = int(aa[1])
+                print( _("Running at debug level:"),  config.conf.pgdebug)
+            except:
+                config.conf.pgdebug = 0
+                print(_("Exception on setting debug level"), sys.exc_info())
+
+        # Most of these are placeholders
+        if aa[0] == "-h" or  aa[0] == "--help" or aa[0] == "-?":
+            xhelp()
+        if aa[0] == "-V" or aa[0] == "--version":
+            xversion()
+        if aa[0] == "-v" or aa[0] == "--verbose":
+            config.conf.verbose = True
+        if aa[0] == "-f":
+            config.conf.full_screen = True
+        if aa[0] == "-v":
+            config.conf.verbose = True
+        if aa[0] == "-x":
+            CLEAR_CONFIG = True
+        if aa[0] == "-c":
+            SHOW_CONFIG = True
+        if aa[0] == "-t":
+            SHOW_TIMING = True
+        if aa[0] == "-o":
+            USE_STDOUT = True
+        if aa[0] == "-k":
+            config.conf.show_keys = True
+        if aa[0] == "-t":
+            print("Tracing ON")
+            sys.settrace(tracer)
 
     class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
 
@@ -320,10 +407,15 @@ if __name__ == '__main__':
             pass
         #print("Args", sys.argv)
 
-    mypath = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
-    port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
-    httpd = simple_server.make_server('', port, application, handler_class=NoLoggingWSGIRequestHandler)
-    print("HTTPD {} on port {}, control-C to stop".format(mypath, port))
+    #mypath = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
+    #port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
+
+    httpd = simple_server.make_server('', config.conf.port, application,
+                                                handler_class=NoLoggingWSGIRequestHandler)
+
+    print("\nHTTPD on port {}, control-C to stop".format(config.conf.port))
+
+    #print("Begin main args", sys.argv)
 
     while True:
         try:

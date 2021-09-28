@@ -44,6 +44,7 @@ def global_items(item):
             if type(aa[1]) == str:
                 return aa[1]
             if type(aa[1]) == type(global_items):
+                cccc = ""
                 try:
                     cccc = aa[1](item)
                 except:

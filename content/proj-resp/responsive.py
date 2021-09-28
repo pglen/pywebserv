@@ -14,8 +14,8 @@ import wsgi_util, wsgi_func
 
 def got_resp(config, url, query, request, template = "", fname = ""):
 
-    print("got_resp() config.mypath=", config.mypath, "url=", url, "query=", query)
-    print("got_resp() template=", template, "fname=", fname)
+    #print("got_resp() config.mypath=", config.mypath, "url=", url, "query=", query)
+    #print("got_resp() template=", template, "fname=", fname)
 
     found = ""
     fn = urlparse(url).path

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 '''
-
     Small wsgiref based web server. Takes a path to serve from and an
     optional port number (defaults to 8000), then tries to serve files.
 
@@ -54,6 +53,7 @@ def re_open():
     pass
 
 def re_serve():
+    opt = ""
     th = subprocess.Popen(["/usr/bin/env", "python", "wsgi_main.py"] + sys.argv[1:])
     return th
 
@@ -65,6 +65,7 @@ def append_file(nnn):
 
     if os.path.isfile(nnn):
         fff = os.stat(nnn).st_mtime
+        # Two synchronized arrays
         fnamearr.append(nnn)
         statarr.append(fff)
 
@@ -92,13 +93,22 @@ def  rescan():
              append_file(aaa)
     #print("fnamearr", fnamearr)
 
+# ------------------------------------------------------------------------
+
 def _rescan(dirx):
+
     fnamearr2 = os.listdir(dirx)
     for aa in range(len(fnamearr2)):
         nnn = dirx + os.sep + fnamearr2[aa]
         #print("nnn", nnn)
         if os.path.isfile(nnn):
              append_file(nnn)
+        elif os.path.isdir(nnn):
+            _rescan(nnn)
+    return None
+
+# ------------------------------------------------------------------------
+# Entry point for the server
 
 if __name__ == '__main__':
 
@@ -112,12 +122,21 @@ if __name__ == '__main__':
     th = re_serve();  waitx();  re_open()
 
     while True:
+
+        #print(th.returncode, th.pid)
+
         flag = False
         for aa in range(len(fnamearr)):
+
+            # Make sure the log files do not trigger
+            if fnamearr[aa][-4:] == ".log":
+                continue
+
             stat = os.stat(fnamearr[aa])
             if statarr[aa] != stat.st_mtime:
                 statarr[aa] = stat.st_mtime
                 flag = True
+                #print("would restart on", fnamearr[aa])
 
         if flag:
             th.terminate(); waitx()

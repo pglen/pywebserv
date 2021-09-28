@@ -9,13 +9,22 @@
 '''
 
 import os, sys, random, datetime, time, codecs
-import wsgi_util, wsgi_func
+import wsgi_util, wsgi_func, wsgi_data
+
+localdb = None
 
 def fill_data(strx):
-    global configx
+    global configx, localdb
+
+    if not localdb:
+        try:
+            localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
+        except:
+            print("Could not create local data for %s", modname)
+
     #print("strx", strx)
     out = ""
-    res = configx.mainclass.sql.getall()
+    res = localdb.getall()
     for aa in res:
         #out += aa[2][3:-2] + " &nbsp; "
         out += str(aa) + " &nbsp; "
@@ -25,9 +34,16 @@ def got_index(config, url, query, request, template = "", fname = ""):
 
     global configx
     configx = config
-    #print("got_index() url", url, "query", query, "request", request, "template", template, "fname", fname)
-    #print("got_index() request_org=", config.mainclass.request_org)
+
+    if config.conf.pgdebug > 3:
+        print("got_index() url=%s"% url, "query=%s" %query,
+                    "request=%s" % request, "template=%s" % template, "fname=%s" % fname)
+
+    if config.conf.verbose:
+        print("got_index() url = '%s'" % url, "request_org=", config.mainclass.request_org)
+
     #print("got_index() request", request)
+    #print("got_index() config", config.showvals(), url, query)
 
     if url == "/":
         url = "/index.html"
@@ -41,9 +57,10 @@ def got_index(config, url, query, request, template = "", fname = ""):
                 sss = aa[1]
                 break
 
-        print("raw data", sss, type(sss))
-        config.mainclass.sql.put("key_" + sss, sss, "", "", "")
-        config.mainclass.sql.putlog("log_" + sss, sss, "", "", "")
+        #print("raw data", sss, type(sss))
+
+        localdb.put("key_" + sss, sss, "", "", "")
+        localdb.putlog("log_" + sss, sss, "", "", "")
 
     if not template:
         template = wsgi_util.resolve_template(config, url, __file__)
@@ -70,12 +87,19 @@ def got_index(config, url, query, request, template = "", fname = ""):
 from wsgi_global import add_one_url
 
 def initialize():
-    print("called initialization")
-    pass
 
-modfname = os.path.basename(__file__)
+    global localdb
+    #print("Called  initialization for '%s'" % modname)
+    if not localdb:
+        try:
+            localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
+        except:
+            print("Could not create local data for %s", modname)
+
+modname = os.path.splitext(os.path.basename(__file__))[0]
+
 try:
-    #print("initiaizing", modfname)
+    #print("Initializing", modname)
     sys.path.append("../")
     # Add default enties to table
     add_one_url("/", got_index, "index.html", __file__)
@@ -84,5 +108,7 @@ try:
     add_one_func("feed_data", fill_data)
 except:
     print("Cannot initialize", modfname, sys.exc_info())
+
+initialize()
 
 # EOF

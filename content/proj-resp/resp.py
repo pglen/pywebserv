@@ -2,10 +2,11 @@
 
 # ------------------------------------------------------------------------
 '''
-# This is a sample project that is added to the site. The idea here is
-# that nothing in this project can syntax error (down) the site, as it is
-# imported under a try: except clause, and it is calling only the
-# URL registration functions
+ This is a sample project that is added to the site. The idea here is
+ that nothing in this project can syntax error (down) the site, as it is
+ imported under a try: except clause, and it is calling only the
+ URL registration functions
+
 '''
 # ------------------------------------------------------------------------
 

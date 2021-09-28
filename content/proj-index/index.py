@@ -88,6 +88,10 @@ from wsgi_global import add_one_url
 
 def initialize():
 
+    '''
+    Initializee the current module
+    '''
+
     global localdb
     #print("Called  initialization for '%s'" % modname)
     if not localdb:

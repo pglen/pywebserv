@@ -136,7 +136,7 @@ if __name__ == '__main__':
             if statarr[aa] != stat.st_mtime:
                 statarr[aa] = stat.st_mtime
                 flag = True
-                #print("would restart on", fnamearr[aa])
+                print("would restart on", fnamearr[aa])
 
         if flag:
             time.sleep(.4)

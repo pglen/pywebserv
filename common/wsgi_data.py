@@ -6,6 +6,11 @@ import sys, os, mimetypes, time, sqlite3
 
 class wsgiSql():
 
+    ''' The data store for the web server. Simple sqlite data files.
+      one clobal file is created, and a local file may be created on
+      a per project basis
+      '''
+
     def __init__(self, file, table = "initial"):
 
         self.table = table
@@ -109,6 +114,11 @@ class wsgiSql():
     # Return False if cannot put data
 
     def   putlog(self, key, val, val2, val3, val4):
+
+        ''' Special function to write to the log.
+            Use sqliteviewer to see it.
+            Usinf Sqlite prevents all sorts of cross log issues
+        '''
 
         #got_clock = time.clock()
 

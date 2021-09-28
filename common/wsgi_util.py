@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
-''' The simplest web server, utilities module '''
+''' The simplest web server, utilities module. This is where we parse the
+    incoming (loaded) files for macros. The substitution occures in steps
+    recursively.
+'''
 
 import sys, os, time, re, traceback
 
@@ -152,7 +155,9 @@ def     recursive_parse(buff, context, regex = "{ .*? }"):
 
 def     put_exception(xstr):
 
-    ''' Give some indication of exceptions '''
+    ''' Give some indication of exceptions
+    in the html output stream and the controlling terminal
+    '''
 
     cumm = xstr + " "
     a,b,c = sys.exc_info()
@@ -206,3 +211,4 @@ def  resolve_template(config, fn, name):
 
     return found
 
+# EOF

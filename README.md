@@ -29,17 +29,13 @@
 
   See index.html for examples.
 
-    Files:
-        _global for url to function mapping
-        _content for stuff
-        _globals for static stuff and { var }  definitions
-
    Directories:
-        projects for application projects
-        siteicons for icons
-        media for image content
+      *  /content/proj*      for applications / projects
+      *  /content/siteicons/ for icons
+      *  /content/media/     for image content
+      *  /content/static/    for static (non changing) content
 
- Flow of presenting:
+### Flow of presenting the pages:
 
     url lookup in main ->
         if entry present

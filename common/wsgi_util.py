@@ -13,36 +13,16 @@ except:
     print("Cannot import", sys.exc_info())
     pass
 
-# These are ENV items we want to skip for our display
-
-nogo = ("OPENHAB", "XDG_", "LS_", "SHELL", "SESSION", "QT",
-             "LESS", "SSH", "GTK", "SHLVL", "XAUTH", "PANEL", "PATH", "DISPLAY",
-                "MANDAT", "WINDOW", "TERM", "GDM", "VIRT", "HUB", "VTE")
-
-def printenv(environ, all=False):
-    for aa in environ.keys():
-        #print("aa", aa)
-        fff = True
-        for cc in nogo:
-            if cc in aa:
-                fff = False
-        if fff or all:
-            print(aa, environ[aa])
-
-        #if "HTTP_" in aa:
-        #    print(aa, environ[aa])
-    print()
-
-def print_httpenv(environ):
-    for aa in environ.keys():
-        if "HTTP_" in aa[:5]:
-            print(aa, "'" + environ[aa] + "'")
-    print(" --- end env")
 
 def _global_items(item, context):
 
     #print("item", "'" + item + "'")
-    for aa in global_table:
+    #for aa in global_table:
+
+    # Scan backwards so items can be overridden
+    for ii in range(len(global_table)-1, -1, -1):
+        aa = global_table[ii]
+        #print("aa", aa)
         if item[2:-2] == aa[0]:
             if type(aa[1]) == str:
                 return aa[1]
@@ -153,31 +133,6 @@ def     recursive_parse(buff, context, regex = "{ .*? }"):
 
 # ------------------------------------------------------------------------
 
-def     put_exception(xstr):
-
-    ''' Give some indication of exceptions
-    in the html output stream and the controlling terminal
-    '''
-
-    cumm = xstr + " "
-    a,b,c = sys.exc_info()
-    if a != None:
-        cumm += str(a) + " " + str(b) + "\n"
-        try:
-            #cumm += str(traceback.format_tb(c, 10))
-            ttt = traceback.extract_tb(c)
-            for aa in ttt:
-                cumm += "File: " + os.path.basename(aa[0]) + \
-                        " Line: " + str(aa[1]) + "\n" +  \
-                    "   Context: " + aa[2] + " -> " + aa[3] + "\n"
-        except:
-            print( "Could not print trace stack. ", sys.exc_info())
-
-    print(cumm)
-    #syslog.syslog("%s %s %s" % (xstr, a, b))
-
-# ------------------------------------------------------------------------
-
 def  resolve_template(config, fn, name):
 
     # Iterate 'lookfor' combos; the html template can be local, html static,
@@ -210,5 +165,57 @@ def  resolve_template(config, fn, name):
     #print("resolve_template(), found: ", found)
 
     return found
+
+# ------------------------------------------------------------------------
+# Utils below
+
+def put_exception(xstr):
+
+    ''' Give some indication of exceptions
+    in the html output stream and the controlling terminal
+    '''
+
+    cumm = xstr + " "
+    a,b,c = sys.exc_info()
+    if a != None:
+        cumm += str(a) + " " + str(b) + "\n"
+        try:
+            #cumm += str(traceback.format_tb(c, 10))
+            ttt = traceback.extract_tb(c)
+            for aa in ttt:
+                cumm += "File: " + os.path.basename(aa[0]) + \
+                        " Line: " + str(aa[1]) + "\n" +  \
+                    "   Context: " + aa[2] + " -> " + aa[3] + "\n"
+        except:
+            print( "Could not print trace stack. ", sys.exc_info())
+
+    print(cumm)
+    #syslog.syslog("%s %s %s" % (xstr, a, b))
+
+# These are ENV items we want to skip for our display
+
+nogo = ("OPENHAB", "XDG_", "LS_", "SHELL", "SESSION", "QT",
+             "LESS", "SSH", "GTK", "SHLVL", "XAUTH", "PANEL", "PATH", "DISPLAY",
+                "MANDAT", "WINDOW", "TERM", "GDM", "VIRT", "HUB", "VTE")
+
+def printenv(environ, all=False):
+    for aa in environ.keys():
+        #print("aa", aa)
+        fff = True
+        for cc in nogo:
+            if cc in aa:
+                fff = False
+        if fff or all:
+            print(aa, environ[aa])
+
+        #if "HTTP_" in aa:
+        #    print(aa, environ[aa])
+    print()
+
+def print_httpenv(environ):
+    for aa in environ.keys():
+        if "HTTP_" in aa[:5]:
+            print(aa, "'" + environ[aa] + "'")
+    print(" --- end env")
 
 # EOF

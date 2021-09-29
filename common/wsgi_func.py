@@ -185,8 +185,9 @@ def     build_initial_table():
         wsgi_global.add_one_func("app2x",   app_two_func)
         wsgi_global.add_one_func("image",   image_func)
         wsgi_global.add_one_func("include", include_func)
-        wsgi_global.add_one_func("deep",    deep_func)
-        wsgi_global.add_one_func("crap",    crap_func)
+
+        #wsgi_global.add_one_func("deep",    deep_func)
+        #wsgi_global.add_one_func("crap",    crap_func)
 
     except:
         #print("Cannot build global table", sys.exc_info())

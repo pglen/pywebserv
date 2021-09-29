@@ -45,14 +45,17 @@
                     <h1 class="modulename">
 wsgi_res    </h1>
 
-                        <div class="docstring"><p>The simplest web server</p>
+                        <div class="docstring"><p>The simplest web server's
+data file for in-line resources</p>
 </div>
 
                         <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span> <span class="c1">#!/usr/bin/env python3</span>
 
-<span class="sd">&#39;&#39;&#39; The simplest web server &#39;&#39;&#39;</span>
+<span class="sd">&#39;&#39;&#39; The simplest web server&#39;s</span>
+<span class="sd">    data file for in-line resources</span>
+<span class="sd">&#39;&#39;&#39;</span>
 
 <span class="n">header2</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">&lt;form method=post&gt;</span>
@@ -67,6 +70,8 @@ wsgi_res    </h1>
 <span class="s1">        &lt;/table&gt;</span>
 <span class="s1">&lt;/form&gt;</span>
 <span class="s1">&#39;&#39;&#39;</span>
+
+<span class="c1">#&#39;&#39;&#39; This is a test header&#39;&#39;&#39;</span>
 
 <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">    &lt;table width=100% { mycolor } border=0&gt;</span>
@@ -87,7 +92,7 @@ wsgi_res    </h1>
 <span class="s1">                Search: &amp;nbsp; &lt;input type=text value=&quot;&quot; size=12&gt;</span>
 <span class="s1">                &lt;td align=right width=7% &gt;</span>
 <span class="s1">                &lt;img src=siteicons/mail-forward.png class=image title=&quot;Mail / Contact Us&quot;&gt;</span>
-<span class="s1">                &lt;img src=siteicons/application-exit.png title=&quot;Enter / Log In&quot;&gt;</span>
+<span class="s1">                &lt;a href=index.html&gt; &lt;img src=siteicons/application-exit.png title=&quot;Enter / Log In&quot;&gt;&lt;/a&gt;</span>
 <span class="s1">    &lt;/table&gt;</span>
 <span class="s1">&#39;&#39;&#39;</span>
 

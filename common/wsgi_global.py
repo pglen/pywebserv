@@ -13,14 +13,15 @@ from wsgi_func  import *
 # A list of variables and strings
 
 global_table = [
-    ["header2", header2],
-    ["var", "<font size=+1>variable { deep } </font>"],
-    ["no problem", "recursive expansion is not even a <b>little</b> problem ... "],
-    ["spacer", "<table><tr><td></table>"],
-    ["mycolor", "bgcolor=#aaffbb"],
-    ["thumbwidth", "120"],
-    ["thumbheight", "80"],
-    ["Company Name", "PGlen.com"],
+    ["header2",     header2],
+    ["var",         "<font size=+1>variable { deep } </font>"],
+    ["no problem",  "recursive expansion is not even a <b>little</b> problem ... "],
+    ["spacer",      "<table><tr><td></table>"],
+    ["linespacer",  "<tr><td height=8>"],
+    ["sitecolor",   "bgcolor=#aaffbb"],
+    ["thumbwidth",  "120"],
+    ["thumbheight",  "80"],
+    ["Company Name", "Under Development"],
   ]
 
 # ------------------------------------------------------------------------

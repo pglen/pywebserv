@@ -45,14 +45,14 @@ def serve():
                 raise
                 break
 
-def re_open():
+def _re_open():
     #th = subprocess.Popen(["firefox", "localhost:8000"], close_fds=True)
     #th = subprocess.Popen(["xvkbd", "-window", "Firefox", "-text", "\Cr"])
     th = subprocess.Popen(["./bringfocus.sh"], shell=True)
     #return th
     pass
 
-def re_serve():
+def _re_serve():
     opt = ""
     th = subprocess.Popen(["/usr/bin/env", "python", "wsgi_main.py"] + sys.argv[1:])
     return th
@@ -60,7 +60,7 @@ def re_serve():
 def waitx():
     time.sleep(.1)
 
-def append_file(nnn):
+def append_filename(nnn):
     global fnamearr, statarr
 
     if os.path.isfile(nnn):
@@ -90,7 +90,7 @@ def  rescan():
                 continue
             _rescan(aaa)
         if os.path.isfile(aaa):
-             append_file(aaa)
+             append_filename(aaa)
     #print("fnamearr", fnamearr)
 
 # ------------------------------------------------------------------------
@@ -102,7 +102,7 @@ def _rescan(dirx):
         nnn = dirx + os.sep + fnamearr2[aa]
         #print("nnn", nnn)
         if os.path.isfile(nnn):
-             append_file(nnn)
+             append_filename(nnn)
         elif os.path.isdir(nnn):
             _rescan(nnn)
     return None
@@ -119,7 +119,7 @@ if __name__ == '__main__':
 
     rescan()
 
-    th = re_serve();  waitx();  re_open()
+    th = _re_serve();  waitx();  _re_open()
 
     while True:
 
@@ -151,8 +151,8 @@ if __name__ == '__main__':
             th.kill();      waitx()
             rescan()
             print("Restarted server:", time.asctime())
-            th = re_serve() ; waitx();
-            re_open()
+            th = _re_serve() ; waitx();
+            _re_open()
         time.sleep(.4)
 
 # EOF

@@ -14,11 +14,6 @@
    * connected to apache2 (tests OK)
    * image re-size from { vars } arguments ex: { image any.png 800 }
 
- ![screen shot for template](content/siteicons/initial.png)
-
- On the screen shot above, the recursive substitution is shown, including
- an undefined variable; (surrounded by question marks)
-
  On the screen shot below, images are added, images are dynamically re sized with the PIL
  library;
 
@@ -70,7 +65,9 @@
         o Initial .py file to configure the project (any name)
         o Content that responds to the callbacks, or presented as is
 
-    See proj-index for an example.
+    See proj-index for an example hoem page. Also proj* for more
+    detailed examples. Please note how simple a calendar
+    implementation becomes.
 
 ### History:
 
@@ -79,6 +76,7 @@
     Mon 19.Apr.2021 Turned icons/ to siteicons/ (for apache not to redirect)
     Thu 22.Apr.2021 Projects in separate dir, reverse isolation
     Mon 27.Sep.2021 Moved user contents to the subdir 'content' (more isolation)
+    Mon Tue 28.Sep.2021 Cleanup, first useful site
 
 ## Licence
 

@@ -105,6 +105,8 @@ try:
     wsgi_global.add_one_url("/", got_index, "index.html", __file__)
     wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
     wsgi_global.add_one_func("feed_data", fill_data)
+    #wsgi_global.add_one_func("Company Name", "Test Website")
+
 except:
     print("Cannot initialize", modname, sys.exc_info())
 

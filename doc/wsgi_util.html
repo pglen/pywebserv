@@ -34,19 +34,19 @@
                     <h2>API Documentation</h2>
                         <ul class="memberlist">
             <li>
-                    <a class="function" href="#printenv">printenv</a>
-            </li>
-            <li>
-                    <a class="function" href="#print_httpenv">print_httpenv</a>
-            </li>
-            <li>
                     <a class="function" href="#recursive_parse">recursive_parse</a>
+            </li>
+            <li>
+                    <a class="function" href="#resolve_template">resolve_template</a>
             </li>
             <li>
                     <a class="function" href="#put_exception">put_exception</a>
             </li>
             <li>
-                    <a class="function" href="#resolve_template">resolve_template</a>
+                    <a class="function" href="#printenv">printenv</a>
+            </li>
+            <li>
+                    <a class="function" href="#print_httpenv">print_httpenv</a>
             </li>
             <li>
                     <a class="module" href="#wsgi_util">wsgi_util</a>
@@ -88,32 +88,6 @@ recursively.</p>
 <span class="k">except</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot import&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
     <span class="k">pass</span>
-
-<span class="c1"># These are ENV items we want to skip for our display</span>
-
-<span class="n">nogo</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;OPENHAB&quot;</span><span class="p">,</span> <span class="s2">&quot;XDG_&quot;</span><span class="p">,</span> <span class="s2">&quot;LS_&quot;</span><span class="p">,</span> <span class="s2">&quot;SHELL&quot;</span><span class="p">,</span> <span class="s2">&quot;SESSION&quot;</span><span class="p">,</span> <span class="s2">&quot;QT&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;LESS&quot;</span><span class="p">,</span> <span class="s2">&quot;SSH&quot;</span><span class="p">,</span> <span class="s2">&quot;GTK&quot;</span><span class="p">,</span> <span class="s2">&quot;SHLVL&quot;</span><span class="p">,</span> <span class="s2">&quot;XAUTH&quot;</span><span class="p">,</span> <span class="s2">&quot;PANEL&quot;</span><span class="p">,</span> <span class="s2">&quot;PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;DISPLAY&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;MANDAT&quot;</span><span class="p">,</span> <span class="s2">&quot;WINDOW&quot;</span><span class="p">,</span> <span class="s2">&quot;TERM&quot;</span><span class="p">,</span> <span class="s2">&quot;GDM&quot;</span><span class="p">,</span> <span class="s2">&quot;VIRT&quot;</span><span class="p">,</span> <span class="s2">&quot;HUB&quot;</span><span class="p">,</span> <span class="s2">&quot;VTE&quot;</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">printenv</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="c1">#print(&quot;aa&quot;, aa)</span>
-        <span class="n">fff</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">for</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">nogo</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">aa</span><span class="p">:</span>
-                <span class="n">fff</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="n">fff</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="n">environ</span><span class="p">[</span><span class="n">aa</span><span class="p">])</span>
-
-        <span class="c1">#if &quot;HTTP_&quot; in aa:</span>
-        <span class="c1">#    print(aa, environ[aa])</span>
-    <span class="nb">print</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">print_httpenv</span><span class="p">(</span><span class="n">environ</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="s2">&quot;HTTP_&quot;</span> <span class="ow">in</span> <span class="n">aa</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">environ</span><span class="p">[</span><span class="n">aa</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; --- end env&quot;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">_global_items</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
 
@@ -229,31 +203,6 @@ recursively.</p>
 
 <span class="c1"># ------------------------------------------------------------------------</span>
 
-<span class="k">def</span>     <span class="nf">put_exception</span><span class="p">(</span><span class="n">xstr</span><span class="p">):</span>
-
-    <span class="sd">&#39;&#39;&#39; Give some indication of exceptions</span>
-<span class="sd">    in the html output stream and the controlling terminal</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-
-    <span class="n">cumm</span> <span class="o">=</span> <span class="n">xstr</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
-    <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cumm</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c1">#cumm += str(traceback.format_tb(c, 10))</span>
-            <span class="n">ttt</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_tb</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">ttt</span><span class="p">:</span>
-                <span class="n">cumm</span> <span class="o">+=</span> <span class="s2">&quot;File: &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> \
-                        <span class="s2">&quot; Line: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>  \
-                    <span class="s2">&quot;   Context: &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; -&gt; &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span> <span class="s2">&quot;Could not print trace stack. &quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">cumm</span><span class="p">)</span>
-    <span class="c1">#syslog.syslog(&quot;%s %s %s&quot; % (xstr, a, b))</span>
-
-<span class="c1"># ------------------------------------------------------------------------</span>
-
 <span class="k">def</span>  <span class="nf">resolve_template</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 
     <span class="c1"># Iterate &#39;lookfor&#39; combos; the html template can be local, html static,</span>
@@ -287,23 +236,39 @@ recursively.</p>
 
     <span class="k">return</span> <span class="n">found</span>
 
-<span class="c1"># EOF</span>
-</pre></div>
+<span class="c1"># ------------------------------------------------------------------------</span>
+<span class="c1"># Utils below</span>
 
-        </details>
+<span class="k">def</span> <span class="nf">put_exception</span><span class="p">(</span><span class="n">xstr</span><span class="p">):</span>
 
-            </section>
-                <section id="printenv">
-                            <div class="attr function"><a class="headerlink" href="#printenv">#&nbsp;&nbsp</a>
+    <span class="sd">&#39;&#39;&#39; Give some indication of exceptions</span>
+<span class="sd">    in the html output stream and the controlling terminal</span>
+<span class="sd">    &#39;&#39;&#39;</span>
 
-        
-            <span class="def">def</span>
-            <span class="name">printenv</span><span class="signature">(environ, all=False)</span>:
-    </div>
+    <span class="n">cumm</span> <span class="o">=</span> <span class="n">xstr</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+    <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cumm</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#cumm += str(traceback.format_tb(c, 10))</span>
+            <span class="n">ttt</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_tb</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">ttt</span><span class="p">:</span>
+                <span class="n">cumm</span> <span class="o">+=</span> <span class="s2">&quot;File: &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> \
+                        <span class="s2">&quot; Line: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>  \
+                    <span class="s2">&quot;   Context: &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; -&gt; &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span> <span class="s2">&quot;Could not print trace stack. &quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
 
-                <details>
-            <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">printenv</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">cumm</span><span class="p">)</span>
+    <span class="c1">#syslog.syslog(&quot;%s %s %s&quot; % (xstr, a, b))</span>
+
+<span class="c1"># These are ENV items we want to skip for our display</span>
+
+<span class="n">nogo</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;OPENHAB&quot;</span><span class="p">,</span> <span class="s2">&quot;XDG_&quot;</span><span class="p">,</span> <span class="s2">&quot;LS_&quot;</span><span class="p">,</span> <span class="s2">&quot;SHELL&quot;</span><span class="p">,</span> <span class="s2">&quot;SESSION&quot;</span><span class="p">,</span> <span class="s2">&quot;QT&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;LESS&quot;</span><span class="p">,</span> <span class="s2">&quot;SSH&quot;</span><span class="p">,</span> <span class="s2">&quot;GTK&quot;</span><span class="p">,</span> <span class="s2">&quot;SHLVL&quot;</span><span class="p">,</span> <span class="s2">&quot;XAUTH&quot;</span><span class="p">,</span> <span class="s2">&quot;PANEL&quot;</span><span class="p">,</span> <span class="s2">&quot;PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;DISPLAY&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MANDAT&quot;</span><span class="p">,</span> <span class="s2">&quot;WINDOW&quot;</span><span class="p">,</span> <span class="s2">&quot;TERM&quot;</span><span class="p">,</span> <span class="s2">&quot;GDM&quot;</span><span class="p">,</span> <span class="s2">&quot;VIRT&quot;</span><span class="p">,</span> <span class="s2">&quot;HUB&quot;</span><span class="p">,</span> <span class="s2">&quot;VTE&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">printenv</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="c1">#print(&quot;aa&quot;, aa)</span>
         <span class="n">fff</span> <span class="o">=</span> <span class="kc">True</span>
@@ -316,35 +281,19 @@ recursively.</p>
         <span class="c1">#if &quot;HTTP_&quot; in aa:</span>
         <span class="c1">#    print(aa, environ[aa])</span>
     <span class="nb">print</span><span class="p">()</span>
-</pre></div>
 
-        </details>
-
-    
-
-                </section>
-                <section id="print_httpenv">
-                            <div class="attr function"><a class="headerlink" href="#print_httpenv">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">print_httpenv</span><span class="signature">(environ)</span>:
-    </div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">print_httpenv</span><span class="p">(</span><span class="n">environ</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">print_httpenv</span><span class="p">(</span><span class="n">environ</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">if</span> <span class="s2">&quot;HTTP_&quot;</span> <span class="ow">in</span> <span class="n">aa</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">environ</span><span class="p">[</span><span class="n">aa</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; --- end env&quot;</span><span class="p">)</span>
+
+<span class="c1"># EOF</span>
 </pre></div>
 
         </details>
 
-    
-
-                </section>
+            </section>
                 <section id="recursive_parse">
                             <div class="attr function"><a class="headerlink" href="#recursive_parse">#&nbsp;&nbsp</a>
 
@@ -405,48 +354,6 @@ recursively.</p>
     
 
                 </section>
-                <section id="put_exception">
-                            <div class="attr function"><a class="headerlink" href="#put_exception">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">put_exception</span><span class="signature">(xstr)</span>:
-    </div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span>     <span class="nf">put_exception</span><span class="p">(</span><span class="n">xstr</span><span class="p">):</span>
-
-    <span class="sd">&#39;&#39;&#39; Give some indication of exceptions</span>
-<span class="sd">    in the html output stream and the controlling terminal</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-
-    <span class="n">cumm</span> <span class="o">=</span> <span class="n">xstr</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
-    <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cumm</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c1">#cumm += str(traceback.format_tb(c, 10))</span>
-            <span class="n">ttt</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_tb</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">ttt</span><span class="p">:</span>
-                <span class="n">cumm</span> <span class="o">+=</span> <span class="s2">&quot;File: &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> \
-                        <span class="s2">&quot; Line: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>  \
-                    <span class="s2">&quot;   Context: &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; -&gt; &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span> <span class="s2">&quot;Could not print trace stack. &quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">cumm</span><span class="p">)</span>
-    <span class="c1">#syslog.syslog(&quot;%s %s %s&quot; % (xstr, a, b))</span>
-</pre></div>
-
-        </details>
-
-            <div class="docstring"><p>Give some indication of exceptions
-in the html output stream and the controlling terminal</p>
-</div>
-
-
-                </section>
                 <section id="resolve_template">
                             <div class="attr function"><a class="headerlink" href="#resolve_template">#&nbsp;&nbsp</a>
 
@@ -496,6 +403,100 @@ in the html output stream and the controlling terminal</p>
     
 
                 </section>
+                <section id="put_exception">
+                            <div class="attr function"><a class="headerlink" href="#put_exception">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">put_exception</span><span class="signature">(xstr)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">put_exception</span><span class="p">(</span><span class="n">xstr</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39; Give some indication of exceptions</span>
+<span class="sd">    in the html output stream and the controlling terminal</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">cumm</span> <span class="o">=</span> <span class="n">xstr</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+    <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cumm</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#cumm += str(traceback.format_tb(c, 10))</span>
+            <span class="n">ttt</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_tb</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">ttt</span><span class="p">:</span>
+                <span class="n">cumm</span> <span class="o">+=</span> <span class="s2">&quot;File: &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> \
+                        <span class="s2">&quot; Line: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>  \
+                    <span class="s2">&quot;   Context: &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; -&gt; &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span> <span class="s2">&quot;Could not print trace stack. &quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">cumm</span><span class="p">)</span>
+    <span class="c1">#syslog.syslog(&quot;%s %s %s&quot; % (xstr, a, b))</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Give some indication of exceptions
+in the html output stream and the controlling terminal</p>
+</div>
+
+
+                </section>
+                <section id="printenv">
+                            <div class="attr function"><a class="headerlink" href="#printenv">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">printenv</span><span class="signature">(environ, all=False)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">printenv</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="c1">#print(&quot;aa&quot;, aa)</span>
+        <span class="n">fff</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">nogo</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">aa</span><span class="p">:</span>
+                <span class="n">fff</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">fff</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="n">environ</span><span class="p">[</span><span class="n">aa</span><span class="p">])</span>
+
+        <span class="c1">#if &quot;HTTP_&quot; in aa:</span>
+        <span class="c1">#    print(aa, environ[aa])</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+
+        </details>
+
+    
+
+                </section>
+                <section id="print_httpenv">
+                            <div class="attr function"><a class="headerlink" href="#print_httpenv">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">print_httpenv</span><span class="signature">(environ)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">print_httpenv</span><span class="p">(</span><span class="n">environ</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">&quot;HTTP_&quot;</span> <span class="ow">in</span> <span class="n">aa</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">environ</span><span class="p">[</span><span class="n">aa</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; --- end env&quot;</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+    
+
+                </section>
                 <section id="wsgi_util">
                                 <div class="attr module"><a class="headerlink" href="#wsgi_util">#&nbsp;&nbsp</a>
 <span class="name"><a href=""></a></span></div>
@@ -516,32 +517,6 @@ in the html output stream and the controlling terminal</p>
 <span class="k">except</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot import&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
     <span class="k">pass</span>
-
-<span class="c1"># These are ENV items we want to skip for our display</span>
-
-<span class="n">nogo</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;OPENHAB&quot;</span><span class="p">,</span> <span class="s2">&quot;XDG_&quot;</span><span class="p">,</span> <span class="s2">&quot;LS_&quot;</span><span class="p">,</span> <span class="s2">&quot;SHELL&quot;</span><span class="p">,</span> <span class="s2">&quot;SESSION&quot;</span><span class="p">,</span> <span class="s2">&quot;QT&quot;</span><span class="p">,</span>
-             <span class="s2">&quot;LESS&quot;</span><span class="p">,</span> <span class="s2">&quot;SSH&quot;</span><span class="p">,</span> <span class="s2">&quot;GTK&quot;</span><span class="p">,</span> <span class="s2">&quot;SHLVL&quot;</span><span class="p">,</span> <span class="s2">&quot;XAUTH&quot;</span><span class="p">,</span> <span class="s2">&quot;PANEL&quot;</span><span class="p">,</span> <span class="s2">&quot;PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;DISPLAY&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;MANDAT&quot;</span><span class="p">,</span> <span class="s2">&quot;WINDOW&quot;</span><span class="p">,</span> <span class="s2">&quot;TERM&quot;</span><span class="p">,</span> <span class="s2">&quot;GDM&quot;</span><span class="p">,</span> <span class="s2">&quot;VIRT&quot;</span><span class="p">,</span> <span class="s2">&quot;HUB&quot;</span><span class="p">,</span> <span class="s2">&quot;VTE&quot;</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">printenv</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="c1">#print(&quot;aa&quot;, aa)</span>
-        <span class="n">fff</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">for</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">nogo</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">aa</span><span class="p">:</span>
-                <span class="n">fff</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="n">fff</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="n">environ</span><span class="p">[</span><span class="n">aa</span><span class="p">])</span>
-
-        <span class="c1">#if &quot;HTTP_&quot; in aa:</span>
-        <span class="c1">#    print(aa, environ[aa])</span>
-    <span class="nb">print</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">print_httpenv</span><span class="p">(</span><span class="n">environ</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="s2">&quot;HTTP_&quot;</span> <span class="ow">in</span> <span class="n">aa</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">environ</span><span class="p">[</span><span class="n">aa</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; --- end env&quot;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">_global_items</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
 
@@ -657,31 +632,6 @@ in the html output stream and the controlling terminal</p>
 
 <span class="c1"># ------------------------------------------------------------------------</span>
 
-<span class="k">def</span>     <span class="nf">put_exception</span><span class="p">(</span><span class="n">xstr</span><span class="p">):</span>
-
-    <span class="sd">&#39;&#39;&#39; Give some indication of exceptions</span>
-<span class="sd">    in the html output stream and the controlling terminal</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-
-    <span class="n">cumm</span> <span class="o">=</span> <span class="n">xstr</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
-    <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cumm</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c1">#cumm += str(traceback.format_tb(c, 10))</span>
-            <span class="n">ttt</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_tb</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">ttt</span><span class="p">:</span>
-                <span class="n">cumm</span> <span class="o">+=</span> <span class="s2">&quot;File: &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> \
-                        <span class="s2">&quot; Line: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>  \
-                    <span class="s2">&quot;   Context: &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; -&gt; &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span> <span class="s2">&quot;Could not print trace stack. &quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">cumm</span><span class="p">)</span>
-    <span class="c1">#syslog.syslog(&quot;%s %s %s&quot; % (xstr, a, b))</span>
-
-<span class="c1"># ------------------------------------------------------------------------</span>
-
 <span class="k">def</span>  <span class="nf">resolve_template</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 
     <span class="c1"># Iterate &#39;lookfor&#39; combos; the html template can be local, html static,</span>
@@ -714,6 +664,58 @@ in the html output stream and the controlling terminal</p>
     <span class="c1">#print(&quot;resolve_template(), found: &quot;, found)</span>
 
     <span class="k">return</span> <span class="n">found</span>
+
+<span class="c1"># ------------------------------------------------------------------------</span>
+<span class="c1"># Utils below</span>
+
+<span class="k">def</span> <span class="nf">put_exception</span><span class="p">(</span><span class="n">xstr</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39; Give some indication of exceptions</span>
+<span class="sd">    in the html output stream and the controlling terminal</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">cumm</span> <span class="o">=</span> <span class="n">xstr</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+    <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cumm</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1">#cumm += str(traceback.format_tb(c, 10))</span>
+            <span class="n">ttt</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_tb</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">ttt</span><span class="p">:</span>
+                <span class="n">cumm</span> <span class="o">+=</span> <span class="s2">&quot;File: &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> \
+                        <span class="s2">&quot; Line: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">aa</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>  \
+                    <span class="s2">&quot;   Context: &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; -&gt; &quot;</span> <span class="o">+</span> <span class="n">aa</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span> <span class="s2">&quot;Could not print trace stack. &quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">cumm</span><span class="p">)</span>
+    <span class="c1">#syslog.syslog(&quot;%s %s %s&quot; % (xstr, a, b))</span>
+
+<span class="c1"># These are ENV items we want to skip for our display</span>
+
+<span class="n">nogo</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;OPENHAB&quot;</span><span class="p">,</span> <span class="s2">&quot;XDG_&quot;</span><span class="p">,</span> <span class="s2">&quot;LS_&quot;</span><span class="p">,</span> <span class="s2">&quot;SHELL&quot;</span><span class="p">,</span> <span class="s2">&quot;SESSION&quot;</span><span class="p">,</span> <span class="s2">&quot;QT&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;LESS&quot;</span><span class="p">,</span> <span class="s2">&quot;SSH&quot;</span><span class="p">,</span> <span class="s2">&quot;GTK&quot;</span><span class="p">,</span> <span class="s2">&quot;SHLVL&quot;</span><span class="p">,</span> <span class="s2">&quot;XAUTH&quot;</span><span class="p">,</span> <span class="s2">&quot;PANEL&quot;</span><span class="p">,</span> <span class="s2">&quot;PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;DISPLAY&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MANDAT&quot;</span><span class="p">,</span> <span class="s2">&quot;WINDOW&quot;</span><span class="p">,</span> <span class="s2">&quot;TERM&quot;</span><span class="p">,</span> <span class="s2">&quot;GDM&quot;</span><span class="p">,</span> <span class="s2">&quot;VIRT&quot;</span><span class="p">,</span> <span class="s2">&quot;HUB&quot;</span><span class="p">,</span> <span class="s2">&quot;VTE&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">printenv</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="c1">#print(&quot;aa&quot;, aa)</span>
+        <span class="n">fff</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">nogo</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cc</span> <span class="ow">in</span> <span class="n">aa</span><span class="p">:</span>
+                <span class="n">fff</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">fff</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="n">environ</span><span class="p">[</span><span class="n">aa</span><span class="p">])</span>
+
+        <span class="c1">#if &quot;HTTP_&quot; in aa:</span>
+        <span class="c1">#    print(aa, environ[aa])</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">print_httpenv</span><span class="p">(</span><span class="n">environ</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">&quot;HTTP_&quot;</span> <span class="ow">in</span> <span class="n">aa</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">environ</span><span class="p">[</span><span class="n">aa</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; --- end env&quot;</span><span class="p">)</span>
 
 <span class="c1"># EOF</span>
 </pre></div>

@@ -1,12 +1,14 @@
  #!/usr/bin/env python3
 
-''' The simplest web server '''
+''' The simplest web server's
+    data file for in-line resources
+'''
 
 header2 = '''
 <form method=post>
     <table width=100% border=0>
         <tr><td>
-        <font size=+2><b>Sub Header here.</b></font>
+        <font size=+2><b>Subx Header here.</b></font>
         <td align=right>
             <input type=text name="hell" value="Feed back">
             <input type=text name="textx" value="Submit Feedback">
@@ -16,8 +18,10 @@ header2 = '''
 </form>
 '''
 
+#''' This is a test header'''
+
 header = '''
-    <table width=100% { mycolor } border=0>
+    <table width=100% { sitecolor } border=0>
     <tr  height=36>
     <td align=left width=22%> &nbsp; &nbsp; <font size=+2> <b>{ Company Name }</b> </font>
             <td>
@@ -35,7 +39,7 @@ header = '''
                 Search: &nbsp; <input type=text value="" size=12>
                 <td align=right width=7% >
                 <img src=siteicons/mail-forward.png class=image title="Mail / Contact Us">
-                <img src=siteicons/application-exit.png title="Enter / Log In">
+                <a href=index.html> <img src=siteicons/application-exit.png title="Enter / Log In"></a>
     </table>
 '''
 

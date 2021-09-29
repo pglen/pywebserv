@@ -19,8 +19,9 @@
 
   ![screen shot of image processing](content/siteicons/next_step.png)
 
- On the screen shot below, projects is added in a separate directory; The project is isolated,
- errors in the project do not influence the site; only an error message shows.
+ On the screen shot below, projects are added in a separate sub directory;
+ The project is isolated, errors in the project do not influence the site;
+ only the page with error, and only an error message shows.
 
   ![screen shot of project and tiles processing](content/siteicons/tiles.png)
 

@@ -1,8 +1,6 @@
 # Wsgi Web Server
 
-## WSGI compliant web server, initial steps.
-
- Mon 27.Sep.2021 first steps are successful.
+## WSGI compliant web server
 
  Web server with no dependencies (for security). One might say this is a framework-less framework.
 
@@ -13,6 +11,7 @@
    * Template expansion { vars } are substituted recursively
    * connected to apache2 (tests OK)
    * image re-size from { vars } arguments ex: { image any.png 800 }
+   * first test site (see below)
 
  On the screen shot below, images are added, images are dynamically re sized with the PIL
  library;

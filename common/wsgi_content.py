@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-''' The simplest web server '''
+''' The simplest web server
+    data module for error files
+'''
 
 import sys, os, mimetypes, time, re
 
@@ -8,9 +10,11 @@ import sys, os, mimetypes, time, re
 
 import  wsgi_util, wsgi_data
 
-# No tag found, search local items
 
 def got_404(config, url, query):
+
+    ''' The error file from 404
+    '''
 
     if  os.path.exists(url):
         with open(url, 'r') as fh:
@@ -22,6 +26,9 @@ def got_404(config, url, query):
     return content
 
 def got_500(config, url, query):
+
+    ''' The error file from 500
+    '''
 
     fn2 = config.mypath + os.sep + url
     if  os.path.exists(fn2):

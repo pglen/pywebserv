@@ -3,7 +3,7 @@
 .PHONY: test clean doc
 
 all:
-	@echo Targets: git doc clean md5
+	@echo Targets: run git doc clean md5
 
 doc:
 	pdoc --logo /home/peterglen/pgpygtk/webserver/drawing.png -o doc `find . -name \*.py`
@@ -13,6 +13,9 @@ git:
 	git commit -m auto
 	git push
 	#git push local
+
+run:
+	./wsgi_server.py
 
 test:
 	@make -C client test

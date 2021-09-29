@@ -2,20 +2,21 @@
 
 '''
     This is a sample project that is added to the site. The idea here is
-    that nothing in this project can syntax error (down) the site, as it is
-    imported under a try: except clause, and it is calling only the
-    URL registration functions
+    that nothing in this project can syntax error (down) the site.
+    It is imported under a try: except clause, and it is calling only the
+    URL registration functions.
     Also, included a default web page function as index.html or as '/'
 '''
 
-import os, sys, random, datetime, time, codecs
-import wsgi_util, wsgi_func, wsgi_data
+import os, sys, time
+
+import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 localdb = None
 
 def fill_data(strx, context):
-    global configx, localdb
 
+    global localdb
     if not localdb:
         try:
             localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
@@ -31,9 +32,6 @@ def fill_data(strx, context):
     return out
 
 def got_index(config, url, query, request, template = "", fname = ""):
-
-    global configx
-    configx = config
 
     if config.conf.pgdebug > 3:
         print("got_index() url=%s"% url, "query=%s" %query,
@@ -84,8 +82,6 @@ def got_index(config, url, query, request, template = "", fname = ""):
 # This function is called when the module is loaded
 #
 
-from wsgi_global import add_one_url
-
 def initialize():
 
     '''
@@ -106,12 +102,11 @@ try:
     #print("Initializing", modname)
     sys.path.append("../")
     # Add default enties to table
-    add_one_url("/", got_index, "index.html", __file__)
-    add_one_url("/index.html", got_index, "index.html", __file__)
-    from wsgi_global import add_one_func
-    add_one_func("feed_data", fill_data)
+    wsgi_global.add_one_url("/", got_index, "index.html", __file__)
+    wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
+    wsgi_global.add_one_func("feed_data", fill_data)
 except:
-    print("Cannot initialize", modfname, sys.exc_info())
+    print("Cannot initialize", modname, sys.exc_info())
 
 initialize()
 

@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-''' The simplest web server '''
-
-
-# These string resources are the style components
+''' The simplest web server
+    These string resources are the style components
+'''
 
 mystyle = '''
 <style>

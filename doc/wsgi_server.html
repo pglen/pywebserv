@@ -215,19 +215,22 @@ changed; calls the bringfocus batch job to refresh browser</p>
             <span class="c1"># Make sure the log files do not trigger</span>
             <span class="k">if</span> <span class="n">fnamearr</span><span class="p">[</span><span class="n">aa</span><span class="p">][</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span> <span class="o">==</span> <span class="s2">&quot;.log&quot;</span><span class="p">:</span>
                 <span class="k">continue</span>
+            <span class="c1"># and puthon compile files do not trigger restart</span>
+            <span class="k">if</span> <span class="n">fnamearr</span><span class="p">[</span><span class="n">aa</span><span class="p">][</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span> <span class="o">==</span> <span class="s2">&quot;.pyc&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
 
             <span class="n">stat</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">fnamearr</span><span class="p">[</span><span class="n">aa</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">statarr</span><span class="p">[</span><span class="n">aa</span><span class="p">]</span> <span class="o">!=</span> <span class="n">stat</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">:</span>
                 <span class="n">statarr</span><span class="p">[</span><span class="n">aa</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">st_mtime</span>
                 <span class="n">flag</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="c1">#print(&quot;would restart on&quot;, fnamearr[aa])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;would restart on&quot;</span><span class="p">,</span> <span class="n">fnamearr</span><span class="p">[</span><span class="n">aa</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">4</span><span class="p">)</span>
             <span class="n">th</span><span class="o">.</span><span class="n">terminate</span><span class="p">();</span> <span class="n">waitx</span><span class="p">()</span>
             <span class="n">th</span><span class="o">.</span><span class="n">kill</span><span class="p">();</span>      <span class="n">waitx</span><span class="p">()</span>
             <span class="n">rescan</span><span class="p">()</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Restarted server:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Restarted server:&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">asctime</span><span class="p">())</span>
             <span class="n">th</span> <span class="o">=</span> <span class="n">re_serve</span><span class="p">()</span> <span class="p">;</span> <span class="n">waitx</span><span class="p">();</span>
             <span class="n">re_open</span><span class="p">()</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">4</span><span class="p">)</span>

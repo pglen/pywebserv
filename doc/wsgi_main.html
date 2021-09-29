@@ -547,7 +547,7 @@ The macro regex is '{ .*? }' [the '?' is for non greedy wild card)</p>
     <span class="n">httpd</span> <span class="o">=</span> <span class="n">simple_server</span><span class="o">.</span><span class="n">make_server</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">application</span><span class="p">,</span>
                                                 <span class="n">handler_class</span><span class="o">=</span><span class="n">NoLoggingWSGIRequestHandler</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">HTTPD on port </span><span class="si">{}</span><span class="s2">, control-C to stop&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTPD on port </span><span class="si">{}</span><span class="s2">, control-C to stop&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
 
     <span class="c1">#print(&quot;Begin main args&quot;, sys.argv)</span>
 

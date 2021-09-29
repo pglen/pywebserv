@@ -413,7 +413,7 @@ if __name__ == '__main__':
     httpd = simple_server.make_server('', config.conf.port, application,
                                                 handler_class=NoLoggingWSGIRequestHandler)
 
-    print("\nHTTPD on port {}, control-C to stop".format(config.conf.port))
+    print("HTTPD on port {}, control-C to stop".format(config.conf.port))
 
     #print("Begin main args", sys.argv)
 

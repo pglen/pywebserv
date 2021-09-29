@@ -131,6 +131,13 @@ if __name__ == '__main__':
             # Make sure the log files do not trigger
             if fnamearr[aa][-4:] == ".log":
                 continue
+            # and python compile files do not trigger restart
+            if fnamearr[aa][-4:] == ".pyc":
+                continue
+
+            # and sqlt files
+            if fnamearr[aa][-5:] == ".sqlt":
+                continue
 
             stat = os.stat(fnamearr[aa])
             if statarr[aa] != stat.st_mtime:
@@ -143,7 +150,7 @@ if __name__ == '__main__':
             th.terminate(); waitx()
             th.kill();      waitx()
             rescan()
-            print("Restarted server:")
+            print("Restarted server:", time.asctime())
             th = re_serve() ; waitx();
             re_open()
         time.sleep(.4)

@@ -100,7 +100,6 @@ modname = os.path.splitext(os.path.basename(__file__))[0]
 
 try:
     #print("Initializing", modname)
-    sys.path.append("../")
     # Add default enties to table
     wsgi_global.add_one_url("/", got_index, "index.html", __file__)
     wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)

@@ -21,7 +21,7 @@ global_table = [
     ["sitecolor",   "bgcolor=#aaffbb"],
     ["thumbwidth",  "120"],
     ["thumbheight",  "80"],
-    ["Company Name", "Under Development"],
+    ["Company Name", "United Planet Peace"],
   ]
 
 # ------------------------------------------------------------------------

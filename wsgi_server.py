@@ -26,7 +26,7 @@ def app(environ, respond):
 
     if os.path.exists(fn):
         respond('200 OK', [('Content-Type', type)])
-        return util.FileWrapper(open(fn, "rb"))
+        return [util.FileWrapper(open(fn, "rb"))]
     else:
         respond('404 Not Found', [('Content-Type', 'text/plain')])
         #respond('200 Hello world', [('Content-Type', 'text/plain')])

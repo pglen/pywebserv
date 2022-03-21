@@ -6,7 +6,11 @@
 # add trailing '_func' to the name as a convention
 
 import os, sys, random, datetime
-from PIL import Image
+
+try:
+    from PIL import Image
+except:
+    print("Must install PIL");
 
 import wsgi_util, wsgi_style, wsgi_res, wsgi_global
 

@@ -38,8 +38,34 @@ The first two forms of the { image } function will preserve the image's aspect r
 
 '''
 
-import sys, os, mimetypes, time, datetime, getopt
-from urllib.parse import urlparse, unquote, parse_qs, parse_qsl
+import sys, os, mimetypes, time, datetime, getopt, traceback
+
+def tracex(xstr):
+
+    cumm = xstr + " "
+    a,b,c = sys.exc_info()
+    #print(a,b,c)
+    if a != None:
+        cumm += str(a) + " " + str(b) + "\n"
+        try:
+            #cumm += str(traceback.format_tb(c, 10))
+            ttt = traceback.extract_tb(c)
+            for aa in ttt:
+                #print( "trace stack item ", aa)
+                cumm += " *** File: " + os.path.basename(aa[0]) + \
+                        " Line: " + str(aa[1]) + "\n" +  \
+                    "   Context: " + aa[2] + " -> " + aa[3] + "\n"
+        except:
+            print( "Could not print trace stack. ", sys.exc_info())
+    print(cumm)
+
+try:
+    from urllib.parse import urlparse, unquote, parse_qs, parse_qsl
+except ImportError:
+     from urlparse import urlparse, unquote, parse_qs, parse_qsl
+
+#from urllib.parse import urlparse, unquote, parse_qs, parse_qsl
+
 from wsgiref import simple_server, util
 
 VERBOSE = 0
@@ -102,7 +128,7 @@ class xWebServer():
         # import here so apache wsgi interface gets the files
         import wsgi_global, wsgi_content, wsgi_util, wsgi_data, wsgi_func
 
-        self.mark = time.perf_counter()
+        #self.mark = time.perf_counter()
         self.respond = respond
         self.environ = environ
         self.config = config
@@ -120,15 +146,23 @@ class xWebServer():
             self.sql = wsgi_data.wsgiSql(self.config.datapath + "data/wsgi_main.sqlt")
         except:
             print("Warn: Cannot create database", sys.exc_info())
+
+        logf = self.config.datapath + "data/wsgi_main.log"
         try:
-            self.logfp = open(self.config.datapath + "data/wsgi_main.log", "a+")
+            self.logfp = open(logf, "a+")
         except:
-            print("Cannot open log", sys.exc_info())
+            import getpass
+            print(getpass.getuser())
+            print("Cannot open log %s %s" % (getpass.getuser(), logf), sys.exc_info())
             self.logfp = None
 
         if self.logfp:
-            sss = [environ['REQUEST_METHOD'], environ['PATH_INFO']]
-            print( str(self.stime), *sss, file=self.logfp, flush=True)
+            # Print less stuff
+            if not "siteicons" in environ['PATH_INFO']:
+                sss = [environ['REQUEST_METHOD'], environ['PATH_INFO']]
+                print( str(self.stime), *sss, file=self.logfp, flush=True)
+
+            #print( str(self.stime), environ, file=self.logfp, flush=True)
 
         if self.config.conf.pgdebug > 8:
             wsgi_util.printenv(environ, True)
@@ -188,6 +222,7 @@ class xWebServer():
         self.urlmap = wsgi_global.urlmap
 
     def _translate_url(self, config, url):
+        ''' return details for a url '''
         #print("Looking up", url)
         par = urlparse(url)
         got, tmpl, filen = self.urlmap.lookup(par.path)
@@ -199,7 +234,7 @@ class xWebServer():
 
     def process_req(self):
 
-        ''' This executes the request, after the initilizer parsed everything '''
+        ''' This executes the request, after the initialize-r parsed everything '''
 
         import wsgi_content, wsgi_util
 
@@ -272,7 +307,6 @@ class xWebServer():
                     ppp = os.path.join(ppp, splitx[aa])
             else:
                 ppp = os.path.join(ppp, splitx[aa])
-
         #print("ppp", ppp)
         return ppp
 
@@ -301,38 +335,45 @@ def application(environ, respond):
     WSGI main entry point. The web server (like apache) will call this.
     '''
 
-    # Make sure we are landing here
-    mypath = os.path.dirname(os.path.realpath(__file__));
-    sys.path.append(mypath)
-    sys.path.append(mypath + os.sep + "common")
-    os.chdir(mypath + os.sep + "content");
-    sys.path.append(mypath + os.sep + "content")
+    #print("  ======= Called 'application' ========   ")
 
-    import wsgi_util, wsgi_content, wsgi_global
+    try:
+        # Make sure we are landing here
+        mypath = os.path.dirname(os.path.realpath(__file__));
+        sys.path.append(mypath)
+        sys.path.append(mypath + os.sep + "common")
+        os.chdir(mypath + os.sep + "content");
+        sys.path.append(mypath + os.sep + "content")
 
-    global usr_cnt, mainclass
+        import wsgi_util, wsgi_content, wsgi_global
 
-    usr_cnt += 1
-    #print("Query arrived", os.getpid(), usr_cnt)
+        global usr_cnt, mainclass
 
-    global config
-    if config:
-        configx = config
-    else:
-        configx = Config()
+        usr_cnt += 1
+        #print("Query arrived", os.getpid(), usr_cnt)
 
-    # if not mainclass:
-    mainclass = xWebServer(environ, respond, configx)
+        global config
+        if config:
+            configx = config
+        else:
+            configx = Config()
 
-    # Only do it one time
-    if usr_cnt == 1:
-        wsgi_global.getprojects(mainclass)
+        # if not mainclass:
+        mainclass = xWebServer(environ, respond, configx)
 
-    wdata = mainclass.process_req()
+        # Only do it one time
+        if usr_cnt == 1:
+            wsgi_global.getprojects(mainclass)
 
-    #print("tdelta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
+        wdata = mainclass.process_req()
+        #print("tdelta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
+        return wdata
 
-    return wdata
+    except:
+        #print("Exception in main:", sys.exc_info())
+        tracex("Exception in main:")
+        content = "Script error"
+        return [bytes(content, "utf-8"),]
 
 def xversion():
     print("Version 1.0")
@@ -351,6 +392,9 @@ if __name__ == '__main__':
     config = Config()
 
     opts = []; args = []
+
+    print("Web server initiated")
+
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "d:h?vV:fxctokt",

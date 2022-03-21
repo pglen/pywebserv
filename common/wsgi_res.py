@@ -8,7 +8,7 @@ header2 = '''
 <form method=post>
     <table width=100% border=0>
         <tr><td>
-        <font size=+2><b>Subx Header here.</b></font>
+        <font size=+2><b>Welcome to UPP</b></font> (under construction, check back later)
         <td align=right>
             <input type=text name="hell" value="Feed back">
             <input type=text name="textx" value="Submit Feedback">

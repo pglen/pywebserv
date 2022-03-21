@@ -8,9 +8,14 @@ all:
 doc:
 	pdoc --logo /home/peterglen/pgpygtk/webserver/drawing.png -o doc `find . -name \*.py`
 
+# Auto Checkin
+ifeq ("$(AUTOCHECK)","")
+AUTOCHECK=autocheck
+endif
+
 git:
 	git add .
-	git commit -m auto
+	git commit -m "$(AUTOCHECK)"
 	git push
 	#git push local
 

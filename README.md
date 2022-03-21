@@ -13,6 +13,12 @@
    * image re-size from { vars } arguments ex: { image any.png 800 }
    * first test site (see below)
 
+
+ History:
+
+    Sun 20.Mar.2022 First live site on the web
+
+
  On the screen shot below, images are added, images are dynamically re sized with the PIL
  library;
 

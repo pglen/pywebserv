@@ -68,9 +68,14 @@ def got_index(config, url, query, request, template = "", fname = ""):
     #print("using template", template)
 
     if template and os.path.exists(template):
+        buff = ""
         #content = "Index file exists " + url + " " +  str(query) + " "
-        with open(template, 'r') as fh:
-            buff = fh.read()
+        try:
+            with open(template, 'r') as fh:
+                buff = fh.read()
+        except:
+            print("reason", sys.exc_info())
+
         # Recursively process
         content = wsgi_util.recursive_parse(buff, __file__)
     else:

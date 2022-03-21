@@ -28,6 +28,12 @@ mystyle = '''
   opacity: 1;
 }
 
+a:link, a:visited {
+    //color: black;
+    text-decoration: none;
+    decoration: none;
+}
+
 </style>
 '''
 

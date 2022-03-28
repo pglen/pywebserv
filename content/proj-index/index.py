@@ -12,6 +12,13 @@ import os, sys, time
 
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
+try:
+    import macros
+except:
+    print("Cannot import macros", sys.exc_info())
+    wsgi_util.put_exception("import macros")
+
+
 localdb = None
 
 def fill_data(strx, context):
@@ -111,8 +118,10 @@ try:
     wsgi_global.add_one_func("feed_data", fill_data)
     #wsgi_global.add_one_func("Company Name", "Test Website")
 
+
 except:
     print("Cannot initialize", modname, sys.exc_info())
+    wsgi_util.put_exception("initialize error")
 
 initialize()
 

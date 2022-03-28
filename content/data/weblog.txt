@@ -1,0 +1,517 @@
+Started Server Page
+Importing macros
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>"{ art_header }"
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+Hello
+Started Server Page
+Started Server Page
+Started Server Page
+Started Server Page
+Started Server Page
+Started Server Page
+Started Server Page
+Started Server Page
+Started Server Page
+Started Server Page
+Importing macros
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>"{ art_header }"
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+Hello
+Importing macros
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>"{ art_header }"
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+Hello
+Started Server Page
+Importing macros
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>"{ art_header }"
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+Hello
+Started Server Page
+Importing macros
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>"{ art_header }"
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+Hello
+Started Server Page
+Importing macros
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>"{ art_header }"
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+Hello
+Importing macros
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>"{ art_header }"
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+Hello
+Importing macros
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>"{ art_header }"
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+Hello
+Importing macros
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>"{ art_header }"
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+Hello
+Importing macros
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#eeeeee>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>"{ art_header }"
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+register var_mac
+Hello
+Importing macros
+register var_macregister var_macregister var_macImporting macros
+register var_mac
+register var_mac
+register var_mac
+Importing macros
+register var_article3
+register var_art_data
+register var_article4
+Importing macros
+registerarticle3
+registerart_data
+registerarticle4
+Importing macros
+registerarticle3
+registerart_data
+registerarticle4
+Importing macros
+registerarticle3
+registerart_data
+registerarticle4
+Importing macros
+registerarticle3
+registerart_data
+registerarticle4
+Importing macros
+registerarticle3
+registerart_data
+registerarticle4
+Importing macros
+registerarticle3
+registerart_data
+registerarticle4
+Importing macros
+registerarticle3
+registerart_data
+registerarticle4
+Importing macros
+registerarticle3
+registerart_data
+registerarticle4
+Importing macros
+registerarticle3
+registerart_data
+registerarticle4
+Importing macros
+registerarticle3
+registerart_data
+registerarticle4
+Importing macros
+register: article3
+register: art_data
+register: article4
+Importing macros
+register: article3
+register: art_data
+register: article4
+Importing macros
+register: article3
+register: art_data
+register: article4
+Importing macros
+register: article3
+register: art_data
+register: article4
+Importing macros
+register: article3
+register: art_data
+register: article4
+Importing macros
+register: article3
+register: art_data
+register: article4

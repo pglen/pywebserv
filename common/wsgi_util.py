@@ -56,7 +56,7 @@ def _global_para_items(item, context):
     if erritem[0] == '#':
         #print("Ignoring commented:", erritem)
         return ""
-    return "!!" + str(item[2:-2]) + "!!"
+    return "<font color=red>!!" + str(item[2:-2]) + "!!</font>"
 
 # Parse buffer
 
@@ -87,7 +87,7 @@ def _parse_buffer(buff, flag, regex, context):
     #print ("arr", arr)
     return arr, count
 
-def     recursive_parse(buff, context, regex = "{ .*? }"):
+def recursive_parse(buff, context, regex = "{ .*? }"):
 
     content = ""
     try:
@@ -217,5 +217,18 @@ def print_httpenv(environ):
         if "HTTP_" in aa[:5]:
             print(aa, "'" + environ[aa] + "'")
     print(" --- end env")
+
+
+def append_file(strx):
+
+    weblog = "./data/weblog.txt"
+    fp = open(weblog, "a")
+
+    if not fp:
+        print("Cannot open log %s" % weblog, os.getcwd())
+        return
+
+    fp.write(strx)
+    fp.close()
 
 # EOF

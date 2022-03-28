@@ -40,6 +40,11 @@ def     app_one_func(strx, context):
 
 def     app_two_func(strx, context):
 
+
+    content = "App2 here"
+    return content
+
+
     '''
     Mock calendar. Does nothing but presents a calendar looking user interface
     '''
@@ -80,8 +85,8 @@ def     app_two_func(strx, context):
                 else:
                     content += "<td> <font size=-1>" + "&nbsp;"
 
-
         content += "</table>"
+
     except:
         print("Exception on app_two_func", sys.exc_info())
     return content
@@ -186,11 +191,11 @@ def     build_initial_table():
     ''' The initial table for the global items '''
     try:
         wsgi_global.add_one_func("app_one", app_one_func)
-        wsgi_global.add_one_func("app2x",   app_two_func)
+        wsgi_global.add_one_func("app2",   app_two_func)
         wsgi_global.add_one_func("image",   image_func)
         wsgi_global.add_one_func("include", include_func)
 
-        #wsgi_global.add_one_func("deep",    deep_func)
+        wsgi_global.add_one_func("deep",    deep_func)
         #wsgi_global.add_one_func("crap",    crap_func)
 
     except:

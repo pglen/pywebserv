@@ -67,7 +67,7 @@
         o Initial .py file to configure the project (any name)
         o Content that responds to the callbacks, or presented as is
 
-    See proj-index for an example hoem page. Also proj* for more
+    See proj-index for an example home page. Also proj* for more
     detailed examples. Please note how simple a calendar
     implementation becomes.
 
@@ -79,6 +79,7 @@
     Thu 22.Apr.2021 Projects in separate dir, reverse isolation
     Mon 27.Sep.2021 Moved user contents to the subdir 'content' (more isolation)
     Mon Tue 28.Sep.2021 Cleanup, first useful site
+    Sat 26.Mar.2022 World peace pages
 
 ## Licence
 

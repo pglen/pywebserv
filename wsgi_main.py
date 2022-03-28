@@ -347,6 +347,8 @@ def application(environ, respond):
 
         import wsgi_util, wsgi_content, wsgi_global
 
+        #wsgi_util.append_file("Started Server Page\n")
+
         global usr_cnt, mainclass
 
         usr_cnt += 1
@@ -361,8 +363,8 @@ def application(environ, respond):
         # if not mainclass:
         mainclass = xWebServer(environ, respond, configx)
 
-        # Only do it one time
-        if usr_cnt == 1:
+        # Only do it one time (not for dev deployment)
+        if True: #usr_cnt == 1:
             wsgi_global.getprojects(mainclass)
 
         wdata = mainclass.process_req()

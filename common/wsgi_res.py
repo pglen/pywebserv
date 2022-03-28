@@ -53,7 +53,7 @@ header = '''
 footer = '''
     <tr  height=48>
     <td align=left width=45%>
-    &nbsp; &nbsp; <font size=+2> <b>Contact</b> </font><b>peterglen99@gmail.com</b>
+    &nbsp; &nbsp; <font size=+2> <b>Contact Site Admin</b> </font><b>peterglen99@gmail.com</b>
             <td> Copyright (C) Open Source
             <td align=right>
                 <img src=siteicons/system-log-out.png class=image title="Log Out / Leave">
@@ -76,7 +76,7 @@ article = '''
             <table border=0 bgcolor=#eeeeee>
             <tr>
                 <tr><td colspan=2>
-                <font size=+2>Article header, longer one
+                <font size=+2>Article header
                 <tr>
                 <td>
                 { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
@@ -111,6 +111,10 @@ article2 = '''
                 Article / Image description detail
             </table>
         </table>
+'''
+
+art_header = '''
+Dynamic header
 '''
 
 bigtext = '''
@@ -169,5 +173,6 @@ bigtext = '''
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
 '''
+
 
 # EOF

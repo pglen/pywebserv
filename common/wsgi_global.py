@@ -10,10 +10,9 @@ from wsgi_style import *
 from wsgi_res   import *
 from wsgi_func  import *
 
-# A list of variables and strings
+# A list of variables and strings. Error here will down the site.
 
 global_table = [
-    ["header2",     header2],
     ["var",         "<font size=+1>variable { deep } </font>"],
     ["no problem",  "recursive expansion is not even a <b>little</b> problem ... "],
     ["spacer",      "<table><tr><td></table>"],
@@ -21,7 +20,8 @@ global_table = [
     ["sitecolor",   "bgcolor=#aaffbb"],
     ["thumbwidth",  "120"],
     ["thumbheight",  "80"],
-    ["Company Name", "United Planet Peace"],
+    ["Company Name", "Company Name here"],
+    ["mycolor", "#cccccc"],
   ]
 
 # ------------------------------------------------------------------------

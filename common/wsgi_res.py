@@ -4,22 +4,6 @@
     data file for in-line resources
 '''
 
-header2 = '''
-<form method=post>
-    <table width=100% border=0>
-        <tr><td>
-        <a href=index.html>
-        <font size=+2><b>Welcome to UPP</b></a> </font>
-        (under construction, check back later)
-
-        <td align=right>
-            <input type=text name="hell" value="Feed back">
-            <input type=text name="textx" value="Submit Feedback">
-            <input type=submit name='hello' value='Submit'>
-        <td>
-        </table>
-</form>
-'''
 
 #''' This is a test header'''
 

@@ -230,4 +230,33 @@ def append_file(strx):
     fp.write(strx)
     fp.close()
 
+
+# ------------------------------------------------------------------
+# Resolve paths, tead file, expand template
+
+def process_default(config, url, query, request, template, fname):
+
+    if not template:
+        template = wsgi_util.resolve_template(config, url, fname)
+    else:
+        template = os.path.dirname(fname) + os.sep + template
+
+    #print("using template", template)
+
+    if template and os.path.exists(template):
+        buff = ""
+        try:
+            with open(template, 'r') as fh:
+                buff = fh.read()
+        except:
+            print("Cannot read template", sys.exc_info())
+
+        # Recursively process
+        content = recursive_parse(buff, fname)
+    else:
+        content = "Index file (dyn) " + url + " " +  template + " " + str(query) + " "
+
+    return content
+
+
 # EOF

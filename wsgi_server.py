@@ -143,14 +143,14 @@ if __name__ == '__main__':
             if statarr[aa] != stat.st_mtime:
                 statarr[aa] = stat.st_mtime
                 flag = True
-                print("would restart on", fnamearr[aa])
+                #print("would restart on", fnamearr[aa])
 
         if flag:
             time.sleep(.4)
             th.terminate(); waitx()
             th.kill();      waitx()
             rescan()
-            print("Restarted server:", time.asctime())
+            #print("Restarted server:", time.asctime())
             th = _re_serve() ; waitx();
             _re_open()
         time.sleep(.4)

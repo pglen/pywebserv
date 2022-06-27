@@ -12,7 +12,7 @@ of the web server, and sub directories may assume the following functions:
 
 
   To create a <b>new project</b>, add a new directory that starts with "proj"
- (like "proj-000") and populate the files. At least one puthon file is needed.
+ (like "proj-000") and populate the files. At least one python file is needed.
 
     To create a <b>new page</b>, add a new python file, and call the
 URL registration function(s) within. The server redirects the url

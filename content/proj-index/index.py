@@ -108,21 +108,91 @@ def initialize():
         except:
             print("Could not create local data for %s", modname)
 
+
+# Upon loading ...
+
+sitestyle = '''
+<style>
+.container {
+  position: relative;
+  width: 50%;
+}
+.image {
+  opacity: 1;
+  display: inline;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+.container {
+  position: relative;
+  width: 50%;
+}
+.container:hover .image {
+  opacity: 0.3;
+}
+.container:hover .middle {
+  opacity: 1;
+}
+
+a:link, a:visited {
+    //color: black;
+    text-decoration: none;
+    decoration: none;
+}
+
+</style>
+'''
+
+def mac_func_one(strx, context):
+    return strx + " Function body here " + str(context)
+
+mac_header2 = '''
+<form method=post>
+    <table width=100% border=0>
+        <tr><td>
+        <a href=index.html>
+        <font size=+2><b>Welcome to UPP, </a> </font> United Planet Peace
+        <!-- (under construction, check back later) --!>
+
+        <td align=right>
+            Quick feedback:  &nbsp;
+            <input type=text name="hell" value="Feed back Title">
+            <input type=text name="textx" value="Feedback Content">
+            <input type=submit name='hello' value='Submit'>
+        <td>
+        </table>
+</form>
+'''
+
 modname = os.path.splitext(os.path.basename(__file__))[0]
 
 try:
-    #print("Initializing", modname)
+    #print("Initializing", "'" + modname + "'" )
     # Add default enties to table
     wsgi_global.add_one_url("/", got_index, "index.html", __file__)
     wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
     wsgi_global.add_one_func("feed_data", fill_data)
-    #wsgi_global.add_one_func("Company Name", "Test Website")
-
+    wsgi_global.add_one_func("Company Name", "UPP")
+    wsgi_global.add_one_func("sitestyle", sitestyle)
 
 except:
     print("Cannot initialize", modname, sys.exc_info())
     wsgi_util.put_exception("initialize error")
 
 initialize()
+
+# Auto add macro entries
+
+try:
+    vvv = vars().copy()
+    for name in vvv:
+        if type(name) == type('a') or type(name) == type(initialize):
+            if "mac_" == name[:4]:
+                print("Adding", name, type(name))
+                wsgi_global.add_one_func(name, vvv[name])
+
+except:
+    print("Exception on init vars", sys.exc_info())
 
 # EOF

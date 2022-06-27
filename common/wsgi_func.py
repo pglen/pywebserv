@@ -188,7 +188,9 @@ def     include_func(arg, context):
 
 def     build_initial_table():
 
-    ''' The initial table for the global items '''
+    ''' The initial table for the global items
+        User may override this
+    '''
     try:
         wsgi_global.add_one_func("app_one", app_one_func)
         wsgi_global.add_one_func("app2",   app_two_func)
@@ -204,7 +206,9 @@ def     build_initial_table():
 
 def     build_initial_rc():
 
-    ''' The initial table for the global resource items '''
+    ''' The initial table for the global resource items
+        The user resources may override any of this
+    '''
     try:
         wsgi_global.add_one_func("header",   wsgi_res.header)
         wsgi_global.add_one_func("footer",   wsgi_res.footer)
@@ -212,7 +216,6 @@ def     build_initial_rc():
         wsgi_global.add_one_func("imgrow",   wsgi_res.imgrow)
         wsgi_global.add_one_func("article",  wsgi_res.article)
         wsgi_global.add_one_func("article2", wsgi_res.article2)
-
         wsgi_global.add_one_func("mystyle",  wsgi_style.mystyle)
 
     except:

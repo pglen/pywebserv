@@ -35,12 +35,12 @@
 
   See index.html for examples.
 
-| Directories | Usage |
-|  ------------|-------------|
-|  /content/proj*      |  applications / projects |
-|  /content/siteicons/ |  icons                   |
-|  /content/media/     |  image content           |
-|  /content/static/    |  static (non changing) content |
+    | Directories | Usage |
+    |  ------------|-------------|
+    |  /content/proj*      |  applications / projects |
+    |  /content/siteicons/ |  icons                   |
+    |  /content/media/     |  image content           |
+    |  /content/static/    |  static (non changing) content |
 
 ### Flow of presenting the pages:
 

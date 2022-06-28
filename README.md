@@ -34,10 +34,6 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
    * First test site (see below)
    * Apache binding tested via the WSGI interface
 
- History:
-
-    Sun 20.Mar.2022 First live site on the web
-    Tue 28.Jun.2022 Created unitedplanetpeace.com proto site
 
  On the screen shot below, images are added, images are dynamically re sized with the PIL
  library;
@@ -104,8 +100,10 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
     Thu 22.Apr.2021 Projects in separate dir, reverse isolation
     Mon 27.Sep.2021 Moved user contents to the subdir 'content' (more isolation)
     Tue 28.Sep.2021 Cleanup, first useful site
+    Sun 20.Mar.2022 First live site on the web
     Sat 26.Mar.2022 World peace pages
-    Tue 28.Jun.2022 united planet peace
+    Tue 28.Jun.2022 Created unitedplanetpeace.com proto site
+    Also see 'git log' for more
 
 ## Licence
 

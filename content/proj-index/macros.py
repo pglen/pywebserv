@@ -4,7 +4,6 @@ import os, sys, time
 
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
-
 ''' Local macros and data. Register it after init or use the "_mac_ prefix to auto register
 '''
 
@@ -15,16 +14,22 @@ _mac_left = '''
 <table width=100% border=0>
     <tr><td align=center bgcolor={ tabhead } colspan=2 height=36>
     <font size=+1><b>Main Navigation</b>
-    <tr><td> &nbsp;
-    <tr><td width=20%> &nbsp;
+    <tr><td height=6>
+    <tr><td colspan=2 align=center><a href=/index.html>
+        <img src="/media/united_planet_logo.png" title="Main Logo">
+        </a>
+
+    <tr><td height=6>
+    <tr><td width=25%> &nbsp;
+
     <td>
-    <li><font size=+1><a href=index.html>Home Page</a>
-    <li><a href=log.html>Log Page</a>
-    <li><a href=index.html>Blog Page</a>
-    <li><a href=index.html>Personal Page</a>
-    <li><a href=index.html>Tech Page</a>
-    <li><a href=index.html>Another Page</a>
-    <li><a href=more.html>More <br> &nbsp;  &nbsp; (test for broken link)</a>
+        <li><font size=+1><a href=index.html>Home Page</a>
+        <li><a href=log.html>Log Page</a>
+        <li><a href=index.html>Blog Page</a>
+        <li><a href=index.html>Personal Page</a>
+        <li><a href=index.html>Tech Page</a>
+        <li><a href=index.html>Another Page</a>
+        <li><a href=more.html>More <br> &nbsp;  &nbsp; (test for broken link)</a>
     <tr><td height=12>
     <tr><td colspan=2 style="text-align:justify;">
     &nbsp;
@@ -32,27 +37,34 @@ _mac_left = '''
     <!--&nbsp <img src=siteicons/media-skip-backward.png title="Backward Front">
     -->
     <tr><td height=8 align=center colspan=2>
-    <img src="/media/upp_2_small.png" title="Logo">
+    <!-- <img src="/media/upp_2_small.png" title="Logo"> -->
+
+
+
  </table>
 '''
 
+_mac_miss_state = '''
+    <table width=100% cellpadding=3 border=0>
+    { mission_statement }
+    </table>
+'''
+
 _mac_mission_statement = '''
-<table width=100% cellpadding=3 border=0>
 <tr><td bgcolor={ misscol }>
 <font size=-1>Mission Statement:</font>
 <font size=+0><br></font>
 <font size=+2><center><b>World Wide Globalization Message.</b></center><p></font>
-&nbsp; &nbsp; The pace of globalization has exceeded expectations. This site is searching for and
-recommending solutions. Because true globalization can end hunger, can end all wars. May create
-a better existence for all, via connecting supply and demand to establish a new equilibrium.
- Globalization may create a more balanced human race with higher quality of life and happiness
-  for EVERYBODY. <p>
+&nbsp; &nbsp; The pace of globalization has exceeded expectations. This institution is searching
+for new ways of existance, and recommending solutions. Because true globalization, done right, can
+end hunger, and can terminate all wars. May create a better existence for all, via connecting supply
+and demand without bounds, and establish a new peaceful equilibrium.
+ Globalization may create a happier human race with higher quality of life and more balance.
+  For EVERYBODY. <p>
 &nbsp; &nbsp; Please do not be misled by the term globalization. It is about global cooperation,
-not control. The fact, that we live in an inseparable global pool, which is our planet, Earth.
-Please look around for ideas on the site, approve / disapprove as you feel, and help if
-you so desire. And help you can. Every one of us makes an impact. Believe in that.<p>
-
-</table>
+not control. We live in an inseparable global pool, our planet, Earth. This is the basis
+for everything else. Please look around for ideas on the site, approve / disapprove as you feel, and help if
+you so desire. And help you can. Every one of us makes an impact.<p>
 '''
 
 _mac_center = '''
@@ -61,7 +73,7 @@ _mac_center = '''
      <table width=100% border=0>
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
-        { mission_statement }
+        { miss_state }
         <table width=100% border=0>
             <tr valign=top>
             { article4 } { article } { article2 } { article3 }

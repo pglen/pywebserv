@@ -49,8 +49,8 @@ def got_index(config, url, query, request, template = "", fname = ""):
     #print("got_index() request", request)
     #print("got_index() config", config.showvals(), url, query)
 
-    if url == "/":
-        url = "/index.html"
+    #if url == "/":
+    #    url = "/index.html"
 
     if request:
         sss = ""
@@ -149,7 +149,6 @@ try:
 
 except:
     print("Cannot initialize", modname, sys.exc_info())
-    wsgi_util.put_exception("initialize error")
 
 initialize()
 

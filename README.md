@@ -14,6 +14,26 @@
    * first test site (see below)
    * apache binding tested via the WSGI interface
 
+
+###  Introduction
+
+ To wet your apetite, here is how simple the HTML page becomes.
+
+        { sitestyle }
+        { header }
+
+        <table width=100%  cellspacing=2 cellpadding=0 border=0>
+            <tr><td bgcolor=#eeeeee width=15% valign=top>
+                { left }
+                { center }
+                { nav }
+                { right }
+        </table>
+        <table width=100% { sitecolor }>
+            { footer }
+        </table>
+
+
  History:
 
     Sun 20.Mar.2022 First live site on the web
@@ -72,6 +92,7 @@
     See proj-index for an example home page. Also proj* for more
     detailed examples. Please note how simple a calendar
     implementation becomes.
+
 
 ### History:
 

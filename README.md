@@ -35,11 +35,12 @@
 
   See index.html for examples.
 
-| Directories | Usage |
-|  ------------|-------------|
+| Directories          | Usage                    |
+|  --------------------|--------------------------|
 |  /content/proj*      |  applications / projects |
 |  /content/siteicons/ |  icons                   |
 |  /content/media/     |  image content           |
+|  /content/common/    |  python scripts (wsgi interface) |
 |  /content/static/    |  static (non changing) content |
 
 ### Flow of presenting the pages:
@@ -62,7 +63,7 @@
 
  To create a new project:
 
-    Add a directory to the web server content directory
+    Add a directory to the web server's "content" directory
         that starts with 'proj' (like proj-hello or proj-sales)
     fill in the directory with content
         o Initial .py file to configure the project (any name)

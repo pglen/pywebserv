@@ -36,10 +36,11 @@
   See index.html for examples.
 
    Directories:
-      *  /content/proj*      for applications / projects
-      *  /content/siteicons/ for icons
-      *  /content/media/     for image content
-      *  /content/static/    for static (non changing) content
+   ------------|-------------|------------
+      |  /content/proj*      | for applications / projects
+      |  /content/siteicons/ | for icons
+      |  /content/media/     | for image content
+      |  /content/static/    | for static (non changing) content
 
 ### Flow of presenting the pages:
 
@@ -78,7 +79,7 @@
     Mon 19.Apr.2021 Turned icons/ to siteicons/ (for apache not to redirect)
     Thu 22.Apr.2021 Projects in separate dir, reverse isolation
     Mon 27.Sep.2021 Moved user contents to the subdir 'content' (more isolation)
-    Mon Tue 28.Sep.2021 Cleanup, first useful site
+    Tue 28.Sep.2021 Cleanup, first useful site
     Sat 26.Mar.2022 World peace pages
     Tue 28.Jun.2022 united planet peace
 

@@ -12,12 +12,12 @@
    * connected to apache2 (tests OK)
    * image re-size from { vars } arguments ex: { image any.png 800 }
    * first test site (see below)
-
+   * apache binding tested via the WSGI interface
 
  History:
 
     Sun 20.Mar.2022 First live site on the web
-
+    Tue 28.Jun.2022 Created unitedplanetpeace.com proto site
 
  On the screen shot below, images are added, images are dynamically re sized with the PIL
  library;
@@ -80,6 +80,7 @@
     Mon 27.Sep.2021 Moved user contents to the subdir 'content' (more isolation)
     Mon Tue 28.Sep.2021 Cleanup, first useful site
     Sat 26.Mar.2022 World peace pages
+    Tue 28.Jun.2022 united planet peace
 
 ## Licence
 

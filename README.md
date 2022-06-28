@@ -6,9 +6,9 @@
 
 ###  Introduction
 
- This is a simple web server framework. To wet your apetite, here is how simple the
-HTML web page becomes. This is the source for the example pages. The macros can be crafted
-by you, so the simplicity is by no means a limitation.  (helps to know html/python)
+ This is a web server framework. To wet your apetite, here is how simple the
+HTML web page becomes. Below, is the source for the example pages. The macros can be crafted
+by you, so the simplicity is by no means a limitation.  (Helps to know html/python)
 
         { sitestyle }
         { header }
@@ -27,14 +27,12 @@ by you, so the simplicity is by no means a limitation.  (helps to know html/pyth
   What works:
 
    * First page delivered
-   * Dynamic page gen
+   * Dynamic page gen.
    * Template expansion { vars } are substituted recursively
-   * connected to apache2 (tests OK)
-   * image re-size from { vars } arguments ex: { image any.png 800 }
-   * first test site (see below)
-   * apache binding tested via the WSGI interface
-
-
+   * Connected to apache2 (tests OK)
+   * Image re-size from { vars } arguments ex: { image any.png 800 }
+   * First test site (see below)
+   * Apache binding tested via the WSGI interface
 
  History:
 
@@ -46,16 +44,18 @@ by you, so the simplicity is by no means a limitation.  (helps to know html/pyth
 
   ![screen shot of image processing](content/siteicons/next_step.png)
 
- On the screen shot below, projects are added in a separate sub directory;
- The project is isolated, errors in the project do not influence the site;
- only the page with error, and only an error message shows.
+ Projects are added in a separate sub directory;
+ The project is isolated, errors in the project do not influence (down) the site;
+ only the page with the error, and (only) an error message shows.
 
   ![screen shot of project and tiles processing](content/siteicons/tiles.png)
 
-  Variable subst regex: "{ .*? }"  (example: { header } )
-  Command parameter subst regex: "\[ .*? \]"  (example: [ value_one ] )
+#### Driving the macros:
 
-  See index.html for examples.
+      Variable subst regex: "{ .*? }"  (example: { header } )
+      Command parameter subst regex: "\[ .*? \]"  (example: [ value_one ] )
+
+      See index.html for examples.
 
 | Directories          | Usage                    |
 |  --------------------|--------------------------|

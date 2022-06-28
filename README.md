@@ -36,7 +36,7 @@
   See index.html for examples.
 
 | Directories: | Usage |
-|  ------------|-------------|------------          |
+|  ------------|-------------|
 |  /content/proj*      | for applications / projects |
 |  /content/siteicons/ | for icons                   |
 |  /content/media/     | for image content           |

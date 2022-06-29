@@ -10,6 +10,8 @@ from wsgi_style import *
 from wsgi_res   import *
 from wsgi_func  import *
 
+verbose = 0
+
 # A list of variables and strings. Error here will down the site.
 
 global_table = [
@@ -61,8 +63,8 @@ urlmap =  UrlMap()
 def     add_one_func(mname, mfunc, mpage = None, fname=None):
 
     '''
-         Add a macro function here. The macro is substituted
-        by the output of the function. Macro syntax is words sourrounded by
+         Add a macro function or string here. The macro is substituted
+        by the output of the function. Macro syntax is words surrounded by
         '{ ' and ' }' as in { macro }
         if macro is a string, substitution is made in line.
 
@@ -71,13 +73,18 @@ def     add_one_func(mname, mfunc, mpage = None, fname=None):
         variables are permitted. The max nesting depth is 10.
           The arguments to a macro are expanded when enclosed in  '[ arg ']'
         like: { mymacro [ arg_one ] two three }
-        The macro (after substution) recives the argument string verbatim.
+        The macro (after substation) receives the argument string verbatim.
     '''
     try:
+        #see if there is an entry already
+        for aa in global_table:
+            if aa[0] == mname:
+                print("Duplicate macro", mname)
+                return 1
         global_table.append([mname, mfunc])
     except:
         print("Cannot add global table item", sys.exc_info())
-
+    return 0
 # ------------------------------------------------------------------------
 # Add functions to URL map
 # One may override any file; in that case the values are filled in
@@ -100,28 +107,47 @@ def     add_one_url(url, mfunc, mpage = None, fname=""):
     except:
         print("Cannot add url map", sys.exc_info())
 
-    #print("urlmap", urlmap.urls)
+    if  verbose:
+        print("urls:", end= "")
+        for aa in urlmap.urls:
+           print("     ", aa[0], end = "")
+        print("")
+
+
+#from importlib import import_module
+import importlib
 
 # ------------------------------------------------------------------------
 
 def  _load_project(pdir, mainclass):
 
-    if mainclass.config.conf.verbose:
+    global verbose
+    verbose =  mainclass.config.conf.verbose
+
+    if mainclass.config.conf.pgdebug > 3:
         print("Loading project from", "'" + pdir + "'")
 
     ret = []
     try:
-        from importlib import import_module
         sys.path.append(pdir)
         files = os.listdir(pdir)
         for aa in files:
-            if aa[-3:] == ".py" and aa != "__init__.py":
-                if os.path.exists(pdir + os.sep + aa):
-                    #print("importing", aa)
-                    mod = ""
+            if aa[-3:] == ".py":
+                fname = pdir + os.sep + aa
+                if os.path.exists(fname):
+                    mname =  pdir + "." + aa[:-3]
+                    #print("mname", mname); #print("modules", sys.modules.keys())
+                    if mname in sys.modules.keys():
+                        #print("imported already", mname)
+                        continue
+                    if verbose:
+                        print("importing", fname)
                     try:
-                        mod = import_module( aa[:-3], aa[:-3] + ".mod")
-                        #print("Module:", aa[:-3], mod)
+                        fp = open(fname)
+                        fff = fp.read().split()
+                        mod = importlib.__import__(mname, globals(), locals(), fff, 0)
+                        if verbose:
+                            print("Module:", mod)
                     except:
                         wsgi_util.put_exception("Cannot import module: '%s' " % aa)
                         msg = "Module %s failed to load" % aa
@@ -130,6 +156,8 @@ def  _load_project(pdir, mainclass):
                         # Keep loading
                         #return ret
 
+                    #if verbose:
+                    #    print("imported", mod)
 
                     ''' did not work
                     try:
@@ -145,7 +173,7 @@ def  _load_project(pdir, mainclass):
                     '''
     except:
         #print("Cannot import guest project", sys.exc_info())
-        wsgi_util.put_exception("Cannot import")
+        wsgi_util.put_exception("Cannot import:")
         ret = [b"Some modules failed to load"]
 
     return ret

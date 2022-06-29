@@ -180,7 +180,7 @@ _mac_header2 = '''
         <form method=post>
             <tr><td>
             <a href=index.html>
-            <font size=+2><b>Welcome to UPP, </a> </font> <br>
+            <font size=+2><b>Welcome to UPP Editorxx, </a> </font> <br>
             &nbsp; &nbsp; &nbsp; the site for United Planet Peace
             <!-- (under construction, check back later) --!>
 
@@ -208,6 +208,8 @@ try:
 except:
     print("Exception on init vars", sys.exc_info())
 
+print("Loading editor")
 
+# EOF
 
 

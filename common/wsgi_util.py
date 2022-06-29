@@ -217,7 +217,6 @@ def print_httpenv(environ):
             print(aa, "'" + environ[aa] + "'")
     print(" --- end env")
 
-
 def append_file(strx):
 
     weblog = "./data/weblog.txt"

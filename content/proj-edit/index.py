@@ -12,7 +12,9 @@ import os, sys, time
 
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
-print("Loading", "'" + __file__  + "'" )
+#print("Loading", "'" + __file__  + "'" )
+
+modname = os.path.splitext(os.path.basename(__file__))[0]
 
 try:
     import macros
@@ -46,13 +48,7 @@ def got_index(config, url, query, request, template = "", fname = ""):
                     "request=%s" % request, "template=%s" % template, "fname=%s" % fname)
 
     if config.conf.verbose:
-        print("got_index() url = '%s'" % url, "request_org=", config.mainclass.request_org)
-
-    #print("got_index() request", request)
-    #print("got_index() config", config.showvals(), url, query)
-
-    #if url == "/":
-    #    url = "/index.html"
+        print("editor: got_index() url = '%s'" % url, "request_org=", config.mainclass.request_org)
 
     if request:
         sss = ""
@@ -74,7 +70,6 @@ def got_log(config, url, query, request, template = "", fname = ""):
     content = wsgi_util.process_default(config, url, query, request, template, fname)
     return content
 
-
 # ------------------------------------------------------------------------
 # Add all the functions for the urls;
 # This function is called when the module is loaded
@@ -94,58 +89,12 @@ def initialize():
         except:
             print("Could not create local data for %s", modname)
 
-
 # Upon loading ... add macros
-
-sitestyle = '''
-<style>
-.container {
-  position: relative;
-  width: 50%;
-}
-.image {
-  opacity: 1;
-  display: inline;
-  height: auto;
-  transition: .5s ease;
-  backface-visibility: hidden;
-}
-.container {
-  position: relative;
-  width: 50%;
-}
-.container:hover .image {
-  opacity: 0.3;
-}
-.container:hover .middle {
-  opacity: 1;
-}
-
-a:link, a:visited {
-    //color: black;
-    text-decoration: none;
-    decoration: none;
-}
-
-</style>
-'''
-
-#mycolor = "#cccccc"
-
-def mac_func_one(strx, context):
-    return strx + " Function body here " + str(context)
-
-modname = os.path.splitext(os.path.basename(__file__))[0]
-
 try:
+    #print("Initializing", "'" + __file__ + "'" )
     # Add default enties to table
-    wsgi_global.add_one_url("/", got_index, "index.html", __file__)
-    wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
-    #wsgi_global.add_one_url("/log.html", got_log, "log.html", __file__)
-
-    wsgi_global.add_one_func("feed_data", fill_data)
-    wsgi_global.add_one_func("Company Name", "UPP, United Planet Peace")
-    wsgi_global.add_one_func("sitestyle", sitestyle)
+    wsgi_global.add_one_url("/editor", got_index, "index.html", __file__)
+    wsgi_global.add_one_url("/editor/index.html", got_index, "index.html", __file__)
 
 except:
     print("Cannot initialize", modname, sys.exc_info())

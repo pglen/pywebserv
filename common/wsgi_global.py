@@ -79,12 +79,13 @@ def     add_one_func(mname, mfunc, mpage = None, fname=None):
         #see if there is an entry already
         for aa in global_table:
             if aa[0] == mname:
-                print("Duplicate macro", mname)
+                #print("Duplicate macro", mname)
                 return 1
         global_table.append([mname, mfunc])
     except:
         print("Cannot add global table item", sys.exc_info())
     return 0
+
 # ------------------------------------------------------------------------
 # Add functions to URL map
 # One may override any file; in that case the values are filled in
@@ -133,10 +134,12 @@ def  _load_project(pdir, mainclass):
         files = os.listdir(pdir)
         for aa in files:
             if aa[-3:] == ".py":
+            #if aa[-8:] == "index.py":
                 fname = pdir + os.sep + aa
                 if os.path.exists(fname):
                     mname =  pdir + "." + aa[:-3]
-                    #print("mname", mname); #print("modules", sys.modules.keys())
+                    #print("mname", mname);
+                    #print("modules", sys.modules.keys())
                     if mname in sys.modules.keys():
                         #print("imported already", mname)
                         continue

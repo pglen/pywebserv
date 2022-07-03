@@ -12,7 +12,7 @@ import os, sys, time
 
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
-#print("Loading", "'" + __file__  + "'" )
+#print("Loading", "'" + os.path.basename(__file__)  + "'" )
 
 modname = os.path.splitext(os.path.basename(__file__))[0]
 

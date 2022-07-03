@@ -126,7 +126,7 @@ class xWebServer():
         ''' Decorate the class instance with data from the environment '''
 
         # import here so apache wsgi interface gets the files
-        import wsgi_global, wsgi_content, wsgi_util, wsgi_data, wsgi_func
+        import wsgi_global, wsgi_content, wsgi_util, wsgi_data, wsgi_func, wsgi_parse
 
         #self.mark = time.perf_counter()
         self.respond = respond

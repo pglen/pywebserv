@@ -10,9 +10,9 @@
 
 import os, sys, time
 
-import wsgi_util, wsgi_func, wsgi_data, wsgi_global
+import wsgi_util, wsgi_func, wsgi_data, wsgi_global, wsgi_parse
 
-print("Loading", "'" + __file__  + "'" )
+#print("Loading", "'" + os.path.basename(__file__)  + "'" )
 
 try:
     import macros
@@ -66,14 +66,14 @@ def got_index(config, url, query, request, template = "", fname = ""):
         localdb.put("key_" + sss, sss, "", "", "")
         localdb.putlog("log_" + sss, sss, "", "", "")
 
-    content = wsgi_util.process_default(config, url, query, request, template, fname)
-    return content
+    #print("loc", macros.local_table)
 
+    content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table )
+    return content
 
 def got_log(config, url, query, request, template = "", fname = ""):
-    content = wsgi_util.process_default(config, url, query, request, template, fname)
+    content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table)
     return content
-
 
 # ------------------------------------------------------------------------
 # Add all the functions for the urls;
@@ -95,43 +95,6 @@ def initialize():
             print("Could not create local data for %s", modname)
 
 
-# Upon loading ... add macros
-
-sitestyle = '''
-<style>
-.container {
-  position: relative;
-  width: 50%;
-}
-.image {
-  opacity: 1;
-  display: inline;
-  height: auto;
-  transition: .5s ease;
-  backface-visibility: hidden;
-}
-.container {
-  position: relative;
-  width: 50%;
-}
-.container:hover .image {
-  opacity: 0.3;
-}
-.container:hover .middle {
-  opacity: 1;
-}
-
-a:link, a:visited {
-    //color: black;
-    text-decoration: none;
-    decoration: none;
-}
-
-</style>
-'''
-
-#mycolor = "#cccccc"
-
 def mac_func_one(strx, context):
     return strx + " Function body here " + str(context)
 
@@ -145,11 +108,23 @@ try:
 
     wsgi_global.add_one_func("feed_data", fill_data)
     wsgi_global.add_one_func("Company Name", "UPP, United Planet Peace")
-    wsgi_global.add_one_func("sitestyle", sitestyle)
+    #wsgi_global.add_one_func("sitestyle", sitestyle)
+
+    #print ("Global table:")
+    #for aa in wsgi_global.global_table:
+    #    print (aa[0], end="  ")
+    #print()
 
 except:
-    print("Cannot initialize", modname, sys.exc_info())
+    print("Cannot add module globals:", "'" + modname + "'", sys.exc_info())
 
 initialize()
+
+#print ("Local table:")
+#for aa in macros.local_table:
+#    print (aa[0], end="  ")
+#print()
+
+
 
 # EOF

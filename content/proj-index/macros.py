@@ -7,8 +7,44 @@ import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 ''' Local macros and data. Register it after init or use the "_mac_ prefix to auto register
 '''
 
+local_table = []
+
 _mac_tabhead = "#ccffcc"
 _mac_misscol = "#eeeeee"
+
+_mac_sitestyle = '''
+<style>
+.container {
+  position: relative;
+  width: 50%;
+}
+.image {
+  opacity: 1;
+  display: inline;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+.container {
+  position: relative;
+  width: 50%;
+}
+.container:hover .image {
+  opacity: 0.3;
+}
+.container:hover .middle {
+  opacity: 1;
+}
+
+a:link, a:visited {
+    //color: black;
+    text-decoration: none;
+    decoration: none;
+}
+
+</style>
+'''
+
 
 _mac_left = '''
 <table width=100% border=0>
@@ -196,15 +232,36 @@ _mac_header2 = '''
     </table>
 '''
 
+# ------------------------------------------------------------------------
+# Add a new project function;
+
+def     add_local_func(mname, mfunc, mpage = None, fname=None):
+
+    #print("local_func:", mname)
+
+    '''
+         Add a macro function or string here. The macro is substituted
+        by the output of the function.
+    '''
+    try:
+        #see if there is an entry already
+        for aa in local_table:
+            if aa[0] == mname:
+                print("Duplicate macro", mname)
+                return 1
+        local_table.append([mname, mfunc])
+    except:
+        print("Cannot add local table item", sys.exc_info())
+    return 0
+
+
 #wsgi_util.append_file("Importing macros\n")
 
 try:
     vvv = locals().copy()
     for aa in vvv:
         if "_mac_" in aa[:5]:
-            #wsgi_util.append_file("register: " + aa[5:] + "\n")
-            wsgi_global.add_one_func(aa[5:],  vvv[aa])
-            #wsgi_global.add_one_func(aa,  vvv[aa])
+            add_local_func(aa[5:],  vvv[aa])
 except:
     print("Exception on init vars", sys.exc_info())
 

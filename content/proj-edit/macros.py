@@ -196,8 +196,6 @@ _mac_header2 = '''
     </table>
 '''
 
-#wsgi_util.append_file("Importing macros\n")
-
 try:
     vvv = locals().copy()
     for aa in vvv:
@@ -207,8 +205,6 @@ try:
             #wsgi_global.add_one_func(aa,  vvv[aa])
 except:
     print("Exception on init vars", sys.exc_info())
-
-print("Loading editor")
 
 # EOF
 

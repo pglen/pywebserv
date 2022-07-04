@@ -75,6 +75,10 @@ def got_log(config, url, query, request, template = "", fname = ""):
     content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table)
     return content
 
+
+def mac_func_one(strx, context):
+    return strx + " Function body here " + str(context)
+
 # ------------------------------------------------------------------------
 # Add all the functions for the urls;
 # This function is called when the module is loaded
@@ -86,6 +90,17 @@ def initialize():
     Initializee the current module
     '''
 
+    try:
+        # Add default enties to table
+        wsgi_global.add_one_url("/", got_index, "index.html", __file__)
+        wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
+        #wsgi_global.add_one_url("/log.html", got_log, "log.html", __file__)
+        #wsgi_global.add_one_func("feed_data", fill_data)
+        wsgi_global.add_one_func("CompanyName", "UPP, United Planet Peace")
+
+    except:
+        print("Cannot add module globals:", "'" + modname + "'", sys.exc_info())
+
     global localdb
     #print("Called  initialization for '%s'" % modname)
     if not localdb:
@@ -94,37 +109,9 @@ def initialize():
         except:
             print("Could not create local data for %s", modname)
 
-
-def mac_func_one(strx, context):
-    return strx + " Function body here " + str(context)
-
 modname = os.path.splitext(os.path.basename(__file__))[0]
 
-try:
-    # Add default enties to table
-    wsgi_global.add_one_url("/", got_index, "index.html", __file__)
-    wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
-    #wsgi_global.add_one_url("/log.html", got_log, "log.html", __file__)
-
-    wsgi_global.add_one_func("feed_data", fill_data)
-    wsgi_global.add_one_func("Company Name", "UPP, United Planet Peace")
-    #wsgi_global.add_one_func("sitestyle", sitestyle)
-
-    #print ("Global table:")
-    #for aa in wsgi_global.global_table:
-    #    print (aa[0], end="  ")
-    #print()
-
-except:
-    print("Cannot add module globals:", "'" + modname + "'", sys.exc_info())
-
 initialize()
-
-#print ("Local table:")
-#for aa in macros.local_table:
-#    print (aa[0], end="  ")
-#print()
-
 
 
 # EOF

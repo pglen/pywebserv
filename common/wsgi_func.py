@@ -12,7 +12,7 @@ try:
 except:
     print("Must install PIL");
 
-import wsgi_util, wsgi_style, wsgi_res, wsgi_global
+import wsgi_util, wsgi_style, wsgi_res, wsgi_global, wsgi_parse
 
 def     deep_func(strx, context):
     return "Deep from code"
@@ -97,19 +97,25 @@ def     image_func(strx, context):
      { image nnn }          --  Put an image tag nnn in the output
      { image nnn www }      --  Put an image tag in the output, resize width to requested
      { image nnn www hhh }  --  Put an image tag in the output, resize to parm
-
     The first two forms of the { image } function will preserve the image's aspect ratio.
-
     '''
 
-    # Expand arguments
-    ssss = wsgi_util.recursive_parse(strx, context,  "\[ .*? \]")
-    sss = ssss.split()
+    #print("Image  str:", strx)
+    #sss = strx.split()
     #print("Image func:", sss)
+
+    # Expand arguments
+    ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.global_table)[0]
+    #print("Image expanded:", ssss)
+    ss = ""
+    for aa in ssss:
+        ss += aa
+    sss = str.split(ss)
+    #print("Image spaced:", sss)
 
     iname = "media/" + sss[2]
     if len(sss) == 4:
-        return "<img src=media/" + iname + ">"
+        return "<img src=" + iname + ">"
 
     elif len(sss) == 5:
         basewidth =  int(sss[3])
@@ -159,8 +165,12 @@ def     include_func(arg, context):
     #print("include_function called", arg, os.getcwd(), context, __file__)
 
     # Expand arguments
-    ssss = wsgi_util.recursive_parse(arg, context, "\[ .*? \]")
-    sss = ssss.split()
+    ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.global_table)[0]
+    ss = ""
+    for aa in ssss:
+        ss += aa
+    sss = str.split(ss)
+    #print("args spaced:", sss)
 
     # Travel down the dependency list
     while True:
@@ -191,18 +201,18 @@ def     build_initial_table():
     ''' The initial table for the global items
         User may override this
     '''
+    #print("build_initial_table()")
+
     try:
         wsgi_global.add_one_func("app_one", app_one_func)
         wsgi_global.add_one_func("app2",   app_two_func)
         wsgi_global.add_one_func("image",   image_func)
         wsgi_global.add_one_func("include", include_func)
-
         wsgi_global.add_one_func("deep",    deep_func)
-        #wsgi_global.add_one_func("crap",    crap_func)
 
     except:
         #print("Cannot build global table", sys.exc_info())
-        wsgi_util.put_exception("Cannot build global table")
+        wsgi_util.put_exception("Cannot build global initital table")
 
 def     build_initial_rc():
 

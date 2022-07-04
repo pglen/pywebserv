@@ -185,6 +185,8 @@ _mac_article3 = '''
         </table>
 '''
 
+_mac_CompanyName = '''UPP; United planet Peace'''
+
 _mac_article4 = '''
     <td>
         <table border=0 bgcolor=#dddddd>
@@ -233,6 +235,48 @@ _mac_header2 = '''
 '''
 
 # ------------------------------------------------------------------------
+# Override main macros
+
+header = '''
+
+    <table width=100% { sitecolor } border=0>
+    <tr  height=36>
+    <td align=left width=22%> &nbsp; &nbsp; <font size=+2>
+     <a href=index.html> <b>{ CompanyName }</b> </a>
+     </font>
+
+            <td>
+                <table width=100% border=0>
+                    <tr align=center>
+                        <td>
+                        <td> <a href=index.html>
+                            <img src=siteicons/go-home.png class=image title="Back to home page"> </a>
+                        <td> <img src=siteicons/emblem-default.png class=image title="Go forward">
+                        <td> <img src=siteicons/emblem-unreadable.png class=image title="Blah Blah">
+                        <td> <img src=siteicons/emblem-favorite.png class=image title="Favorite">
+                        <td>
+                </table>
+                <td align=right width=18%>
+                Search: &nbsp; <input type=text value="" size=12>
+                <td align=right width=7% >
+                <img src=siteicons/mail-forward.png class=image title="Mail / Contact Us">
+                <a href=index.html> <img src=siteicons/application-exit.png title="Enter / Log In"></a>
+    </table>
+'''
+
+footer = '''
+    <tr  height=48>
+    <td align=left width=45%>
+    &nbsp; &nbsp; <font size=+2> <b>Contact Site Admin</b> </font><b>peterglen99@gmail.com</b>
+            <td> Copyright (C) Open Source
+            <td align=right>
+                <img src=siteicons/system-log-out.png class=image title="Log Out / Leave">
+                &nbsp; &nbsp;
+'''
+
+
+
+# ------------------------------------------------------------------------
 # Add a new project function;
 
 def     add_local_func(mname, mfunc, mpage = None, fname=None):
@@ -257,6 +301,9 @@ def     add_local_func(mname, mfunc, mpage = None, fname=None):
 
 #wsgi_util.append_file("Importing macros\n")
 
+add_local_func("header", header)
+add_local_func("footer", footer)
+
 try:
     vvv = locals().copy()
     for aa in vvv:
@@ -265,6 +312,9 @@ try:
 except:
     print("Exception on init vars", sys.exc_info())
 
-
+#print ("Local table:")
+#for aa in macros.local_table:
+#    print (aa[0], end="  ")
+#print()
 
 

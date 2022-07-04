@@ -13,6 +13,8 @@ except:
     print("Cannot import", sys.exc_info())
     pass
 
+verbose = 0
+
 # ------------------------------------------------------------------------
 
 def  resolve_template(config, fn, name):
@@ -118,7 +120,8 @@ def append_file(strx):
 
 def process_default(config, url, query, request, template, fname, local_table):
 
-    print("process_default() local_table: ", local_table[:1], "\n")
+    if verbose:
+        print("process_default() local_table: ", local_table[:1])
 
     if not template:
         template = wsgi_util.resolve_template(config, url, fname)
@@ -142,5 +145,24 @@ def process_default(config, url, query, request, template, fname, local_table):
 
     return content
 
+def dump_table(strx, tabx):
+    ''' Dump named internal table '''
+    print (strx)
+    for aa in tabx:
+        print ("'" + aa[0] + "' = ", unescape(str(aa[1])[:24]), end="\n")
+    print()
+
+def unescape(strx):
+    ''' expand new lines etc ... to \\n '''
+    ret = "'"
+    for aa in strx:
+        if aa == "\r":
+            ret += "\\r"
+        elif aa == "\n":
+            ret += "\\n"
+        else:
+            ret += aa
+    ret += "'"
+    return ret
 
 # EOF

@@ -12,18 +12,23 @@ from wsgi_func  import *
 
 verbose = 0
 
-# A list of variables and strings. Error here will down the site.
+# A list of variables and strings. Making an error here will down the site.
+# The local macro can override the global one. Make sure you do not expect
+# nested override, as the macro is expanded with locals first, globals second;
+# The local mocro will not override the macro that is uncovered by global
+# macro expansion;
 
 global_table = [
-    ["var",         "<font size=+1>variable { deep } </font>"],
-    ["no problem",  "recursive expansion is not even a <b>little</b> problem ... "],
+    #["var",         "<font size=+1>variable { deep } </font>"],
+    #["no problem",  "recursive expansion is not even a <b>little</b> problem ... "],
+    #["CompanyName", "Company Name Here"],
+
     ["spacer",      "<table><tr><td></table>"],
     ["linespacer",  "<tr><td height=8>"],
     ["sitecolor",   "bgcolor=#aaffbb"],
     ["thumbwidth",  "120"],
     ["thumbheight",  "80"],
-    ["Company Name", "Company Name here"],
-    ["mycolor", "#cccccc"],
+    ["mycolor",     "#cccccc"],
   ]
 
 # ------------------------------------------------------------------------

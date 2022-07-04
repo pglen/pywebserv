@@ -12,7 +12,7 @@ header = '''
     <table width=100% { sitecolor } border=0>
     <tr  height=36>
     <td align=left width=22%> &nbsp; &nbsp; <font size=+2>
-     <a href=index.html> <b>{ Company Name }</b> </a>
+     <a href=index.html> <b>{ CompanyName }</b> </a>
      </font>
 
             <td>

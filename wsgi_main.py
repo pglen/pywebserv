@@ -101,16 +101,20 @@ class Config:
         self.conf       = subConfig()
 
     def showvals(self):
-        strx = "Properties: "
-        for aa in dir(self):
-            if "__" not in aa:
-                #strx += aa + " = " + self.__getattribute__(aa)
-                strx += aa + " "
-        strx += " Conf properties: "
+        strx = ""
+        #strx = "Properties:\n"
+        #for aa in dir(self):
+        #    if "__" not in aa:
+        #        #strx += str(aa) + " = " + str(self.__getattribute__(aa)) + "\n"
+        #        #strx += aa + " "
+        #        pass
+
+        strx += "Conf properties:\n"
         for aa in dir(self.conf):
             if "__" not in aa:
-                strx += aa + " "
-        strx += "\n"
+                strx += str(aa) + " = " + str(self.conf.__getattribute__(aa)) + "\n"
+                #strx += aa + " "
+        #strx += "\n"
         return strx
 
 class xWebServer():

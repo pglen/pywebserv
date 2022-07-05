@@ -50,6 +50,8 @@ def got_index(config, url, query, request, template = "", fname = ""):
     if config.conf.verbose:
         print("editor: got_index() url = '%s'" % url, "request_org=", config.mainclass.request_org)
 
+    #print("Editor page, cwd:", os.getcwd())
+
     if request:
         sss = ""
         # Save it
@@ -62,12 +64,11 @@ def got_index(config, url, query, request, template = "", fname = ""):
         localdb.put("key_" + sss, sss, "", "", "")
         localdb.putlog("log_" + sss, sss, "", "", "")
 
-    content = wsgi_util.process_default(config, url, query, request, template, fname)
+    content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table)
     return content
 
-
 def got_log(config, url, query, request, template = "", fname = ""):
-    content = wsgi_util.process_default(config, url, query, request, template, fname)
+    content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table)
     return content
 
 # ------------------------------------------------------------------------

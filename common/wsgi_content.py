@@ -8,14 +8,12 @@ import sys, os, mimetypes, time, re
 
 # Persitent info here
 
-import  wsgi_util, wsgi_data, wsgi_parse
-
+import  wsgi_util, wsgi_data, wsgi_parse, wsgi_global
 
 def got_404(config, url, query):
 
     ''' The error file from 404
     '''
-
     if  os.path.exists(url):
         with open(url, 'r') as fh:
             buff = fh.read()

@@ -127,7 +127,7 @@ def recursive_parse(buff, context, local_table):
             wsgi_util.put_exception("exception in local parser", )
             parsed2 = buff
     else:
-        parsed2 = buffer
+        parsed2 = buff
 
     # Recursively process
     #print("GLOBAL")

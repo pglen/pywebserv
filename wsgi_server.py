@@ -139,7 +139,12 @@ if __name__ == '__main__':
             if fnamearr[aa][-5:] == ".sqlt":
                 continue
 
-            stat = os.stat(fnamearr[aa])
+            try:
+                stat = os.stat(fnamearr[aa])
+            except:
+                pass
+                continue;
+
             if statarr[aa] != stat.st_mtime:
                 statarr[aa] = stat.st_mtime
                 flag = True

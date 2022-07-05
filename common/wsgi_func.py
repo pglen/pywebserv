@@ -113,24 +113,27 @@ def     image_func(strx, context):
     sss = str.split(ss)
     #print("Image spaced:", sss)
 
-    iname = "media/" + sss[2]
+    iname = "/media/" + sss[2]
     if len(sss) == 4:
         return "<img src=" + iname + ">"
 
     elif len(sss) == 5:
         basewidth =  int(sss[3])
-        nnn = "media/res_" + sss[3] + "_" + str(sss[2])
+        nnn = "/tmp/res_" + sss[3] + "_" + str(sss[2])
+        cwd = os.getcwd();
+        nnn2 = cwd + nnn
+        iname2 = cwd + iname
+
         # Note: If resized is older, we generate
-        if not os.path.exists(nnn) or os.stat(nnn).st_mtime < os.stat(iname).st_mtime:
+        if not os.path.exists(nnn2) or os.stat(nnn2).st_mtime < os.stat(iname2).st_mtime:
             try:
-                img = Image.open(iname)
+                img = Image.open("." + iname)
                 wpercent = (basewidth / float(img.size[0]))
                 hsize = int((float(img.size[1]) * float(wpercent)))
                 img = img.resize((basewidth, hsize), Image.ANTIALIAS)
-                #print("new name", nnn)
-                img.save(nnn)
+                img.save(nnn2)
             except:
-                print("Image process", sys.exc_info())
+                print("Exc Image proc.five:", nnn, sys.exc_info())
         else:
             #print("Using cached version", nnn)
             pass
@@ -139,23 +142,27 @@ def     image_func(strx, context):
     elif len(sss) == 6:
         basewidth  =  int(sss[3])
         baseheight =  int(sss[4])
-        nnn = "media/res_" + sss[3] + "x" + sss[4] + "_" + str(sss[2])
-        # Note: If resized is older, we generate
+        cwd = os.getcwd();
+        nnn = "/tmp/res_" + sss[3] + "x" + sss[4] + "_" + str(sss[2])
+        nnn2 = cwd + nnn
+        iname2 = cwd + iname
+        #print("nnn", nnn2)
+        #print("iname2", iname2)
         try:
-            if not os.path.exists(nnn) or os.stat(nnn).st_mtime < os.stat(iname).st_mtime:
-                img = Image.open(iname)
+            # Note: If resized is older, we generate
+            if not os.path.exists(nnn2) or os.stat(nnn2).st_mtime < os.stat(iname2).st_mtime:
+                img = Image.open(iname2)
                 img = img.resize((basewidth, baseheight), Image.ANTIALIAS)
-                #print("new name", nnn)
-                img.save(nnn)
+                img.save(nnn2)
         except:
-            print("Image process", sss[2], sys.exc_info()[1])
+            print("Exc image proc.six:", iname2, sys.exc_info()[1])
         else:
             #print("Using cached version", nnn)
             pass
         #return "<img src=" + sss[2] + " height=" + sss[3] + " width= " + sss[4] + " >"
         return "<img src=" + nnn + " >"
 
-    return "<img src=media/broken.png>"
+    return "<img src=/media/broken.png>"
 
 # ------------------------------------------------------------------------
 # I wish the http standard had this one command

@@ -20,17 +20,17 @@ header = '''
                     <tr align=center>
                         <td>
                         <td> <a href=index.html>
-                            <img src=siteicons/go-home.png class=image title="Back to home page"> </a>
-                        <td> <img src=siteicons/emblem-default.png class=image title="Go forward">
-                        <td> <img src=siteicons/emblem-unreadable.png class=image title="Blah Blah">
-                        <td> <img src=siteicons/emblem-favorite.png class=image title="Favorite">
+                            <img src=/siteicons/go-home.png class=image title="Back to home page"> </a>
+                        <td> <img src=/siteicons/emblem-default.png class=image title="Go forward">
+                        <td> <img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
+                        <td> <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
                         <td>
                 </table>
                 <td align=right width=18%>
                 Search: &nbsp; <input type=text value="" size=12>
                 <td align=right width=7% >
-                <img src=siteicons/mail-forward.png class=image title="Mail / Contact Us">
-                <a href=index.html> <img src=siteicons/application-exit.png title="Enter / Log In"></a>
+                <img src=/siteicons/mail-forward.png class=image title="Mail / Contact Us">
+                <a href=index.html> <img src=/siteicons/application-exit.png title="Enter / Log In"></a>
     </table>
 '''
 
@@ -40,7 +40,7 @@ footer = '''
     &nbsp; &nbsp; <font size=+2> <b>Contact Site Admin</b> </font><b>peterglen99@gmail.com</b>
             <td> Copyright (C) Open Source
             <td align=right>
-                <img src=siteicons/system-log-out.png class=image title="Log Out / Leave">
+                <img src=/siteicons/system-log-out.png class=image title="Log Out / Leave">
                 &nbsp; &nbsp;
 '''
 

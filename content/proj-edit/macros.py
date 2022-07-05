@@ -4,8 +4,33 @@ import os, sys, time
 
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
+local_table = []
+
 ''' Local macros and data. Register it after init or use the "_mac_ prefix to auto register
 '''
+
+# ------------------------------------------------------------------------
+# Add a new project function;
+
+def     add_local_func(mname, mfunc, mpage = None, fname=None):
+
+    #print("local_func:", mname)
+
+    '''
+         Add a macro function or string here. The macro is substituted
+        by the output of the function.
+    '''
+    try:
+        #see if there is an entry already
+        for aa in local_table:
+            if aa[0] == mname:
+                print("Duplicate macro", mname)
+                return 1
+        local_table.append([mname, mfunc])
+    except:
+        print("Cannot add local table item", sys.exc_info())
+    return 0
+
 
 _mac_tabhead = "#ccffcc"
 _mac_misscol = "#eeeeee"
@@ -97,13 +122,13 @@ _mac_nav = '''
 <table width=100% border=0>
     <tr align=center>
         <td align=right>
-            &nbsp <img src=siteicons/media-skip-backward.png title="Backward Front">
-            &nbsp <img src=siteicons/media-seek-backward.png title=Backward>
+            &nbsp <img src=/siteicons/media-skip-backward.png title="Backward Front">
+            &nbsp <img src=/siteicons/media-seek-backward.png title=Backward>
             <td width=150px>
             &nbsp; Navigation &nbsp;
             <td align=left>
-            &nbsp <img src=siteicons/media-seek-forward.png title=Forward>
-            &nbsp <img src=siteicons/media-skip-forward.png title="Forward Front">
+            &nbsp <img src=/siteicons/media-seek-forward.png title=Forward>
+            &nbsp <img src=/siteicons/media-skip-forward.png title="Forward Front">
 </table>
 '''
 

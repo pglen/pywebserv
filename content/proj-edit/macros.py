@@ -1,18 +1,18 @@
  #!/usr/bin/env python3
 
-import os, sys, time
-
-import wsgi_util, wsgi_func, wsgi_data, wsgi_global
-
-local_table = []
+import sys
 
 ''' Local macros and data. Register it after init or use the "_mac_ prefix to auto register
 '''
+
+local_table = []
 
 # ------------------------------------------------------------------------
 # Add a new project function;
 
 def     add_local_func(mname, mfunc, mpage = None, fname=None):
+
+    global local_table
 
     #print("local_func:", mname)
 
@@ -25,56 +25,72 @@ def     add_local_func(mname, mfunc, mpage = None, fname=None):
         for aa in local_table:
             if aa[0] == mname:
                 print("Duplicate macro", mname)
-                return 1
+                return True
         local_table.append([mname, mfunc])
     except:
         print("Cannot add local table item", sys.exc_info())
-    return 0
+    return False
 
 
 _mac_tabhead = "#ccffcc"
 _mac_misscol = "#eeeeee"
-
-_mac_left = '''
-<table width=100% border=0>
-    <tr><td align=center bgcolor={ tabhead } colspan=2 height=36>
-    <font size=+1><b>Main Navigation</b>
-    <tr><td height=6>
-    <tr><td colspan=2 align=center><a href=/index.html>
-        <img src="/media/united_planet_logo.png" title="Main Logo">
-        </a>
-
-    <tr><td height=6>
-    <tr><td width=30%> &nbsp;
-    <td>
-        <li><font size=+1><a href=index.html>Home Page</a>
-        <li><a href=log.html>Log Page</a>
-        <li><a href=index.html>Blog Page</a>
-        <li><a href=index.html>Personal Page</a>
-        <li><a href=index.html>Tech Page</a>
-        <li><a href=index.html>Another Page</a>
-        <li><a href=more.html>More <br> &nbsp;  &nbsp; (test for broken link)</a>
-    <tr><td height=12>
-    <tr><td colspan=2 style="text-align:justify;">
-    &nbsp;
-
-    <!--&nbsp <img src=siteicons/media-skip-backward.png title="Backward Front">
-    -->
-    <tr><td height=8 align=center colspan=2>
-    <!-- <img src="/media/upp_2_small.png" title="Logo"> -->
-
-
-
- </table>
-'''
 
 _mac_miss_state = '''
     <table width=100% cellpadding=3 border=0>
     { mission_statement }
     </table>
 '''
+_mac_ShortCName = '''
+    United Planet Peace
+    '''
 
-_mac_mission_statement = '''
+_mac_header_edit = '''
+header here
+'''
+
+_mac_edit_center = '''
+
+<td valign=top>
+
+    <table width=100% { sitecolor } border=0>
+    <tr  height=36>
+    <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
+    <a href=index.html> <b>{ ShortCName }</b> </a>
+    </font>
+        <td>
+        <table width=100% border=0>
+            <tr align=center>
+                <td>
+                <td> <a href=index.html>
+                    <img src=/siteicons/go-home.png class=image title="Back to home page"> </a>
+                <td> <img src=/siteicons/emblem-default.png class=image title="Go forward">
+                <td> <img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
+                <td> <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
+                <td>
+        </table>
+     </table>
+
+     <center>{ center_body }
+'''
+
+_mac_editrow = '''
+
+<tr align=center><td> Edit
+<td> Edit2
+<td> Edit3
+'''
+
+_mac_center_body = '''
+
+    <table width=100% border=1>
+        <tr><td align=center colspan=3>
+        Edit main rows
+        { imgrow }
+    </table>
+
+'''
+
+_mac_mission_statement2 = '''
 <tr><td bgcolor={ misscol }>
 <font size=-1>Mission Statement:</font>
 <font size=+0><br></font>
@@ -98,18 +114,6 @@ _mac_center = '''
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
         { miss_state }
-        <table width=100% border=0>
-            <tr valign=top>
-            { article4 } { article } { article2 } { article3 }
-         </table>
-
-        <!-- <video width="800" height="600" controls>
-          <source src="/media/henryProject_1.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-            </video>   -->
-
-       <!-- { feed_data } -->
-
         <table width=100% border=0>
             <tr valign=top>
             { imgrow } { imgrow } { imgrow }
@@ -205,7 +209,7 @@ _mac_header2 = '''
         <form method=post>
             <tr><td>
             <a href=index.html>
-            <font size=+2><b>Welcome to UPP Editorxx, </a> </font> <br>
+            <font size=+2><b>Welcome to UPP Site Editor, </a> </font> <br>
             &nbsp; &nbsp; &nbsp; the site for United Planet Peace
             <!-- (under construction, check back later) --!>
 
@@ -223,14 +227,35 @@ _mac_header2 = '''
 
 try:
     vvv = locals().copy()
+    #print("vvv", vvv)
     for aa in vvv:
         if "_mac_" in aa[:5]:
-            #wsgi_util.append_file("register: " + aa[5:] + "\n")
-            wsgi_global.add_one_func(aa[5:],  vvv[aa])
-            #wsgi_global.add_one_func(aa,  vvv[aa])
+            if Config.verbose:
+                #print("Added:", aa[5:]) #, vvv[aa][:12])
+                pass
+            add_local_func(aa[5:], vvv[aa])
+
+    #print("Local table len", len(local_table))
+    #
+    #print ("local table")
+    #for aa in local_table:
+    #    print(" '" + aa[0] + "'", end = " ")
+    #print ("\ntable end")
+
 except:
-    print("Exception on init vars", sys.exc_info())
+    #print("Exception on editor init vars", sys.exc_info())
+    print_exception("Editor")
+    raise
 
 # EOF
+
+
+
+
+
+
+
+
+
 
 

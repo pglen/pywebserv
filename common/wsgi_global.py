@@ -2,15 +2,17 @@
 
 ''' These tags / funtions / tables are global to the site '''
 
-import sys, time
+import sys, time, importlib
 
 # Get strings and functions
+
 
 from wsgi_style import *
 from wsgi_res   import *
 from wsgi_func  import *
 
 verbose = 0
+pgdebug = 0
 
 # A list of variables and strings. Making an error here will down the site.
 # The local macro can override the global one. Make sure you do not expect
@@ -107,30 +109,26 @@ def     add_one_url(url, mfunc, mpage = None, fname=""):
     it was generated without template substitution.
     '''
 
-    global urlmap
+    global urlmap, pgdebug
+
     try:
         urlmap.add(url, mfunc, mpage, fname)
     except:
         print("Cannot add url map", sys.exc_info())
 
-    if  verbose:
+    if pgdebug > 3:
         print("urls:", end= "")
         for aa in urlmap.urls:
-           print("     ", aa[0], end = "")
+           print(" ", aa[0], end = " ")
         print("")
-
-
-#from importlib import import_module
-import importlib
 
 # ------------------------------------------------------------------------
 
 def  _load_project(pdir, mainclass):
 
-    global verbose
-    verbose =  mainclass.config.conf.verbose
+    global verbose, pgdebug
 
-    if mainclass.config.conf.pgdebug > 3:
+    if pgdebug > 3:
         print("Loading project from", "'" + pdir + "'")
 
     ret = []
@@ -154,15 +152,15 @@ def  _load_project(pdir, mainclass):
                         fp = open(fname)
                         fff = fp.read().split()
                         mod = importlib.__import__(mname, globals(), locals(), fff, 0)
-                        if verbose:
+                        if pgdebug > 3:
                             print("Module:", mod)
                     except:
-                        wsgi_util.put_exception("Cannot import module: '%s' " % aa)
+                        wsgi_util.put_exception("Cannot import module: '%s'" % fname)
                         msg = "Module %s failed to load" % aa
                         #print("msg", msg)
                         ret = [msg.encode("utf-8"),]
                         # Keep loading
-                        #return ret
+                        continue
 
                     #if verbose:
                     #    print("imported", mod)
@@ -194,10 +192,15 @@ def     getprojects(mainclass):
     '''
         Add (import) projects in directories starting with 'proj'
         for automatic inclusion into the site.
-        The initial project dir was called 'projects'
+        The initial proj ect dir was called 'projects'
     '''
 
-    if mainclass.config.conf.pgdebug > 2:
+    global vebose, pgdebug
+
+    #verbose =  mainclass.config.verbose
+    #pgdebug =  mainclass.config.pgdebug
+
+    if pgdebug > 2:
         print("getprojects beg", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
 
     pdir = "proj"
@@ -211,7 +214,7 @@ def     getprojects(mainclass):
 
     # Print all URLS
 
-    if mainclass.config.conf.pgdebug > 3:
+    if pgdebug > 3:
         print("Dumping urlmap")
         for aa in urlmap.urls:
            print("     ", aa[0])
@@ -231,7 +234,7 @@ def     getprojects(mainclass):
         if ddd > 1:
             print("   ** Warn: Duplicate URL", xcnt, url)
 
-    if mainclass.config.conf.pgdebug > 2:
+    if pgdebug > 2:
         print("getprojects end", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
 
 # EOF

@@ -114,14 +114,17 @@ def append_file(strx):
     fp.write(strx)
     fp.close()
 
-
-# ------------------------------------------------------------------
+# ------------------------------------------------------------------------
 # Resolve paths, read file, expand template
 
 def process_default(config, url, query, request, template, fname, local_table):
 
-    if verbose:
-        print("process_default() local_table: ", local_table[:1])
+    if Config.verbose:
+        print("process_default() with local_table len ", len(local_table))
+
+    if Config.pgdebug > 5:
+        if local_table:
+            dump_table("Local Table:", local_table)
 
     if not template:
         template = wsgi_util.resolve_template(config, url, fname)

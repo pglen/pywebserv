@@ -68,54 +68,16 @@ except ImportError:
 
 from wsgiref import simple_server, util
 
-VERBOSE = 0
-config = None
-
 import gettext
 gettext.bindtextdomain('pyedpro', './locale/')
 gettext.textdomain('pyedpro')
 _ = gettext.gettext
 
+class myconf():
+    verbose = 0;
+    pgdebug = 0;
+    show_keys  = 0
 # ------------------------------------------------------------------------
-
-class subConfig:
-
-    def __init__(self):
-        self.verbose = 0
-        self.pgdebug = 0
-        self.port = 8000
-
-class Config:
-
-    '''
-    Parameters are going around with this class
-    '''
-
-    def __init__(self):
-        self.mypath     = ""
-        self.datapath   = ""
-        self.server     = None
-        self.mainclass  = None
-        #self.verbose    = 0
-        #self.debug      = 0
-        self.conf       = subConfig()
-
-    def showvals(self):
-        strx = ""
-        #strx = "Properties:\n"
-        #for aa in dir(self):
-        #    if "__" not in aa:
-        #        #strx += str(aa) + " = " + str(self.__getattribute__(aa)) + "\n"
-        #        #strx += aa + " "
-        #        pass
-
-        strx += "Conf properties:\n"
-        for aa in dir(self.conf):
-            if "__" not in aa:
-                strx += str(aa) + " = " + str(self.conf.__getattribute__(aa)) + "\n"
-                #strx += aa + " "
-        #strx += "\n"
-        return strx
 
 class xWebServer():
 
@@ -125,33 +87,33 @@ class xWebServer():
      output to the client.
     '''
 
-    def __init__(self, environ, respond, config):
+    def __init__(self, environ, respond):
 
         ''' Decorate the class instance with data from the environment '''
 
         # import here so apache wsgi interface gets the files
-        import wsgi_global, wsgi_content, wsgi_util, wsgi_data, wsgi_func, wsgi_parse
+        import wsgi_global, wsgi_content, wsgi_util
+        import wsgi_data, wsgi_func, wsgi_parse
+        # wsgi_conf
 
         #self.mark = time.perf_counter()
         self.respond = respond
         self.environ = environ
-        self.config = config
 
-        self.config.mainclass = self
-        self.config.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
-        self.config.datapath = self.config.mypath + "content" + os.sep
+        Config.mainclass = self
+        Config.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
+        Config.datapath = Config.mypath + "content" + os.sep
 
-        if self.config.conf.pgdebug > 6:
-            print("self.config.mypath", self.config.mypath, "self.config.datapath", self.config.datapath)
+        #if self.config.pgdebug > 6:
+        #    print("self.config.mypath", self.config.mypath, "self.config.datapath", self.config.datapath)
 
-        self.config.verbose = VERBOSE
         self.stime = datetime.datetime.now()
         try:
-            self.sql = wsgi_data.wsgiSql(self.config.datapath + "data/wsgi_main.sqlt")
+            self.sql = wsgi_data.wsgiSql(Config.datapath + "data/wsgi_main.sqlt")
         except:
             print("Warn: Cannot create database", sys.exc_info())
 
-        logf = self.config.datapath + "data/wsgi_main.log"
+        logf = Config.datapath + "data/wsgi_main.log"
         try:
             self.logfp = open(logf, "a+")
         except:
@@ -168,8 +130,8 @@ class xWebServer():
 
             #print( str(self.stime), environ, file=self.logfp, flush=True)
 
-        if self.config.conf.pgdebug > 8:
-            wsgi_util.printenv(environ, True)
+        #if self.config.pgdebug > 8:
+        #    wsgi_util.printenv(environ, True)
 
         #print(environ['wsgi.version'])
         #print("Loaded in ", self.mypath)
@@ -181,20 +143,20 @@ class xWebServer():
         self.query = ""
         if 'QUERY_STRING' in environ:
             self.query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
-            if self.config.conf.pgdebug > 4:
-                print("QUERY_STRING", self.query)
+            #if self.config.pgdebug > 4:
+            #    print("QUERY_STRING", self.query)
 
         self.cookie = ""
         if 'HTTP_COOKIE' in environ:
             self.cookie = environ['HTTP_COOKIE'].split("=")
-            if self.config.conf.pgdebug > 4:
-                print("HTTP_COOKIE", self.cookie)
+            #if self.config.pgdebug > 4:
+            #    print("HTTP_COOKIE", self.cookie)
 
         self.method = ""
         if 'REQUEST_METHOD' in environ:
             self.method = environ['REQUEST_METHOD']
-            if self.config.conf.pgdebug > 4:
-                print("REQUEST_METHOD", self.method)
+            #if self.config.pgdebug > 4:
+            #    print("REQUEST_METHOD", self.method)
 
         self.request_org = ""
         self.request = {}
@@ -206,8 +168,8 @@ class xWebServer():
                     self.request_org = environ['wsgi.input'].read(content_length).decode()
                     #print("Request_org", self.request_org)
                     self.request = parse_qsl(str(self.request_org), keep_blank_values=True)
-                    if self.config.conf.pgdebug > 5:
-                        print("Request", self.request)
+                    #if self.config.pgdebug > 5:
+                    #    print("Request", self.request)
                 except:
                     print("No post data", sys.exc_info())
                     pass
@@ -218,7 +180,7 @@ class xWebServer():
 
         splitx = os.path.split(self.url)
         tmpname = self._assem_path(splitx)
-        self.fn = self.config.datapath +  tmpname
+        self.fn = Config.datapath +  tmpname
         #print("self.fn", self.fn)
         self.mtype = mimetypes.guess_type(self.fn)[0]
         if not self.mtype:
@@ -243,19 +205,20 @@ class xWebServer():
         import wsgi_content, wsgi_util
 
         #print("serving", self.url, self.fn)
-        callme, tmpl, filen = self._translate_url(self.config, self.url)
+
+        callme, tmpl, filen = self._translate_url(Config, self.url)
         if(callme):
             content = ""
             try:
                 #print("Callback",  self.fn, self.url)
-                content = callme(self.config, self.url, self.query, self.request, tmpl, filen)
+                content = callme(Config, self.url, self.query, self.request, tmpl, filen)
             except:
                 wsgi_util.put_exception("process_req")
                 self.respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
 
-                fn5 = self.config.datapath + os.sep + "html/500.html"
+                fn5 = Config.datapath + os.sep + "html/500.html"
                 if os.path.exists(fn5):
-                    content = wsgi_content.got_500(self.config, fn5, self.query)
+                    content = wsgi_content.got_500(Config, fn5, self.query)
                 else:
                     content = "Empty results from page assembly."
                 return [bytes(content, "utf-8")]
@@ -291,9 +254,9 @@ class xWebServer():
 
             else:       # Error content
                 self.respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
-                fn4 = self.config.datapath + os.sep + "html/404.html"
+                fn4 = Config.datapath + os.sep + "html/404.html"
                 if os.path.exists(fn4):
-                    content = wsgi_content.got_404(self.config, fn4, self.query)
+                    content = wsgi_content.got_404(Config, fn4, self.query)
                     return [bytes(content, "utf-8")]
                 else:
                     return [b"URL not found. (and 404 file does not exist)."]
@@ -339,7 +302,7 @@ def application(environ, respond):
     WSGI main entry point. The web server (like apache) will call this.
     '''
 
-    #print("  ======= Called 'application' ========   ")
+    #print("Started:", environ['PATH_INFO'])
 
     try:
         # Make sure we are landing here
@@ -349,23 +312,21 @@ def application(environ, respond):
         os.chdir(mypath + os.sep + "content");
         sys.path.append(mypath + os.sep + "content")
 
-        import wsgi_util, wsgi_content, wsgi_global
+        import wsgi_util, wsgi_content, wsgi_global, wsgi_conf
 
         #wsgi_util.append_file("Started Server Page\n")
 
+        global myconf
+        Config.pgdebug = myconf.pgdebug
+        Config.verbose = myconf.verbose
         global usr_cnt, mainclass
+
 
         usr_cnt += 1
         #print("Query arrived", os.getpid(), usr_cnt)
-
-        global config
-        if config:
-            configx = config
-        else:
-            configx = Config()
-
         # if not mainclass:
-        mainclass = xWebServer(environ, respond, configx)
+        mainclass = xWebServer(environ, respond)
+
 
         # Only do it one time (not for dev deployment)
         if True: #usr_cnt == 1:
@@ -393,14 +354,10 @@ def xhelp():
 
 if __name__ == '__main__':
 
-    #global config
-
-    config = Config()
-
     opts = []; args = []
 
-    print("Web server initiated")
-
+    from common import wsgi_conf
+    #print("Web server initiated.")
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "d:h?vV:fxctokt",
@@ -412,13 +369,14 @@ if __name__ == '__main__':
 
     # Outdated parsing ... for now, leave it as is
     for aa in opts:
-        #print("opt", aa[0], aa[1])
+        #print("opt", "'" + aa[0] + "'", aa[1])
         if aa[0] == "-d" or aa[0] == "--debug":
             try:
-                config.conf.pgdebug = int(aa[1])
-                print( _("Running at debug level:"),  config.conf.pgdebug)
+                #Config.pgdebug = int(aa[1])
+                myconf.pgdebug = int(aa[1])
+                #print( _("Running at debug level:"),  Config.pgdebug)
             except:
-                config.conf.pgdebug = 0
+                myconf.pgdebug = 0
                 print(_("Exception on setting debug level"), sys.exc_info())
 
         # Most of these are placeholders
@@ -427,11 +385,9 @@ if __name__ == '__main__':
         if aa[0] == "-V" or aa[0] == "--version":
             xversion()
         if aa[0] == "-v" or aa[0] == "--verbose":
-            config.conf.verbose = True
+            myconf.verbose = 1
         if aa[0] == "-f":
-            config.conf.full_screen = True
-        if aa[0] == "-v":
-            config.conf.verbose = True
+            Config.full_screen = True
         if aa[0] == "-x":
             CLEAR_CONFIG = True
         if aa[0] == "-c":
@@ -441,10 +397,19 @@ if __name__ == '__main__':
         if aa[0] == "-o":
             USE_STDOUT = True
         if aa[0] == "-k":
-            config.conf.show_keys = True
+            myconf.show_keys = True
         if aa[0] == "-t":
             print("Tracing ON")
             sys.settrace(tracer)
+
+    print("\n===== Starting HTTPD on port {}, control-C to stop".format(Config.port))
+
+    print("Config:")
+    for aa in dir(Config):
+        if aa[:2] !=  "__":
+            print("'" + aa + "=" + str(getattr(Config, aa)), end="' ")
+    print("");
+
 
     class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
 
@@ -460,10 +425,8 @@ if __name__ == '__main__':
     #mypath = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     #port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
 
-    httpd = simple_server.make_server('', config.conf.port, application,
+    httpd = simple_server.make_server('', Config.port, application,
                                                 handler_class=NoLoggingWSGIRequestHandler)
-
-    print("HTTPD on port {}, control-C to stop".format(config.conf.port))
 
     #print("Begin main args", sys.argv)
 

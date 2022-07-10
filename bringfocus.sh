@@ -11,7 +11,7 @@ xdotool key ctrl+r
 
 # Bring focus back to your editor
 # Edit string to match the header of the editor you are using
-WW=`xdotool search --name "pyedpro:" | head -1`
+WW=`xdotool search --name "pyedpro:" | tail -1`
 #echo $WW
 xdotool windowactivate --sync $WW
 

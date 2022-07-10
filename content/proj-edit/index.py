@@ -4,23 +4,18 @@
     This is a sample project that is added to the site. The idea here is
     that nothing in this project can syntax error (down) the site.
     It is imported under a try: except clause, and it is calling only the
-    URL registration functions.
+    URL registration functions and macro definitons.
     Also, included a default web page function as index.html or as '/'
 '''
 
 import os, sys, time
-
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 #print("Loading", "'" + os.path.basename(__file__)  + "'" )
 
 modname = os.path.splitext(os.path.basename(__file__))[0]
 
-try:
-    import macros
-except:
-    print("Cannot import macros", sys.exc_info())
-    wsgi_util.put_exception("import macros")
+from . import macros
 
 localdb = None
 
@@ -43,14 +38,15 @@ def fill_data(strx, context):
 
 def got_index(config, url, query, request, template = "", fname = ""):
 
-    if config.conf.pgdebug > 3:
+    if config.pgdebug > 3:
         print("got_index() url=%s"% url, "query=%s" %query,
                     "request=%s" % request, "template=%s" % template, "fname=%s" % fname)
 
-    if config.conf.verbose:
-        print("editor: got_index() url = '%s'" % url, "request_org=", config.mainclass.request_org)
+    if config.pgdebug > 0:
+        print("editor: got_index() url = '%s'" % url)
 
     #print("Editor page, cwd:", os.getcwd())
+    #print("Config values:", wsgi_conf.showvals())
 
     if request:
         sss = ""
@@ -67,30 +63,24 @@ def got_index(config, url, query, request, template = "", fname = ""):
     content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table)
     return content
 
-def got_log(config, url, query, request, template = "", fname = ""):
-    content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table)
-    return content
-
 # ------------------------------------------------------------------------
 # Add all the functions for the urls;
-# This function is called when the module is loaded
+# This function/code is called when the module is loaded
 #
 
-def initialize():
+'''
+Initializee the current module
+'''
 
-    '''
-    Initializee the current module
-    '''
+#print("Called  initialization for '%s'" % modname)
+if not localdb:
+    try:
+        localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
+    except:
+        print("Could not create local data for %s", modname)
 
-    global localdb
-    #print("Called  initialization for '%s'" % modname)
-    if not localdb:
-        try:
-            localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
-        except:
-            print("Could not create local data for %s", modname)
+# Upon loading ... add urls and add macros
 
-# Upon loading ... add macros
 try:
     #print("Initializing", "'" + __file__ + "'" )
     # Add default enties to table
@@ -100,6 +90,16 @@ try:
 except:
     print("Cannot initialize", modname, sys.exc_info())
 
-initialize()
+#vvv = locals().copy()
+#    #print("vvv", vvv)
+#    for vv in vvv:
+#        if  "macros" in vv:
+#            #print("vv", vv, vvv[vv]);
+#            for aa in dir(vvv[vv]):
+#                #print("aa", aa);
+#                if "_mac_" in aa[:5]:
+#                    val = getattr(vvv[vv], aa)
+#                    print("Added:", aa[5:]) #, val[:12])
+#                    add_local_func(aa[5:],  val)
 
 # EOF

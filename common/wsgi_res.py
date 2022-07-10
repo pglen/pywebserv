@@ -11,7 +11,7 @@ header = '''
 
     <table width=100% { sitecolor } border=0>
     <tr  height=36>
-    <td align=left width=22%> &nbsp; &nbsp; <font size=+2>
+    <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
      <a href=index.html> <b>{ CompanyName }</b> </a>
      </font>
 
@@ -22,7 +22,7 @@ header = '''
                         <td> <a href=index.html>
                             <img src=/siteicons/go-home.png class=image title="Back to home page"> </a>
                         <td> <img src=/siteicons/emblem-default.png class=image title="Go forward">
-                        <td> <img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
+                        <td> img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
                         <td> <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
                         <td>
                 </table>

@@ -6,13 +6,12 @@
 '''
 
 import sys, os, time, re, traceback
-import wsgi_global
-import wsgi_util
+import wsgi_global, wsgi_util
+#, wsgi_conf
 
 _MAX_RECURSE = 10
 _regex = "{ .*? }"
 _regex2 = "\[ .*? \]"
-verbose = 0
 
 # ------------------------------------------------------------------------
 
@@ -105,20 +104,21 @@ def _parse_one(buff, context, tablex, regex):
 
 def recursive_parse(buff, context, local_table):
 
-    if verbose:
+    if Config.pgdebug > 3:
         print("recursive_parse() buff:", wsgi_util.unescape(buff[:12]))
 
-    #if mainclass.config.conf.pgdebug > 2:
+    #if local_table:
+    #    wsgi_util.dump_table("Local Table:", local_table)
 
-    #wsgi_util.dump_table("Local Table:", local_table)
+    #if global_table:
     #wsgi_util.dump_table("Global Table:", wsgi_global.global_table)
 
     parsed2 = ""
 
     # Do local table first, so it overrides global
     if local_table:
-        if verbose:
-            print("local_table: ", local_table[:1])
+        if Config.verbose:
+            print("local_table: ", len(local_table))
 
         #print("LOCAL")
         try:

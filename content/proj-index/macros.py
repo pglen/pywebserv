@@ -91,15 +91,16 @@ _mac_mission_statement = '''
 <font size=+0><br></font>
 <font size=+2><center><b>World Wide Globalization Message.</b></center><p></font>
 &nbsp; &nbsp; The pace of globalization has exceeded expectations. This institution is searching
-for new ways of existance, and recommending solutions. Because true globalization, done right, can
+for new ways of existence, and recommending solutions. Because true globalization, done right, can
 end hunger, and can terminate all wars. May create a better existence for all, via connecting supply
-and demand without bounds, and establish a new peaceful equilibrium.
+and demand without bounds. And it will establish a new, peaceful equilibrium.
  Globalization may create a happier human race with higher quality of life and more balance.
   For EVERYBODY. <p>
-&nbsp; &nbsp; Please do not be misled by the term globalization. It is about global cooperation,
-not control. We live in an inseparable global pool, our planet, Earth. This is the basis
-for everything else. Please look around for ideas on the site, approve / disapprove as you feel, and help if
-you so desire. And help you can. Every one of us makes an impact.<p>
+&nbsp; &nbsp; The term globalization is used in the context of global cooperation,
+not global control. We live in an inseparable entity, our planet, Earth. This is the basis
+for our existence, and the basis for everything else. Please look around for ideas on
+the site, approve / disapprove as you feel, and help if you so desire. And help
+you can. Every one of us makes an impact.<p>
 '''
 
 _mac_center = '''
@@ -185,7 +186,7 @@ _mac_article3 = '''
         </table>
 '''
 
-_mac_CompanyName = '''UPP; United planet Peace'''
+_mac_CompanyName = '''UPP the United Planet Peace'''
 
 _mac_article4 = '''
     <td>
@@ -241,7 +242,7 @@ header = '''
 
     <table width=100% { sitecolor } border=0>
     <tr  height=36>
-    <td align=left width=22%> &nbsp; &nbsp; <font size=+2>
+    <td align=left width=30%> &nbsp; &nbsp; <font size=+2>
      <a href=index.html> <b>{ CompanyName }</b> </a>
      </font>
 
@@ -308,7 +309,11 @@ try:
         if "_mac_" in aa[:5]:
             add_local_func(aa[5:],  vvv[aa])
 except:
-    print("Exception on init vars", sys.exc_info())
+    print("Exception on index init vars", sys.exc_info())
+
+# Add to global, so it becomes site wide
+wsgi_global.add_one_func("sitestyle", _mac_sitestyle)
+wsgi_global.add_one_func("left", _mac_left)
 
 #print ("Local table:")
 #for aa in macros.local_table:

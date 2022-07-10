@@ -12,9 +12,8 @@ import os, sys, time
 
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global, wsgi_parse
 
-#print("Loading", "'" + os.path.basename(__file__)  + "'" )
 
-gl_config = None
+#print("Loading", "'" + os.path.basename(__file__)  + "'" )
 
 try:
     import macros
@@ -26,18 +25,16 @@ localdb = None
 
 def got_index(config, url, query, request, template = "", fname = ""):
 
-    global gl_config
-    gl_config = config
+    #print("got_index()", "url:", url, "query:", query)
+    #print(wsgi_conf.config.showvals())
 
-    print("got_index()", "url:", url, "query:", query)
-    print("gl_config:"); print(gl_config.showvals())
-
-    if gl_config.conf.pgdebug > 3:
+    if Config.pgdebug > 3:
         print("got_index() url=%s"% url, "query=%s" %query,
                     "request=%s" % request, "template=%s" % template, "fname=%s" % fname)
 
-    if gl_config.conf.verbose:
-        print("got_index() url = '%s'" % url, "request_org=", gl_config.mainclass.request_org)
+    if Config.verbose:
+        print("got_index() url = '%s'" % url)
+        #, "request_org=", request)
 
     #print("got_index() request", request)
 
@@ -90,7 +87,7 @@ def got_log(config, url, query, request, template = "", fname = ""):
 def initialize():
 
     '''
-    Initializee the current module
+    Initialize the current module
     '''
 
     try:

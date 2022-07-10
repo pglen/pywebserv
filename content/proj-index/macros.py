@@ -44,8 +44,6 @@ a:link, a:visited {
 
 </style>
 '''
-
-
 _mac_left = '''
 <table width=100% border=0>
     <tr><td align=center bgcolor={ tabhead } colspan=2 height=36>
@@ -73,10 +71,8 @@ _mac_left = '''
     -->
     <tr><td height=8 align=center colspan=2>
     <!-- <img src="/media/upp_2_small.png" title="Logo"> -->
-
-
-
  </table>
+
 '''
 
 _mac_miss_state = '''

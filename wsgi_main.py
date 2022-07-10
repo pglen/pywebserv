@@ -404,11 +404,11 @@ if __name__ == '__main__':
 
     print("\n===== Starting HTTPD on port {}, control-C to stop".format(Config.port))
 
-    print("Config:")
-    for aa in dir(Config):
-        if aa[:2] !=  "__":
-            print("'" + aa + "=" + str(getattr(Config, aa)), end="' ")
-    print("");
+    #print("Config:")
+    #for aa in dir(Config):
+    #    if aa[:2] !=  "__":
+    #        print("'" + aa + "=" + str(getattr(Config, aa)), end="' ")
+    #print("");
 
 
     class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):

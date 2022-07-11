@@ -12,14 +12,9 @@ import os, sys, time
 
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global, wsgi_parse
 
-
 #print("Loading", "'" + os.path.basename(__file__)  + "'" )
 
-try:
-    import macros
-except:
-    print("Cannot import macros", sys.exc_info())
-    wsgi_util.put_exception("import macros")
+from . import macros
 
 localdb = None
 

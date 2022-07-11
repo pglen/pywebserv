@@ -20,9 +20,9 @@ header = '''
                     <tr align=center>
                         <td>
                         <td> <a href=index.html>
-                            <img src=/siteicons/go-home.png class=image title="Back to home page"> </a>
+                             <img src=/siteicons/go-home.png class=image title="Back to home page"> </a>
                         <td> <img src=/siteicons/emblem-default.png class=image title="Go forward">
-                        <td> img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
+                        <td> <img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
                         <td> <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
                         <td>
                 </table>

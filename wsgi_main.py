@@ -77,6 +77,7 @@ class myconf():
     verbose = 0;
     pgdebug = 0;
     show_keys  = 0
+    port = 8000
 # ------------------------------------------------------------------------
 
 class xWebServer():
@@ -356,11 +357,8 @@ if __name__ == '__main__':
 
     opts = []; args = []
 
-    from common import wsgi_conf
-    #print("Web server initiated.")
-
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "d:h?vV:fxctokt",
+        opts, args = getopt.getopt(sys.argv[1:], "d:h?vV:fxctoktp:",
                         ["debug=", "help", "help", "verbose", "version", ])
 
     except getopt.GetoptError as err:
@@ -372,12 +370,18 @@ if __name__ == '__main__':
         #print("opt", "'" + aa[0] + "'", aa[1])
         if aa[0] == "-d" or aa[0] == "--debug":
             try:
-                #Config.pgdebug = int(aa[1])
                 myconf.pgdebug = int(aa[1])
                 #print( _("Running at debug level:"),  Config.pgdebug)
             except:
                 myconf.pgdebug = 0
                 print(_("Exception on setting debug level"), sys.exc_info())
+
+        if aa[0] == "-p" or aa[0] == "--port":
+            try:
+                myconf.port = int(aa[1])
+            except:
+                myconf.port = 0
+                print(_("Exception on setting port"), sys.exc_info())
 
         # Most of these are placeholders
         if aa[0] == "-h" or  aa[0] == "--help" or aa[0] == "-?":
@@ -387,7 +391,7 @@ if __name__ == '__main__':
         if aa[0] == "-v" or aa[0] == "--verbose":
             myconf.verbose = 1
         if aa[0] == "-f":
-            Config.full_screen = True
+            myconf.full_screen = True
         if aa[0] == "-x":
             CLEAR_CONFIG = True
         if aa[0] == "-c":
@@ -402,14 +406,7 @@ if __name__ == '__main__':
             print("Tracing ON")
             sys.settrace(tracer)
 
-    print("\n===== Starting HTTPD on port {}, control-C to stop".format(Config.port))
-
-    #print("Config:")
-    #for aa in dir(Config):
-    #    if aa[:2] !=  "__":
-    #        print("'" + aa + "=" + str(getattr(Config, aa)), end="' ")
-    #print("");
-
+    print("\n===== Starting HTTPD on port {}, control-C to stop".format(myconf.port))
 
     class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
 
@@ -425,7 +422,7 @@ if __name__ == '__main__':
     #mypath = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     #port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
 
-    httpd = simple_server.make_server('', Config.port, application,
+    httpd = simple_server.make_server('', myconf.port, application,
                                                 handler_class=NoLoggingWSGIRequestHandler)
 
     #print("Begin main args", sys.argv)

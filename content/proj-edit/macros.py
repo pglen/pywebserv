@@ -82,9 +82,12 @@ _mac_editrow = '''
 
 _mac_center_body = '''
 
-    <table width=100% border=1>
+    <table width=100% border=0>
         <tr><td align=center colspan=3>
-        Edit main rows
+        <font size=+2>Edit main rows</font>
+        { imgrow }
+        { imgrow }
+        { imgrow }
         { imgrow }
     </table>
 
@@ -248,14 +251,3 @@ except:
     raise
 
 # EOF
-
-
-
-
-
-
-
-
-
-
-

@@ -290,14 +290,14 @@ def     add_local_func(mname, mfunc, mpage = None, fname=None):
                 return 1
         local_table.append([mname, mfunc])
     except:
-        print("Cannot add local table item", sys.exc_info())
+        print_exc("Cannot add local table item", sys.exc_info())
     return 0
 
 
 #wsgi_util.append_file("Importing macros\n")
 
-add_local_func("header", header)
-add_local_func("footer", footer)
+#add_local_func("header", header)
+#add_local_func("footer", footer)
 
 try:
     vvv = locals().copy()
@@ -311,9 +311,5 @@ except:
 wsgi_global.add_one_func("sitestyle", _mac_sitestyle)
 wsgi_global.add_one_func("left", _mac_left)
 
-#print ("Local table:")
-#for aa in macros.local_table:
-#    print (aa[0], end="  ")
-#print()
 
 

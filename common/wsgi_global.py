@@ -28,6 +28,8 @@ global_table = [
     ["spacer",      "<table><tr><td></table>"],
     ["linespacer",  "<tr><td height=8>"],
     ["sitecolor",   "bgcolor=#aaffbb"],
+    ["feedwidth",   "400"],
+    ["feedheight",  "300"],
     ["thumbwidth",  "120"],
     ["thumbheight",  "80"],
     ["mycolor",     "#cccccc"],

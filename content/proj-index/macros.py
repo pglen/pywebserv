@@ -18,13 +18,25 @@ _mac_sitestyle = '''
   position: relative;
   width: 50%;
 }
+
 .image {
   opacity: 1;
   display: inline;
   height: auto;
   transition: .5s ease;
   backface-visibility: hidden;
+  //corner-radius: 15px;
 }
+
+img {
+  opacity: 1;
+  display: inline;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+  border-radius: 15px;
+}
+
 .container {
   position: relative;
   width: 50%;
@@ -40,6 +52,19 @@ a:link, a:visited {
     //color: black;
     text-decoration: none;
     decoration: none;
+}
+
+.up-class {
+    writing-mode: sideways-lr;
+    text-orientation: mixed;
+    //background-color:  #aaffaa;
+}
+
+.textx {
+
+    border-radius: 10px;
+    background-color:  #cccccc;
+    padding: 10px;
 }
 
 </style>
@@ -108,7 +133,7 @@ _mac_center = '''
         { miss_state }
         <table width=100% border=0>
             <tr valign=top>
-            { article4 } { article } { article2 } { article3 }
+            { article } { article2 } { article3 } { article4 }
          </table>
 
         <!-- <video width="800" height="600" controls>
@@ -234,7 +259,7 @@ _mac_header2 = '''
 # ------------------------------------------------------------------------
 # Override main macros
 
-header = '''
+_mac_header = '''
 
     <table width=100% { sitecolor } border=0>
     <tr  height=36>
@@ -261,14 +286,39 @@ header = '''
     </table>
 '''
 
-footer = '''
+_mac_footer = '''
     <tr  height=48>
     <td align=left width=45%>
     &nbsp; &nbsp; <font size=+2> <b>Contact Site Admin</b> </font><b>peterglen99@gmail.com</b>
-            <td> Copyright (C) Open Source
+            <td> Copyright (C) Peter Glen; Released to Open Source
             <td align=right>
                 <img src=/siteicons/system-log-out.png class=image title="Log Out / Leave">
                 &nbsp; &nbsp;
+'''
+
+_mac_imgrow = '''
+  <tr>  <td width=10>
+  <td width=20>
+  <div class=up-class> <font size=+2>Hello rotated text</font></div>
+
+  <td width=10>
+     <td align=center>
+      <table border=0><tr><td align=center width=400>
+       <font size=+2> Image row Header
+      { image beach-hd.jpeg [ feedwidth ] [ feedheight ]  }<p>
+
+         <div class=textx>
+          <font size=+0>
+          Image row text Image row text Image row text Image row text
+          Image row text Image row text Image row text Image row text
+          </div>
+       </table>
+
+      <td width=10>
+      <td> Image description Image description3
+      Image description
+      Image description Image description Image description Image description Image description
+
 '''
 
 # ------------------------------------------------------------------------

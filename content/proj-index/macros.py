@@ -4,7 +4,7 @@ import os, sys, time
 
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
-''' Local macros and data. Register it after init or use the "_mac_ prefix to auto register
+''' Local macros and data. Register it after init or use the _mac_ prefix to auto register
 '''
 
 local_table = []
@@ -107,21 +107,22 @@ _mac_miss_state = '''
 '''
 
 _mac_mission_statement = '''
-<tr><td bgcolor={ misscol }>
-<font size=-1>Mission Statement:</font>
-<font size=+0><br></font>
-<font size=+2><center><b>World Wide Globalization Message.</b></center><p></font>
-&nbsp; &nbsp; The pace of globalization has exceeded expectations. This institution is searching
-for new ways of existence, and recommending solutions. Because true globalization, done right, can
-end hunger, and can terminate all wars. May create a better existence for all, via connecting supply
-and demand without bounds. And it will establish a new, peaceful equilibrium.
- Globalization may create a happier human race with higher quality of life and more balance.
-  For EVERYBODY. <p>
-&nbsp; &nbsp; The term globalization is used in the context of global cooperation,
-not global control. We live in an inseparable entity, our planet, Earth. This is the basis
-for our existence, and the basis for everything else. Please look around for ideas on
-the site, approve / disapprove as you feel, and help if you so desire. And help
-you can. Every one of us makes an impact.<p>
+
+<tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
+    <font size=-1>Mission Statement:</font>
+    <font size=+0><br></font>
+    <font size=+2><center><b>World Wide Globalization Message.</b></center><p></font>
+    &nbsp; &nbsp; The pace of globalization has exceeded expectations. This institution is searching
+    for new ways of existence, and recommending solutions. Because true globalization, done right, can
+    end hunger, and can terminate all wars. May create a better existence for all, via connecting supply
+    and demand without bounds. And it will establish a new, peaceful equilibrium.
+     Globalization may create a happier human race with higher quality of life and more balance.
+      For EVERYBODY. <p>
+    &nbsp; &nbsp; The term globalization is used in the context of global cooperation,
+    not global control. We live in an inseparable entity, our planet, Earth. This is the basis
+    for our existence, and the basis for everything else. Please look around for ideas on
+    the site, approve or disapprove as you feel, and please help if you so desire. And help
+    you can. Every one of us makes an impact.<p>
 '''
 
 _mac_center = '''
@@ -235,6 +236,9 @@ _mac_article5 = '''Hello'''
 
 _mac_art_header = '''Header here'''
 
+# Clear text box when the first char is space (empty)
+_mac_clr = ''' if(this.value[0]==' ')this.value='' '''
+
 _mac_header2 = '''
     <table width=100% border=0>
         <form method=post>
@@ -246,13 +250,12 @@ _mac_header2 = '''
 
             <td align=right>
                  <font size=-1>Quick feedback:</font>  &nbsp;
-                <input type=text name="feedname" value="Name" size=10>
-                <input type=text name="feedtit"  value="Title" size=10>
-                <input type=text name="feedtxt"  value="Feedback Content" size=12>
+                <input type=text name="feedname" onfocus="{ clr }" value=" Your Name" size=10>
+                <input type=text name="feedtit"  onfocus="{ clr }" value=" Feddback Title" size=10>
+                <input type=text name="feedtxt"  onfocus="{ clr }" value=" Feedback Content" size=12>
                 <input type=submit name='feedSUB' value='Submit'>
             <td>
         </form>
-
     </table>
 '''
 

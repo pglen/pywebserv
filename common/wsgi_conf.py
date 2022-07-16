@@ -23,6 +23,9 @@ class Configx:
     pgdebug     = 0
     port        = 8000
 
+    def tostr():
+        print("verb:", Configx.verbose, "deb:", Configx.pgdebug)
+
 builtins.Config = Configx
 
 #def showvals():

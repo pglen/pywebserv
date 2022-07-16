@@ -96,6 +96,44 @@ def printenv(environ, all=False):
         #    print(aa, environ[aa])
     print()
 
+def getwenv(environ, all=False):
+    ret = ""
+    for aa in environ.keys():
+        #print("aa", aa)
+        fff = True
+        for cc in nogo:
+            if cc in aa:
+                fff = False
+        if fff or all:
+            ret += aa + " " + str(environ[aa]) + "<br>"
+
+        #if "HTTP_" in aa:
+        #    print(aa, environ[aa])
+    ret += "\n"
+    return ret;
+
+def gethttpenv(environ, all=False):
+    cnt = 0; ret = "<table>"
+
+    for aa in environ.keys():
+        if not "HTTP_" in aa[:5] and \
+                not "CONTENT_" in aa[:8] and \
+                        not "QUERY_" in aa[:5]:
+            continue
+        #print("aa", aa)
+        fff = True
+        for cc in nogo:
+            if cc in aa:
+                fff = False
+        if fff or all:
+            if cnt % 2 == 0:
+                ret += "<tr>"
+            ret += "<td>" + aa + " " + str(environ[aa]) + "<br>"
+        cnt+= 1
+    ret += "\n"
+    ret += "</table>"
+    return ret;
+
 def print_httpenv(environ):
     for aa in environ.keys():
         if "HTTP_" in aa[:5]:

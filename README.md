@@ -110,9 +110,11 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
     Sun 20.Mar.2022 First live site on the web
     Sat 26.Mar.2022 World peace pages
     Tue 28.Jun.2022 Created unitedplanetpeace.com proto site
+    Sat 16.Jul.2022 Site dev continues
+
     Also see 'git log' for more
 
-## Licence
+## License
 
  Open source.
 

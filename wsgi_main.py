@@ -207,14 +207,18 @@ class xWebServer():
 
         #print("serving", self.url, self.fn)
 
-        callme, tmpl, filen = self._translate_url(Config, self.url)
+        try:
+            callme, tmpl, filen = self._translate_url(Config, self.url)
+        except:
+            wsgi_util.put_exception("call proj entry")
+
         if(callme):
             content = ""
             try:
                 #print("Callback",  self.fn, self.url)
                 content = callme(Config, self.url, self.query, self.request, tmpl, filen)
             except:
-                wsgi_util.put_exception("process_req")
+                wsgi_util.put_exception("At process_req " + str(filen))
                 self.respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
 
                 fn5 = Config.datapath + os.sep + "html/500.html"
@@ -326,12 +330,17 @@ def application(environ, respond):
         usr_cnt += 1
         #print("Query arrived", os.getpid(), usr_cnt)
         # if not mainclass:
-        mainclass = xWebServer(environ, respond)
-
+        try:
+            mainclass = xWebServer(environ, respond)
+        except:
+            wsgi_util.put_exception("Creating Server OBJ")
 
         # Only do it one time (not for dev deployment)
         if True: #usr_cnt == 1:
-            wsgi_global.getprojects(mainclass)
+            try:
+                wsgi_global.getprojects(mainclass)
+            except:
+                wsgi_util.put_exception("Loading Projects")
 
         wdata = mainclass.process_req()
         #print("tdelta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")

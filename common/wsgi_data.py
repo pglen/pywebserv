@@ -56,6 +56,7 @@ class wsgiSql():
     # Return None if no data
 
     def   get(self, kkk):
+        rr = None
         try:
             if os.name == "nt":
                 self.c.execute("select * from " + self.table + " where key = ?", (kkk,))
@@ -65,6 +66,7 @@ class wsgiSql():
         except:
             print("Cannot get sql data", sys.exc_info())
             rr = None
+            raise
         finally:
             pass
         if rr:
@@ -156,11 +158,12 @@ class wsgiSql():
     # Get All
 
     def   getall(self):
+        rr = None
         try:
             self.c.execute("select * from " + self.table + "")
             rr = self.c.fetchall()
         except:
-            print("Cannot get sql data", sys.exc_info())
+            print("Cannot get ALL sql data", sys.exc_info())
         finally:
             #c.close
             pass
@@ -183,3 +186,5 @@ class wsgiSql():
         else:
             return None
 
+    def close(self):
+        self.conn.close()

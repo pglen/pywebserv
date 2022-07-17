@@ -10,12 +10,17 @@
 import os, sys, random, datetime, time
 from urllib.parse import urlparse, unquote, parse_qs
 
-import wsgi_util, wsgi_func
+ppp = __file__.split('/'); plen = len(ppp)
+modname = ppp[plen-2] + "-" + ppp[plen-1]
+
+print("Loaded mod:", modname)
+
+import wsgi_global, wsgi_util, wsgi_func, wsgi_parse
 
 def got_resp(config, url, query, request, template = "", fname = ""):
 
     #print("got_resp() config.mypath=", config.mypath, "url=", url, "query=", query)
-    print("got_resp() template=", template, "fname=", fname)
+    #print("got_resp() template=", template, "fname=", fname)
 
     found = ""
     fn = urlparse(url).path
@@ -32,7 +37,7 @@ def got_resp(config, url, query, request, template = "", fname = ""):
             buff = fh.read()
         #print("buff", buff)
         # Recursively process
-        content = wsgi_util.recursive_parse(buff, __file__)
+        content = wsgi_parse.recursive_parse(buff, __file__, None)
     else:
         content = "Index file (dyn) " + url + " " +  str(query) + " "
     return content
@@ -46,21 +51,21 @@ def my_style_func(arg, context):
     #print("style func here", arg)
     return "style here"
 
-# Expand arguments
+# Expand arguments:
+#   image _name tooltip_str
 
 def siteicon_func(arg, context):
-    ssss = wsgi_util.recursive_parse(arg, context, "\[ .*? \]")
-    sss = ssss.split()
-    # Concat arguments to str
-    strx = "\""
-    for aa in  sss[3:-1]:
-        strx += aa + " "
-    strx += "\""
 
-    #print("strx", strx)
+    ssss = wsgi_parse.parse_buffer(arg, "\[ .*? \]", context, wsgi_global.global_table)[0]
+    ss = ""
+    for aa in ssss:  ss += aa
+    sss = str.split(ss)
+    #print("args spaced:", sss)
+    if len(sss) < 4:
+        sss.append("Icon")
 
     cwd = os.path.dirname(os.getcwd())
-    print("cwd", cwd)
+    #print("cwd", cwd)
 
     # Travel down the dependency list
     while True:
@@ -85,30 +90,26 @@ def siteicon_func(arg, context):
     #if not os.path.isfile(fname):
     #    print("Icon file does not exist")
 
-    return "<img src=" + fname + " title=" + strx + ">"
+    # Concatinate remaining arguments
+    mmm = "'"
+    for ss in sss[3:len(sss)-1]:  mmm += ss + " "
+    mmm += "'"
+    return "<img src=" + fname + " title=" + mmm + ">"
 
 # ------------------------------------------------------------------------
 # Add all the functions for the urls; this function is called
 # When the url is accessed
 
-sys.path.append("../")
-
-from wsgi_global import add_one_url
-
-add_one_url("/test/responsive", got_resp, "", __file__)
+wsgi_global.add_one_url("/responsive", got_resp, "responsive.html", __file__)
 
 # ------------------------------------------------------------------------
 # Add all the functions and the macro names here
 # Simply refer to the macro in the html temple, and it will get called
 # and the output substituted
 
-from wsgi_global import add_one_func
-
-add_one_func("image2", my_img_func)
-add_one_func("style", my_style_func)
-add_one_func("siteicon", siteicon_func)
-add_one_func("forw", "media-skip-backward.png")
-
-#add_one_func("include", include_function)
+wsgi_global.add_one_func("image2", my_img_func)
+wsgi_global.add_one_func("style", my_style_func)
+wsgi_global.add_one_func("siteicon", siteicon_func)
+wsgi_global.add_one_func("forw", "media-skip-forward.png")
 
 # EOF

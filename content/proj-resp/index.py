@@ -16,6 +16,10 @@ print("Loaded mod:", modname)
 
 import os, sys, random, datetime, time
 
+sys.path.append("../")
+
+import wsgi_global, wsgi_util, wsgi_func, wsgi_parse
+
 # Add URL; too simple, but is communicates the idea
 
 def got_aa(config, url, query, req, templ):
@@ -98,24 +102,33 @@ def     mock_cal_func(strx, context):
         print("Exception on two", sys.exc_info())
     return content
 
+def got_index(config, url, query, request, template = "", fname = ""):
+
+    print("got_index()", "url:", url, "query:", query, "fname:", fname)
+    #template = "responsive.html"
+    #print(wsgi_conf.config.showvals())
+
+    content = wsgi_util.process_default(config, url, query, request, template, fname)
+
+    #content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table )
+    #content = "Nothing here"
+
+    return content
+
 # ------------------------------------------------------------------------
 # Add all the functions for the urls; this function is called
 # When the url is accessed
 
-sys.path.append("../")
-
-from wsgi_global import add_one_url
-
-add_one_url("/aa", got_aa)
-add_one_url("/bb", got_bb)
+#add_one_url("/aa", got_aa)
+#add_one_url("/bb", got_bb)
+wsgi_global.add_one_url("/resp", got_index, "", __file__)
 
 # ------------------------------------------------------------------------
 # Add all the functions and the macro names here
 # Simply refer to the macro in the html temple, and it will get called
 # and the output substituted
 
-from wsgi_global import add_one_func
 
-add_one_func("app3", mock_cal_func)
+wsgi_global.add_one_func("app3", mock_cal_func)
 
 # EOF

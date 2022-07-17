@@ -73,7 +73,6 @@ def     app_two_func(strx, context):
                 #aa*7 + bb + 1
                 if cnt > rrr:
                     break
-
                 cnt += 1
                 if cnt > mon:
                     content += "<td> <font size=-1>" + str(cnt2+1)
@@ -167,9 +166,9 @@ def     image_func(strx, context):
 # ------------------------------------------------------------------------
 # I wish the http standard had this one command
 
-def     include_func(arg, context):
+def     include_func(strx, context):
 
-    #print("include_function called", arg, os.getcwd(), context, __file__)
+    #print("include_function called", strx, os.getcwd(), context, __file__)
 
     # Expand arguments
     ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.global_table)[0]

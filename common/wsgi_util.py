@@ -71,7 +71,7 @@ def put_exception(xstr):
                         " Line: " + str(aa[1]) + "\n" +  \
                     "   Context: " + aa[2] + " -> " + aa[3] + "\n"
         except:
-            print( "Could not print trace stack. ", sys.exc_info())
+            print( "Could not print trace stack. ", cumm, sys.exc_info())
 
     print(cumm)
     #syslog.syslog("%s %s %s" % (xstr, a, b))
@@ -155,7 +155,9 @@ def append_file(strx):
 # ------------------------------------------------------------------------
 # Resolve paths, read file, expand template
 
-def process_default(config, url, query, request, template, fname, local_table):
+def process_default(config, url, query, request, template, fname, local_table = []):
+
+    print("using template", template, "fname", fname)
 
     if Config.verbose:
         print("process_default() with local_table len ", len(local_table))
@@ -163,13 +165,15 @@ def process_default(config, url, query, request, template, fname, local_table):
     if Config.pgdebug > 5:
         if local_table:
             dump_table("Local Table:", local_table)
+    try:
+        if not template:
+            template = resolve_template(config, url, fname)
+        else:
+            template = os.path.dirname(fname) + os.sep + template
+    except:
+        put_exception("Cannot create template");
 
-    if not template:
-        template = wsgi_util.resolve_template(config, url, fname)
-    else:
-        template = os.path.dirname(fname) + os.sep + template
-
-    #print("using template", template)
+    print("using template", template)
 
     if template and os.path.exists(template):
         buff = ""

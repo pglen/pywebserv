@@ -38,7 +38,8 @@ def _parse_items(item, context, table):
                 try:
                     cccc = aa[1](item, context)
                 except:
-                    print("cannot exec", aa[1], sys.exc_info())
+                    wsgi_util.put_exception("Cannot exec: " + str(item))
+                    #print("item", item, "aa[1]", aa[1])
                     pass
                 #print("cccc", cccc[:12])
                 return cccc

@@ -2,7 +2,7 @@
 
 '''
     This is a sample project that is added to the site. The idea here is
-    that nothing in this project can syntax error (down) the site.
+    that nothing in this project can down the site, oly the page. (like: syntax error)
     It is imported under a try: except clause, and it is calling only the
     URL registration functions.
     Also, included a default web page function as index.html or as '/'
@@ -13,6 +13,12 @@ import os, sys, time
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global, wsgi_parse
 
 #print("Loading", "'" + os.path.basename(__file__)  + "'" )
+
+ppp = __file__.split('/')
+plen = len(ppp)
+modname = ppp[plen-2] + "-" + ppp[plen-1]
+
+print("Loaded mod:", modname)
 
 from . import macros, swear
 
@@ -90,27 +96,21 @@ def process_submit(request):
 # This function is called when the module is loaded
 #
 
-def initialize():
+'''
+Initialize the current module
+'''
 
-    '''
-    Initialize the current module
-    '''
+try:
+    # Add default enties to tables
+    wsgi_global.add_one_url("/", got_index, "index.html", __file__)
+    wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
+    wsgi_global.add_one_url("/log.html", got_log, "log.html", __file__)
 
-    try:
-        # Add default enties to tables
-        wsgi_global.add_one_url("/", got_index, "index.html", __file__)
-        wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
-        wsgi_global.add_one_url("/log.html", got_log, "log.html", __file__)
+    wsgi_global.add_one_func("show_submit", show_submit_func)
+    wsgi_global.add_one_func("feed_data", fill_data)
+    wsgi_global.add_one_func("CompanyName", "UPP, United Planet Peace")
 
-        wsgi_global.add_one_func("show_submit", show_submit_func)
-        wsgi_global.add_one_func("feed_data", fill_data)
-        wsgi_global.add_one_func("CompanyName", "UPP, United Planet Peace")
-
-    except:
-        print("Cannot add module globals:", "'" + modname + "'", sys.exc_info())
-
-modname = os.path.splitext(os.path.basename(__file__))[0]
-
-initialize()
+except:
+    print("Cannot add module globals:", "'" + modname + "'", sys.exc_info())
 
 # EOF

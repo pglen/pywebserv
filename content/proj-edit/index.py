@@ -13,7 +13,11 @@ import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 #print("Loading", "'" + os.path.basename(__file__)  + "'" )
 
-modname = os.path.splitext(os.path.basename(__file__))[0]
+ppp = __file__.split('/')
+plen = len(ppp)
+modname = ppp[plen-2] + "-" + ppp[plen-1]
+
+print("Loaded mod:", modname)
 
 from . import macros
 

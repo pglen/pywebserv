@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 
-# ------------------------------------------------------------------------
 '''
  This is a sample project that is added to the site. The idea here is
- that nothing in this project can syntax error (down) the site, as it is
+ that nothing in this project can down the site, as it is
  imported under a try: except clause, and it is calling only the
  URL registration functions
 
 '''
-# ------------------------------------------------------------------------
+
+ppp = __file__.split('/')
+plen = len(ppp)
+modname = ppp[plen-2] + "-" + ppp[plen-1]
+
+print("Loaded mod:", modname)
 
 import os, sys, random, datetime, time
 

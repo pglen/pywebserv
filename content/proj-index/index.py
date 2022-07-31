@@ -10,7 +10,7 @@
 
 import os, sys, time
 
-import wsgi_util, wsgi_func, wsgi_data, wsgi_global, wsgi_parse
+import wsgi_util, wsgi_func, wsgi_data, wsgi_global, wsgi_parse, wsgi_swear
 
 #print("Loading", "'" + os.path.basename(__file__)  + "'" )
 
@@ -18,9 +18,9 @@ ppp = __file__.split('/')
 plen = len(ppp)
 modname = ppp[plen-2] + "-" + ppp[plen-1]
 
-print("Loaded mod:", modname)
+#print("Loaded mod:", modname)
 
-from . import macros, swear
+from . import macros
 
 def got_index(config, url, query, request, template = "", fname = ""):
 
@@ -76,7 +76,7 @@ def process_submit(request):
     sss = []
     # Save it
     for aa in request[:-1]:  # do not post last (submit entry)
-        bb = swear.filter_words(aa[1])
+        bb = wsgi_swear.filter_words(aa[1])
         #print("de-sweared", bb)
         sss.append(bb)
 

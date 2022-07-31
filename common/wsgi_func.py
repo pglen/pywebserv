@@ -14,6 +14,31 @@ except:
 
 import wsgi_util, wsgi_style, wsgi_res, wsgi_global, wsgi_parse
 
+# ------------------------------------------------------------------------
+
+def     parse_args(strx, context):
+
+    '''
+    Expand arguments, return arr of argument strings, including command
+    The latest one filters delimiters
+    '''
+
+    ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.global_table)[0]
+    #print("Args expanded:", ssss)
+    ss = ""
+    for aa in ssss:
+        # Filter delimiters
+            ss += aa
+
+    sss = str.split(ss)
+    #print("Args decoded:", sss)
+    ddd = []
+    for aa in sss:
+        if aa != '[' and aa != ']' and aa != '{' and aa != '}':
+            ddd.append(aa)
+    #print("Args filtered:", ddd)
+    return ddd
+
 def     deep_func(strx, context):
     return "Deep from code"
 
@@ -99,32 +124,28 @@ def     image_func(strx, context):
     The first two forms of the { image } function will preserve the image's aspect ratio.
     '''
 
-    #print("Image  str:", strx)
-    #sss = strx.split()
-    #print("Image func:", sss)
+    sss = parse_args(strx, context)
+    #print("Image args:", len(sss), sss)
 
-    # Expand arguments
-    ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.global_table)[0]
-    #print("Image expanded:", ssss)
-    ss = ""
-    for aa in ssss:
-        ss += aa
-    sss = str.split(ss)
-    #print("Image spaced:", sss)
-
-    iname = "/media/" + sss[2]
-    if len(sss) == 4:
+    iname = "/media/" + sss[1]
+    if len(sss) == 2:
         return "<img src=" + iname + ">"
 
-    elif len(sss) == 5:
-        basewidth =  int(sss[3])
-        nnn = "/tmp/res_" + sss[3] + "_" + str(sss[2])
+    elif len(sss) == 3:
+        try:
+            basewidth =  int(sss[2])
+        except:
+            print("Invalid parameters to image function (3)", sss)
+            return "<img src=" + iname + ">"
+
+        nnn = "/tmp/res_" + sss[2] + "_" + str(sss[1])
         cwd = os.getcwd();
         nnn2 = cwd + nnn
         iname2 = cwd + iname
 
         # Note: If resized is older, we generate
         if not os.path.exists(nnn2) or os.stat(nnn2).st_mtime < os.stat(iname2).st_mtime:
+            #print("Resizing", nnn2)
             try:
                 img = Image.open("." + iname)
                 wpercent = (basewidth / float(img.size[0]))
@@ -134,20 +155,26 @@ def     image_func(strx, context):
             except:
                 print("Exc Image proc.five:", nnn, sys.exc_info())
         else:
-            #print("Using cached version", nnn)
+            #print("Using cached version", nnn2)
             pass
         return "<img src=" + nnn + " >"
 
-    elif len(sss) == 6:
-        basewidth  =  int(sss[3])
-        baseheight =  int(sss[4])
+    elif len(sss) == 4:
+        try:
+            basewidth  =  int(sss[2])
+            baseheight =  int(sss[3])
+        except:
+            print("Invalid parameters to image function (4)", sss)
+            return "<img src=" + iname + ">"
+
         cwd = os.getcwd();
-        nnn = "/tmp/res_" + sss[3] + "x" + sss[4] + "_" + str(sss[2])
+        nnn = "/tmp/res_" + sss[2] + "x" + sss[3] + "_" + str(sss[1])
         nnn2 = cwd + nnn
         iname2 = cwd + iname
         #print("nnn", nnn2)
         #print("iname2", iname2)
         try:
+            #print("Resizing", nnn2)
             # Note: If resized is older, we generate
             if not os.path.exists(nnn2) or os.stat(nnn2).st_mtime < os.stat(iname2).st_mtime:
                 img = Image.open(iname2)
@@ -156,7 +183,7 @@ def     image_func(strx, context):
         except:
             print("Exc image proc.six:", iname2, sys.exc_info()[1])
         else:
-            #print("Using cached version", nnn)
+            #print("Using cached version", nnn2)
             pass
         #return "<img src=" + sss[2] + " height=" + sss[3] + " width= " + sss[4] + " >"
         return "<img src=" + nnn + " >"

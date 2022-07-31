@@ -1,57 +1,20 @@
  #!/usr/bin/env python3
 
 import sys
+import  wsgi_util, wsgi_func, wsgi_global
 
-''' Local macros and data. Register it after init or use the "_mac_ prefix to auto register
+'''
+    Local macros and data. Register it after init or use the "_mac_ prefix to auto register
 '''
 
 local_table = []
 
-# ------------------------------------------------------------------------
-# Add a new project function;
-
-def     add_local_func(mname, mfunc, mpage = None, fname=None):
-
-    global local_table
-
-    #print("local_func:", mname)
-
-    '''
-         Add a macro function or string here. The macro is substituted
-        by the output of the function.
-    '''
-    try:
-        #see if there is an entry already
-        for aa in local_table:
-            if aa[0] == mname:
-                print("Duplicate macro", mname)
-                return True
-        local_table.append([mname, mfunc])
-    except:
-        print("Cannot add local table item", sys.exc_info())
-    return False
-
-
-_mac_tabhead = "#ccffcc"
-_mac_misscol = "#eeeeee"
-
-_mac_miss_state = '''
-    <table width=100% cellpadding=3 border=0>
-    { mission_statement }
-    </table>
-'''
 _mac_ShortCName = '''
-    United Planet Peace
-    '''
-
-_mac_header_edit = '''
-header here
+ United Planet Peace
 '''
 
 _mac_edit_center = '''
-
 <td valign=top>
-
     <table width=100% { sitecolor } border=0>
     <tr  height=36>
     <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
@@ -69,84 +32,129 @@ _mac_edit_center = '''
                 <td>
         </table>
      </table>
-
      <center>{ center_body }
 '''
 
 _mac_editrow = '''
-
 <tr align=center><td> Edit
 <td> Edit2
 <td> Edit3
 '''
 
-_mac_center_body = '''
+_mac_feedwidth2 = '800'
 
+_mac_imgrow_ed = '''
+  <tr>  <td width=10>
+  <td width=20>
+  <div class=up-class> <font size=+2>Hello rotated text</font></div>
+
+  <td width=10>
+     <td align=center>
+      <table border=0><tr><td align=center width=400>
+       <font size=+2> Image row Header
+      { image beach-hd.jpeg [ feedwidth ]  }<p>
+
+         <div class=textx>
+          <font size=+0>
+          Image row text Image row text Image row text Image row text
+          Image row text Image row text Image row text Image row text
+          </div>
+       </table>
+
+      <td width=10>
+      <td> Image description Image description3
+      Image description
+      Image description Image description Image description Image description Image description
+'''
+
+def imgrow_data(strx, context):
+
+    sss = wsgi_func.parse_args(strx, context)
+    #print("strx", strx)
+
+    strx = '''
+    <tr>  <td width=10>
+    <td width=20>
+    <div class=up-class> <font size=+2>Hello rotated text</font></div>
+
+    <td width=10>
+     <td align=center>
+      <table border=0 width=100%>
+      <tr><td align=center>
+       <font size=+2> Image row Header
+      <tr><td align=center>
+      { image beach-hd.jpeg [ feedwidth2 ]  }
+      <tr><td align=center>
+         <div class=textx>
+          <font size=+0>
+          Image row text Image row text Image row text Image row text
+          Image row text Image row text Image row text Image row text
+          Image row text Image row text Image row text Image row text
+          Image row text Image row text Image row text Image row text
+          Image row text Image row text Image row text Image row text
+          Image row text Image row text Image row text Image row text
+          Image row text Image row text Image row text Image row text
+          Image row text Image row text Image row text Image row text
+          Image row text Image row text Image row text Image row text
+          </div>
+       </table>
+    '''
+
+
+    desc = '''
+    Image description Image description3
+      Image description
+    Image description Image description Image description Image description Image description
+    '''
+
+    foot = '''<td width=10> <td>  '''
+    strx += foot
+    strx += desc
+
+    return strx
+
+def one_row(strx, context):
+
+    #print(strx, context)
+
+    ret = ""
+    for aa in range(5):
+        #print("One row")
+        ret +=   " { imgrow_data [ %d ] }" % aa
+    return ret
+
+_mac_center_body = '''
     <table width=100% border=0>
-        <tr><td align=center colspan=3>
-        <font size=+2>Edit main rows</font>
-        { imgrow }
-        { imgrow }
-        { imgrow }
-        { imgrow }
+        <tr><td align=center colspan=6>
+        <font Page Main size=+2>Edit Rows</font>
+
+        { one_row }
+
     </table>
 
 '''
 
-_mac_mission_statement2 = '''
-<tr><td bgcolor={ misscol }>
-<font size=-1>Mission Statement:</font>
-<font size=+0><br></font>
-<font size=+2><center><b>World Wide Globalization Message.</b></center><p></font>
-&nbsp; &nbsp; The pace of globalization has exceeded expectations. This institution is searching
-for new ways of existance, and recommending solutions. Because true globalization, done right, can
-end hunger, and can terminate all wars. May create a better existence for all, via connecting supply
-and demand without bounds, and establish a new peaceful equilibrium.
- Globalization may create a happier human race with higher quality of life and more balance.
-  For EVERYBODY. <p>
-&nbsp; &nbsp; Please do not be misled by the term globalization. It is about global cooperation,
-not control. We live in an inseparable global pool, our planet, Earth. This is the basis
-for everything else. Please look around for ideas on the site, approve / disapprove as you feel, and help if
-you so desire. And help you can. Every one of us makes an impact.<p>
-'''
-
-_mac_center = '''
-
-    <td valign=top>
-     <table width=100% border=0>
-        <tr><td align=center>
-        <font size=+2><b>{ header2 } </b></font>
-        { miss_state }
-        <table width=100% border=0>
-            <tr valign=top>
-            { imgrow } { imgrow } { imgrow }
-         </table>
-     </table>
-
-'''
-
 _mac_nav = '''
-<table width=100% border=0>
-    <tr align=center>
-        <td align=right>
-            &nbsp <img src=/siteicons/media-skip-backward.png title="Backward Front">
-            &nbsp <img src=/siteicons/media-seek-backward.png title=Backward>
-            <td width=150px>
-            &nbsp; Navigation &nbsp;
-            <td align=left>
-            &nbsp <img src=/siteicons/media-seek-forward.png title=Forward>
-            &nbsp <img src=/siteicons/media-skip-forward.png title="Forward Front">
-</table>
+    <table width=100% border=0>
+        <tr align=center>
+            <td align=right>
+                &nbsp <img src=/siteicons/media-skip-backward.png title="Backward Front">
+                &nbsp <img src=/siteicons/media-seek-backward.png title=Backward>
+                <td width=150px>
+                &nbsp; Navigation &nbsp;
+                <td align=left>
+                &nbsp <img src=/siteicons/media-seek-forward.png title=Forward>
+                &nbsp <img src=/siteicons/media-skip-forward.png title="Forward Front">
+    </table>
 '''
 
 _mac_right = '''
-
 <td width=20% valign=top>
   <table border=0 width=100% cellpadding=3>
     <tr><td bgcolor={ tabhead } height=36 align=center>
         <font size=+1> <b>Misc</b>
     <tr><td>
-    <tr><td>
+    <tr><td align=center>
         &nbsp; &nbsp;
         <b>Last column, maybe ads</b><br>
         cogito ero sum cogito ero sum cogito ero sum
@@ -234,20 +242,21 @@ try:
     for aa in vvv:
         if "_mac_" in aa[:5]:
             if Config.verbose:
-                #print("Added:", aa[5:]) #, vvv[aa][:12])
-                pass
-            add_local_func(aa[5:], vvv[aa])
+                print("Added:", aa[5:]) #, vvv[aa][:12])
+            wsgi_util.add_local_func(aa[5:], vvv[aa], local_table)
 
-    #print("Local table len", len(local_table))
-    #
-    #print ("local table")
+    #print("Local table: len=%d", len(local_table))
     #for aa in local_table:
     #    print(" '" + aa[0] + "'", end = " ")
     #print ("\ntable end")
 
+    wsgi_util.add_local_func("one_row", one_row, local_table)
+    wsgi_util.add_local_func("imgrow_data", imgrow_data, local_table)
+    #wsgi_global.add_one_func("feedwidth2", _mac_feedwidth2)
+
 except:
     #print("Exception on editor init vars", sys.exc_info())
-    print_exception("Editor")
+    wsgi_util.put_exception("Editor")
     raise
 
 # EOF

@@ -19,6 +19,10 @@
   float: left;
 }
 
+#col2 {
+  float: right;
+}
+
 body {
   font-family: Arial;
   padding: 10px;
@@ -78,9 +82,10 @@ body {
   padding-left: 20px;
 }
 
-/* Right column */
+/* Right column
+*/
 .rightcolumn {
-  float: right;
+  float: left;
   width: 15%;
   background-color: #f1f1f1;
   padding-left: 20px;
@@ -95,9 +100,10 @@ body {
 
 /* Add a card effect for articles */
 .card {
-  background-color: white;
-  padding: 20px;
-  margin-top: 20px;
+  /*background-color: white;*/
+  background-color: lightgrey;
+  padding: 5px;
+  /*margin-top: 20px;*/
 }
 
 /* Clear floats after the columns */
@@ -115,38 +121,39 @@ body {
   margin-top: 20px;
 }
 
-/*
-*/
 
-@media screen and (max-width: 700px) {
-   .leftcolumn,  .midcolumn, .rightcolumn {
-    width: 100%;
-    padding: 0;
-  }
-}
+@media screen and (max-width: 500px)
+    {
+       .leftcolumn, .midcolumn, .rightcolumn {
+        width: 100%;
+        padding: 0;
+        float: right;
+      }
+    }
 
-/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other
-instead of next to each other  */
+
+/* Responsive layout - when the screen is less than 800px wide, make the two
+columns stack on top of each other instead of next to each other
 
 @media screen and (max-width: 400px) {
-  .leftcolumn,  .midcolumn {
-    width: 100%;
+  .leftcolumn {
     padding: 0;
+    width: 100%;
+    float: right;
+  }
+  .midcolumn {
+    padding: 0;
+    width: 100%;
+    float: right;
   }
   .rightcolumn {
-  float: none
-  }
-}
-
-/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each
-other instead of next to each other */
-
-@media screen and (max-width: 300px) {
-  .topnav a {
-    float: none;
+    padding: 0;
     width: 100%;
+    float: right;
   }
 }
+
+*/
 
 </style>
 

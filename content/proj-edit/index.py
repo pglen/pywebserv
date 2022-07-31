@@ -17,7 +17,7 @@ ppp = __file__.split('/')
 plen = len(ppp)
 modname = ppp[plen-2] + "-" + ppp[plen-1]
 
-print("Loaded mod:", modname)
+#print("Loaded mod:", modname)
 
 from . import macros
 
@@ -77,11 +77,11 @@ Initializee the current module
 '''
 
 #print("Called  initialization for '%s'" % modname)
-if not localdb:
-    try:
-        localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
-    except:
-        print("Could not create local data for %s", modname)
+#if not localdb:
+#    try:
+#        localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
+#    except:
+#        print("Could not create local data for %s", modname)
 
 # Upon loading ... add urls and add macros
 
@@ -93,17 +93,5 @@ try:
 
 except:
     print("Cannot initialize", modname, sys.exc_info())
-
-#vvv = locals().copy()
-#    #print("vvv", vvv)
-#    for vv in vvv:
-#        if  "macros" in vv:
-#            #print("vv", vv, vvv[vv]);
-#            for aa in dir(vvv[vv]):
-#                #print("aa", aa);
-#                if "_mac_" in aa[:5]:
-#                    val = getattr(vvv[vv], aa)
-#                    print("Added:", aa[5:]) #, val[:12])
-#                    add_local_func(aa[5:],  val)
 
 # EOF

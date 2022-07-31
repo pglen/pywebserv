@@ -12,7 +12,7 @@ ppp = __file__.split('/')
 plen = len(ppp)
 modname = ppp[plen-2] + "-" + ppp[plen-1]
 
-print("Loaded mod:", modname)
+#print("Loaded mod:", modname)
 
 import os, sys, random, datetime, time
 

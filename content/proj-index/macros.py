@@ -71,7 +71,7 @@ a:link, a:visited {
 '''
 _mac_left = '''
 <table width=100% border=0>
-    <tr><td align=center bgcolor={ tabhead } colspan=2 height=36>
+    <tr><td bgcolor={ tabhead } align=center colspan=2 height=36>
     <font size=+1><b>Main Navigation</b>
     <tr><td height=6>
     <tr><td colspan=2 align=center><a href=/index.html>
@@ -324,39 +324,11 @@ _mac_imgrow = '''
 
 '''
 
-# ------------------------------------------------------------------------
-# Add a new project function;
-
-def     add_local_func(mname, mfunc, mpage = None, fname=None):
-
-    #print("local_func:", mname)
-
-    '''
-         Add a macro function or string here. The macro is substituted
-        by the output of the function.
-    '''
-    try:
-        #see if there is an entry already
-        for aa in local_table:
-            if aa[0] == mname:
-                print("Duplicate macro", mname)
-                return 1
-        local_table.append([mname, mfunc])
-    except:
-        print_exc("Cannot add local table item", sys.exc_info())
-    return 0
-
-
-#wsgi_util.append_file("Importing macros\n")
-
-#add_local_func("header", header)
-#add_local_func("footer", footer)
-
 try:
     vvv = locals().copy()
     for aa in vvv:
         if "_mac_" in aa[:5]:
-            add_local_func(aa[5:],  vvv[aa])
+            wsgi_util.add_local_func(aa[5:],  vvv[aa], local_table)
 except:
     print("Exception on index init vars", sys.exc_info())
 
@@ -364,5 +336,6 @@ except:
 wsgi_global.add_one_func("sitestyle", _mac_sitestyle)
 wsgi_global.add_one_func("left", _mac_left)
 
-
-
+# Do not forget to make the desendents (project/site) global
+wsgi_global.add_one_func("tabhead", _mac_tabhead)
+wsgi_global.add_one_func("misscol", _mac_misscol)

@@ -157,7 +157,7 @@ def append_file(strx):
 
 def process_default(config, url, query, request, template, fname, local_table = []):
 
-    print("using template", template, "fname", fname)
+    #print("using template", template, "fname", fname)
 
     if Config.verbose:
         print("process_default() with local_table len ", len(local_table))
@@ -173,7 +173,7 @@ def process_default(config, url, query, request, template, fname, local_table = 
     except:
         put_exception("Cannot create template");
 
-    print("using template", template)
+    #print("using template", template)
 
     if template and os.path.exists(template):
         buff = ""
@@ -209,5 +209,28 @@ def unescape(strx):
             ret += aa
     ret += "'"
     return ret
+
+# ------------------------------------------------------------------------
+# Add a new project function;
+
+def     add_local_func(mname, mfunc, table):
+
+    '''
+         Add a macro function or string here. The macro is substituted
+        by the output of the function.
+    '''
+
+    #print("local_func:", mname)
+
+    try:
+        #see if there is an entry already
+        for aa in table:
+            if aa[0] == mname:
+                print("Duplicate function/macro", mname)
+                return True
+        table.append([mname, mfunc])
+    except:
+        print("Cannot add local table item", sys.exc_info())
+    return False
 
 # EOF

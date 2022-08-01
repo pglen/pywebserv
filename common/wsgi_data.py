@@ -7,7 +7,7 @@ import sys, os, mimetypes, time, sqlite3
 class wsgiSql():
 
     ''' The data store for the web server. Simple sqlite data files.
-      one clobal file is created, and a local file may be created on
+      one global file is created, and a local file may be created on
       a per project basis
       '''
 

@@ -105,13 +105,18 @@ def     mock_cal_func(strx, context):
 def got_index(config, url, query, request, template = "", fname = ""):
 
     print("got_index()", "url:", url, "query:", query, "fname:", fname)
+
     #template = "responsive.html"
     #print(wsgi_conf.config.showvals())
 
-    content = wsgi_util.process_default(config, url, query, request, template, fname)
+    wcontext = wsgi_util.wContext(config, url, query)
+    wcontext.request    = request
+    wcontext.template   = template
+    wcontext.fname      = fname
+    wcontext.local_table = macros.local_table
 
-    #content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table )
-    #content = "Nothing here"
+    wcontext.print()
+    content = wsgi_util.process_default2(wcontext)
 
     return content
 

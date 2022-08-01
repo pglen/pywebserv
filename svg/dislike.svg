@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="dislike.svg"
+   inkscape:export-filename="/home/peterglen/pgpygtk/webserver/content/siteicons/dislike.png"
+   inkscape:export-xdpi="5.6292367"
+   inkscape:export-ydpi="5.6292367"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.2473214"
+     inkscape:cx="396.85039"
+     inkscape:cy="503.07802"
+     inkscape:window-width="1641"
+     inkscape:window-height="964"
+     inkscape:window-x="2337"
+     inkscape:window-y="1132"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1"
+     inkscape:snap-nodes="true"
+     inkscape:snap-global="false"
+     inkscape:snap-bbox="false" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient20620">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop20616" />
+      <stop
+         style="stop-color:#ffff00;stop-opacity:1"
+         offset="1"
+         id="stop20618" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient20130">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop20126" />
+      <stop
+         style="stop-color:#ffff00;stop-opacity:1"
+         offset="1"
+         id="stop20128" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient20130"
+       id="linearGradient20132"
+       x1="90.830208"
+       y1="135.97182"
+       x2="160.38139"
+       y2="136.14156"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient20620"
+       id="linearGradient20622"
+       x1="-176.90097"
+       y1="-109.50557"
+       x2="-153.98909"
+       y2="-109.77184"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g20882">
+      <path
+         id="path1373"
+         style="fill:url(#linearGradient20132);fill-opacity:1;fill-rule:nonzero;stroke:#4158dd;stroke-width:7.70662;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 128.31006,156.49519 -8.66814,0.0505 c -4.41725,0.0257 -10.75063,0.22064 -14.14497,4.38731 -2.27739,2.79551 -2.58658,8.16061 -2.51686,13.54164 0.46177,35.64338 -32.638609,38.41499 -32.287916,-3.85615 -2.435498,-9.25076 2.117185,-10.04092 -4.978122,-12.31755 -19.641109,-0.84675 -20.866593,-17.29042 1.369331,-21.65722 -26.00688,-1.9863 -21.203325,-20.82236 0.706251,-20.42875 C 42.68781,114.72281 47.940639,94.273141 65.794408,92.372346 44.747321,92.077859 44.544318,69.938639 68.862556,70.910396 c 16.884724,0.359317 71.381664,-1.132434 87.664664,0.129002 0.0579,31.814752 -2.87275,53.676782 -1.87347,85.554502 l -26.92562,-0.20442"
+         sodipodi:nodetypes="csssccccccccc"
+         inkscape:export-filename="/home/peterglen/pgpygtk/webserver/content/siteicons/dislike.png"
+         inkscape:export-xdpi="5.7574449"
+         inkscape:export-ydpi="5.7574449" />
+      <rect
+         style="fill:url(#linearGradient20622);fill-opacity:1;stroke:#4158dd;stroke-width:6.98279;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect12637"
+         width="33.634624"
+         height="100.6545"
+         x="-191.11511"
+         y="-160.09909"
+         ry="9.7021093"
+         rx="0"
+         transform="matrix(-0.99973492,-0.02302362,0.01616712,-0.9998693,0,0)"
+         inkscape:export-filename="/home/peterglen/pgpygtk/webserver/content/siteicons/dislike.png"
+         inkscape:export-xdpi="5.7574449"
+         inkscape:export-ydpi="5.7574449" />
+    </g>
+  </g>
+</svg>

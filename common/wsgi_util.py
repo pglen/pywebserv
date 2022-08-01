@@ -15,6 +15,28 @@ except:
 
 verbose = 0
 
+class  wContext():
+
+    def __init__(self, config, url, query):
+
+        self.config = config
+        self.url = url
+        self.query = query
+
+        self.request = None
+        self.template = None
+        self.fname  = None
+        self.local_table  = None
+
+    def print(self):
+        #print("config", self.config)
+        print("url=", self.url, end=" - ")
+        print("query=", self.query, end=" - ")
+        print("request=", self.request, end=" - ")
+        print("template=", self.template, end=" - ")
+        print("fname=", self.fname)
+        print("local_table len:", len(self.local_table))
+
 # ------------------------------------------------------------------------
 
 def  resolve_template(config, fn, name):
@@ -155,21 +177,21 @@ def append_file(strx):
 # ------------------------------------------------------------------------
 # Resolve paths, read file, expand template
 
-def process_default(config, url, query, request, template, fname, local_table = []):
+def process_default2(context):
 
-    #print("using template", template, "fname", fname)
+    #print("using template", context.template, "fname", context.fname)
 
     if Config.verbose:
-        print("process_default() with local_table len ", len(local_table))
+        print("process_default() with local_table len ", len(context.local_table))
 
     if Config.pgdebug > 5:
-        if local_table:
-            dump_table("Local Table:", local_table)
+        if context.local_table:
+            dump_table("Local Table:", context.local_table)
     try:
-        if not template:
-            template = resolve_template(config, url, fname)
+        if not context.template:
+            template = resolve_template(context.config, context.url, context.fname)
         else:
-            template = os.path.dirname(fname) + os.sep + template
+            template = os.path.dirname(context.fname) + os.sep + context.template
     except:
         put_exception("Cannot create template");
 
@@ -184,11 +206,13 @@ def process_default(config, url, query, request, template, fname, local_table = 
             print("Cannot read template", sys.exc_info())
 
         # Recursively process
-        content = wsgi_parse.recursive_parse(buff, fname, local_table)
+        content = wsgi_parse.recursive_parse(buff, context, context.local_table)
     else:
-        content = "Index file (dyn) " + url + " " +  template + " " + str(query) + " "
+        content = "Index file (dyn) " + context.url + " " +  \
+                        context.template + " " + str(context.query) + " "
 
     return content
+
 
 def dump_table(strx, tabx):
     ''' Dump named internal table '''
@@ -210,10 +234,25 @@ def unescape(strx):
     ret += "'"
     return ret
 
+def add_locals(locs, local_table):
+
+    #print("locs", locs)
+    for aa in locs:
+        if "_mac_" in aa[:5]:
+            if Config.verbose:
+                print("Added:", aa[5:]) #, locs[aa][:12])
+            add_local_func(aa[5:], locs[aa], local_table)
+
+    #print("Local table: len=%d", len(local_table))
+    #for aa in local_table:
+    #    print(" '" + aa[0] + "'", end = " ")
+    #print ("\ntable end")
+
+
 # ------------------------------------------------------------------------
 # Add a new project function;
 
-def     add_local_func(mname, mfunc, table):
+def add_local_func(mname, mfunc, table):
 
     '''
          Add a macro function or string here. The macro is substituted

@@ -1,7 +1,7 @@
  #!/usr/bin/env python3
 
 import sys
-import  wsgi_util, wsgi_func, wsgi_global
+import  wsgi_util, wsgi_func, wsgi_global, wsgi_data
 
 '''
     Local macros and data. Register it after init or use the "_mac_ prefix to auto register
@@ -9,9 +9,33 @@ import  wsgi_util, wsgi_func, wsgi_global
 
 local_table = []
 
-_mac_ShortCName = '''
- United Planet Peace
-'''
+ppp = __file__.split('/')
+plen = len(ppp)
+modname = ppp[plen-2] + "-" + ppp[plen-1]
+
+_mac_feedwidth = '800'
+_mac_ShortCName = ''' United Planet Peace '''
+
+def fill_data():
+
+    #print("data/%s_data.sqlt" % modname)
+
+    try:
+        localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
+    except:
+        print("Could not create local data for %s" % modname)
+        wsgi_util.put_exception("opening SQL")
+        return
+
+    #print("strx", strx)
+    out = ""
+    res = localdb.getall()
+    for aa in res:
+        #out += aa[2][3:-2] + " &nbsp; "
+        out += str(aa) + " &nbsp; "
+
+    localdb.close()
+    return out
 
 _mac_edit_center = '''
 <td valign=top>
@@ -25,7 +49,7 @@ _mac_edit_center = '''
             <tr align=center>
                 <td>
                 <td> <a href=index.html>
-                    <img src=/siteicons/go-home.png class=image title="Back to home page"> </a>
+                     <img src=/siteicons/go-home.png class=image title="Back to home page"> </a>
                 <td> <img src=/siteicons/emblem-default.png class=image title="Go forward">
                 <td> <img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
                 <td> <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
@@ -41,65 +65,93 @@ _mac_editrow = '''
 <td> Edit3
 '''
 
-_mac_feedwidth2 = '800'
-
-_mac_imgrow_ed = '''
-  <tr>  <td width=10>
-  <td width=20>
-  <div class=up-class> <font size=+2>Hello rotated text</font></div>
-
-  <td width=10>
-     <td align=center>
-      <table border=0><tr><td align=center width=400>
-       <font size=+2> Image row Header
-      { image beach-hd.jpeg [ feedwidth ]  }<p>
-
-         <div class=textx>
-          <font size=+0>
-          Image row text Image row text Image row text Image row text
-          Image row text Image row text Image row text Image row text
-          </div>
-       </table>
-
-      <td width=10>
-      <td> Image description Image description3
-      Image description
-      Image description Image description Image description Image description Image description
-'''
+#<font Page Main size=+2>Edit Rows</font>
 
 def imgrow_data(strx, context):
 
     sss = wsgi_func.parse_args(strx, context)
-    #print("strx", strx)
+    foot = '''<td width=10> <td>  '''
+
+    #print("sss", sss)
+    #return "burn"
+    data = fill_data()
+    #print("data", data)
+
+    if not len(data):
+        strx = '''
+        <tr>
+            <td width=10>
+            <td width=10>
+            <td align=center>
+            <td align=center colspan=6>
+            <p><font size=+2>No data %s</font>
+            <td width=10>
+            <td>
+        ''' % sss[1]
+        return strx
 
     strx = '''
-    <tr>  <td width=10>
+    <tr> <td width=10>
     <td width=20>
     <div class=up-class> <font size=+2>Hello rotated text</font></div>
-
     <td width=10>
-     <td align=center>
-      <table border=0 width=100%>
-      <tr><td align=center>
-       <font size=+2> Image row Header
-      <tr><td align=center>
-      { image beach-hd.jpeg [ feedwidth2 ]  }
-      <tr><td align=center>
-         <div class=textx>
-          <font size=+0>
-          Image row text Image row text Image row text Image row text
-          Image row text Image row text Image row text Image row text
-          Image row text Image row text Image row text Image row text
-          Image row text Image row text Image row text Image row text
-          Image row text Image row text Image row text Image row text
-          Image row text Image row text Image row text Image row text
-          Image row text Image row text Image row text Image row text
-          Image row text Image row text Image row text Image row text
-          Image row text Image row text Image row text Image row text
-          </div>
-       </table>
+    <td align=center>
+    <table width=100% border=0>
+        <tr><td align=center>
+        <font size=+2> Image row Header
     '''
 
+    strx += str(sss[1])
+
+
+    strx += '''
+    <tr><td align=center>
+    { image beach-hd.jpeg [ feedwidth ]  }
+
+        <tr><td align=center>
+         <a href=editor?like>
+         &nbsp;
+         <img src=/siteicons/like.png  class=plain title="Like">
+         </a>
+         &nbsp;
+         <a href=editor?dislike>
+         &nbsp;
+         <img src=/siteicons/dislike.png   class=plain  title="DisLike">
+         &nbsp;
+         <a href=editor?love>
+         &nbsp;
+         <img src=/siteicons/emblem-favorite.png    class=plain  title="Love">
+         &nbsp;
+         <a href=editor?forward>
+         &nbsp;
+         <img src=/siteicons/mail-forward.png   class=plain  title="Forward">
+         &nbsp;
+         <a href=editor?share>
+         &nbsp;
+         <img src=/siteicons/network-transmit.png   class=plain title="Share">
+         &nbsp;
+
+        <tr><td align=center>
+            <table border=0>
+            <tr><td align=center>
+                 <div class=textx>
+                  <font size=+0>
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  Image row text Image row text Image row text Image row text
+                  </div>
+            </table>
+       </table>
+    '''
 
     desc = '''
     Image description Image description3
@@ -107,17 +159,18 @@ def imgrow_data(strx, context):
     Image description Image description Image description Image description Image description
     '''
 
-    foot = '''<td width=10> <td>  '''
     strx += foot
     strx += desc
 
     return strx
 
-def one_row(strx, context):
+def mid_rows(strx, context):
 
     #print(strx, context)
-
-    ret = ""
+    ret = '''
+    <tr> <td colspan=7 align=center>
+            <p><font size=+3>Data Review Header</font>
+    '''
     for aa in range(5):
         #print("One row")
         ret +=   " { imgrow_data [ %d ] }" % aa
@@ -126,12 +179,8 @@ def one_row(strx, context):
 _mac_center_body = '''
     <table width=100% border=0>
         <tr><td align=center colspan=6>
-        <font Page Main size=+2>Edit Rows</font>
-
-        { one_row }
-
+        { mid_rows }
     </table>
-
 '''
 
 _mac_nav = '''
@@ -149,73 +198,27 @@ _mac_nav = '''
 '''
 
 _mac_right = '''
-<td width=20% valign=top>
-  <table border=0 width=100% cellpadding=3>
-    <tr><td bgcolor={ tabhead } height=36 align=center>
-        <font size=+1> <b>Misc</b>
-    <tr><td>
-    <tr><td align=center>
-        &nbsp; &nbsp;
-        <b>Last column, maybe ads</b><br>
-        cogito ero sum cogito ero sum cogito ero sum
-        cogito ero sum cogito ero sum cogito ero sum
-        cogito ero sum cogito ero sum cogito ero sum
-        { deep }<br>
-        { app_one } <p>
-        { app2 } <p>
-        { app3 }
-</table>
-'''
-
-_mac_article3 = '''
-    <td>
-        <table border=0 bgcolor=#dddddd>
-            <tr><td>
-            <table border=0 bgcolor=#f5f5f5>
-            <tr>
-                <tr><td colspan=2>
-                <font size=+2>Article header, number three
-                <tr>
-                <td>
-                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
-                <td>
-                Image description
-                <tr><td colspan=2> Article Title
-                <tr><td colspan=2 style="text-alignment:justify"> Image description3
-                Article / Image description detail <br>
-                Article / Image description detail
-                Article / Image description detail
-            </table>
+    <td valign=top width=20%>
+        <table width=100% cellpadding=3 border=1>
+        <tr><td bgcolor={ tabhead } height=36 align=center>
+            <font size=+1> <b>Misc</b>
+        <tr><td>
+        <tr><td align=center>
+            &nbsp; &nbsp;
+            <b>Last column, maybe ads</b><br>
+            cogito ero sum cogito ero sum cogito ero sum
+            cogito ero sum cogito ero sum cogito ero sum
+            cogito ero sum cogito ero sum cogito ero sum
+            { deep }<br>
+            { app_one } <p>
+            { app2 } <p>
+            { app3 }
         </table>
 '''
+# Clear text box when the first char is space (empty)
+_mac_clr = ''' if(this.value[0]==' ')this.value='' '''
 
-_mac_article4 = '''
-    <td>
-        <table border=0 bgcolor=#dddddd>
-            <tr><td>
-            <table border=0 bgcolor=#eeeeee>
-            <tr>
-                <tr><td colspan=2>
-                <font size=+2>"{ art_header } four"
-                <tr>
-                <td>
-                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
-                <td>
-                Image description
-                <tr><td colspan=2> Article Title
-                <tr><td colspan=2 style="text-alignment:justify"> Image description3
-                Article / Image description detail <br>
-                Article / Image description detail
-                Article / Image description detail
-            </table>
-        </table>
-'''
-
-_mac_article5 = '''Hello'''
-
-_mac_art_header = '''Header here'''
-
-_mac_header2 = '''
+_mac_header = '''
     <table width=100% border=0>
         <form method=post>
             <tr><td>
@@ -223,40 +226,31 @@ _mac_header2 = '''
             <font size=+2><b>Welcome to UPP Site Editor, </a> </font> <br>
             &nbsp; &nbsp; &nbsp; the site for United Planet Peace
             <!-- (under construction, check back later) --!>
-
-            <td align=right>
+                <td align=right>
                  <font size=-1>Quick feedback:</font>  &nbsp;
-                <input type=text name="feedname" value="Name" size=10>
-                <input type=text name="feedtit"  value="Title" size=10>
-                <input type=text name="feedtxt"  value="Feedback Content" size=12>
+                <input type=text name="feedname" onfocus="{ clr }" value=" Your Name" size=10>
+                <input type=text name="feedtit"  onfocus="{ clr }" value=" Feddback Title" size=10>
+                <input type=text name="feedtxt"  onfocus="{ clr }" value=" Feedback Content" size=12>
                 <input type=submit name='feedSUB' value='Submit'>
             <td>
         </form>
-
+            <td align=right width=18%>
+                Search site: &nbsp; <input type=text value="" size=12>
+                <td align=right>
+                <img src=/siteicons/mail-forward.png class=image title="Mail / Contact Us">
+                <a href=index.html> <img src=/siteicons/application-exit.png title="Enter / Log In"></a>
     </table>
 '''
 
 try:
-    vvv = locals().copy()
-    #print("vvv", vvv)
-    for aa in vvv:
-        if "_mac_" in aa[:5]:
-            if Config.verbose:
-                print("Added:", aa[5:]) #, vvv[aa][:12])
-            wsgi_util.add_local_func(aa[5:], vvv[aa], local_table)
+    wsgi_util.add_locals(locals().copy(), local_table)
 
-    #print("Local table: len=%d", len(local_table))
-    #for aa in local_table:
-    #    print(" '" + aa[0] + "'", end = " ")
-    #print ("\ntable end")
-
-    wsgi_util.add_local_func("one_row", one_row, local_table)
+    wsgi_util.add_local_func("mid_rows", mid_rows, local_table)
     wsgi_util.add_local_func("imgrow_data", imgrow_data, local_table)
-    #wsgi_global.add_one_func("feedwidth2", _mac_feedwidth2)
 
 except:
     #print("Exception on editor init vars", sys.exc_info())
-    wsgi_util.put_exception("Editor")
+    wsgi_util.put_exception("in Editor")
     raise
 
 # EOF

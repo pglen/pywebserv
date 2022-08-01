@@ -21,10 +21,15 @@ def     parse_args(strx, context):
     '''
     Expand arguments, return arr of argument strings, including command
     The latest one filters delimiters
+    Added local table variable expansion
     '''
 
-    ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.global_table)[0]
+    fff = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, context.local_table)[0]
+    eee = ' '.join(fff)
+    #print("Args loc expanded:", eee)
+    ssss = wsgi_parse.parse_buffer(eee, "\[ .*? \]", context, wsgi_global.global_table)[0]
     #print("Args expanded:", ssss)
+
     ss = ""
     for aa in ssss:
         # Filter delimiters
@@ -123,6 +128,7 @@ def     image_func(strx, context):
      { image nnn www hhh }  --  Put an image tag in the output, resize to parm
     The first two forms of the { image } function will preserve the image's aspect ratio.
     '''
+    #print("image_func", strx)
 
     sss = parse_args(strx, context)
     #print("Image args:", len(sss), sss)

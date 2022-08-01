@@ -36,7 +36,16 @@ def got_index(config, url, query, request, template = "", fname = ""):
     if request:
         process_submit(request)
 
-    content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table )
+
+    wcontext = wsgi_util.wContext(config, url, query)
+    wcontext.request    = request
+    wcontext.template   = template
+    wcontext.fname      = fname
+    wcontext.local_table = macros.local_table
+
+    wcontext.print()
+    content = wsgi_util.process_default2(wcontext)
+
     return content
 
 def fill_data(strx, context):
@@ -55,7 +64,14 @@ def fill_data(strx, context):
     return out
 
 def got_log(config, url, query, request, template = "", fname = ""):
-    content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table)
+
+    wcontext = wsgi_util.wContext(config, url, query)
+    wcontext.request    = request
+    wcontext.template   = template
+    wcontext.fname      = fname
+    wcontext.local_table = macros.local_table
+
+    content = wsgi_util.process_default2(wcontext)
     return content
 
 # This can be shown on an HTML page

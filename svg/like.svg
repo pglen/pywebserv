@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="like.svg"
+   inkscape:export-filename="/home/peterglen/pgpygtk/webserver/content/siteicons/like.png"
+   inkscape:export-xdpi="5.7574449"
+   inkscape:export-ydpi="5.7574449"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.2151235"
+     inkscape:cx="378.56236"
+     inkscape:cy="485.13589"
+     inkscape:window-width="1641"
+     inkscape:window-height="964"
+     inkscape:window-x="2337"
+     inkscape:window-y="1132"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1"
+     inkscape:snap-nodes="true"
+     inkscape:snap-global="false"
+     inkscape:snap-bbox="false" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient16361">
+      <stop
+         style="stop-color:#000080;stop-opacity:1;"
+         offset="0"
+         id="stop16357" />
+      <stop
+         style="stop-color:#00b8d6;stop-opacity:0"
+         offset="1"
+         id="stop16359" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient16361"
+       id="linearGradient16227"
+       x1="77.911278"
+       y1="127.80179"
+       x2="140.8071"
+       y2="115.23907"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.136608,0,0.00640467,0.99887517,-8.834651,0.14654576)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient16361"
+       id="linearGradient16363"
+       x1="78.018059"
+       y1="153.56218"
+       x2="47.757195"
+       y2="154.33159"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0891846,0,0,0.9992872,-5.1116553,0.09651477)" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="path1373"
+       style="fill:url(#linearGradient16227);fill-opacity:1;stroke:#4158dd;stroke-width:6.465;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 108.70445,108.0009 8.6672,-0.24724 c 4.41677,-0.126 10.7459,-0.46292 14.04653,-4.65976 2.21451,-2.81576 2.40293,-8.127233 2.21208,-13.445828 -1.26417,-35.229839 31.77458,-38.723783 32.37546,3.077367 2.6438,9.090701 -1.8912,9.975591 5.25552,12.064921 19.66062,0.38994 21.2563,16.61977 -0.88183,21.44349 26.05219,1.37168 21.67255,20.10413 -0.24639,20.21384 25.13599,0.90369 20.34339,21.24173 2.532,23.52755 21.0542,-0.18807 21.75559,21.69619 -2.58508,21.28913 -16.8932,0.0292 -71.357806,2.74494 -87.66957,1.86852 -0.774059,-31.4537 1.664474,-53.13524 -0.05244,-84.62976 l 26.93084,-0.41097"
+       sodipodi:nodetypes="csssccccccccc"
+       inkscape:export-filename="/home/peterglen/pgpygtk/webserver/content/siteicons/like.png"
+       inkscape:export-xdpi="5.7574449"
+       inkscape:export-ydpi="5.7574449" />
+    <rect
+       style="fill:url(#linearGradient16363);fill-opacity:1;stroke:#4158dd;stroke-width:2.34514;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect12637"
+       width="33.643913"
+       height="99.542442"
+       x="47.70665"
+       y="101.48005"
+       ry="9.5949183"
+       rx="0"
+       transform="matrix(1,0,0.00641174,0.99997944,0,0)" />
+  </g>
+</svg>

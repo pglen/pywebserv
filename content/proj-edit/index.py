@@ -23,23 +23,6 @@ from . import macros
 
 localdb = None
 
-def fill_data(strx, context):
-
-    global localdb
-    if not localdb:
-        try:
-            localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
-        except:
-            print("Could not create local data for %s", modname)
-
-    #print("strx", strx)
-    out = ""
-    res = localdb.getall()
-    for aa in res:
-        #out += aa[2][3:-2] + " &nbsp; "
-        out += str(aa) + " &nbsp; "
-    return out
-
 def got_index(config, url, query, request, template = "", fname = ""):
 
     if config.pgdebug > 3:
@@ -64,7 +47,14 @@ def got_index(config, url, query, request, template = "", fname = ""):
         localdb.put("key_" + sss, sss, "", "", "")
         localdb.putlog("log_" + sss, sss, "", "", "")
 
-    content = wsgi_util.process_default(config, url, query, request, template, fname, macros.local_table)
+    wcontext = wsgi_util.wContext(config, url, query)
+    wcontext.request    = request
+    wcontext.template   = template
+    wcontext.fname      = fname
+    wcontext.local_table = macros.local_table
+
+    content = wsgi_util.process_default2(wcontext)
+
     return content
 
 # ------------------------------------------------------------------------

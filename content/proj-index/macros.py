@@ -19,6 +19,12 @@ _mac_sitestyle = '''
   width: 50%;
 }
 
+.plain {
+    #border: 0;
+    #background-color: #333333;
+    border-radius: 0px;
+}
+
 .image {
   opacity: 1;
   display: inline;
@@ -65,6 +71,7 @@ a:link, a:visited {
     border-radius: 10px;
     background-color:  #cccccc;
     padding: 10px;
+    max-width: 800px;
 }
 
 </style>
@@ -336,6 +343,6 @@ except:
 wsgi_global.add_one_func("sitestyle", _mac_sitestyle)
 wsgi_global.add_one_func("left", _mac_left)
 
-# Do not forget to make the desendents (project/site) global
+# Do not forget to make the desendents (project/site) globals
 wsgi_global.add_one_func("tabhead", _mac_tabhead)
 wsgi_global.add_one_func("misscol", _mac_misscol)

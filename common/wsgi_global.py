@@ -6,33 +6,25 @@ import sys, time, importlib
 
 # Get strings and functions
 
-
 from wsgi_style import *
 from wsgi_res   import *
 from wsgi_func  import *
 
-verbose = 0
-pgdebug = 0
-
 # A list of variables and strings. Making an error here will down the site.
-# The local macro can override the global one. Make sure you do not expect
+# The newly defined local macro can override the global one. Make sure you do not expect
 # nested override, as the macro is expanded with locals first, globals second;
-# The local mocro will not override the macro that is uncovered by global
+# The local macro will not override the macro that is uncovered by global
 # macro expansion;
 
 global_table = [
-    #["var",         "<font size=+1>variable { deep } </font>"],
-    #["no problem",  "recursive expansion is not even a <b>little</b> problem ... "],
-    #["CompanyName", "Company Name Here"],
-
-    ["spacer",      "<table><tr><td></table>"],
-    ["linespacer",  "<tr><td height=8>"],
-    ["sitecolor",   "bgcolor=#aaffbb"],
-    ["feedwidth",   "400"],
-    ["feedheight",  "300"],
-    ["thumbwidth",  "120"],
-    ["thumbheight",  "80"],
-    ["mycolor",     "#cccccc"],
+    ["spacer",          "<table><tr><td></table>"],
+    ["linespacer",      "<tr><td height=8>"],
+    ["sitecolor",       "bgcolor=#aaffbb"],
+    ["feedwidth",       "400"],
+    ["feedheight",      "300"],
+    ["thumbwidth",      "120"],
+    ["thumbheight",     "80"],
+    ["nullcolor",       "#cccccc"],
   ]
 
 # ------------------------------------------------------------------------
@@ -111,27 +103,16 @@ def     add_one_url(url, mfunc, mpage = None, fname=""):
     it was generated without template substitution.
     '''
 
-    global urlmap, pgdebug
+    global urlmap
 
     try:
         urlmap.add(url, mfunc, mpage, fname)
     except:
         print("Cannot add url map", sys.exc_info())
 
-    if pgdebug > 3:
-        print("urls:", end= "")
-        for aa in urlmap.urls:
-           print(" ", aa[0], end = " ")
-        print("")
-
 # ------------------------------------------------------------------------
 
 def  _load_project(pdir, mainclass):
-
-    global verbose, pgdebug
-
-    if pgdebug > 3:
-        print("Loading project from", "'" + pdir + "'")
 
     ret = []
     try:
@@ -148,14 +129,10 @@ def  _load_project(pdir, mainclass):
                     if mname in sys.modules.keys():
                         #print("imported already", mname)
                         continue
-                    if verbose:
-                        print("importing", fname)
                     try:
                         fp = open(fname)
                         fff = fp.read().split()
                         mod = importlib.__import__(mname, globals(), locals(), fff, 0)
-                        if pgdebug > 3:
-                            print("Module:", mod)
                     except:
                         wsgi_util.put_exception("Cannot import module: '%s'" % fname)
                         msg = "Module %s failed to load" % aa
@@ -163,9 +140,6 @@ def  _load_project(pdir, mainclass):
                         ret = [msg.encode("utf-8"),]
                         # Keep loading
                         continue
-
-                    #if verbose:
-                    #    print("imported", mod)
 
                     ''' did not work
                     try:
@@ -194,16 +168,9 @@ def     getprojects(mainclass):
     '''
         Add (import) projects in directories starting with 'proj'
         for automatic inclusion into the site.
-        The initial proj ect dir was called 'projects'
+        The initial proj-ect dir was called 'projects'
     '''
 
-    global vebose, pgdebug
-
-    #verbose =  mainclass.config.verbose
-    #pgdebug =  mainclass.config.pgdebug
-
-    if pgdebug > 2:
-        print("getprojects beg", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
 
     pdir = "proj"
     dirs = os.listdir(".")
@@ -215,14 +182,6 @@ def     getprojects(mainclass):
     #print("pl delta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
 
     # Print all URLS
-
-    if pgdebug > 3:
-        print("Dumping urlmap")
-        for aa in urlmap.urls:
-           print("     ", aa[0])
-           #print("     ", aa)
-        print("End urlmap")
-
     cnt = 0
     for aa in urlmap.urls:
         # Check for duplicate
@@ -235,8 +194,5 @@ def     getprojects(mainclass):
         cnt += 1
         if ddd > 1:
             print("   ** Warn: Duplicate URL", xcnt, url)
-
-    if pgdebug > 2:
-        print("getprojects end", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
 
 # EOF

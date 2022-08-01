@@ -64,8 +64,6 @@ try:
 except ImportError:
      from urlparse import urlparse, unquote, parse_qs, parse_qsl
 
-#from urllib.parse import urlparse, unquote, parse_qs, parse_qsl
-
 from wsgiref import simple_server, util
 
 import gettext
@@ -325,7 +323,6 @@ def application(environ, respond):
         Config.pgdebug = myconf.pgdebug
         Config.verbose = myconf.verbose
         global usr_cnt, mainclass
-
 
         usr_cnt += 1
         #print("Query arrived", os.getpid(), usr_cnt)

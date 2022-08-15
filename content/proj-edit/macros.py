@@ -7,7 +7,7 @@ import  wsgi_util, wsgi_func, wsgi_global, wsgi_data
     Local macros and data. Register it after init or use the "_mac_ prefix to auto register
 '''
 
-local_table = []
+from . import common
 
 ppp = __file__.split('/')
 plen = len(ppp)
@@ -16,7 +16,9 @@ modname = ppp[plen-2] + "-" + ppp[plen-1]
 _mac_feedwidth = '800'
 _mac_ShortCName = ''' United Planet Peace '''
 
-def fill_data():
+# ------------------------------------------------------------------------
+
+def fill_data(recnum):
 
     #print("data/%s_data.sqlt" % modname)
 
@@ -27,7 +29,7 @@ def fill_data():
         wsgi_util.put_exception("opening SQL")
         return
 
-    #print("strx", strx)
+    #print("recnum", recnum)
     out = ""
     res = localdb.getall()
     for aa in res:
@@ -72,22 +74,25 @@ def imgrow_data(strx, context):
     sss = wsgi_func.parse_args(strx, context)
     foot = '''<td width=10> <td>  '''
 
-    #print("sss", sss)
-    #return "burn"
-    data = fill_data()
+    #print("arg sss", sss)
+    data = fill_data(int(sss[1]))
     #print("data", data)
 
     if not len(data):
         strx = '''
+        <form action=editor.html method=post>
         <tr>
             <td width=10>
             <td width=10>
             <td align=center>
             <td align=center colspan=6>
             <p><font size=+2>No data %s</font>
+            <input type=submit id=idsub name=ed_%s value="Edit" >
+            <input type=submit id=idsub name=del_%s value="Del" >
             <td width=10>
             <td>
-        ''' % sss[1]
+        </form>
+        ''' % (sss[1], sss[1], sss[1])
         return strx
 
     strx = '''
@@ -169,7 +174,7 @@ def mid_rows(strx, context):
     #print(strx, context)
     ret = '''
     <tr> <td colspan=7 align=center>
-            <p><font size=+3>Data Review Header</font>
+            <p><font size=+3>Data Review</font>
     '''
     for aa in range(5):
         #print("One row")
@@ -206,7 +211,7 @@ _mac_right = '''
         <tr><td align=center>
             &nbsp; &nbsp;
             <b>Last column, maybe ads</b><br>
-            cogito ero sum cogito ero sum cogito ero sum
+            cogito ergo sum cogito ergo sum cogito ero sum
             cogito ero sum cogito ero sum cogito ero sum
             cogito ero sum cogito ero sum cogito ero sum
             { deep }<br>
@@ -243,10 +248,9 @@ _mac_header = '''
 '''
 
 try:
-    wsgi_util.add_locals(locals().copy(), local_table)
-
-    wsgi_util.add_local_func("mid_rows", mid_rows, local_table)
-    wsgi_util.add_local_func("imgrow_data", imgrow_data, local_table)
+    wsgi_util.add_locals(locals().copy(), common.local_table)
+    wsgi_util.add_local_func("mid_rows", mid_rows, common.local_table)
+    wsgi_util.add_local_func("imgrow_data", imgrow_data, common.local_table)
 
 except:
     #print("Exception on editor init vars", sys.exc_info())

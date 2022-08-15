@@ -102,9 +102,11 @@ class xWebServer():
         Config.mainclass = self
         Config.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
         Config.datapath = Config.mypath + "content" + os.sep
+        self.config = Config
 
-        #if self.config.pgdebug > 6:
-        #    print("self.config.mypath", self.config.mypath, "self.config.datapath", self.config.datapath)
+        #if self.config.pgdebug > 1:
+        #    print("self.config.mypath", self.config.mypath)
+        #    print("self.config.datapath", self.config.datapath)
 
         self.stime = datetime.datetime.now()
         try:
@@ -142,8 +144,9 @@ class xWebServer():
         self.query = ""
         if 'QUERY_STRING' in environ:
             self.query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
-            #if self.config.pgdebug > 4:
-            #    print("QUERY_STRING", self.query)
+            if self.config.pgdebug > 2:
+                if self.query:
+                    print("QUERY_STRING", self.query)
 
         self.cookie = ""
         if 'HTTP_COOKIE' in environ:
@@ -167,10 +170,12 @@ class xWebServer():
                     self.request_org = environ['wsgi.input'].read(content_length).decode()
                     #print("Request_org", self.request_org)
                     self.request = parse_qsl(str(self.request_org), keep_blank_values=True)
-                    #if self.config.pgdebug > 5:
-                    #    print("Request", self.request)
+                    if self.config.pgdebug > 2:
+                        if self.request:
+                            print("Request", self.request)
                 except:
                     print("No post data", sys.exc_info())
+                    wsgi_util.put_exception("No post data")
                     pass
 
         self.url = ""
@@ -355,7 +360,8 @@ def xversion():
 
 def xhelp():
     print("Helping 1.0")
-    #sys.exit(0)
+    print("d:h?vV:fxctoktp:")
+    sys.exit(0)
 
 # ------------------------------------------------------------------------
 

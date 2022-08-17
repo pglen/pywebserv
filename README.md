@@ -124,9 +124,11 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
 		LogLevel error
 	
 		WSGIScriptAlias / /home/peterglen/pgpygtk/webserver/wsgi_main.py
+
 		DocumentRoot /home/peterglen/pgpygtk/webserver
 
 	<Directory /home/peterglen/pgpygtk/webserver>
+
 		SetHandler wsgi-script
 		Options ExecCGI
 		Require all granted

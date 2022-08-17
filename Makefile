@@ -17,7 +17,7 @@ git:
 	git add .
 	git commit -m "$(AUTOCHECK)"
 	git push
-	#git push local
+	git push local
 
 run:
 	./wsgi_server.py

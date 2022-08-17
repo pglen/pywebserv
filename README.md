@@ -36,11 +36,11 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
 
 ### Development
 
-    Assuming Linux / Firefox setup; start the wsgi_server.py in a terminal. This will
-    start a web server, and serve the site on port 8000. Connect firefox to localhost:8000.
-    Edit away; When a file is modified, the 'wsgi_server' utility will refresh
-    the firefox page. Instant feedback without the load / refresh cycle. Natually, other
-    setups can be adjusted for, see source for details.
+   Assuming Linux / Firefox setup; start the wsgi_server.py in a terminal. This will
+   start a web server, and serve the site on port 8000. Connect firefox to localhost:8000.
+   Edit away; When a file is modified, the 'wsgi_server' utility will refresh
+   the firefox page. Instant feedback without the load / refresh cycle. Natually, other
+   setups can be adjusted for, see source for details.
 
  On the screen shot below, images are added, images are dynamically re sized with the PIL
  library;
@@ -48,7 +48,7 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
   ![screen shot of image processing](content/siteicons/next_step.png)
 
  Projects are added in a separate sub directory;
- The project is isolated, errors in the project do not influence (down) the site;
+ The projects are isolated, errors in the project do not influence (down) the site;
  only the page with the error, and (only) an error message shows.
 
   ![screen shot of project and tiles processing](content/siteicons/tiles.png)
@@ -76,28 +76,28 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
                 expand macro -> present page
             else
                 call function in url table
-                function fills in everything -> present
+                function fills in everything -> present it
         else
             if static file ->
                 present it
             else
-                if 404 file
+                if 404 or error file
                     present it
                 else
-                    404 message
+                    404 error message
 
  To create a new project:
 
-    Add a directory to the web server's "content" directory
+    Add a directory to the web server's "./content/" directory
         that starts with 'proj' (like proj-hello or proj-sales)
     fill in the directory with content
-        o Initial .py file to configure the project (any name)
-        o Content that responds to the callbacks, or presented as is
+        o Initial .py file to configure the project (index.py)
+        o Content that responds to the callbacks, or ..
+		...  content presented as is
 
     See proj-index for an example home page. Also proj* for more
-    detailed examples. Please note how simple a calendar
-    implementation becomes.
-
+    detailed examples. 
+    Please note how simple a calendar implementation becomes.
 
 ### History:
 

@@ -115,6 +115,29 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
 
     Also see 'git log' for more
 
+## Apache config (example on port 7777
+)
+Listen 7777
+
+<VirtualHost *:7777>
+	ServerName localhost
+	LogLevel error
+	
+	WSGIScriptAlias / /home/peterglen/pgpygtk/webserver/wsgi_main.py
+	DocumentRoot /home/peterglen/pgpygtk/webserver
+
+<Directory /home/peterglen/pgpygtk/webserver>
+	SetHandler wsgi-script
+	Options ExecCGI
+	Require all granted
+
+<Files wsgi_main.py>
+	Require all granted
+</Files>
+</Directory>
+
+</VirtualHost>
+
 ## License
 
  Open source.

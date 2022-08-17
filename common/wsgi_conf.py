@@ -28,6 +28,21 @@ class Configx:
 
 builtins.Config = Configx
 
+class CarryOn:
+
+    '''
+    Parameters are going around all the way to processing
+    '''
+    def __init__(self):
+
+        self.environ = None
+        self.mainclass = None
+
+    def tostr():
+        print("environ:", Carryon.environ, "mainclass:", Configx.pgdebug)
+
+
+
 #def showvals():
 #
 #    return "Verb = " + str(Config.verbose),  "Deb = " + str(Config.pgdebug)

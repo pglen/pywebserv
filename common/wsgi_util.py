@@ -35,7 +35,7 @@ class  wContext():
         print("request=", self.request, end=" - ")
         print("template=", self.template, end=" - ")
         print("fname=", self.fname)
-        print("local_table len:", len(self.local_table))
+        #print("local_table len:", len(self.local_table))
 
 # ------------------------------------------------------------------------
 
@@ -105,6 +105,7 @@ nogo = ("OPENHAB", "XDG_", "LS_", "SHELL", "SESSION", "QT",
                 "MANDAT", "WINDOW", "TERM", "GDM", "VIRT", "HUB", "VTE")
 
 def printenv(environ, all=False):
+    print("-----------------")
     for aa in environ.keys():
         #print("aa", aa)
         fff = True
@@ -112,10 +113,11 @@ def printenv(environ, all=False):
             if cc in aa:
                 fff = False
         if fff or all:
-            print(aa, environ[aa])
+            print(aa, "=", environ[aa])
 
         #if "HTTP_" in aa:
         #    print(aa, environ[aa])
+    #print("-----------------")
     print()
 
 def getwenv(environ, all=False):

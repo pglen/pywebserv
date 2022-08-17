@@ -118,8 +118,8 @@ def recursive_parse(buff, context, local_table):
 
     # Do local table first, so it overrides global
     if local_table:
-        if Config.verbose:
-            print("local_table len: ", len(local_table))
+        #if Config.verbose:
+        #    print("local_table len: ", len(local_table))
 
         #print("LOCAL")
         try:

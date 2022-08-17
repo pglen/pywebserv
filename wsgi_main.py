@@ -82,7 +82,7 @@ class xWebServer():
 
     '''
      This class has all the info we would need for page generation. Add urls and functions
-     to complete the reply. The return value of the process_rq function is the
+     to complete the reply. The return value of the process_request function is the
      output to the client.
     '''
 
@@ -93,11 +93,12 @@ class xWebServer():
         # import here so apache wsgi interface gets the files
         import wsgi_global, wsgi_content, wsgi_util
         import wsgi_data, wsgi_func, wsgi_parse
-        # wsgi_conf
 
         #self.mark = time.perf_counter()
-        self.respond = respond
-        self.environ = environ
+        #self.respond = respond
+        #self.environ = environ
+
+        #wsgi_util.printenv(environ)
 
         Config.mainclass = self
         Config.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
@@ -109,10 +110,11 @@ class xWebServer():
         #    print("self.config.datapath", self.config.datapath)
 
         self.stime = datetime.datetime.now()
-        try:
-            self.sql = wsgi_data.wsgiSql(Config.datapath + "data/wsgi_main.sqlt")
-        except:
-            print("Warn: Cannot create database", sys.exc_info())
+        #try:
+        #    self.sql = wsgi_data.wsgiSql(Config.datapath + "data/wsgi_main.sqlt")
+        #except:
+        #    print("Warn: Cannot create database", sys.exc_info())
+        #
 
         logf = Config.datapath + "data/wsgi_main.log"
         try:
@@ -133,13 +135,17 @@ class xWebServer():
 
         #if self.config.pgdebug > 8:
         #    wsgi_util.printenv(environ, True)
-
         #print(environ['wsgi.version'])
         #print("Loaded in ", self.mypath)
         #wsgi_util.print_httpenv(environ)
 
         wsgi_func.build_initial_table()
         wsgi_func.build_initial_rc()
+
+    def parse_instance(self, environ, respond):
+        import wsgi_global
+
+        self.environ = environ
 
         self.query = ""
         if 'QUERY_STRING' in environ:
@@ -189,24 +195,29 @@ class xWebServer():
         self.mtype = mimetypes.guess_type(self.fn)[0]
         if not self.mtype:
             self.mtype = "text/plain"
-        self.urlmap = wsgi_global.urlmap
+
 
     def _translate_url(self, config, url):
+        import wsgi_global, wsgi_content, wsgi_util
+
         ''' return details for a url '''
         #print("Looking up", url)
         par = urlparse(url)
-        got, tmpl, filen = self.urlmap.lookup(par.path)
+        got, tmpl, filen = wsgi_global.urlmap.lookup(par.path)
         #print("Got ", got, tmpl, filen)
         return got, tmpl, filen
 
     # --------------------------------------------------------------------
     #  Dynamic content - overrides static
 
-    def process_req(self):
+    def process_request(self, request, respond):
 
-        ''' This executes the request, after the initialize-r parsed everything '''
+        '''
+            This executes the request, after the main initializer
+            parsed everything
+        '''
 
-        import wsgi_content, wsgi_util
+        import wsgi_global, wsgi_content, wsgi_util
 
         #print("serving", self.url, self.fn)
 
@@ -214,15 +225,18 @@ class xWebServer():
             callme, tmpl, filen = self._translate_url(Config, self.url)
         except:
             wsgi_util.put_exception("call proj entry")
+            return
 
         if(callme):
             content = ""
             try:
                 #print("Callback",  self.fn, self.url)
                 content = callme(Config, self.url, self.query, self.request, tmpl, filen)
+                #content = callme2(Config, self.url, self.query, self.request, tmpl, filen)
+
             except:
-                wsgi_util.put_exception("At process_req " + str(filen))
-                self.respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
+                wsgi_util.put_exception("At process_request " + str(filen))
+                respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
 
                 fn5 = Config.datapath + os.sep + "html/500.html"
                 if os.path.exists(fn5):
@@ -231,7 +245,7 @@ class xWebServer():
                     content = "Empty results from page assembly."
                 return [bytes(content, "utf-8")]
 
-            self.respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
+            respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
             return [bytes(content, "utf-8")]
 
         # Static content
@@ -256,7 +270,7 @@ class xWebServer():
                 self.mtype = mimetypes.guess_type(found_file)[0]
                 if not self.mtype:
                     self.mtype = "text/plain"
-                self.respond('200 OK', [('Content-Type', self.mtype + ';charset=UTF-8')])
+                respond('200 OK', [('Content-Type', self.mtype + ';charset=UTF-8')])
                 fp = util.FileWrapper(open(found_file, "rb"))
                 return fp
 
@@ -298,7 +312,6 @@ class xWebServer():
         #print("ppp", ppp)
         return ppp
 
-usr_cnt = 0
 mainclass = None
 
 # ------------------------------------------------------------------------
@@ -309,6 +322,8 @@ def application(environ, respond):
     '''
     WSGI main entry point. The web server (like apache) will call this.
     '''
+
+    mark = time.perf_counter()
 
     #print("Started:", environ['PATH_INFO'])
 
@@ -325,27 +340,49 @@ def application(environ, respond):
         #wsgi_util.append_file("Started Server Page\n")
 
         global myconf
+
         Config.pgdebug = myconf.pgdebug
         Config.verbose = myconf.verbose
         global usr_cnt, mainclass
 
-        usr_cnt += 1
+        #usr_cnt += 1
         #print("Query arrived", os.getpid(), usr_cnt)
-        # if not mainclass:
-        try:
-            mainclass = xWebServer(environ, respond)
-        except:
-            wsgi_util.put_exception("Creating Server OBJ")
+
+        if ".html" in environ['PATH_INFO']:
+            print("tdelta0", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
 
         # Only do it one time (not for dev deployment)
-        if True: #usr_cnt == 1:
+        if not mainclass:
             try:
+                mainclass = xWebServer(environ, respond)
+            except:
+                wsgi_util.put_exception("Creating Server OBJ")
+            try:
+                import wsgi_global
                 wsgi_global.getprojects(mainclass)
             except:
                 wsgi_util.put_exception("Loading Projects")
+            print("Main object inited", mainclass)
+        else:
+            pass
+            #print("Initialized main already")
 
-        wdata = mainclass.process_req()
-        #print("tdelta", "%.4f" % ( (time.perf_counter() - mainclass.mark) * 1000), "ms")
+        if ".html" in environ['PATH_INFO']:
+            print("tdelta1", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
+
+        mainclass.parse_instance(environ, respond)
+
+        if ".html" in environ['PATH_INFO']:
+            print("tdelta2", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
+
+        wdata = mainclass.process_request(environ, respond)
+
+        #respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
+        #wdata = [bytes("hello", "utf-8"), ]
+
+        if ".html" in environ['PATH_INFO']:
+            print("tdelta", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
+
         return wdata
 
     except:

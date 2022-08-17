@@ -71,6 +71,12 @@ gettext.bindtextdomain('pyedpro', './locale/')
 gettext.textdomain('pyedpro')
 _ = gettext.gettext
 
+class comline():
+    CLEAR_CONFIG = False
+    SHOW_CONFIG = False
+    SHOW_TIMING = False
+    USE_STDOUT = False
+
 class myconf():
     verbose = 0;
     pgdebug = 0;
@@ -348,8 +354,8 @@ def application(environ, respond):
         #usr_cnt += 1
         #print("Query arrived", os.getpid(), usr_cnt)
 
-        if ".html" in environ['PATH_INFO']:
-            print("tdelta0", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
+        #if ".html" in environ['PATH_INFO']:
+        #    print("tdelta0", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
 
         # Only do it one time (not for dev deployment)
         if not mainclass:
@@ -362,26 +368,26 @@ def application(environ, respond):
                 wsgi_global.getprojects(mainclass)
             except:
                 wsgi_util.put_exception("Loading Projects")
-            print("Main object inited", mainclass)
+            #print("Main object inited", mainclass)
         else:
             pass
             #print("Initialized main already")
 
-        if ".html" in environ['PATH_INFO']:
-            print("tdelta1", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
+        #if ".html" in environ['PATH_INFO']:
+        #    print("tdelta1", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
 
         mainclass.parse_instance(environ, respond)
 
-        if ".html" in environ['PATH_INFO']:
-            print("tdelta2", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
+        #if ".html" in environ['PATH_INFO']:
+        #    print("tdelta2", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
 
         wdata = mainclass.process_request(environ, respond)
 
         #respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
         #wdata = [bytes("hello", "utf-8"), ]
 
-        if ".html" in environ['PATH_INFO']:
-            print("tdelta", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
+        #if ".html" in environ['PATH_INFO']:
+        #    print("tdelta", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
 
         return wdata
 
@@ -442,13 +448,13 @@ if __name__ == '__main__':
         if aa[0] == "-f":
             myconf.full_screen = True
         if aa[0] == "-x":
-            CLEAR_CONFIG = True
+            comline.CLEAR_CONFIG = True
         if aa[0] == "-c":
-            SHOW_CONFIG = True
+            comline.SHOW_CONFIG = True
         if aa[0] == "-t":
-            SHOW_TIMING = True
+            comline.SHOW_TIMING = True
         if aa[0] == "-o":
-            USE_STDOUT = True
+            comline.USE_STDOUT = True
         if aa[0] == "-k":
             myconf.show_keys = True
         if aa[0] == "-t":
@@ -456,6 +462,15 @@ if __name__ == '__main__':
             sys.settrace(tracer)
 
     print("\n===== Starting HTTPD on port {}, control-C to stop".format(myconf.port))
+
+    #print("comline", );
+    for aa in dir(comline):
+        if "__" not in aa:
+            try:
+                print(aa, "=", comline.__getattribute__(comline, aa))
+            except:
+                pass
+                print(sys.exc_info())
 
     class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
 

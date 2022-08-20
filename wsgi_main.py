@@ -82,6 +82,7 @@ class myconf():
     pgdebug = 0;
     show_keys  = 0
     port = 8000
+
 # ------------------------------------------------------------------------
 
 class xWebServer():
@@ -101,8 +102,6 @@ class xWebServer():
         import wsgi_data, wsgi_func, wsgi_parse
 
         #self.mark = time.perf_counter()
-        #self.respond = respond
-        #self.environ = environ
 
         #wsgi_util.printenv(environ)
 
@@ -110,6 +109,9 @@ class xWebServer():
         Config.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
         Config.datapath = Config.mypath + "content" + os.sep
         self.config = Config
+
+        import wsgi_conf
+        self.carryon = wsgi_conf.CarryOn()
 
         #if self.config.pgdebug > 1:
         #    print("self.config.mypath", self.config.mypath)
@@ -193,6 +195,7 @@ class xWebServer():
         self.url = ""
         if 'PATH_INFO' in environ:
             self.url = environ['PATH_INFO']
+        #print("self.url", self.url)
 
         splitx = os.path.split(self.url)
         tmpname = self._assem_path(splitx)
@@ -205,12 +208,12 @@ class xWebServer():
 
     def _translate_url(self, config, url):
         import wsgi_global, wsgi_content, wsgi_util
-
         ''' return details for a url '''
+
         #print("Looking up", url)
         par = urlparse(url)
         got, tmpl, filen = wsgi_global.urlmap.lookup(par.path)
-        #print("Got ", got, tmpl, filen)
+        #print("_translate_url Got ", got, tmpl, filen)
         return got, tmpl, filen
 
     # --------------------------------------------------------------------
@@ -222,13 +225,11 @@ class xWebServer():
             This executes the request, after the main initializer
             parsed everything
         '''
-
         import wsgi_global, wsgi_content, wsgi_util
-
         #print("serving", self.url, self.fn)
 
         try:
-            callme, tmpl, filen = self._translate_url(Config, self.url)
+            callme, template, fname = self._translate_url(Config, self.url)
         except:
             wsgi_util.put_exception("call proj entry")
             return
@@ -236,12 +237,17 @@ class xWebServer():
         if(callme):
             content = ""
             try:
-                #print("Callback",  self.fn, self.url)
-                content = callme(Config, self.url, self.query, self.request, tmpl, filen)
-                #content = callme2(Config, self.url, self.query, self.request, tmpl, filen)
+                self.carryon.url = self.url
+                self.carryon.query = self.query
+                self.carryon.request = self.request
+                self.carryon.template = template
+                self.carryon.fname = fname
+                #self.carryon.print()
 
+                #print("Callback",  self.fn, self.url)
+                content = callme(Config, self.carryon)
             except:
-                wsgi_util.put_exception("At process_request " + str(filen))
+                wsgi_util.put_exception("At process_request " + str(fname))
                 respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
 
                 fn5 = Config.datapath + os.sep + "html/500.html"
@@ -256,16 +262,31 @@ class xWebServer():
 
         # Static content
         else:
+            #self.fn = os.path()
+            #print("Looking for file", self.fn)
             found_file = ""
             while 1:
                 if os.path.exists(self.fn):
                     found_file = self.fn
                     break
+
+                fn2 = self._pad_path(self.fn, "static")
+                if os.path.exists(self.fn):
+                    found_file = self.fn
+                    break
+
                 fn2 = self._pad_path(self.fn, "static")
                 if os.path.exists(fn2):
                     found_file = fn2
                     break
+
                 fn2 = self._pad_path(self.fn, "html")
+                if os.path.exists(fn2):
+                    found_file = fn2
+                    break
+
+                fn2 = Config.datapath + os.sep + "css" + os.sep \
+                                        + os.path.basename(self.url)
                 if os.path.exists(fn2):
                     found_file = fn2
                     break
@@ -281,7 +302,9 @@ class xWebServer():
                 return fp
 
             else:       # Error content
-                self.respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
+                print("did not find file", found_file)
+                respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
+
                 fn4 = Config.datapath + os.sep + "html/404.html"
                 if os.path.exists(fn4):
                     content = wsgi_content.got_404(Config, fn4, self.query)
@@ -464,13 +487,13 @@ if __name__ == '__main__':
     print("\n===== Starting HTTPD on port {}, control-C to stop".format(myconf.port))
 
     #print("comline", );
-    for aa in dir(comline):
-        if "__" not in aa:
-            try:
-                print(aa, "=", comline.__getattribute__(comline, aa))
-            except:
-                pass
-                print(sys.exc_info())
+    #for aa in dir(comline):
+    #    if "__" not in aa:
+    #        try:
+    #            print(aa, "=", comline.__getattribute__(comline, aa))
+    #        except:
+    #            pass
+    #            print(sys.exc_info())
 
     class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
 

@@ -25,25 +25,28 @@ from . import macros
 from . import editor
 from . import common
 
-localdb = None
+def got_index(config, carry):
 
-def got_index(config, url, query, request, template = "", fname = ""):
+    if Config.verbose:
+        print("got_index() url = '%s'" % carry.url)
 
-    if config.pgdebug > 3:
-        print("got_index() url=%s"% url, "query=%s" %query,
-                    "request=%s" % request, "template=%s" % template )# , "fname=%s" % fname)
+    if Config.pgdebug > 1:
+        print("got_index()", "url:", url, "query:", query)
 
-    if config.pgdebug > 0:
-        print("editor: got_index() url = '%s'" % url)
+    if Config.pgdebug > 2:
+        print(wsgi_conf.config.showvals())
 
-    if request:
+    if Config.pgdebug > 3:
+        print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
+                    "request=%s" % carry.request,
+                         "template=%s" % carry.template, "fname=%s" % carry.fname)
+    if carry.request:
         rq = []
         for aa in request:
             rq.append(aa[1])
 
         #print("data", rq)
         #print("database", "data/%s.sqlt" % projname)
-
         try:
             #startt = time.perf_counter()
             localdb = wsgi_data.wsgiSql("data/%s.sqlt" % projname)
@@ -55,22 +58,8 @@ def got_index(config, url, query, request, template = "", fname = ""):
             print("Cannot put data")
             wsgi_util.put_exception("in index data")
 
-    wcontext = wsgi_util.wContext(config, url, query)
-    wcontext.request    = request
-    wcontext.template   = template
-    wcontext.fname      = fname
-    wcontext.local_table = common.local_table
-
-    content = wsgi_util.process_default2(wcontext)
-
-    try:
-        localdb = wsgi_data.wsgiSql("data/%s.sqlt" % projname)
-        #localdb.putlog("log_" + sss, sss, "", "", "")
-        localdb.close()
-    except:
-        print("Cannot put log data")
-        wsgi_util.put_exception("in index data")
-
+    carry.local_table = common.local_table
+    content = wsgi_util.process_default2(carry)
     return content
 
 # ------------------------------------------------------------------------

@@ -7,7 +7,7 @@ import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 ''' Local macros and data. Register it after init or use the _mac_ prefix to auto register
 '''
 
-local_table = []
+from . import common
 
 _mac_tabhead = "#ccffcc"
 _mac_misscol = "#eeeeee"
@@ -125,8 +125,8 @@ _mac_mission_statement = '''
     and demand without bounds. And it will establish a new, peaceful equilibrium.
      Globalization may create a happier human race with higher quality of life and more balance.
       For EVERYBODY. <p>
-    &nbsp; &nbsp; The term globalization is used in the context of global cooperation,
-    not global control. We live in an inseparable entity, our planet, Earth. This is the basis
+    &nbsp; &nbsp; The term globalization is used in the context of global cooperation.
+    We live in an inseparable entity, our planet, Earth. This is the basis
     for our existence, and the basis for everything else. Please look around for ideas on
     the site, approve or disapprove as you feel, and please help if you so desire. And help
     you can. Every one of us makes an impact.<p>
@@ -335,7 +335,7 @@ try:
     vvv = locals().copy()
     for aa in vvv:
         if "_mac_" in aa[:5]:
-            wsgi_util.add_local_func(aa[5:],  vvv[aa], local_table)
+            wsgi_util.add_local_func(aa[5:],  vvv[aa], common.local_table)
 except:
     print("Exception on index init vars", sys.exc_info())
 

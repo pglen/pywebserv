@@ -9,26 +9,46 @@ from . import common
     Data Editor
 '''
 
-def got_editor(config, url, query, request, template = "", fname = ""):
+def got_editor(config, carry):
 
-    #print("Called editor")
-    wcontext = wsgi_util.wContext(config, url, query)
-    wcontext.request    = request
-    wcontext.template   = template
-    wcontext.fname      = fname
-    wcontext.local_table = common.local_table
+    if Config.verbose:
+        print("got_index() url = '%s'" % carry.url)
 
-    #print(common.local_table)
+    if Config.pgdebug > 1:
+        print("got_index()", "url:", url, "query:", query)
 
-    content = wsgi_util.process_default2(wcontext)
+    if Config.pgdebug > 2:
+        print(wsgi_conf.config.showvals())
 
+    if Config.pgdebug > 3:
+        print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
+                    "request=%s" % carry.request,
+                         "template=%s" % carry.template, "fname=%s" % carry.fname)
+    if carry.request:
+        rq = []
+        for aa in request:
+            rq.append(aa[1])
+
+        #print("data", rq)
+        #print("database", "data/%s.sqlt" % projname)
+        try:
+            #startt = time.perf_counter()
+            localdb = wsgi_data.wsgiSql("data/%s.sqlt" % projname)
+            localdb.put("key_" + rq[0], rq[0], rq[1], rq[2], "")
+            localdb.close()
+            # Measure time needed
+            #print("database op %f msec " %  ((time.perf_counter() - startt) * 1000))
+        except:
+            print("Cannot put data")
+            wsgi_util.put_exception("in index data")
+
+    carry.local_table = common.local_table
+    content = wsgi_util.process_default2(carry)
     return content
 
 
 def one_center(strx, context):
-
     content = "<td width=70% align=center valign=top> <p><p>Center Col <p> <p>"
-
     return content
 
 try:

@@ -38,10 +38,15 @@ class CarryOn:
         self.environ = None
         self.mainclass = None
 
-    def tostr():
+    def tostr(self):
         print("environ:", Carryon.environ, "mainclass:", Configx.pgdebug)
 
-
+    def print(self):
+        print("self.carryon.url",     self.url)
+        print("self.carryon.query",   self.query)
+        print("self.carryon.request", self.request)
+        print("self.carryon.tmplate", self.template)
+        print("self.carryon.fname",   self.fname)
 
 #def showvals():
 #

@@ -105,6 +105,9 @@ def     add_one_url(url, mfunc, mpage = None, fname=""):
 
     global urlmap
 
+    if not mpage:
+        mpage = "index.html"
+
     try:
         urlmap.add(url, mfunc, mpage, fname)
     except:

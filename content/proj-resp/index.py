@@ -18,6 +18,8 @@ import os, sys, random, datetime, time
 
 sys.path.append("../")
 
+from . import common
+
 import wsgi_global, wsgi_util, wsgi_func, wsgi_parse
 
 # Add URL; too simple, but is communicates the idea
@@ -102,37 +104,31 @@ def     mock_cal_func(strx, context):
         print("Exception on two", sys.exc_info())
     return content
 
-def got_index(config, url, query, request, template = "", fname = ""):
+def     got_index(config, carry):
 
-    print("got_index()", "url:", url, "query:", query, "fname:", fname)
+    if Config.verbose:
+        print("got_index() url = '%s'" % carry.url)
 
-    #template = "responsive.html"
-    #print(wsgi_conf.config.showvals())
+    if Config.pgdebug > 1:
+        print("got_index()", "url:", carry.url, "query:", carry.query)
 
-    wcontext = wsgi_util.wContext(config, url, query)
-    wcontext.request    = request
-    wcontext.template   = template
-    wcontext.fname      = fname
-    wcontext.local_table = macros.local_table
-
-    wcontext.print()
-    content = wsgi_util.process_default2(wcontext)
-
+    carry.local_table = common.local_table
+    content = wsgi_util.process_default2(carry)
     return content
 
 # ------------------------------------------------------------------------
 # Add all the functions for the urls; this function is called
 # When the url is accessed
 
-#add_one_url("/aa", got_aa)
-#add_one_url("/bb", got_bb)
-wsgi_global.add_one_url("/resp", got_index, "", __file__)
+#wsgi_global.add_one_url("/resp/",  got_index, "index.html", __file__)
+wsgi_global.add_one_url("/resp/",  got_index, "resp.html", __file__)
+wsgi_global.add_one_url("/resp/index.html", got_index, "index.html", __file__)
+wsgi_global.add_one_url("/resp/resp.html", got_index, "resp.html", __file__)
 
 # ------------------------------------------------------------------------
 # Add all the functions and the macro names here
 # Simply refer to the macro in the html temple, and it will get called
 # and the output substituted
-
 
 wsgi_global.add_one_func("app3", mock_cal_func)
 

@@ -21,31 +21,27 @@ modname = ppp[plen-2] + "-" + ppp[plen-1]
 #print("Loaded mod:", modname)
 
 from . import macros
+from . import common
 
-def got_index(config, url, query, request, template = "", fname = ""):
+def got_index(config, carry):
 
-    #print("got_index()", "url:", url, "query:", query)
-    #print(wsgi_conf.config.showvals())
+    if Config.verbose:
+        print("got_index() url = '%s'" % carry.url)
+
+    if Config.pgdebug > 1:
+        print("got_index()", "url:", carry.url, "query:", carry.query)
+
+    if Config.pgdebug > 2:
+        print(wsgi_conf.config.showvals())
 
     if Config.pgdebug > 3:
-        print("got_index() url=%s"% url, "query=%s" %query,
-                    "request=%s" % request, "template=%s" % template, "fname=%s" % fname)
-    if Config.verbose:
-        print("got_index() url = '%s'" % url)
-
-    if request:
-        process_submit(request)
-
-
-    wcontext = wsgi_util.wContext(config, url, query)
-    wcontext.request    = request
-    wcontext.template   = template
-    wcontext.fname      = fname
-    wcontext.local_table = macros.local_table
-
-    wcontext.print()
-    content = wsgi_util.process_default2(wcontext)
-
+        print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
+                    "request=%s" % carry.request,
+                         "template=%s" % carry.template, "fname=%s" % carry.fname)
+    if carry.request:
+        process_submit(carry.request)
+    carry.local_table = common.local_table
+    content = wsgi_util.process_default2(carry)
     return content
 
 def fill_data(strx, context):
@@ -69,7 +65,7 @@ def got_log(config, url, query, request, template = "", fname = ""):
     wcontext.request    = request
     wcontext.template   = template
     wcontext.fname      = fname
-    wcontext.local_table = macros.local_table
+    wcontext.local_table = common.local_table
 
     content = wsgi_util.process_default2(wcontext)
     return content

@@ -53,6 +53,20 @@ class UrlMap():
                 return aa[1], aa[2], aa[3]
         return None, None, None
 
+    # find first level of URL
+    def revlookup(self, rev):
+        rrr = rev.split(os.sep)
+        for aa in self.urls:
+            sss = aa[0].split(os.sep)
+            #print("rev url", sss[1], "aa 1", aa[1], aa[2])
+            try:
+                #print(rrr, sss);
+                if rrr[1] == sss[1]:
+                    return os.path.split(aa[3])
+            except:
+                pass
+        return ""
+
 # ------------------------------------------------------------------------
 # URL to function table, global
 

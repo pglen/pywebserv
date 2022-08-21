@@ -43,7 +43,7 @@ def got_editor(config, carry):
             wsgi_util.put_exception("in index data")
 
     carry.local_table = common.local_table
-    content = wsgi_util.process_default2(carry)
+    content = wsgi_util.process_default(carry)
     return content
 
 

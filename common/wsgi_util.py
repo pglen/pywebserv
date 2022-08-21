@@ -179,7 +179,7 @@ def append_file(strx):
 # ------------------------------------------------------------------------
 # Resolve paths, read file, expand template
 
-def process_default2(context):
+def process_default(context):
 
     #print("using template", context.template, "fname", context.fname)
 

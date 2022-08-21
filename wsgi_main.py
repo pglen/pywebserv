@@ -198,22 +198,25 @@ class xWebServer():
         #print("self.url", self.url)
 
         splitx = os.path.split(self.url)
+        #splitx = self.url.split(os.sep)
+
         tmpname = self._assem_path(splitx)
         self.fn = Config.datapath +  tmpname
+
         #print("self.fn", self.fn)
         self.mtype = mimetypes.guess_type(self.fn)[0]
         if not self.mtype:
             self.mtype = "text/plain"
 
-
     def _translate_url(self, config, url):
-        import wsgi_global, wsgi_content, wsgi_util
+
         ''' return details for a url '''
 
+        import wsgi_global, wsgi_content, wsgi_util
         #print("Looking up", url)
         par = urlparse(url)
         got, tmpl, filen = wsgi_global.urlmap.lookup(par.path)
-        #print("_translate_url Got ", got, tmpl, filen)
+        #print("_translate_url from", url, "Got ", got, tmpl, filen)
         return got, tmpl, filen
 
     # --------------------------------------------------------------------
@@ -231,7 +234,7 @@ class xWebServer():
         try:
             callme, template, fname = self._translate_url(Config, self.url)
         except:
-            wsgi_util.put_exception("call proj entry")
+            wsgi_util.put_exception("When calling proj entry")
             return
 
         if(callme):
@@ -262,7 +265,6 @@ class xWebServer():
 
         # Static content
         else:
-            #self.fn = os.path()
             #print("Looking for file", self.fn)
             found_file = ""
             while 1:
@@ -270,9 +272,12 @@ class xWebServer():
                     found_file = self.fn
                     break
 
-                fn2 = self._pad_path(self.fn, "static")
-                if os.path.exists(self.fn):
-                    found_file = self.fn
+                rev = wsgi_global.urlmap.revlookup(self.url)
+                popped = self._pop_path(self.url)
+                #print("rev:", rev, "got popped:", popped,)
+                fn2 = rev[0] + popped
+                if os.path.exists(fn2):
+                    found_file = fn2
                     break
 
                 fn2 = self._pad_path(self.fn, "static")
@@ -302,7 +307,7 @@ class xWebServer():
                 return fp
 
             else:       # Error content
-                print("did not find file", found_file)
+                #print("did not find file", found_file)
                 respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
 
                 fn4 = Config.datapath + os.sep + "html/404.html"
@@ -313,7 +318,7 @@ class xWebServer():
                     return [b"URL not found. (and 404 file does not exist)."]
 
     def _assem_path(self, splitx):
-        #print("splitx", splitx)
+        #print("assem_path: splitx", splitx)
         ppp = ""
         for aa in range(len(splitx)):
             #print("re-assemble", splitx[aa])
@@ -339,6 +344,23 @@ class xWebServer():
                 ppp = os.path.join(ppp, padname)
             ppp = os.path.join(ppp, splitx[aa])
         #print("ppp", ppp)
+        return ppp
+
+    def _pop_path(self, pname):
+        ''' pop path head '''
+        splitx = pname.split(os.sep)
+        #print("splitx", splitx)
+        ppp = ""
+        for aa in range(len(splitx)):
+            #print("re-assemble", splitx[aa])
+            if aa == 1:
+                pass
+            else:
+                ppp += splitx[aa]
+                if  aa != len(splitx)-1:
+                    ppp+= os.sep
+
+        #print("pop_path: pname", pname, "ppp", ppp)
         return ppp
 
 mainclass = None

@@ -113,7 +113,7 @@ def     got_index(config, carry):
         print("got_index()", "url:", carry.url, "query:", carry.query)
 
     carry.local_table = common.local_table
-    content = wsgi_util.process_default2(carry)
+    content = wsgi_util.process_default(carry)
     return content
 
 # ------------------------------------------------------------------------

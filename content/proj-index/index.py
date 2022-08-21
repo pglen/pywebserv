@@ -41,7 +41,7 @@ def got_index(config, carry):
     if carry.request:
         process_submit(carry.request)
     carry.local_table = common.local_table
-    content = wsgi_util.process_default2(carry)
+    content = wsgi_util.process_default(carry)
     return content
 
 def fill_data(strx, context):
@@ -59,15 +59,10 @@ def fill_data(strx, context):
     localdb.close()
     return out
 
-def got_log(config, url, query, request, template = "", fname = ""):
+def got_log(config, carry):
 
-    wcontext = wsgi_util.wContext(config, url, query)
-    wcontext.request    = request
-    wcontext.template   = template
-    wcontext.fname      = fname
-    wcontext.local_table = common.local_table
-
-    content = wsgi_util.process_default2(wcontext)
+    carry.local_table = common.local_table
+    content = wsgi_util.process_default(wcontext)
     return content
 
 # This can be shown on an HTML page

@@ -28,7 +28,7 @@ class  wContext():
         self.fname  = None
         self.local_table  = None
 
-    def print(self):
+    def printvals(self):
         #print("config", self.config)
         print("url=", self.url, end=" - ")
         print("query=", self.query, end=" - ")
@@ -179,16 +179,17 @@ def append_file(strx):
 # ------------------------------------------------------------------------
 # Resolve paths, read file, expand template
 
-def process_default(context):
+def process_default(configx, context):
 
     #print("using template", context.template, "fname", context.fname)
 
-    if Config.verbose:
+    if configx.verbose:
         print("process_default() with local_table len ", len(context.local_table))
 
-    if Config.pgdebug > 5:
+    if configx.pgdebug > 5:
         if context.local_table:
             dump_table("Local Table:", context.local_table)
+
     try:
         if not context.template:
             template = resolve_template(context.config, context.url, context.fname)
@@ -241,8 +242,9 @@ def add_locals(locs, local_table):
     #print("locs", locs)
     for aa in locs:
         if "_mac_" in aa[:5]:
-            if Config.verbose:
-                print("Added:", aa[5:]) #, locs[aa][:12])
+            #if Config.verbose:
+            #    print("Added:", aa[5:]) #, locs[aa][:12])
+
             add_local_func(aa[5:], locs[aa], local_table)
 
     #print("Local table: len=%d", len(local_table))

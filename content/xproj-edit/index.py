@@ -27,19 +27,20 @@ from . import common
 
 def got_index(config, carry):
 
-    if Config.verbose:
-        print("got_index() url = '%s'" % carry.url)
+    #if Config.verbose:
+    #    print("got_index() url = '%s'" % carry.url)
+    #
+    #if Config.pgdebug > 1:
+    #    print("got_index()", "url:", url, "query:", query)
+    #
+    #if Config.pgdebug > 2:
+    #    print(wsgi_conf.config.showvals())
+    #
+    #if Config.pgdebug > 3:
+    #    print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
+    #                "request=%s" % carry.request,
+    #                     "template=%s" % carry.template, "fname=%s" % carry.fname)
 
-    if Config.pgdebug > 1:
-        print("got_index()", "url:", url, "query:", query)
-
-    if Config.pgdebug > 2:
-        print(wsgi_conf.config.showvals())
-
-    if Config.pgdebug > 3:
-        print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
-                    "request=%s" % carry.request,
-                         "template=%s" % carry.template, "fname=%s" % carry.fname)
     if carry.request:
         rq = []
         for aa in request:

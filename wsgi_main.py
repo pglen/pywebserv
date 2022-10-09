@@ -77,11 +77,13 @@ class comline():
     SHOW_TIMING = False
     USE_STDOUT = False
 
-class myconf():
-    verbose = 0;
-    pgdebug = 0;
-    show_keys  = 0
-    port = 8000
+class Myconf():
+
+    def __init__(self):
+        self.verbose = 0;
+        self.pgdebug = 0;
+        self.show_keys  = 0
+        self.port = 8000
 
 # ------------------------------------------------------------------------
 
@@ -99,32 +101,32 @@ class xWebServer():
 
         # import here so apache wsgi interface gets the files
         import wsgi_global, wsgi_content, wsgi_util
-        import wsgi_data, wsgi_func, wsgi_parse
+        import wsgi_data, wsgi_func, wsgi_parse, wsgi_conf
 
         #self.mark = time.perf_counter()
-
         #wsgi_util.printenv(environ)
-
-        Config.mainclass = self
-        Config.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
-        Config.datapath = Config.mypath + "content" + os.sep
-        self.config = Config
 
         import wsgi_conf
         self.carryon = wsgi_conf.CarryOn()
+        self.configx = wsgi_conf.Configx()
+
+        self.configx.mainclass = self
+        self.configx.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
+        self.configx.datapath = self.configx.mypath + "content" + os.sep
 
         #if self.config.pgdebug > 1:
         #    print("self.config.mypath", self.config.mypath)
         #    print("self.config.datapath", self.config.datapath)
 
         self.stime = datetime.datetime.now()
+
         #try:
-        #    self.sql = wsgi_data.wsgiSql(Config.datapath + "data/wsgi_main.sqlt")
+        #    self.sql = wsgi_data.wsgiSql(self.configx.datapath + "data/wsgi_main.sqlt")
         #except:
         #    print("Warn: Cannot create database", sys.exc_info())
         #
 
-        logf = Config.datapath + "data/wsgi_main.log"
+        logf = self.configx.datapath + "data/wsgi_main.log"
         try:
             self.logfp = open(logf, "a+")
         except:
@@ -158,7 +160,7 @@ class xWebServer():
         self.query = ""
         if 'QUERY_STRING' in environ:
             self.query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
-            if self.config.pgdebug > 2:
+            if self.configx.pgdebug > 2:
                 if self.query:
                     print("QUERY_STRING", self.query)
 
@@ -201,7 +203,7 @@ class xWebServer():
         #splitx = self.url.split(os.sep)
 
         tmpname = self._assem_path(splitx)
-        self.fn = Config.datapath +  tmpname
+        self.fn = self.configx.datapath +  tmpname
 
         #print("self.fn", self.fn)
         self.mtype = mimetypes.guess_type(self.fn)[0]
@@ -232,7 +234,7 @@ class xWebServer():
         #print("serving", self.url, self.fn)
 
         try:
-            callme, template, fname = self._translate_url(Config, self.url)
+            callme, template, fname = self._translate_url(self.configx, self.url)
         except:
             wsgi_util.put_exception("When calling proj entry")
             return
@@ -246,16 +248,15 @@ class xWebServer():
                 self.carryon.template = template
                 self.carryon.fname = fname
                 #self.carryon.print()
-
                 #print("Callback",  self.fn, self.url)
-                content = callme(Config, self.carryon)
+                content = callme(self.configx, self.carryon)
             except:
                 wsgi_util.put_exception("At process_request " + str(fname))
                 respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
 
-                fn5 = Config.datapath + os.sep + "html/500.html"
+                fn5 = self.configx.datapath + os.sep + "html/500.html"
                 if os.path.exists(fn5):
-                    content = wsgi_content.got_500(Config, fn5, self.query)
+                    content = wsgi_content.got_500(self.configx, fn5, self.query)
                 else:
                     content = "Empty results from page assembly."
                 return [bytes(content, "utf-8")]
@@ -290,7 +291,7 @@ class xWebServer():
                     found_file = fn2
                     break
 
-                fn2 = Config.datapath + os.sep + "css" + os.sep \
+                fn2 = self.configx.datapath + os.sep + "css" + os.sep \
                                         + os.path.basename(self.url)
                 if os.path.exists(fn2):
                     found_file = fn2
@@ -310,9 +311,9 @@ class xWebServer():
                 #print("did not find file", found_file)
                 respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
 
-                fn4 = Config.datapath + os.sep + "html/404.html"
+                fn4 = self.configx.datapath + os.sep + "html/404.html"
                 if os.path.exists(fn4):
-                    content = wsgi_content.got_404(Config, fn4, self.query)
+                    content = wsgi_content.got_404(self.configx, fn4, self.query)
                     return [bytes(content, "utf-8")]
                 else:
                     return [b"URL not found. (and 404 file does not exist)."]
@@ -390,11 +391,7 @@ def application(environ, respond):
 
         #wsgi_util.append_file("Started Server Page\n")
 
-        global myconf
-
-        Config.pgdebug = myconf.pgdebug
-        Config.verbose = myconf.verbose
-        global usr_cnt, mainclass
+        global usr_cnt, mainclass, myconf
 
         #usr_cnt += 1
         #print("Query arrived", os.getpid(), usr_cnt)
@@ -408,15 +405,17 @@ def application(environ, respond):
                 mainclass = xWebServer(environ, respond)
             except:
                 wsgi_util.put_exception("Creating Server OBJ")
-            try:
-                import wsgi_global
-                wsgi_global.getprojects(mainclass)
-            except:
-                wsgi_util.put_exception("Loading Projects")
-            #print("Main object inited", mainclass)
-        else:
-            pass
-            #print("Initialized main already")
+                return "Bad Server"
+
+        # re - decorate
+        mainclass.configx.pgdebug = myconf.pgdebug
+        mainclass.configx.verbose = myconf.verbose
+
+        try:
+            wsgi_global.getprojects(mainclass)
+        except:
+            wsgi_util.put_exception("Loading Projects")
+        #print("Main object inited", mainclass)
 
         #if ".html" in environ['PATH_INFO']:
         #    print("tdelta1", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
@@ -455,6 +454,10 @@ def xhelp():
 
 if __name__ == '__main__':
 
+    global myconf
+
+    myconf =  Myconf()
+
     opts = []; args = []
 
     try:
@@ -465,13 +468,14 @@ if __name__ == '__main__':
         print(_("Invalid option(s) on command line:"), err)
         sys.exit(1)
 
+
     # Outdated parsing ... for now, leave it as is
     for aa in opts:
         #print("opt", "'" + aa[0] + "'", aa[1])
         if aa[0] == "-d" or aa[0] == "--debug":
             try:
                 myconf.pgdebug = int(aa[1])
-                #print( _("Running at debug level:"),  Config.pgdebug)
+                #print( _("Running at debug level:"),  self.configx.pgdebug)
             except:
                 myconf.pgdebug = 0
                 print(_("Exception on setting debug level"), sys.exc_info())

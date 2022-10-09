@@ -7,7 +7,6 @@
 
 import sys, os, time, re, traceback
 import wsgi_global, wsgi_util
-#, wsgi_conf
 
 _MAX_RECURSE = 10
 _regex = "{ .*? }"
@@ -105,8 +104,8 @@ def _parse_one(buff, context, tablex, regex):
 
 def recursive_parse(buff, context, local_table):
 
-    if Config.pgdebug > 3:
-        print("recursive_parse() buff:", wsgi_util.unescape(buff[:12]))
+    #if Config.pgdebug > 3:
+    #    print("recursive_parse() buff:", wsgi_util.unescape(buff[:12]))
 
     #if local_table:
     #    wsgi_util.dump_table("Local Table:", local_table)

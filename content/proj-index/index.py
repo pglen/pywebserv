@@ -10,7 +10,8 @@
 
 import os, sys, time
 
-import wsgi_util, wsgi_func, wsgi_data, wsgi_global, wsgi_parse, wsgi_swear
+import wsgi_util, wsgi_func, wsgi_data
+import wsgi_global, wsgi_parse, wsgi_swear, wsgi_conf
 
 #print("Loading", "'" + os.path.basename(__file__)  + "'" )
 
@@ -25,23 +26,24 @@ from . import common
 
 def got_index(config, carry):
 
-    if Config.verbose:
+    if config.verbose:
         print("got_index() url = '%s'" % carry.url)
 
-    if Config.pgdebug > 1:
+    if config.pgdebug > 1:
         print("got_index()", "url:", carry.url, "query:", carry.query)
 
-    if Config.pgdebug > 2:
-        print(wsgi_conf.config.showvals())
+    if config.pgdebug > 2:
+        print("wsgi_conf", config.getvals())
 
-    if Config.pgdebug > 3:
+    if config.pgdebug > 3:
         print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
+
     if carry.request:
         process_submit(carry.request)
     carry.local_table = common.local_table
-    content = wsgi_util.process_default(carry)
+    content = wsgi_util.process_default(config, carry)
     return content
 
 def fill_data(strx, context):
@@ -62,7 +64,7 @@ def fill_data(strx, context):
 def got_log(config, carry):
 
     carry.local_table = common.local_table
-    content = wsgi_util.process_default(wcontext)
+    content = wsgi_util.process_default(config, carry)
     return content
 
 # This can be shown on an HTML page
@@ -121,3 +123,11 @@ except:
     print("Cannot add module globals:", "'" + modname + "'", sys.exc_info())
 
 # EOF
+
+
+
+
+
+
+
+

@@ -28,9 +28,9 @@ def got_500(config, url, query):
     ''' The error file from 500
     '''
 
-    fn2 = config.mypath + os.sep + url
-    if  os.path.exists(fn2):
-        with open(fn2, 'r') as fh:
+    #fn2 = config.mypath + os.sep + url
+    if  os.path.exists(url):
+        with open(url, 'r') as fh:
             buff = fh.read()
         # Recursively process
         content = wsgi_parse.recursive_parse(buff, __file__, None)

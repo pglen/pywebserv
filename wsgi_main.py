@@ -106,7 +106,6 @@ class xWebServer():
         #self.mark = time.perf_counter()
         #wsgi_util.printenv(environ)
 
-        import wsgi_conf
         self.carryon = wsgi_conf.CarryOn()
         self.configx = wsgi_conf.Configx()
 
@@ -204,6 +203,7 @@ class xWebServer():
 
         tmpname = self._assem_path(splitx)
         self.fn = self.configx.datapath +  tmpname
+        self.fn = os.path.normpath(self.fn)
 
         #print("self.fn", self.fn)
         self.mtype = mimetypes.guess_type(self.fn)[0]
@@ -231,7 +231,9 @@ class xWebServer():
             parsed everything
         '''
         import wsgi_global, wsgi_content, wsgi_util
+
         #print("serving", self.url, self.fn)
+        #print("url map", wsgi_global.urlmap.dump())
 
         try:
             callme, template, fname = self._translate_url(self.configx, self.url)
@@ -247,6 +249,7 @@ class xWebServer():
                 self.carryon.request = self.request
                 self.carryon.template = template
                 self.carryon.fname = fname
+
                 #self.carryon.print()
                 #print("Callback",  self.fn, self.url)
                 content = callme(self.configx, self.carryon)
@@ -254,9 +257,10 @@ class xWebServer():
                 wsgi_util.put_exception("At process_request " + str(fname))
                 respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
 
-                fn5 = self.configx.datapath + os.sep + "html/500.html"
+                fn5 = self.configx.datapath + "html/500.html"
                 if os.path.exists(fn5):
                     content = wsgi_content.got_500(self.configx, fn5, self.query)
+                    #print("got 505", content)
                 else:
                     content = "Empty results from page assembly."
                 return [bytes(content, "utf-8")]
@@ -264,8 +268,8 @@ class xWebServer():
             respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
             return [bytes(content, "utf-8")]
 
-        # Static content
         else:
+            # Iterte for other content
             #print("Looking for file", self.fn)
             found_file = ""
             while 1:
@@ -276,10 +280,11 @@ class xWebServer():
                 rev = wsgi_global.urlmap.revlookup(self.url)
                 popped = self._pop_path(self.url)
                 #print("rev:", rev, "got popped:", popped,)
-                fn2 = rev[0] + popped
-                if os.path.exists(fn2):
-                    found_file = fn2
-                    break
+                if rev:
+                    fn2 = rev[0] + popped
+                    if os.path.exists(fn2):
+                        found_file = fn2
+                        break
 
                 fn2 = self._pad_path(self.fn, "static")
                 if os.path.exists(fn2):
@@ -298,8 +303,8 @@ class xWebServer():
                     break
                 break
 
-            #print("found_file", found_file)
             if found_file:
+                #print("found_file", "'" + found_file + "'")
                 self.mtype = mimetypes.guess_type(found_file)[0]
                 if not self.mtype:
                     self.mtype = "text/plain"
@@ -308,12 +313,28 @@ class xWebServer():
                 return fp
 
             else:       # Error content
-                #print("did not find file", found_file)
+
+                if self.configx.verbose:
+                    print("No such file", "'" + self.fn + "'")
                 respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
 
-                fn4 = self.configx.datapath + os.sep + "html/404.html"
-                if os.path.exists(fn4):
-                    content = wsgi_content.got_404(self.configx, fn4, self.query)
+                print("error select", self.url, fname)
+
+                # Search for 404 file
+                errfile = ""
+                while True:
+                    fn4 =  os.path.dirname(self.fn) + os.sep + "404.html"
+                    if os.path.exists(fn4):
+                        errfile = fn4
+                        break
+                    fn4 = self.configx.datapath +  "html/404.html"
+                    if os.path.exists(fn4):
+                        errfile = fn4
+                        break
+                    break
+
+                if errfile:
+                    content = wsgi_content.got_404(self.configx, errfile, self.query)
                     return [bytes(content, "utf-8")]
                 else:
                     return [b"URL not found. (and 404 file does not exist)."]
@@ -415,8 +436,8 @@ def application(environ, respond):
             wsgi_global.getprojects(mainclass)
         except:
             wsgi_util.put_exception("Loading Projects")
-        #print("Main object inited", mainclass)
 
+        #print("Main object inited", mainclass)
         #if ".html" in environ['PATH_INFO']:
         #    print("tdelta1", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
 

@@ -38,6 +38,10 @@ class UrlMap():
 
         self.urls = []
 
+    def dump(self):
+        for aa in self.urls:
+            print("url", aa)
+
     def add(self, url, func, page, fname):
         # Got one already?
         #for aa in self.urls:

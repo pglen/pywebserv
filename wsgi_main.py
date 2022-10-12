@@ -185,11 +185,13 @@ class xWebServer():
                     self.request_org = environ['wsgi.input'].read(content_length).decode()
                     #print("Request_org", self.request_org)
                     self.request = parse_qsl(str(self.request_org), keep_blank_values=True)
-                    if self.config.pgdebug > 2:
-                        if self.request:
-                            print("Request", self.request)
+                    #if self.config.pgdebug > 2:
+                    #    if self.request:
+                    #        print("Request", self.request)
+
                 except:
                     print("No post data", sys.exc_info())
+                    import wsgi_util
                     wsgi_util.put_exception("No post data")
                     pass
 

@@ -104,6 +104,14 @@ nogo = ("OPENHAB", "XDG_", "LS_", "SHELL", "SESSION", "QT",
              "LESS", "SSH", "GTK", "SHLVL", "XAUTH", "PANEL", "PATH", "DISPLAY",
                 "MANDAT", "WINDOW", "TERM", "GDM", "VIRT", "HUB", "VTE")
 
+def printobj(theobj):
+    print("Class", str(theobj.__class__) )
+    for aa in dir(theobj):
+        if aa[:2] != "__":
+            ooo = getattr(theobj, aa)
+            if "method" not in str(type(ooo)):
+                print(aa, "=", ooo)
+
 def printenv(environ, all=False):
     print("-----------------")
     for aa in environ.keys():

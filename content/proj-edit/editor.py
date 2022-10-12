@@ -11,6 +11,8 @@ from . import common
 
 def got_editor(config, carry):
 
+    wsgi_util.printobj(carry)
+
     if config.verbose:
         print("got_index() url = '%s'" % carry.url)
 
@@ -20,24 +22,26 @@ def got_editor(config, carry):
     if config.pgdebug > 2:
         print(wsgi_conf.config.showvals())
 
-    if config.pgdebug > 3:
+    if 1: #config.pgdebug > 3:
         print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
     if carry.request:
         rq = []
-        for aa in request:
+        for aa in carry.request:
             rq.append(aa[1])
 
+        projname = "editor"
         #print("data", rq)
         #print("database", "data/%s.sqlt" % projname)
         try:
             #startt = time.perf_counter()
-            localdb = wsgi_data.wsgiSql("data/%s.sqlt" % projname)
-            localdb.put("key_" + rq[0], rq[0], rq[1], rq[2], "")
-            localdb.close()
+            #localdb = wsgi_data.wsgiSql("data/%s.sqlt" % projname)
+            #localdb.put("key_" + rq[0], rq[0], rq[1], rq[2], "")
+            #localdb.close()
             # Measure time needed
             #print("database op %f msec " %  ((time.perf_counter() - startt) * 1000))
+            pass
         except:
             print("Cannot put data")
             wsgi_util.put_exception("in index data")

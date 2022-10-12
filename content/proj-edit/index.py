@@ -27,19 +27,19 @@ from . import common
 
 def got_index(config, carry):
 
-    #if Config.verbose:
-    #    print("got_index() url = '%s'" % carry.url)
-    #
-    #if Config.pgdebug > 1:
-    #    print("got_index()", "url:", url, "query:", query)
-    #
-    #if Config.pgdebug > 2:
-    #    print(wsgi_conf.config.showvals())
-    #
-    #if Config.pgdebug > 3:
-    #    print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
-    #                "request=%s" % carry.request,
-    #                     "template=%s" % carry.template, "fname=%s" % carry.fname)
+    if config.verbose:
+        print("got_index() url = '%s'" % carry.url)
+
+    if config.pgdebug > 1:
+        print("got_index()", "url:", url, "query:", query)
+
+    if config.pgdebug > 2:
+        print(wsgi_conf.config.showvals())
+
+    if config.pgdebug > 3:
+        print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
+                    "request=%s" % carry.request,
+                         "template=%s" % carry.template, "fname=%s" % carry.fname)
 
     if carry.request:
         rq = []
@@ -60,7 +60,7 @@ def got_index(config, carry):
             wsgi_util.put_exception("in index data")
 
     carry.local_table = common.local_table
-    content = wsgi_util.process_default(carry)
+    content = wsgi_util.process_default(config, carry)
     return content
 
 # ------------------------------------------------------------------------

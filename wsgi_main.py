@@ -424,6 +424,7 @@ def application(environ, respond):
         if not mainclass:
             try:
                 mainclass = xWebServer(environ, respond)
+                myconf =  Myconf()
             except:
                 wsgi_util.put_exception("Creating Server OBJ")
                 return "Bad Server"

@@ -11,16 +11,16 @@ from . import common
 
 def got_editor(config, carry):
 
-    if Config.verbose:
+    if config.verbose:
         print("got_index() url = '%s'" % carry.url)
 
-    if Config.pgdebug > 1:
+    if config.pgdebug > 1:
         print("got_index()", "url:", url, "query:", query)
 
-    if Config.pgdebug > 2:
+    if config.pgdebug > 2:
         print(wsgi_conf.config.showvals())
 
-    if Config.pgdebug > 3:
+    if config.pgdebug > 3:
         print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
@@ -43,7 +43,7 @@ def got_editor(config, carry):
             wsgi_util.put_exception("in index data")
 
     carry.local_table = common.local_table
-    content = wsgi_util.process_default(carry)
+    content = wsgi_util.process_default(config, carry)
     return content
 
 

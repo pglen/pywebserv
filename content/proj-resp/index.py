@@ -106,14 +106,14 @@ def     mock_cal_func(strx, context):
 
 def     got_index(config, carry):
 
-    if Config.verbose:
+    if config.verbose:
         print("got_index() url = '%s'" % carry.url)
 
-    if Config.pgdebug > 1:
+    if config.pgdebug > 1:
         print("got_index()", "url:", carry.url, "query:", carry.query)
 
     carry.local_table = common.local_table
-    content = wsgi_util.process_default(carry)
+    content = wsgi_util.process_default(config, carry)
     return content
 
 # ------------------------------------------------------------------------

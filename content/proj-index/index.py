@@ -13,12 +13,8 @@ import os, sys, time
 import wsgi_util, wsgi_func, wsgi_data
 import wsgi_global, wsgi_parse, wsgi_swear, wsgi_conf
 
-#print("Loading", "'" + os.path.basename(__file__)  + "'" )
-
 ppp = __file__.split('/')
-plen = len(ppp)
-modname = ppp[plen-2] + "-" + ppp[plen-1]
-
+modname = ppp[-2]
 #print("Loaded mod:", modname)
 
 from . import macros
@@ -49,9 +45,10 @@ def got_index(config, carry):
 def fill_data(strx, context):
 
     try:
-        localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
+        localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
     except:
         print("Could not create / open local data for %s", modname)
+        return ""
 
     #print("strx", strx)
     out = ""
@@ -92,7 +89,7 @@ def process_submit(request):
     #print("raw data", str(request), sss, type(sss))
 
     try:
-        localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
+        localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
     except:
         print("Could not create / open local data for %s", modname)
 

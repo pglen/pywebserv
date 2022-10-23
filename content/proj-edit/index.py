@@ -14,11 +14,7 @@ import wsgi_util, wsgi_func, wsgi_data, wsgi_global, wsgi_swear
 #print("Loading", "'" + os.path.basename(__file__)  + "'" )
 
 ppp = __file__.split('/')
-plen = len(ppp)
-modname = ppp[plen-2] + "-" + ppp[plen-1]
-projname = ppp[plen-2]
-
-#print("Loaded proj:", projname)
+modname = ppp[-2]
 #print("Loaded mod:", modname)
 
 from . import macros
@@ -28,13 +24,13 @@ from . import common
 def got_index(config, carry):
 
     if config.verbose:
-        print("got_index() url = '%s'" % carry.url)
+        print("got_index() url", carry.url)
 
     if config.pgdebug > 1:
-        print("got_index()", "url:", url, "query:", query)
+        print("got_index()", "url:", carry.url, "request:", carry.request)
 
     if config.pgdebug > 2:
-        print(wsgi_conf.config.showvals())
+        print(config.getvals())
 
     if config.pgdebug > 3:
         print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
@@ -47,7 +43,7 @@ def got_index(config, carry):
             rq.append(aa[1])
 
         #print("data", rq)
-        #print("database", "data/%s.sqlt" % projname)
+        print("database", "data/%s.sqlt" % projname)
         try:
             #startt = time.perf_counter()
             localdb = wsgi_data.wsgiSql("data/%s.sqlt" % projname)
@@ -83,5 +79,3 @@ except:
     print("Cannot initialize", modname, sys.exc_info())
 
 # EOF
-
-

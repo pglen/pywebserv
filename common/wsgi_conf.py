@@ -24,8 +24,8 @@ class Configx:
         self.server      = None
         self.mainclass   = None
 
-    def tostr(self):
-        print("verb:", self.verbose, "deb:", self.pgdebug)
+    def __str__(self):
+        return "verb:"+ str(self.verbose) + " deb:" + str(self.pgdebug)
 
     # Return details of
     def getvals(self):

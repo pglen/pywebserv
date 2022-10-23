@@ -125,6 +125,9 @@ class xWebServer():
         #    print("Warn: Cannot create database", sys.exc_info())
         #
 
+        logd = self.configx.datapath + "data"
+        if not os.access(logd, os.X_OK):
+            os.mkdir(logd)
         logf = self.configx.datapath + "data/wsgi_main.log"
         try:
             self.logfp = open(logf, "a+")
@@ -255,6 +258,15 @@ class xWebServer():
                 #self.carryon.print()
                 #print("Callback",  self.fn, self.url)
                 content = callme(self.configx, self.carryon)
+
+                try:
+                    # See if resudial anything
+                    if hasattr(self.carryon, "localdb"):
+                        #print("exiting", self.carryon.localdb)
+                        self.carryon.localdb.close()
+                except:
+                    print("Error on exit cleaup")
+
             except:
                 wsgi_util.put_exception("At process_request " + str(fname))
                 respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])

@@ -10,34 +10,27 @@ import  wsgi_util, wsgi_func, wsgi_global, wsgi_data
 from . import common
 
 ppp = __file__.split('/')
-plen = len(ppp)
-modname = ppp[plen-2] + "-" + ppp[plen-1]
+#print("ppp", ppp)
+modname = ppp[-2]
+#print("modname", modname)
 
 _mac_feedwidth = '800'
 _mac_ShortCName = ''' United Planet Peace '''
 
 # ------------------------------------------------------------------------
 
-def fill_data(recnum):
+def fill_data(localdb, recnum):
 
-    #print("data/%s_data.sqlt" % modname)
-
-    try:
-        localdb = wsgi_data.wsgiSql("data/%s_data.sqlt" % modname)
-    except:
-        print("Could not create local data for %s" % modname)
-        wsgi_util.put_exception("opening SQL")
-        return
-
+    #print("data file", "data/%s_data.sqlt" % modname)
+    #print("localdb", localdb)
     #print("recnum", recnum)
-    out = ""
-    res = localdb.getall()
-    for aa in res:
-        #out += aa[2][3:-2] + " &nbsp; "
-        out += str(aa) + " &nbsp; "
+    #print("all", localdb.getall())
 
-    localdb.close()
-    return out
+    res = localdb.getbyid(recnum)
+    #print("res", res)
+    if not res:
+        res = "Empty record"
+    return res
 
 _mac_edit_center = '''
 <td valign=top>
@@ -75,10 +68,12 @@ def imgrow_data(strx, context):
     foot = '''<td width=10> <td>  '''
 
     #print("arg sss", sss)
-    data = fill_data(int(sss[1]))
+
+    data = fill_data(context.localdb, int(sss[1]))
+
     #print("data", data)
 
-    if not len(data):
+    if 1: #not len(data):
         strx = '''
         <form action=editor.html method=post>
         <tr>
@@ -86,13 +81,13 @@ def imgrow_data(strx, context):
             <td width=10>
             <td align=center>
             <td align=center colspan=6>
-            <p><font size=+2>No data %s</font>
+            <p><font size=+2> %s id=%s</font>
             <input type=submit id=idsub name=ed_%s value="Edit" >
             <input type=submit id=idsub name=del_%s value="Del" >
             <td width=10>
             <td>
         </form>
-        ''' % (sss[1], sss[1], sss[1])
+        ''' % (data, sss[1], sss[1], sss[1])
         return strx
 
     strx = '''
@@ -176,9 +171,22 @@ def mid_rows(strx, context):
     <tr> <td colspan=7 align=center>
             <p><font size=+3>Data Review</font>
     '''
-    for aa in range(5):
-        #print("One row")
-        ret +=   " { imgrow_data [ %d ] }" % aa
+
+    try:
+        context.localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
+    except:
+        print("Could not create local data for %s" % modname)
+        wsgi_util.put_exception("opening SQL")
+        return
+
+    recs = context.localdb.getcount()
+
+    for aa in range(recs):
+        # Starting at one
+        ret +=   " { imgrow_data [ %d ] }" % (aa+1)
+
+    #context.localdb.close()
+
     return ret
 
 _mac_center_body = '''

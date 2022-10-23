@@ -4,55 +4,77 @@ import sys
 import  wsgi_util, wsgi_func, wsgi_global, wsgi_data
 
 from . import common
+from . import macros
+
+ppp = __file__.split('/')
+modname = ppp[-2]
+#print("modname", modname)
 
 '''
-    Data Editor
+    Data Editor; list of data
 '''
 
 def got_editor(config, carry):
 
-    wsgi_util.printobj(carry)
+    #wsgi_util.printobj(carry)
+
+    content = ""
+    carry.cdata   = ""
 
     if config.verbose:
         print("got_index() url = '%s'" % carry.url)
 
-    if config.pgdebug > 1:
-        print("got_index()", "url:", url, "query:", query)
+    if 1: #config.pgdebug > 1:
+        print("got_index()", "url:", carry.url, "query:", carry.query,
+                 "request", carry.request)
 
     if config.pgdebug > 2:
         print(wsgi_conf.config.showvals())
 
-    if 1: #config.pgdebug > 3:
+    if config.pgdebug > 3:
         print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
     if carry.request:
-        rq = []
-        for aa in carry.request:
-            rq.append(aa[1])
+        #print("database", "data/%s.sqlt" % modname)
+        # Do we have database handle already?
+        if 1: #not hasattr(carry, "localdb"):
+            try:
+                carry.localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
+            except:
+                print("Cannot put data")
+                wsgi_util.put_exception("in index data")
 
-        projname = "editor"
-        #print("data", rq)
-        #print("database", "data/%s.sqlt" % projname)
-        try:
-            #startt = time.perf_counter()
-            #localdb = wsgi_data.wsgiSql("data/%s.sqlt" % projname)
-            #localdb.put("key_" + rq[0], rq[0], rq[1], rq[2], "")
-            #localdb.close()
-            # Measure time needed
-            #print("database op %f msec " %  ((time.perf_counter() - startt) * 1000))
-            pass
-        except:
-            print("Cannot put data")
-            wsgi_util.put_exception("in index data")
+        if carry.request[0][1] == "Edit":
+            rq = carry.request[0][0].split("_")
+            print("rq edit data", rq[1])
+            res = macros.fill_data(carry.localdb, rq[1])
+            #print("res:", res)
+            if res:
+                carry.cdata += "<table>"
+                carry.cdata += "<tr><td>arg 1 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa1>" + res[1] + "</textarea><p>"
+                carry.cdata += "<tr><td>arg 2 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa2>" + res[2] + "</textarea><p>"
+                carry.cdata += "<tr><td>arg 3 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa3>" + res[3] + "</textarea><p>"
+                carry.cdata += "<tr><td>arg 4 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa4>" + res[4] + "</textarea><p>"
+                carry.cdata += "</table>"
+
+        if carry.request[0][1] == "Del":
+            rq = carry.request[0][0].split("_")
+            print("rq delete data", rq[1])
+
+            #carry.localdb.put("key_" + rq[0], rq[0], rq[1], rq[2], "")
 
     carry.local_table = common.local_table
-    content = wsgi_util.process_default(config, carry)
+    content += wsgi_util.process_default(config, carry)
+    #print("content", content)
+
     return content
 
-
 def one_center(strx, context):
-    content = "<td width=70% align=center valign=top> <p><p>Center Col <p> <p>"
+    content = "<td width=70% align=center valign=top> <p><p>Record %d" # % (1)
+    content += "<p><p> " + context.cdata  + "<p>"
+    content += "<input type=submit value='Save Data'>"
+
     return content
 
 try:

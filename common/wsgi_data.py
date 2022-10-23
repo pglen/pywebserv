@@ -14,7 +14,7 @@ class wsgiSql():
     def __init__(self, file, table = "initial"):
 
         self.table = table
-
+        self.file = file
         try:
             self.conn = sqlite3.connect(file)
         except:
@@ -52,10 +52,12 @@ class wsgiSql():
         except:
             print("Cannot create sql table ", sys.exc_info())
 
+        #print("Created/Opened SQl", self.file)
+
     # --------------------------------------------------------------------
     # Return None if no data
 
-    def   get(self, kkk):
+    def  get(self, kkk):
         rr = None
         try:
             if os.name == "nt":
@@ -71,6 +73,30 @@ class wsgiSql():
             pass
         if rr:
             return rr[1:]
+        else:
+            return None
+
+    # --------------------------------------------------------------------
+    # Return None if no data
+
+    def  getbyid(self, kkk):
+
+        #print("byid", kkk)
+        rr = None
+        try:
+            if os.name == "nt":
+                self.c.execute("select * from " + self.table + " where pri = ?", (kkk,))
+            else:
+                self.c.execute("select * from " + self.table + " indexed by iconfig where pri = ?", (kkk,))
+            rr = self.c.fetchone()
+        except:
+            print("Cannot get sql data", sys.exc_info())
+            rr = None
+            raise
+        finally:
+            pass
+        if rr:
+            return rr
         else:
             return None
 
@@ -170,6 +196,22 @@ class wsgiSql():
         return rr
 
     # --------------------------------------------------------------------
+    # Get Count of records
+
+    def   getcount(self):
+        rr = None
+        try:
+            self.c.execute("select count(*) from " + self.table + "")
+            rr = self.c.fetchall()
+        except:
+            print("Cannot get count sql data", sys.exc_info())
+        finally:
+            #c.close
+            pass
+        #print("rr", rr)
+        return rr[0][0]
+
+    # --------------------------------------------------------------------
     # Return None if no data
 
     def   rmall(self):
@@ -187,4 +229,8 @@ class wsgiSql():
             return None
 
     def close(self):
+        #print("Closed SQL", self.file)
         self.conn.close()
+
+    def __delete__(self):
+        print("delete", self)

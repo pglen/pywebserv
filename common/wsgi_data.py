@@ -4,6 +4,32 @@
 
 import sys, os, mimetypes, time, sqlite3
 
+
+# Do we have database handle already?
+
+def soft_opendb(carry, modname):
+
+    dbname = "data/%s.sqlt" % modname
+    #print("database", "data/%s.sqlt" % modname)
+
+    needopen = False
+    if not hasattr(carry, "localdb"):
+        needopen = True
+    else:
+        # see if it is OK
+        try:
+            recs = carry.localdb.getcount()
+        except:
+            needopen = True
+
+    if needopen:
+        try:
+            carry.localdb = wsgi_data.wsgiSql(dbname)
+        except:
+            print("Cannot open database", dbname)
+            wsgi_util.put_exception("Open database %s") % dbname
+
+
 class wsgiSql():
 
     ''' The data store for the web server. Simple sqlite data files.
@@ -60,10 +86,7 @@ class wsgiSql():
     def  get(self, kkk):
         rr = None
         try:
-            if os.name == "nt":
-                self.c.execute("select * from " + self.table + " where key = ?", (kkk,))
-            else:
-                self.c.execute("select * from " + self.table + " indexed by iconfig where key = ?", (kkk,))
+            self.c.execute("select * from " + self.table + " indexed by iconfig where key = ?", (kkk,))
             rr = self.c.fetchone()
         except:
             print("Cannot get sql data", sys.exc_info())
@@ -84,10 +107,7 @@ class wsgiSql():
         #print("byid", kkk)
         rr = None
         try:
-            if os.name == "nt":
-                self.c.execute("select * from " + self.table + " where pri = ?", (kkk,))
-            else:
-                self.c.execute("select * from " + self.table + " indexed by iconfig where pri = ?", (kkk,))
+            self.c.execute("select * from " + self.table + " indexed by iconfig where pri = ?", (kkk,))
             rr = self.c.fetchone()
         except:
             print("Cannot get sql data", sys.exc_info())
@@ -109,10 +129,7 @@ class wsgiSql():
 
         ret = True
         try:
-            if os.name == "nt":
-                self.c.execute("select * from " + self.table + " where key == ?", (key,))
-            else:
-                self.c.execute("select * from " + self.table + " indexed by iconfig where key == ?", (key,))
+            self.c.execute("select * from " + self.table + " indexed by iconfig where key == ?", (key,))
             rr = self.c.fetchall()
             if rr == []:
                 #print( "inserting")
@@ -120,11 +137,7 @@ class wsgiSql():
             else:
 
                 #print ("updating")
-                if os.name == "nt":
-                    self.c.execute("update " + self.table + " set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
-                                     (val, val2, val3, val4, key))
-                else:
-                    self.c.execute("update " + self.table + " indexed by iconfig set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
+                self.c.execute("update " + self.table + " indexed by iconfig set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
                                      (val, val2, val3, val4, key))
             self.conn.commit()
         except:
@@ -152,21 +165,14 @@ class wsgiSql():
 
         ret = True
         try:
-            if os.name == "nt":
-                self.c.execute("select * from " + self.table2 + " where key == ?", (key,))
-            else:
-                self.c.execute("select * from " + self.table2 + " indexed by ilogconfig where key == ?", (key,))
+            self.c.execute("select * from " + self.table2 + " indexed by ilogconfig where key == ?", (key,))
             rr = self.c.fetchall()
             if rr == []:
                 #print( "inserting")
                 self.c.execute("insert into " + self.table2 + " (key, val, val2, val3, val4) values (?, ?, ?, ?, ?)", (key, val, val2, val3, val4))
             else:
                 #print ("updating")
-                if os.name == "nt":
-                    self.c.execute("update " + self.table2 + " set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
-                                     (val, val2, val3, val4, key))
-                else:
-                    self.c.execute("update " + self.table2 + " indexed by ilogconfig set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
+                self.c.execute("update " + self.table2 + " indexed by ilogconfig set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
                                      (val, val2, val3, val4, key))
             self.conn.commit()
         except:

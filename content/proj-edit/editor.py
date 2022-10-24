@@ -14,6 +14,8 @@ modname = ppp[-2]
     Data Editor; list of data
 '''
 
+
+
 def got_editor(config, carry):
 
     #wsgi_util.printobj(carry)
@@ -36,14 +38,8 @@ def got_editor(config, carry):
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
     if carry.request:
-        #print("database", "data/%s.sqlt" % modname)
-        # Do we have database handle already?
-        if 1: #not hasattr(carry, "localdb"):
-            try:
-                carry.localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
-            except:
-                print("Cannot put data")
-                wsgi_util.put_exception("in index data")
+
+        wsgi_data.soft_opendb(carry, modname)
 
         if carry.request[0][1] == "Edit":
             rq = carry.request[0][0].split("_")

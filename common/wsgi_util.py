@@ -6,12 +6,12 @@
 '''
 
 import sys, os, time, re, traceback
+import wsgi_global, wsgi_parse
 
-try:
-    import wsgi_global, wsgi_parse
-except:
-    print("Cannot import", sys.exc_info())
-    pass
+#try:
+#    import wsgi_global, wsgi_parse
+#except:
+#    print("Cannot import", sys.exc_info())
 
 verbose = 0
 
@@ -260,7 +260,6 @@ def add_locals(locs, local_table):
     #    print(" '" + aa[0] + "'", end = " ")
     #print ("\ntable end")
 
-
 # ------------------------------------------------------------------------
 # Add a new project function;
 
@@ -283,5 +282,55 @@ def add_local_func(mname, mfunc, table):
     except:
         print("Cannot add local table item", sys.exc_info())
     return False
+
+def _check_type(locvars, aa):
+    ''' See if it is str and func '''
+    if type(locvars[aa]) == type(""):
+        #print("Global str:", "'" + aa[6:] + "' = " , locvars[aa][:12].replace("\n", "\\n") )
+        pass
+    elif type(locvars[aa]) == type(add_local_vars):
+        #print("Global func:", "'" + aa[6:] + "' = " , locvars[aa])
+        pass
+    else:
+        print("Invalid type definition", "'" + aa + "'")
+        return True
+
+def add_local_vars(locvars, table):
+
+    '''
+         Add all local varables here. A copy of the vars is received
+         for non changing array
+    '''
+
+    try:
+        for aa in locvars:
+            # These become locals
+            if "_mac_" in aa[:5]:
+                if _check_type(locvars, aa):
+                    continue
+                #print("Adding:", "'" + aa[5:] + "' = " , locvars[aa][:12].replace("\n", "\\n") )
+                add_local_func(aa[5:],  locvars[aa], table)
+    except:
+        print("Exception on add_local_vars", sys.exc_info())
+        put_exception("loc")
+
+
+def add_global_vars(locvars, table):
+
+    '''
+         Add all global varables here. A copy of the vars is received
+         for non changing array
+    '''
+
+    try:
+        for aa in locvars:
+            # These become globals (site wide)
+            if "_glob_" in aa[:6]:
+                if _check_type(locvars, aa):
+                    continue
+                wsgi_global.add_one_func(aa[6:], locvars[aa])
+    except:
+        print("Exception on add_local_vars", sys.exc_info())
+        put_exception("loc")
 
 # EOF

@@ -14,8 +14,6 @@ modname = ppp[-2]
     Data Editor; list of data
 '''
 
-
-
 def got_editor(config, carry):
 
     #wsgi_util.printobj(carry)
@@ -70,7 +68,6 @@ def one_center(strx, context):
     content = "<td width=70% align=center valign=top> <p><p>Record %d" # % (1)
     content += "<p><p> " + context.cdata  + "<p>"
     content += "<input type=submit value='Save Data'>"
-
     return content
 
 try:

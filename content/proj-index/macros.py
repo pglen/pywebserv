@@ -1,7 +1,19 @@
  #!/usr/bin/env python3
 
-import os, sys, time
+'''
+     This is a sample project macro file;
+        Variables start with "_mac_" will become local macros, that can be
+        referenced on this page.
+        Variables start with "_glob_" wil become global that can be
+        referenced on the whole site.
 
+     This file is imported under a try: except clause, so ordinarily,
+    nothing in this file can down the site, can only down this page.
+    (for example a syntax error) However, some conditions (like missing
+    site dependencies) CAN down the site.
+'''
+
+import os, sys, time
 import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 ''' Local macros and data. Register it after init or use the _mac_ prefix to auto register
@@ -9,22 +21,20 @@ import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 from . import common
 
-_mac_tabhead = "#ccffcc"
-_mac_misscol = "#eeeeee"
+_glob_tabhead = "#ccffcc"
+_glob_misscol = "#eeeeee"
 
-_mac_sitestyle = '''
+_glob_sitestyle = '''
 <style>
 .container {
   position: relative;
   width: 50%;
 }
-
 .plain {
     #border: 0;
     #background-color: #333333;
     border-radius: 0px;
 }
-
 .image {
   opacity: 1;
   display: inline;
@@ -33,7 +43,6 @@ _mac_sitestyle = '''
   backface-visibility: hidden;
   //corner-radius: 15px;
 }
-
 img {
   opacity: 1;
   display: inline;
@@ -42,7 +51,6 @@ img {
   backface-visibility: hidden;
   border-radius: 15px;
 }
-
 .container {
   position: relative;
   width: 50%;
@@ -53,30 +61,35 @@ img {
 .container:hover .middle {
   opacity: 1;
 }
-
 a:link, a:visited {
     //color: black;
     text-decoration: none;
     decoration: none;
 }
-
 .up-class {
     writing-mode: sideways-lr;
     text-orientation: mixed;
     //background-color:  #aaffaa;
 }
-
 .textx {
-
     border-radius: 10px;
     background-color:  #cccccc;
     padding: 10px;
     max-width: 800px;
 }
-
 </style>
 '''
-_mac_left = '''
+
+## Example bad type for glob
+#_glob_site_bad = ("1", "2")
+## Example bad type for mac
+#_mac_site_bad = ("1", "2")
+
+# Can add a function too
+#def _glob_sitestyle_func(config, carry):
+#    print(glob_sitestyle2)
+
+_glob_site_left = '''
 <table width=100% border=0>
     <tr><td bgcolor={ tabhead } align=center colspan=2 height=36>
     <font size=+1><b>Main Navigation</b>
@@ -132,7 +145,7 @@ _mac_mission_statement = '''
     you can. Every one of us makes an impact.<p>
 '''
 
-_mac_center = '''
+_mac_main_center = '''
 
     <td valign=top>
      <table width=100% border=0>
@@ -173,8 +186,7 @@ _mac_nav = '''
 </table>
 '''
 
-_mac_right = '''
-
+_glob_site_right = '''
 <td width=20% valign=top>
   <table border=0 width=100% cellpadding=3>
     <tr><td bgcolor={ tabhead } height=36 align=center>
@@ -296,14 +308,16 @@ _mac_header = '''
     </table>
 '''
 
-_mac_footer = '''
-    <tr  height=48>
-    <td align=left width=45%>
-    &nbsp; &nbsp; <font size=+2> <b>Contact Site Admin</b> </font><b>peterglen99@gmail.com</b>
-            <td> Copyright (C) Peter Glen; Released to Open Source
-            <td align=right>
-                <img src=/siteicons/system-log-out.png class=image title="Log Out / Leave">
-                &nbsp; &nbsp;
+_glob_site_footer = '''
+    <table width=100% { sitecolor }>
+        <tr  height=48>
+        <td align=left width=45%>
+        &nbsp; &nbsp; <font size=+2> <b>Contact Site Admin</b> </font><b>peterglen99@gmail.com</b>
+                <td> Copyright (C) Peter Glen; Released to Open Source
+                <td align=right>
+                    <img src=/siteicons/system-log-out.png class=image title="Log Out / Leave">
+                    &nbsp; &nbsp;
+    </table>
 '''
 
 _mac_imgrow = '''
@@ -331,18 +345,10 @@ _mac_imgrow = '''
 
 '''
 
-try:
-    vvv = locals().copy()
-    for aa in vvv:
-        if "_mac_" in aa[:5]:
-            wsgi_util.add_local_func(aa[5:],  vvv[aa], common.local_table)
-except:
-    print("Exception on index init vars", sys.exc_info())
+# This adds local the variables pre - marked for a purpose
+wsgi_util.add_local_vars( locals().copy(), common.local_table)
 
-# Add to global, so it becomes site wide
-wsgi_global.add_one_func("sitestyle", _mac_sitestyle)
-wsgi_global.add_one_func("left", _mac_left)
+# This adds global the variables pre - marked for a purpose
+wsgi_util.add_global_vars( locals().copy(), common.local_table)
 
-# Do not forget to make the desendents (project/site) globals
-wsgi_global.add_one_func("tabhead", _mac_tabhead)
-wsgi_global.add_one_func("misscol", _mac_misscol)
+# EOF

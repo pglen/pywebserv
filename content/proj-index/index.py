@@ -2,7 +2,8 @@
 
 '''
     This is a sample project that is added to the site. The idea here is
-    that nothing in this project can down the site, oly the page. (like: syntax error)
+    that nothing in this project can down the site, oly the page.
+    (like a syntax error)
     It is imported under a try: except clause, and it is calling only the
     URL registration functions.
     Also, included a default web page function as index.html or as '/'
@@ -42,20 +43,46 @@ def got_index(config, carry):
     content = wsgi_util.process_default(config, carry)
     return content
 
+# ------------------------------------------------------------------------
+# Get the top row's data
+
 def fill_data(strx, context):
 
+    ddd = wsgi_func.parse_args(strx, context)
+    if len(ddd) > 1:
+        prefix = ddd[1]
+    else:
+        prefix = ""
+
+    print("ddd", ddd)
+    # Get data from the editor
+    mn = "proj-edit"
     try:
-        localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
+        #localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
+        localdb = wsgi_data.wsgiSql("data/%s.sqlt" % mn)
     except:
         print("Could not create / open local data for %s", modname)
         return ""
 
-    #print("strx", strx)
-    out = ""
+    print("strx", strx, modname)
+    out = ""; cnt = 0
     res = localdb.getall()
+
+    # The data is returned as macros, the page can reference
+    wsgi_global.add_one_func(prefix + "DataLen", str(len(res)))
+
     for aa in res:
-        out += "'" + aa[1] + "'  &nbsp;  '" + aa[2] + "' &nbsp; '" + aa[3] + "'<br>"
+        #out += "'" + aa[1] + "'  &nbsp;  '" + aa[2] + "' &nbsp; '" + aa[3] + "'<br>"
+        cnt2 = 0
+        wsgi_global.add_one_func(prefix + "RecLen%d" % cnt2, str(len(aa)))
+        for bb in aa:
+            wsgi_global.add_one_func(prefix + "Data%d-%d" % (cnt, cnt2), str(bb) )
+            cnt2 += 1
+        cnt += 1
+
     localdb.close()
+
+    print("out", out)
     return out
 
 def got_log(config, carry):
@@ -113,7 +140,7 @@ try:
     wsgi_global.add_one_url("/log.html", got_log, "log.html", __file__)
 
     wsgi_global.add_one_func("show_submit", show_submit_func)
-    wsgi_global.add_one_func("feed_data", fill_data)
+    wsgi_global.add_one_func("fill_data", fill_data)
     wsgi_global.add_one_func("CompanyName", "UPP, United Planet Peace")
 
 except:

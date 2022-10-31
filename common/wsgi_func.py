@@ -263,9 +263,10 @@ def     build_initial_rc():
         wsgi_global.add_one_func("footer",   wsgi_res.footer)
         wsgi_global.add_one_func("bigtext",  wsgi_res.bigtext)
         wsgi_global.add_one_func("imgrow",   wsgi_res.imgrow)
-        wsgi_global.add_one_func("article",  wsgi_res.article)
-        wsgi_global.add_one_func("article2", wsgi_res.article2)
         wsgi_global.add_one_func("mystyle",  wsgi_style.mystyle)
+
+        wsgi_global.add_one_func("xarticle",  wsgi_res.article)
+        wsgi_global.add_one_func("xarticle2", wsgi_res.article2)
 
     except:
         #print("Cannot build global rc", sys.exc_info())

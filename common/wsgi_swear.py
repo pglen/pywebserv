@@ -1,5 +1,12 @@
  #!/usr/bin/env python3
 
+''' Add undesired (swear) words and phrased here.
+    The output is padded with random punctuation if bad word is encounered.
+
+'''
+
+import random
+
 swearwords = (\
     "cumbubble",    "fuck",         "fuck you",     "shitbag",
     "shit",         "asshole",      "dickweed",
@@ -20,14 +27,36 @@ swearwords = (\
     "todger",       "nutsack",      "dickface",     "dick",
     )
 
+''' Add undesired (swear) words here. '''
+
 swearphrases = (\
     "piss off",  "son of a bitch",    "fuck trumpet",
      "talking the piss",
      )
 
+''' Add undesired (swear) phrases here. '''
+
+fillchars = "!@#$%&*?"
+
+def _calcpad(sws):
+
+    pad = ""
+    for cc in range(len(sws)):
+        if cc % 2 == 1:
+            rr = random.randint(0, len(fillchars)-1)
+            pad += fillchars[rr]
+        else:
+            pad += sws[cc]
+    return pad
+
 def filter_words(strx):
 
-    ret = ""; sw = 0
+    '''  Replace bad words with a star (*) [asterisk] character<br>
+         V2 Sun 30.Oct.2022: the replacement is a random punctuation
+         and spaced into one out of two chars.
+    '''
+
+    ret = ""; ret2 = ""; sw = 0
 
     # Scan for phrases:
     for cc in swearphrases:
@@ -36,28 +65,39 @@ def filter_words(strx):
             sw = len(cc)
             pos = strx.lower().find(cc)
             #print("pos", pos)
-            ret += strx[:pos] + " " + "*" * sw + strx[pos+sw:]
+            pad = _calcpad(strx[pos:pos+sw])
+            #ret += strx[:pos] + " " + "*" * sw + strx[pos+sw:]
+            ret += strx[:pos] + " " + pad + strx[pos+sw:]
     if sw:
-        return ret
+        # Assign new
+        strx = ret
 
-    # Scan for wors:
+    # Scan for words:
     sss = strx.split(' ')
     cnt = 0
     for aa in sss:
         #print("aa", aa)
+        sw = 0
         for bb in swearwords:
             if bb in aa.lower():
-                #print("  Swear word:", aa)
+                #print(" Swear word:", aa)
                 sw = len(aa)
                 break;
         if not sw:
-            ret += aa
-            if cnt < len(sss)-1:
-                ret += " "
-
+            ret2 += aa + " "
+            #if cnt < len(sss)-1:
+            #    ret2 += " "
         else:
-            ret += "*" * sw
-        cnt += 1
+            pad2 = _calcpad(strx[cnt:cnt+sw])
+            #print("pad2", pad2)
+            ret2 += pad2 + " "
+        # Keep track of position
+        cnt += len(aa) + 1
 
-    return ret
+    return ret2
 
+if __name__ == '__main__':
+    import sys
+    print(filter_words(str(sys.argv[1])))
+
+# EOF

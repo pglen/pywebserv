@@ -24,6 +24,8 @@ from . import common
 _glob_tabhead = "#ccffcc"
 _glob_misscol = "#eeeeee"
 
+_mac_CompanyName = '''UPP the United Planet Peace'''
+
 _glob_sitestyle = '''
 <style>
 .container {
@@ -120,7 +122,7 @@ _glob_site_left = '''
 
 '''
 
-_mac_miss_state = '''
+_mac_mission_statement = '''
     <table width=100% cellpadding=3 border=0>
     { mission_statement }
     </table>
@@ -151,10 +153,15 @@ _mac_main_center = '''
      <table width=100% border=0>
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
-        { miss_state }
+        { mission_statement }
+        { fill_data xx }
+        <!-- len={ xxDataLen }<br> -->
+
         <table width=100% border=0>
             <tr valign=top>
+            <td valign=middle bgcolor=#cccccc> &nbsp; << &nbsp;
             { article } { article2 } { article3 } { article4 }
+            <td valign=middle bgcolor=#cccccc> &nbsp; >>  &nbsp;
          </table>
 
         <!-- <video width="800" height="600" controls>
@@ -205,7 +212,32 @@ _glob_site_right = '''
 </table>
 '''
 
-_mac_article3 = '''
+#{ xxData0-0 } <br>
+#{ xxData0-1 } <br>
+#{ xxData0-2 } <br>
+#{ xxData0-3 } <br>
+
+_mac_article = '''
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2> { xxData0-1 }
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                { xxData0-2 }
+                <tr><td colspan=2> { xxData0-3 }
+                <tr><td colspan=2 style="text-alignment:justify">
+                { xxData0-4 }<br>
+            </table>
+        </table>
+'''
+
+_mac_article2 = '''
     <td>
         <table border=0 bgcolor=#dddddd>
             <tr><td>
@@ -227,7 +259,27 @@ _mac_article3 = '''
         </table>
 '''
 
-_mac_CompanyName = '''UPP the United Planet Peace'''
+_mac_article3 = '''
+    <td>
+        <table border=0 bgcolor=#dddddd>
+            <tr><td>
+            <table border=0 bgcolor=#f5f5f5>
+            <tr>
+                <tr><td colspan=2>
+                <font size=+2>Article header, number three
+                <tr>
+                <td>
+                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+                <td>
+                Image description
+                <tr><td colspan=2> Article Title
+                <tr><td colspan=2 style="text-alignment:justify"> Image description3
+                Article / Image description detail <br>
+                Article / Image description detail
+                Article / Image description detail
+            </table>
+        </table>
+'''
 
 _mac_article4 = '''
     <td>
@@ -319,6 +371,7 @@ _glob_site_footer = '''
                     &nbsp; &nbsp;
     </table>
 '''
+
 
 _mac_imgrow = '''
   <tr>  <td width=10>

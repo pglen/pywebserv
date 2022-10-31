@@ -32,9 +32,9 @@ def fill_data(localdb, recnum):
         res = "Empty record"
     return res
 
-_mac_edit_center = '''
-<td valign=top>
-    <table width=100% { sitecolor } border=0>
+
+_mac_center_top = '''
+ <table width=100% { sitecolor } border=0>
     <tr  height=36>
     <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
     <a href=index.html> <b>{ ShortCName }</b> </a>
@@ -51,7 +51,14 @@ _mac_edit_center = '''
                 <td>
         </table>
      </table>
-     <center>{ center_body }
+'''
+
+_mac_edit_center = '''
+<td valign=top>
+
+     <center>
+     { center_top }
+     { center_body }
 '''
 
 _mac_editrow = '''

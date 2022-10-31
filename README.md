@@ -56,7 +56,7 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
 #### Driving the macros:
 
       Variable subst regex: "{ .*? }"  (example: { header } )
-      Command parameter subst regex: "\[ .*? \]"  (example: [ value_one ] )
+      Command parameter subst regex: "[ .*? ]"  (example: [ value_one ] )
 
       See index.html for examples.
 
@@ -96,7 +96,7 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
 		...  content presented as is
 
     See proj-index for an example home page. Also proj* for more
-    detailed examples. 
+    detailed examples.
     Please note how simple a calendar implementation becomes.
 
 ### History:

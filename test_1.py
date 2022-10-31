@@ -2,13 +2,13 @@
 
 import os, sys, time, copy
 
-_mac1 = '''
-Hello 1
-'''
-
-_mac2 = '''
-Hello 2
-'''
+#_mac1 = '''
+#Hello 1
+#'''
+#
+#_mac2 = '''
+#Hello 2
+#'''
 
 #test_1.py
 

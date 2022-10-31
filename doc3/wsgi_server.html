@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>wsgi_server API documentation</title>
+<meta name="description" content="Small wsgiref based web server. Takes a path to serve from and an
+optional port number (defaults to 8000), then tries to serve files …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>wsgi_server</code></h1>
+</header>
+<section id="section-intro">
+<p>Small wsgiref based web server. Takes a path to serve from and an
+optional port number (defaults to 8000), then tries to serve files.</p>
+<p>Mime types are guessed from the file names, 404 errors are raised
+if the file is not found. Used for the make serve target in Doc.</p>
+<p>Restarts if any of the files in current dir changed and project dir
+changed; calls the bringfocus batch job to refresh browser</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">#!/usr/bin/env python3
+
+&#39;&#39;&#39;
+    Small wsgiref based web server. Takes a path to serve from and an
+    optional port number (defaults to 8000), then tries to serve files.
+
+    Mime types are guessed from the file names, 404 errors are raised
+    if the file is not found. Used for the make serve target in Doc.
+
+    Restarts if any of the files in current dir changed and project dir
+    changed; calls the bringfocus batch job to refresh browser
+
+&#39;&#39;&#39;
+
+import sys, os, time
+import mimetypes, subprocess
+
+from wsgiref import simple_server, util
+
+def app(environ, respond):
+
+    fn = os.path.join(path, environ[&#39;PATH_INFO&#39;][1:])
+    if &#39;.&#39; not in fn.split(os.path.sep)[-1]:
+        fn = os.path.join(fn, &#39;index.html&#39;)
+    type = mimetypes.guess_type(fn)[0]
+
+    if os.path.exists(fn):
+        respond(&#39;200 OK&#39;, [(&#39;Content-Type&#39;, type)])
+        return [util.FileWrapper(open(fn, &#34;rb&#34;))]
+    else:
+        respond(&#39;404 Not Found&#39;, [(&#39;Content-Type&#39;, &#39;text/plain&#39;)])
+        #respond(&#39;200 Hello world&#39;, [(&#39;Content-Type&#39;, &#39;text/plain&#39;)])
+        return [b&#39;not found&#39;]
+        #return &#34;Hello World&#34;
+
+def serve():
+        httpd = simple_server.make_server(&#39;&#39;, port, app)
+        print(&#34;Serving {} on port {}, control-C to stop&#34;.format(path, port))
+        while True:
+            try:
+                httpd.handle_request()
+            except KeyboardInterrupt:
+                print(&#34;Shutting down.&#34;)
+                httpd.server_close()
+                raise
+                break
+
+def _re_open():
+    #th = subprocess.Popen([&#34;firefox&#34;, &#34;localhost:8000&#34;], close_fds=True)
+    #th = subprocess.Popen([&#34;xvkbd&#34;, &#34;-window&#34;, &#34;Firefox&#34;, &#34;-text&#34;, &#34;\Cr&#34;])
+    th = subprocess.Popen([&#34;./bringfocus.sh&#34;], shell=True)
+    #return th
+    pass
+
+def _re_serve():
+    opt = &#34;&#34;
+    th = subprocess.Popen([&#34;/usr/bin/env&#34;, &#34;python&#34;, &#34;wsgi_main.py&#34;] + sys.argv[1:])
+    return th
+
+def waitx():
+    time.sleep(.1)
+
+def append_filename(nnn):
+    global fnamearr, statarr
+
+    if os.path.isfile(nnn):
+        fff = os.stat(nnn).st_mtime
+        # Two synchronized arrays
+        fnamearr.append(nnn)
+        statarr.append(fff)
+
+# ------------------------------------------------------------------------
+# Scan all files in one deep directory
+
+def  rescan():
+    global fnamearr, statarr
+
+    fnamearr = []; statarr = []
+    fnamearr2a = os.listdir()
+    #print(&#34;fnamearr2a&#34;, fnamearr2a)
+
+    for aaa in fnamearr2a:
+        if os.path.isdir(aaa):
+            # No need for these files
+            if &#34;__&#34; in aaa:
+                continue
+            if &#34;.git&#34; in aaa:
+                continue
+            if &#34;data&#34; in aaa:
+                continue
+            _rescan(aaa)
+        if os.path.isfile(aaa):
+             append_filename(aaa)
+    #print(&#34;fnamearr&#34;, fnamearr)
+
+# ------------------------------------------------------------------------
+
+def _rescan(dirx):
+
+    fnamearr2 = os.listdir(dirx)
+    for aa in range(len(fnamearr2)):
+        nnn = dirx + os.sep + fnamearr2[aa]
+        #print(&#34;nnn&#34;, nnn)
+        if os.path.isfile(nnn):
+             append_filename(nnn)
+        elif os.path.isdir(nnn):
+            _rescan(nnn)
+    return None
+
+# ------------------------------------------------------------------------
+# Entry point for the server
+
+if __name__ == &#39;__main__&#39;:
+
+    #path = sys.argv[1] if len(sys.argv) &gt; 1 else os.getcwd()
+    #port = int(sys.argv[2]) if len(sys.argv) &gt; 2 else 8000
+
+    global fnamearr, statarr
+
+    rescan()
+
+    th = _re_serve();  waitx();  _re_open()
+
+    while True:
+
+        #print(th.returncode, th.pid)
+
+        flag = False
+        for aa in range(len(fnamearr)):
+
+            # Make sure the log files do not trigger
+            if fnamearr[aa][-4:] == &#34;.log&#34;:
+                continue
+            # and python compile files do not trigger restart
+            if fnamearr[aa][-4:] == &#34;.pyc&#34;:
+                continue
+
+            # and sqlt files
+            if fnamearr[aa][-5:] == &#34;.sqlt&#34;:
+                continue
+
+            try:
+                stat = os.stat(fnamearr[aa])
+            except:
+                pass
+                continue;
+
+            if statarr[aa] != stat.st_mtime:
+                statarr[aa] = stat.st_mtime
+                flag = True
+                #print(&#34;would restart on&#34;, fnamearr[aa])
+
+        if flag:
+            time.sleep(.4)
+            th.terminate(); waitx()
+            th.kill();      waitx()
+            rescan()
+            #print(&#34;Restarted server:&#34;, time.asctime())
+            th = _re_serve() ; waitx();
+            _re_open()
+        time.sleep(.4)
+
+# EOF</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="wsgi_server.app"><code class="name flex">
+<span>def <span class="ident">app</span></span>(<span>environ, respond)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def app(environ, respond):
+
+    fn = os.path.join(path, environ[&#39;PATH_INFO&#39;][1:])
+    if &#39;.&#39; not in fn.split(os.path.sep)[-1]:
+        fn = os.path.join(fn, &#39;index.html&#39;)
+    type = mimetypes.guess_type(fn)[0]
+
+    if os.path.exists(fn):
+        respond(&#39;200 OK&#39;, [(&#39;Content-Type&#39;, type)])
+        return [util.FileWrapper(open(fn, &#34;rb&#34;))]
+    else:
+        respond(&#39;404 Not Found&#39;, [(&#39;Content-Type&#39;, &#39;text/plain&#39;)])
+        #respond(&#39;200 Hello world&#39;, [(&#39;Content-Type&#39;, &#39;text/plain&#39;)])
+        return [b&#39;not found&#39;]
+        #return &#34;Hello World&#34;</code></pre>
+</details>
+</dd>
+<dt id="wsgi_server.append_filename"><code class="name flex">
+<span>def <span class="ident">append_filename</span></span>(<span>nnn)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def append_filename(nnn):
+    global fnamearr, statarr
+
+    if os.path.isfile(nnn):
+        fff = os.stat(nnn).st_mtime
+        # Two synchronized arrays
+        fnamearr.append(nnn)
+        statarr.append(fff)</code></pre>
+</details>
+</dd>
+<dt id="wsgi_server.rescan"><code class="name flex">
+<span>def <span class="ident">rescan</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def  rescan():
+    global fnamearr, statarr
+
+    fnamearr = []; statarr = []
+    fnamearr2a = os.listdir()
+    #print(&#34;fnamearr2a&#34;, fnamearr2a)
+
+    for aaa in fnamearr2a:
+        if os.path.isdir(aaa):
+            # No need for these files
+            if &#34;__&#34; in aaa:
+                continue
+            if &#34;.git&#34; in aaa:
+                continue
+            if &#34;data&#34; in aaa:
+                continue
+            _rescan(aaa)
+        if os.path.isfile(aaa):
+             append_filename(aaa)
+    #print(&#34;fnamearr&#34;, fnamearr)</code></pre>
+</details>
+</dd>
+<dt id="wsgi_server.serve"><code class="name flex">
+<span>def <span class="ident">serve</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def serve():
+        httpd = simple_server.make_server(&#39;&#39;, port, app)
+        print(&#34;Serving {} on port {}, control-C to stop&#34;.format(path, port))
+        while True:
+            try:
+                httpd.handle_request()
+            except KeyboardInterrupt:
+                print(&#34;Shutting down.&#34;)
+                httpd.server_close()
+                raise
+                break</code></pre>
+</details>
+</dd>
+<dt id="wsgi_server.waitx"><code class="name flex">
+<span>def <span class="ident">waitx</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def waitx():
+    time.sleep(.1)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="wsgi_server.app" href="#wsgi_server.app">app</a></code></li>
+<li><code><a title="wsgi_server.append_filename" href="#wsgi_server.append_filename">append_filename</a></code></li>
+<li><code><a title="wsgi_server.rescan" href="#wsgi_server.rescan">rescan</a></code></li>
+<li><code><a title="wsgi_server.serve" href="#wsgi_server.serve">serve</a></code></li>
+<li><code><a title="wsgi_server.waitx" href="#wsgi_server.waitx">waitx</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

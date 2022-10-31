@@ -8,8 +8,10 @@ of the web server, and sub directories may assume the following functions:
         siteicons       icons for this site
         media           images, media
         static          files that may be presented as is
-        proj*           python and html / css files that make up the site
-
+        Proj-*          python and html / css files that make up the site
+            index.py    included by default
+            macros.py   macros included in project
+            common.py   common to project
 
   To create a <b>new project</b>, add a new directory that starts with "proj"
  (like "proj-000") and populate the files. At least one python file is needed.
@@ -28,6 +30,20 @@ The macro regex is '{ .*? }' [the '?' is for non greedy wild card)
 
  add_one_func("mymacro", my_img_func)
 
+  Macro 'auto' files:
+
+    The variables in the files start with "_mac_" will become local
+    macros, that can be  referenced on this page.
+    Variables start with "_glob_" wil become global that can be
+    referenced on the whole site. See: ./contents/Proj-xxx/macros.py
+
+     The project files are imported under a try: except clause, so ordinarily,
+    nothing in this file can down the site, can only down the particular page.
+    (for example a syntax error)
+    However, some conditions (like missing site dependencies)
+     CAN down the site.
+
+
  Builtin macros:
 
  { image nnn }          --  Put an image tag nnn in the output
@@ -41,6 +57,10 @@ The first two forms of the { image } function will preserve the image's aspect r
 import sys, os, mimetypes, time, datetime, getopt, traceback
 
 def tracex(xstr):
+
+    '''  Trace current fault.
+         This was crafted, so the apache run time can access it without any includes.
+      '''
 
     cumm = xstr + " "
     a,b,c = sys.exc_info()
@@ -72,12 +92,17 @@ gettext.textdomain('pyedpro')
 _ = gettext.gettext
 
 class comline():
+
+    ''' Command line action defines '''
+
     CLEAR_CONFIG = False
     SHOW_CONFIG = False
     SHOW_TIMING = False
     USE_STDOUT = False
 
 class Myconf():
+
+    ''' Simplified config for propagating command line to runtime '''
 
     def __init__(self):
         self.verbose = 0;
@@ -332,7 +357,7 @@ class xWebServer():
                     print("No such file", "'" + self.fn + "'")
                 respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
 
-                print("error select", self.url, fname)
+                #print("error select", self.url, fname)
 
                 # Search for 404 file
                 errfile = ""

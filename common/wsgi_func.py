@@ -208,7 +208,7 @@ def     load_data_func(strx, context):
            arg[1]      name of module to get the data from
            arg[2]      prefix of this set
            arg[3]      optional: fist record
-           arg[4]      optional: last record
+           arg[4]      optional: record count
 
      Example:
                { loadData proj-edit xx }
@@ -216,27 +216,41 @@ def     load_data_func(strx, context):
     '''
 
     ddd = parse_args(strx, context)
+    print("load_data_func() ddd", ddd)
 
-    prefix = ""
+    prefix = ""; first = 0; count = 0
+
     if len(ddd) > 2:
         prefix = ddd[2]
+    if len(ddd) > 3:
+        first = int(ddd[3])
+    if len(ddd) > 4:
+        count = int(ddd[4])
 
-    #print("load_data_func() ddd", ddd)
     #print("cwd", os.getcwd())
-    #print("prefix", prefix)
+    print("prefix", prefix, "first", first, "count", count)
 
-    # Get data from the editor
+    # Get data from the editor;
+    # Careful, passing the wrong filename, it will be created
     try:
         fff = "./data/%s.sqlt" % ddd[1]
         localdb = wsgi_data.wsgiSql(fff)
-    except:
-        print("Could not create / open local data for '%s'" % fff)
+    except Exception as e:
+        print("Could not create / open local data for '%s'" % fff, e)
         wsgi_util.put_exception("get data")
         return ""
 
     #print("strx", strx, modname)
     cnt = 0
-    res = localdb.getall()
+
+    if  count == 0:
+        res = localdb.getall()
+    else:
+        res = localdb.getrange(first, count)
+        print("res", res)
+
+    if not res:
+        res = []
 
     # The data is returned as macros, the page can reference
     wsgi_global.gltable.add_one_func(prefix + "DLen", str(len(res)))

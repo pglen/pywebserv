@@ -313,6 +313,23 @@ def add_local_funcs(locvars, table):
         print("Exception on add_local_funcs", sys.exc_info())
         put_exception("loc func")
 
+# ------------------------------------------------------------------------
+# Scan for _func_ in the name
+
+def add_global_funcs(locvars, table):
+
+    try:
+        for aa in locvars:
+            #print("Adding local func", aa, type(locvars[aa]))
+            if type(locvars[aa]) == type(add_local_funcs):
+                # Do not add hidden
+                if "_gfunc_" == aa[:7]:
+                    #print("Adding global func2", aa)
+                    wsgi_global.gltable.add_one_func(aa[7:], locvars[aa])
+
+    except:
+        print("Exception on add_global_funcs", sys.exc_info())
+        put_exception("glob func")
 
 
 def add_local_vars(locvars, table):
@@ -355,5 +372,18 @@ def add_global_vars(locvars, table):
     except:
         print("Exception on add_local_vars", sys.exc_info())
         put_exception("loc")
+
+# ------------------------------------------------------------------------
+# This is a collection of all automatic var adds
+
+def add_all_vars(locvars, table):
+
+    # This adds local the variables pre - marked for a purpose
+    add_local_vars(locvars, table)
+    add_local_funcs(locvars, table)
+
+    # This adds global the variables pre - marked for a purpose
+    add_global_vars(locvars, table)
+    add_global_funcs(locvars, table)
 
 # EOF

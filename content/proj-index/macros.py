@@ -24,8 +24,6 @@ from . import common
 _glob_tabhead = "#ccffcc"
 _glob_misscol = "#eeeeee"
 
-#_mac_loadData = '''{ loadData proj-edit xx }'''
-
 _mac_CompanyName = '''UPP the United Planet Peace'''
 
 _glob_sitestyle = '''
@@ -150,7 +148,7 @@ _mac_main_center = '''
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
         { mission_statement }
-        { loadData proj-edit xx }
+        { loadData proj-edit xx 3 3 }
 
         <!-- len={ xxDataLen }<br> -->
 
@@ -208,11 +206,6 @@ _glob_site_right = '''
         { app3 }
 </table>
 '''
-
-#{ xxData0-0 } <br>
-#{ xxData0-1 } <br>
-#{ xxData0-2 } <br>
-#{ xxData0-3 } <br>
 
 def _func_article(strx, context):
 
@@ -337,14 +330,6 @@ _mac_imgrow = '''
 
 '''
 
-# This adds local the variables pre - marked for a purpose
-wsgi_util.add_local_vars( locals().copy(), common.local_table)
-
-# This adds global the variables pre - marked for a purpose
-wsgi_util.add_global_vars(locals().copy(), common.local_table)
-
-#wsgi_global.gltable.add_one_func("article", article)
-wsgi_util.add_local_funcs(locals().copy(), common.local_table)
-
+wsgi_util.add_all_vars(locals().copy(), common.local_table)
 
 # EOF

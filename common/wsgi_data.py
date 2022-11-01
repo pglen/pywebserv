@@ -107,9 +107,34 @@ class wsgiSql():
         #print("byid", kkk)
         rr = None
         try:
-            self.c.execute("select * from " + self.table + " indexed by iconfig where pri = ?", (kkk,))
+            self.c.execute("select * from " + self.table + \
+                             " indexed by iconfig where pri = ?", (kkk,))
             rr = self.c.fetchone()
         except:
+            print("Cannot get sql data", sys.exc_info())
+            rr = None
+            raise
+        finally:
+            pass
+        if rr:
+            return rr
+        else:
+            return None
+
+    # --------------------------------------------------------------------
+    # Return None if no data
+
+    def  getrange(self, skip, count):
+
+        #print("byid", kkk)
+        rr = None
+        try:
+            self.c.execute("select * from " + self.table + \
+                             " limit %d offset %d" % (int(count), int(skip) ) )
+
+            rr = self.c.fetchall()
+        except:
+            wsgi_util.put_exception("getrange ")
             print("Cannot get sql data", sys.exc_info())
             rr = None
             raise

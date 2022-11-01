@@ -1,4 +1,4 @@
-# Wsgi Web Server
+# pywebserv Wsgi Web Server
 
 ## WSGI compliant web server
 

@@ -130,6 +130,6 @@ wsgi_global.add_one_url("/resp/resp.html", got_index, "resp.html", __file__)
 # Simply refer to the macro in the html temple, and it will get called
 # and the output substituted
 
-wsgi_global.add_one_func("app3", mock_cal_func)
+wsgi_global.gltable.add_one_func("app3", mock_cal_func)
 
 # EOF

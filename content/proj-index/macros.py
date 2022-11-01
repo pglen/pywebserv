@@ -24,6 +24,8 @@ from . import common
 _glob_tabhead = "#ccffcc"
 _glob_misscol = "#eeeeee"
 
+#_mac_loadData = '''{ loadData proj-edit xx }'''
+
 _mac_CompanyName = '''UPP the United Planet Peace'''
 
 _glob_sitestyle = '''
@@ -123,12 +125,6 @@ _glob_site_left = '''
 '''
 
 _mac_mission_statement = '''
-    <table width=100% cellpadding=3 border=0>
-    { mission_statement }
-    </table>
-'''
-
-_mac_mission_statement = '''
 
 <tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
     <font size=-1>Mission Statement:</font>
@@ -154,7 +150,8 @@ _mac_main_center = '''
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
         { mission_statement }
-        { fill_data xx }
+        { loadData proj-edit xx }
+
         <!-- len={ xxDataLen }<br> -->
 
         <table width=100% border=0>
@@ -217,7 +214,7 @@ _glob_site_right = '''
 #{ xxData0-2 } <br>
 #{ xxData0-3 } <br>
 
-def article(strx, context):
+def _func_article(strx, context):
 
     ddd = wsgi_func.parse_args(strx, context)
 
@@ -244,72 +241,6 @@ def article(strx, context):
         </table>
     ''' % (ddd[1], ddd[1], ddd[1], ddd[1], ddd[1], ddd[1], )
     return sss
-
-_mac_article2 = '''
-    <td>
-        <table border=0 bgcolor=#dddddd>
-            <tr><td>
-            <table border=0 bgcolor=#f5f5f5>
-            <tr>
-                <tr><td colspan=2>
-                <font size=+2>Article header, number three
-                <tr>
-                <td>
-                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
-                <td>
-                Image description
-                <tr><td colspan=2> Article Title
-                <tr><td colspan=2 style="text-alignment:justify"> Image description3
-                Article / Image description detail <br>
-                Article / Image description detail
-                Article / Image description detail
-            </table>
-        </table>
-'''
-
-_mac_article3 = '''
-    <td>
-        <table border=0 bgcolor=#dddddd>
-            <tr><td>
-            <table border=0 bgcolor=#f5f5f5>
-            <tr>
-                <tr><td colspan=2>
-                <font size=+2>Article header, number three
-                <tr>
-                <td>
-                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
-                <td>
-                Image description
-                <tr><td colspan=2> Article Title
-                <tr><td colspan=2 style="text-alignment:justify"> Image description3
-                Article / Image description detail <br>
-                Article / Image description detail
-                Article / Image description detail
-            </table>
-        </table>
-'''
-
-_mac_article4 = '''
-    <td>
-        <table border=0 bgcolor=#dddddd>
-            <tr><td>
-            <table border=0 bgcolor=#eeeeee>
-            <tr>
-                <tr><td colspan=2>
-                <font size=+2>"{ art_header } four"
-                <tr>
-                <td>
-                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
-                <td>
-                Image description
-                <tr><td colspan=2> Article Title
-                <tr><td colspan=2 style="text-alignment:justify"> Image description3
-                Article / Image description detail <br>
-                Article / Image description detail
-                Article / Image description detail
-            </table>
-        </table>
-'''
 
 _mac_article5 = '''Hello'''
 
@@ -410,8 +341,10 @@ _mac_imgrow = '''
 wsgi_util.add_local_vars( locals().copy(), common.local_table)
 
 # This adds global the variables pre - marked for a purpose
-wsgi_util.add_global_vars( locals().copy(), common.local_table)
+wsgi_util.add_global_vars(locals().copy(), common.local_table)
 
-wsgi_global.add_one_func("article", article)
+#wsgi_global.gltable.add_one_func("article", article)
+wsgi_util.add_local_funcs(locals().copy(), common.local_table)
+
 
 # EOF

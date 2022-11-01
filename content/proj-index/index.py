@@ -43,68 +43,6 @@ def got_index(config, carry):
     content = wsgi_util.process_default(config, carry)
     return content
 
-# ----------------------------------------------------------------
-# Retrieve from pre loaded table
-
-def get_data(strx, context):
-
-    ddd = wsgi_func.parse_args(strx, context)
-
-    #wsgi_global.dump_table()
-    #print("ddd", ddd)
-
-    try:
-        item = wsgi_global.lookup_item(ddd[1] + "Data")[0][int(ddd[2])][int(ddd[3])]
-        #print("item", item)
-    except:
-        item = "No data at %s:%s" % (ddd[2], ddd[3])
-        pass
-
-    return item
-
-# ------------------------------------------------------------------------
-# Get the top row's data
-
-def fill_data(strx, context):
-
-    ddd = wsgi_func.parse_args(strx, context)
-    if len(ddd) > 1:
-        prefix = ddd[1]
-    else:
-        prefix = ""
-
-    #print("ddd", ddd)
-    # Get data from the editor
-    mn = "proj-edit"
-    try:
-        localdb = wsgi_data.wsgiSql("data/%s.sqlt" % mn)
-    except:
-        print("Could not create / open local data for %s", modname)
-        return ""
-
-    #print("strx", strx, modname)
-    cnt = 0
-    res = localdb.getall()
-
-    # The data is returned as macros, the page can reference
-    wsgi_global.add_one_func(prefix + "DLen", str(len(res)))
-    wsgi_global.add_one_func(prefix + "Data", res )
-    wsgi_global.add_one_func("getData", get_data)
-
-    #for aa in res:
-    #    cnt2 = 0
-    #    wsgi_global.add_one_func(prefix + "RecLen%d" % cnt2, str(len(aa)))
-    #    for bb in aa:
-    #        wsgi_global.add_one_func(prefix + "Dat%d-%d" % (cnt, cnt2), str(bb) )
-    #        cnt2 += 1
-    #    cnt += 1
-
-    localdb.close()
-
-    #wsgi_global.dump_table()
-
-    return ""
-
 def got_log(config, carry):
 
     carry.local_table = common.local_table
@@ -159,9 +97,9 @@ try:
     wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
     wsgi_global.add_one_url("/log.html", got_log, "log.html", __file__)
 
-    wsgi_global.add_one_func("show_submit", show_submit_func)
-    wsgi_global.add_one_func("fill_data", fill_data)
-    wsgi_global.add_one_func("CompanyName", "UPP, United Planet Peace")
+    wsgi_global.gltable.add_one_func("show_submit", show_submit_func)
+    #wsgi_global.gltable.add_one_func("fill_data", fill_data)
+    wsgi_global.gltable.add_one_func("CompanyName", "UPP, United Planet Peace")
 
 except:
     print("Cannot add module globals:", "'" + modname + "'", sys.exc_info())

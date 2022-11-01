@@ -12,7 +12,8 @@ try:
 except:
     print("Must install PIL");
 
-import wsgi_util, wsgi_style, wsgi_res, wsgi_global, wsgi_parse
+import wsgi_util, wsgi_style, wsgi_res, wsgi_global
+import wsgi_parse, wsgi_data
 
 # ------------------------------------------------------------------------
 
@@ -196,6 +197,103 @@ def     image_func(strx, context):
 
     return "<img src=/media/broken.png>"
 
+def     load_data_func(strx, context):
+
+    '''
+    # ------------------------------------------------------------------------
+     Get a row's data; pre load database table as macros.
+
+       Arguments:
+           arg[0]      command name
+           arg[1]      name of module to get the data from
+           arg[2]      prefix of this set
+           arg[3]      optional: fist record
+           arg[4]      optional: last record
+
+     Example:
+               { loadData proj-edit xx }
+
+    '''
+
+    ddd = parse_args(strx, context)
+
+    prefix = ""
+    if len(ddd) > 2:
+        prefix = ddd[2]
+
+    #print("load_data_func() ddd", ddd)
+    #print("cwd", os.getcwd())
+    #print("prefix", prefix)
+
+    # Get data from the editor
+    try:
+        fff = "./data/%s.sqlt" % ddd[1]
+        localdb = wsgi_data.wsgiSql(fff)
+    except:
+        print("Could not create / open local data for '%s'" % fff)
+        wsgi_util.put_exception("get data")
+        return ""
+
+    #print("strx", strx, modname)
+    cnt = 0
+    res = localdb.getall()
+
+    # The data is returned as macros, the page can reference
+    wsgi_global.gltable.add_one_func(prefix + "DLen", str(len(res)))
+    wsgi_global.gltable.add_one_func(prefix + "Data", res )
+
+    #for aa in res:
+    #    cnt2 = 0
+    #    wsgi_global.add_one_func(prefix + "RecLen%d" % cnt2, str(len(aa)))
+    #    for bb in aa:
+    #        wsgi_global.gltable.add_one_func(prefix + "Dat%d-%d" % (cnt, cnt2), str(bb) )
+    #        cnt2 += 1
+    #    cnt += 1
+
+    localdb.close()
+
+    #wsgi_global.dump_table()
+
+    return ""
+
+
+def     get_data_func(strx, context):
+
+    '''
+     ----------------------------------------------------------------
+     Retrieve from pre loaded table
+
+       Arguments:
+           arg[0]      command name
+           arg[1]      prefix of this set
+           arg[2]      index of row
+           arg[3]      index of col
+
+     Example:
+               { getData xx %s 5 }
+
+     Please note that the rendering engine will try to render within
+     HTML comments. The macro below is still expanded.
+
+              <!--  { getData xx %s 15 } -->
+    '''
+
+    ddd = parse_args(strx, context)
+    #wsgi_global.dump_table()
+    #print("ddd", ddd)
+
+    try:
+        item = wsgi_global.gltable.lookup_item(\
+                        ddd[1] + "Data")[0][int(ddd[2])][int(ddd[3])]
+        #print("item", item)
+    except IndexError:
+        #wsgi_util.put_exception("get data")
+        item = "No data at %s:%s" % (ddd[2], ddd[3])
+    except:
+        wsgi_util.put_exception("get data")
+        item = "Error"
+    return item
+
 # ------------------------------------------------------------------------
 # I wish the http standard had this one command
 
@@ -243,11 +341,16 @@ def     build_initial_table():
     #print("build_initial_table()")
 
     try:
-        wsgi_global.add_one_func("app_one", app_one_func)
-        wsgi_global.add_one_func("app2",   app_two_func)
-        wsgi_global.add_one_func("image",   image_func)
-        wsgi_global.add_one_func("include", include_func)
-        wsgi_global.add_one_func("deep",    deep_func)
+        # Built ins
+        wsgi_global.gltable.add_one_func("image",    image_func)
+        wsgi_global.gltable.add_one_func("getData",  get_data_func)
+        wsgi_global.gltable.add_one_func("loadData", load_data_func)
+        wsgi_global.gltable.add_one_func("include",  include_func)
+        wsgi_global.gltable.add_one_func("deep",     deep_func)
+
+        # Examples
+        wsgi_global.gltable.add_one_func("app_one",  app_one_func)
+        wsgi_global.gltable.add_one_func("app2",     app_two_func)
 
     except:
         #print("Cannot build global table", sys.exc_info())
@@ -259,14 +362,14 @@ def     build_initial_rc():
         The user resources may override any of this
     '''
     try:
-        wsgi_global.add_one_func("header",   wsgi_res.header)
-        wsgi_global.add_one_func("footer",   wsgi_res.footer)
-        wsgi_global.add_one_func("bigtext",  wsgi_res.bigtext)
-        wsgi_global.add_one_func("imgrow",   wsgi_res.imgrow)
-        wsgi_global.add_one_func("mystyle",  wsgi_style.mystyle)
+        wsgi_global.gltable.add_one_func("header",   wsgi_res.header)
+        wsgi_global.gltable.add_one_func("footer",   wsgi_res.footer)
+        wsgi_global.gltable.add_one_func("bigtext",  wsgi_res.bigtext)
+        wsgi_global.gltable.add_one_func("imgrow",   wsgi_res.imgrow)
+        wsgi_global.gltable.add_one_func("mystyle",  wsgi_style.mystyle)
 
-        wsgi_global.add_one_func("xarticle",  wsgi_res.article)
-        wsgi_global.add_one_func("xarticle2", wsgi_res.article2)
+        wsgi_global.gltable.add_one_func("xarticle",  wsgi_res.article)
+        wsgi_global.gltable.add_one_func("xarticle2", wsgi_res.article2)
 
     except:
         #print("Cannot build global rc", sys.exc_info())

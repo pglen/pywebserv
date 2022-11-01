@@ -79,49 +79,59 @@ urlmap =  UrlMap()
 # ------------------------------------------------------------------------
 # Add a new project function;
 
-def     add_one_func(mname, mfunc, mpage = None, fname=None):
+class Table():
 
-    '''
-         Add a macro function or string here. The macro is substituted
-        by the output of the function. Macro syntax is words surrounded by
-        '{ ' and ' }' as in { macro }
-        if macro is a string, substitution is made in line.
+    def __init__(self):
+        pass
 
-          It is also permissible to add a python variable as the value for
-        substitution. It is substituted recursively, so variables in
-        variables are permitted. The max nesting depth is 10.
-          The arguments to a macro are expanded when enclosed in  '[ arg ']'
-        like: { mymacro [ arg_one ] two three }
-        The macro (after substation) receives the argument string verbatim.
-    '''
-    try:
-        #see if there is an entry already
+    def add_one_func(self, mname, mfunc, mpage = None, fname=None):
+        '''
+             Add a macro function or string here. The macro is substituted
+            by the output of the function. Macro syntax is words surrounded by
+            '{ ' and ' }' as in { macro }
+            if macro is a string, substitution is made in line.
+
+              It is also permissible to add a python variable as the value for
+            substitution. It is substituted recursively, so variables in
+            variables are permitted. The max nesting depth is 10.
+              The arguments to a macro are expanded when enclosed in  '[ arg ']'
+            like: { mymacro [ arg_one ] two three }
+            The macro (after substation) receives the argument string verbatim.
+        '''
+
+        #print("adding mname", mname)
+
+        #global global_table
+        try:
+            #see if there is an entry already
+            for aa in global_table:
+                if aa[0] == mname:
+                    print("Duplicate macro", mname)
+                    return 1
+            global_table.append([mname, mfunc])
+        except:
+            print("Cannot add global table item", sys.exc_info())
+        return 0
+
+    def lookup_item(self, item):
         for aa in global_table:
-            if aa[0] == mname:
-                #print("Duplicate macro", mname)
-                return 1
-        global_table.append([mname, mfunc])
-    except:
-        print("Cannot add global table item", sys.exc_info())
-    return 0
+            if aa[0] == item:
+                return aa[1:]
+        return ""
 
-def lookup_item(item):
-    for aa in global_table:
-        if aa[0] == item:
-            return aa[1:]
-    return ""
+    def dump_table(self):
+        for aa in global_table:
+            print("'" + aa[0] + "' = ", end = " ")
+            #print("type", type(aa[1]))
 
-def     dump_table():
-    for aa in global_table:
-        print("'" + aa[0] + "' = ", end = " ")
-        #print("type", type(aa[1]))
+            if type(aa[1]) == type(""):
+                print("'" + aa[1][:24].replace("\n", "\\n") + "'")
+            elif type(aa[1]) == type([]):
+                print("ARR ", aa[1][0])
+            else:
+                print("'" + aa[1].__name__ + "()" +"'")
 
-        if type(aa[1]) == type(""):
-            print("'" + aa[1][:24].replace("\n", "\\n") + "'")
-        elif type(aa[1]) == type([]):
-            print("ARR ", aa[1][0])
-        else:
-            print("'" + aa[1].__name__ + "()" +"'")
+gltable = Table()
 
 # ------------------------------------------------------------------------
 # Add functions to URL map

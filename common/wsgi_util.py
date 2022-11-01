@@ -295,11 +295,33 @@ def _check_type(locvars, aa):
         print("Invalid type definition", "'" + aa + "'")
         return True
 
+# ------------------------------------------------------------------------
+# Scan for _func_ in the name
+
+def add_local_funcs(locvars, table):
+
+    try:
+        for aa in locvars:
+            #print("Adding local func", aa, type(locvars[aa]))
+            if type(locvars[aa]) == type(add_local_funcs):
+                # Do not add hidden
+                if "_func_" == aa[:6]:
+                    #print("Adding local func2", aa)
+                    add_local_func(aa[6:],  locvars[aa], table)
+
+    except:
+        print("Exception on add_local_funcs", sys.exc_info())
+        put_exception("loc func")
+
+
+
 def add_local_vars(locvars, table):
 
     '''
          Add all local varables here. A copy of the vars is received
          for non changing array
+         Scan for _mac_ in the name
+
     '''
 
     try:
@@ -320,7 +342,8 @@ def add_global_vars(locvars, table):
     '''
          Add all global varables here. A copy of the vars is received
          for non changing array
-    '''
+         Scan for _glob_ in the name
+'''
 
     try:
         for aa in locvars:
@@ -328,7 +351,7 @@ def add_global_vars(locvars, table):
             if "_glob_" in aa[:6]:
                 if _check_type(locvars, aa):
                     continue
-                wsgi_global.add_one_func(aa[6:], locvars[aa])
+                wsgi_global.gltable.add_one_func(aa[6:], locvars[aa])
     except:
         print("Exception on add_local_vars", sys.exc_info())
         put_exception("loc")

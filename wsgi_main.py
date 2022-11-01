@@ -28,7 +28,7 @@ will be replaced by the return value of the function. The macro
 is created by surrounding braces with a space. Like: { mymacro }
 The macro regex is '{ .*? }' [the '?' is for non greedy wild card)
 
- add_one_func("mymacro", my_img_func)
+  add_one_func("mymacro", my_img_func)
 
   Macro 'auto' files:
 
@@ -42,7 +42,6 @@ The macro regex is '{ .*? }' [the '?' is for non greedy wild card)
     (for example a syntax error)
     However, some conditions (like missing site dependencies)
      CAN down the site.
-
 
  Builtin macros:
 

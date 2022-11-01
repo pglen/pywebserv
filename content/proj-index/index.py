@@ -43,6 +43,25 @@ def got_index(config, carry):
     content = wsgi_util.process_default(config, carry)
     return content
 
+# ----------------------------------------------------------------
+# Retrieve from pre loaded table
+
+def get_data(strx, context):
+
+    ddd = wsgi_func.parse_args(strx, context)
+
+    #wsgi_global.dump_table()
+    #print("ddd", ddd)
+
+    try:
+        item = wsgi_global.lookup_item(ddd[1] + "Data")[0][int(ddd[2])][int(ddd[3])]
+        #print("item", item)
+    except:
+        item = "No data at %s:%s" % (ddd[2], ddd[3])
+        pass
+
+    return item
+
 # ------------------------------------------------------------------------
 # Get the top row's data
 
@@ -54,36 +73,37 @@ def fill_data(strx, context):
     else:
         prefix = ""
 
-    print("ddd", ddd)
+    #print("ddd", ddd)
     # Get data from the editor
     mn = "proj-edit"
     try:
-        #localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
         localdb = wsgi_data.wsgiSql("data/%s.sqlt" % mn)
     except:
         print("Could not create / open local data for %s", modname)
         return ""
 
-    print("strx", strx, modname)
-    out = ""; cnt = 0
+    #print("strx", strx, modname)
+    cnt = 0
     res = localdb.getall()
 
     # The data is returned as macros, the page can reference
-    wsgi_global.add_one_func(prefix + "DataLen", str(len(res)))
+    wsgi_global.add_one_func(prefix + "DLen", str(len(res)))
+    wsgi_global.add_one_func(prefix + "Data", res )
+    wsgi_global.add_one_func("getData", get_data)
 
-    for aa in res:
-        #out += "'" + aa[1] + "'  &nbsp;  '" + aa[2] + "' &nbsp; '" + aa[3] + "'<br>"
-        cnt2 = 0
-        wsgi_global.add_one_func(prefix + "RecLen%d" % cnt2, str(len(aa)))
-        for bb in aa:
-            wsgi_global.add_one_func(prefix + "Data%d-%d" % (cnt, cnt2), str(bb) )
-            cnt2 += 1
-        cnt += 1
+    #for aa in res:
+    #    cnt2 = 0
+    #    wsgi_global.add_one_func(prefix + "RecLen%d" % cnt2, str(len(aa)))
+    #    for bb in aa:
+    #        wsgi_global.add_one_func(prefix + "Dat%d-%d" % (cnt, cnt2), str(bb) )
+    #        cnt2 += 1
+    #    cnt += 1
 
     localdb.close()
 
-    print("out", out)
-    return out
+    #wsgi_global.dump_table()
+
+    return ""
 
 def got_log(config, carry):
 

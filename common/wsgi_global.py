@@ -105,6 +105,24 @@ def     add_one_func(mname, mfunc, mpage = None, fname=None):
         print("Cannot add global table item", sys.exc_info())
     return 0
 
+def lookup_item(item):
+    for aa in global_table:
+        if aa[0] == item:
+            return aa[1:]
+    return ""
+
+def     dump_table():
+    for aa in global_table:
+        print("'" + aa[0] + "' = ", end = " ")
+        #print("type", type(aa[1]))
+
+        if type(aa[1]) == type(""):
+            print("'" + aa[1][:24].replace("\n", "\\n") + "'")
+        elif type(aa[1]) == type([]):
+            print("ARR ", aa[1][0])
+        else:
+            print("'" + aa[1].__name__ + "()" +"'")
+
 # ------------------------------------------------------------------------
 # Add functions to URL map
 # One may override any file; in that case the values are filled in

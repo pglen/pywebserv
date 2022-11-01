@@ -160,7 +160,7 @@ _mac_main_center = '''
         <table width=100% border=0>
             <tr valign=top>
             <td valign=middle bgcolor=#cccccc> &nbsp; << &nbsp;
-            { article } { article2 } { article3 } { article4 }
+            { article 0 } { article 1 } { article 2 } { article 3 }
             <td valign=middle bgcolor=#cccccc> &nbsp; >>  &nbsp;
          </table>
 
@@ -217,25 +217,33 @@ _glob_site_right = '''
 #{ xxData0-2 } <br>
 #{ xxData0-3 } <br>
 
-_mac_article = '''
+def article(strx, context):
+
+    ddd = wsgi_func.parse_args(strx, context)
+
+    sss = '''
     <td>
         <table border=0 bgcolor=#dddddd>
             <tr><td>
             <table border=0 bgcolor=#f5f5f5>
             <tr>
                 <tr><td colspan=2>
-                <font size=+2> { xxData0-1 }
+                <font size=+2> { getData xx %s 1 }
                 <tr>
                 <td>
                 { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
                 <td>
-                { xxData0-2 }
-                <tr><td colspan=2> { xxData0-3 }
+                    { getData xx %s 2 }
+                <tr><td colspan=2>
+                    { getData xx %s 3 }
                 <tr><td colspan=2 style="text-alignment:justify">
-                { xxData0-4 }<br>
+                    { getData xx %s 4 }<br>
+                    { getData xx %s 5 }<br>
+                    <!-- { getData xx %s 6 }<br> -->
             </table>
         </table>
-'''
+    ''' % (ddd[1], ddd[1], ddd[1], ddd[1], ddd[1], ddd[1], )
+    return sss
 
 _mac_article2 = '''
     <td>
@@ -403,5 +411,7 @@ wsgi_util.add_local_vars( locals().copy(), common.local_table)
 
 # This adds global the variables pre - marked for a purpose
 wsgi_util.add_global_vars( locals().copy(), common.local_table)
+
+wsgi_global.add_one_func("article", article)
 
 # EOF

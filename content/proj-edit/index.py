@@ -9,12 +9,10 @@
 '''
 
 import os, sys, time
-import wsgi_util, wsgi_func, wsgi_data, wsgi_global, wsgi_swear
+import wsgi_util, wsgi_func, wsgi_data, wsgi_global,  wsgi_util
 
 #print("Loading", "'" + os.path.basename(__file__)  + "'" )
-
-ppp = __file__.split('/')
-modname = ppp[-2]
+modname = __file__.split('/')[-2]
 #print("Loaded mod:", modname)
 
 from . import macros
@@ -38,12 +36,13 @@ def got_index(config, carry):
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
 
     if carry.request:
+        print("carry.request", carry.request)
         rq = []
-        for aa in request:
+        for aa in carry.request:
             rq.append(aa[1])
 
         #print("data", rq)
-        print("save to database", "data/%s.sqlt" % modname)
+        #print("save to database", "data/%s.sqlt" % modname)
         try:
             #startt = time.perf_counter()
             wsgi_data.soft_opendb(carry, modname)

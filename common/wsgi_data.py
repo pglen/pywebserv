@@ -2,8 +2,8 @@
 
 ''' The simplest web server '''
 
-import sys, os, mimetypes, time, sqlite3
-
+import sys, os, mimetypes, time, sqlite3, uuid
+import wsgi_util
 
 # Do we have database handle already?
 
@@ -16,15 +16,19 @@ def soft_opendb(carry, modname):
     if not hasattr(carry, "localdb"):
         needopen = True
     else:
-        # see if it is OK
+        # see if DB is OK
         try:
-            recs = carry.localdb.getcount()
+            conn = sqlite3.connect(file)
+            c = conn.cursor()
+            c.execute("select count(*) from " + self.table + "")
+            conn.close()
         except:
+            #print("Cannot open/create db:", file, sys.exc_info())
             needopen = True
 
     if needopen:
         try:
-            carry.localdb = wsgi_data.wsgiSql(dbname)
+            carry.localdb = wsgiSql(dbname)
         except:
             print("Cannot open database", dbname)
             wsgi_util.put_exception("Open database %s") % dbname
@@ -51,7 +55,7 @@ class wsgiSql():
             self.c = self.conn.cursor()
             # Create table
             self.c.execute("create table if not exists " + self.table + "\
-             (pri INTEGER PRIMARY KEY, key text, val text, val2 text, val3 text, val4 text)")
+             (pri INTEGER PRIMARY KEY, key text, uuid text, val text, val2 text, val3 text, val4 text)")
             self.c.execute("create index if not exists iconfig on " + self.table + " (key)")
             self.c.execute("create index if not exists pconfig on " + self.table + " (pri)")
             self.c.execute("PRAGMA synchronous=OFF")
@@ -158,11 +162,13 @@ class wsgiSql():
             rr = self.c.fetchall()
             if rr == []:
                 #print( "inserting")
-                self.c.execute("insert into " + self.table + " (key, val, val2, val3, val4) values (?, ?, ?, ?, ?)", (key, val, val2, val3, val4))
+                uuidx = str(uuid.uuid4())
+                self.c.execute("insert into " + self.table + " (key, uuid, val, val2, val3, val4) \
+                    values (?, ?, ?, ?, ?, ?)", (key, uuidx, val, val2, val3, val4))
             else:
-
                 #print ("updating")
-                self.c.execute("update " + self.table + " indexed by iconfig set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
+                self.c.execute("update " + self.table +
+                            " indexed by iconfig set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
                                      (val, val2, val3, val4, key))
             self.conn.commit()
         except:

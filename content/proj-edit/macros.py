@@ -10,7 +10,6 @@ import  wsgi_util, wsgi_func, wsgi_global, wsgi_data
 from . import common
 
 ppp = __file__.split('/')
-#print("ppp", ppp)
 modname = ppp[-2]
 #print("modname", modname)
 
@@ -73,29 +72,24 @@ def imgrow_data(strx, context):
 
     sss = wsgi_func.parse_args(strx, context)
     foot = '''<td width=10> <td>  '''
-
     #print("arg sss", sss)
-
     data = fill_data(context.localdb, int(sss[1]))
-
     #print("data", data)
+    strx = '''
+    <form action=editor.html method=post>
+    <tr>
+    <td>
+    '''
+    for aa in data[3:]:
+        strx += "<td> <font size=+2>%s</font> " % aa
 
-    if 1: #not len(data):
-        strx = '''
-        <form action=editor.html method=post>
-        <tr>
-            <td width=10>
-            <td width=10>
-            <td align=center>
-            <td align=center colspan=6>
-            <p><font size=+2> %s id=%s</font>
-            <input type=submit id=idsub name=ed_%s value="Edit" >
-            <input type=submit id=idsub name=del_%s value="Del" >
-            <td width=10>
-            <td>
-        </form>
-        ''' % (data, sss[1], sss[1], sss[1])
-        return strx
+    strx += '''
+        <input type=submit id=idsub name=ed_%s value="Edit" >
+        <input type=submit id=idsub name=del_%s value="Del" >
+        <td>
+    </form>
+    ''' %  (sss[1], sss[1])
+    return strx
 
     strx = '''
     <tr> <td width=10>
@@ -186,14 +180,13 @@ def mid_rows(strx, context):
         wsgi_util.put_exception("opening SQL")
         return
 
+    ret += "<table border=0>"
     recs = context.localdb.getcount()
-
     for aa in range(recs):
         # Starting at one
         ret +=   " { imgrow_data [ %d ] }" % (aa+1)
-
+    ret += "</table>"
     #context.localdb.close()
-
     return ret
 
 _mac_center_body = '''
@@ -215,6 +208,12 @@ _mac_nav = '''
                 &nbsp <img src=/siteicons/media-seek-forward.png title=Forward>
                 &nbsp <img src=/siteicons/media-skip-forward.png title="Forward Front">
     </table>
+'''
+
+_mac_add_new = '''
+    <form action=editor.html method=post>
+    <input type=submit name='add_new' value='Add New'>
+    </form>
 '''
 
 _mac_right = '''

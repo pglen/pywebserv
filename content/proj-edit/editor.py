@@ -1,7 +1,7 @@
  #!/usr/bin/env python3
 
 import sys
-import  wsgi_util, wsgi_func, wsgi_global, wsgi_data
+import  wsgi_util, wsgi_func, wsgi_global, wsgi_data, wsgi_util
 
 from . import common
 from . import macros
@@ -37,6 +37,8 @@ def got_editor(config, carry):
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
     if carry.request:
 
+        print("carry.request", carry.request)
+
         wsgi_data.soft_opendb(carry, modname)
 
         if carry.request[0][1] == "Edit":
@@ -52,6 +54,15 @@ def got_editor(config, carry):
                 carry.cdata += "<tr><td>arg 4 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa4>" + res[4] + "</textarea><p>"
                 carry.cdata += "</table>"
 
+        if carry.request[0][1] == "Add New":
+            #print ("adding new data")
+            carry.cdata += "<table>"
+            carry.cdata += "<tr><td>arg 1 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa1>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>arg 2 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa2>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>arg 3 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa3>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>arg 4 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa4>"  + "</textarea><p>"
+            carry.cdata += "</table>"
+
         if carry.request[0][1] == "Del":
             rq = carry.request[0][0].split("_")
             print("rq delete data", rq[1])
@@ -59,15 +70,18 @@ def got_editor(config, carry):
             #carry.localdb.put("key_" + rq[0], rq[0], rq[1], rq[2], "")
 
     carry.local_table = common.local_table
+
     content += wsgi_util.process_default(config, carry)
     #print("content", content)
 
     return content
 
 def one_center(strx, context):
-    content = "<td width=70% align=center valign=top> <p><p>Record %d" # % (1)
+    content = "<form action=index.html method=post >"
+    content += "<td width=70% align=center valign=top> <p><p>Record %d" # % (1)
     content += "<p><p> " + context.cdata  + "<p>"
     content += "<input type=submit value='Save Data'>"
+    content += "</form >"
     return content
 
 try:

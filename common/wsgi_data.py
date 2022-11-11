@@ -158,18 +158,23 @@ class wsgiSql():
 
         ret = True
         try:
-            self.c.execute("select * from " + self.table + " indexed by iconfig where key == ?", (key,))
+            self.c.execute("select * from " + self.table + \
+                            " indexed by iconfig where key == ?", (key,))
             rr = self.c.fetchall()
             if rr == []:
                 #print( "inserting")
                 uuidx = str(uuid.uuid4())
-                self.c.execute("insert into " + self.table + " (key, uuid, val, val2, val3, val4) \
-                    values (?, ?, ?, ?, ?, ?)", (key, uuidx, val, val2, val3, val4))
+                self.c.execute("insert into " + self.table + \
+                        " (key, uuid, val, val2, val3, val4) \
+                            values (?, ?, ?, ?, ?, ?)", \
+                                (key, uuidx, val, val2, val3, val4))
             else:
                 #print ("updating")
                 self.c.execute("update " + self.table +
-                            " indexed by iconfig set val = ?, val2 = ?, val3 = ?, val4 = ? where key = ?",\
-                                     (val, val2, val3, val4, key))
+                    " indexed by iconfig set " \
+                        " val = ?, val2 = ?, val3 = ?, val4 = ? " \
+                            " where key = ?", \
+                                (val, val2, val3, val4, key))
             self.conn.commit()
         except:
             print("Cannot put sql data", sys.exc_info())

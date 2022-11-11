@@ -228,7 +228,7 @@ def     load_data_func(strx, context):
         count = int(ddd[4])
 
     #print("cwd", os.getcwd())
-    print("prefix", prefix, "first", first, "count", count)
+    #print("prefix", prefix, "first", first, "count", count)
 
     # Get data from the editor;
     # Careful, passing the wrong filename, it will be created

@@ -36,19 +36,21 @@ def got_index(config, carry):
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
 
     if carry.request:
-        print("carry.request", carry.request)
+
+        #print("carry.request", carry.request)
+
         rq = []
         for aa in carry.request:
             rq.append(aa[1])
 
-        #print("data", rq)
+        print("data rq", rq)
         #print("save to database", "data/%s.sqlt" % modname)
         try:
             #startt = time.perf_counter()
             wsgi_data.soft_opendb(carry, modname)
 
             #localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
-            carry.localdb.put("key_" + rq[0], rq[0], rq[1], rq[2], "")
+            carry.localdb.put(rq[0], rq[1], rq[2], rq[3], "")
 
             #localdb.close()
             # Measure time needed

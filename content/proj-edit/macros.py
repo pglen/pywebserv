@@ -72,16 +72,19 @@ def imgrow_data(strx, context):
 
     sss = wsgi_func.parse_args(strx, context)
     foot = '''<td width=10> <td>  '''
-    #print("arg sss", sss)
+    print("arg sss", sss)
     data = fill_data(context.localdb, int(sss[1]))
     #print("data", data)
     strx = '''
     <form action=editor.html method=post>
-    <tr>
+    <tr style=\"background-color:%s\">
     <td>
-    '''
-    for aa in data[3:]:
-        strx += "<td> <font size=+2>%s</font> " % aa
+    ''' %  sss[2]
+
+    #print("context.trcolor", context.trcolor)
+
+    for aa in data[1:]:
+        strx += "<td> <font>%s</font> " % aa
 
     strx += '''
         <input type=submit id=idsub name=ed_%s value="Edit" >
@@ -183,8 +186,15 @@ def mid_rows(strx, context):
     ret += "<table border=0>"
     recs = context.localdb.getcount()
     for aa in range(recs):
+        if (aa % 2) == 0:
+            trcolor = "#ddeedd"
+        else:
+            trcolor = "#cceecc"
+
+        #print("trcolor", trcolor)
         # Starting at one
-        ret +=   " { imgrow_data [ %d ] }" % (aa+1)
+        ret +=   " { imgrow_data [ %d ] [ %s ] }" % (aa+1, trcolor)
+
     ret += "</table>"
     #context.localdb.close()
     return ret

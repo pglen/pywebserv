@@ -148,7 +148,7 @@ _mac_main_center = '''
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
         { mission_statement }
-        { loadData proj-edit xx 3 3 }
+        { loadData proj-edit xx 0 4 }
 
         <!-- len={ xxDataLen }<br> -->
 

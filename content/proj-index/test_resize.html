@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    { include style.css }
+
+</head>
+
+<style>
+
+.tableouter {
+  position: relative;
+  overflow-x:scroll;
+}
+
+.headerclone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-right: 16px;  <-- This accounts for the vertical scroll bar.  I needed to use some script to determine the exact size of the scrollbar for each browser.  Apply this value as inline CSS in your cloning script.
+}
+
+.tableinner {
+  height: 400px;  <-- this determines the height of the scrolling container.
+  overlfow-y: scroll
+}
+
+</style>
+
+<div class="tableouter">
+  <div class="tableinner">
+    <table border=1>
+      <colgroup>
+        <col style="10%"></col> <--- repeat for each column and adjust width to taste
+      </colgroup>
+      <thead>
+        ...
+      </thead>
+      <tbody>
+        ...
+      </tbody>
+
+      <tr>
+      <td> Hello
+      <td> Hello
+      <td> Hello
+      <td> Hello
+
+            <tr>
+      <td> HelloHelloHelloHelloHelloHelloHelloHello
+      <td> Hello
+      <td> Hello
+      <td> Hello
+
+
+    </table>
+  </div>
+  <table class="headerclone" /> (clone of header portion, including colgroup)
+</div>
+

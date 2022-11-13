@@ -143,7 +143,8 @@ _mac_mission_statement = '''
 
 _mac_main_center = '''
 
-    <td valign=top>
+    <table width=100% border=1>
+    <tr><td valign=top>
      <table width=100% border=0>
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
@@ -171,6 +172,7 @@ _mac_main_center = '''
             { imgrow } { imgrow } { imgrow }
          </table>
      </table>
+   </table>
 
 '''
 

@@ -179,7 +179,9 @@ class xWebServer():
         wsgi_func.build_initial_rc()
 
     def parse_instance(self, environ, respond):
-        import wsgi_global
+        import wsgi_global, wsgi_util
+
+        wsgi_util.printenv(environ)
 
         self.environ = environ
 
@@ -278,6 +280,8 @@ class xWebServer():
                 self.carryon.request = self.request
                 self.carryon.template = template
                 self.carryon.fname = fname
+                global myconf
+                self.carryon.myconfx = myconf
 
                 #self.carryon.print()
                 #print("Callback",  self.fn, self.url)

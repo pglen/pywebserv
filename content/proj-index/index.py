@@ -94,6 +94,7 @@ Initialize the current module
 try:
     # Add default enties to tables
     wsgi_global.add_one_url("/", got_index, "index.html", __file__)
+    wsgi_global.add_one_url("/test_resize.html", got_index, "test_resize.html", __file__)
     wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
     wsgi_global.add_one_url("/log.html", got_log, "log.html", __file__)
 

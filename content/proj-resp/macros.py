@@ -27,6 +27,6 @@ try:
 
 except:
     #print("Exception on editor init vars", sys.exc_info())
-    wsgi_util.put_exception("in Editor")
+    wsgi_util.put_exception("in resp")
     raise
 

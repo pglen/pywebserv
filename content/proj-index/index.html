@@ -1,14 +1,41 @@
-{ sitestyle }
-{ header }
-    <table width=100%  cellspacing=2 cellpadding=0 border=0>
-        <tr><td bgcolor=#eeeeee width=15% valign=top>
-            { site_left }
-            { main_center }
-            { nav }
-            { site_right }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    { include style.css }
+
+</head>
+
+<div class="header">
+    { sitestyle }
+    { header }
+</div>
+
+<!-- <div class="row">-->
+   <!--  <table width=100%  cellspacing=2 cellpadding=0 border=0>-->
+   <!--      <tr><td bgcolor=#eeeeee width=15% valign=top>-->
+
+
+            <div class="leftcolumn">
+                { site_left }
+            </div>
+
+             <div class="midcolumn">
+                {_ main_center }
+                { nav }
+             </div>
+
+            <div class="rightcolumn">
+                { site_right }
+            </div>
+
             <p>
-    </table>
+   <!--  </table>-->
     <center>
     { feed_data }
-{ site_footer }
 
+<!-- </div>-->
+
+<div class="footer">
+    { site_footer }
+</div>

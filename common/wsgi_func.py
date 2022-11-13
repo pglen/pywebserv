@@ -216,7 +216,8 @@ def     load_data_func(strx, context):
     '''
 
     ddd = parse_args(strx, context)
-    print("load_data_func() ddd", ddd)
+    if context.myconfx.pgdebug > 1:
+        print("load_data_func() ddd", ddd)
 
     prefix = ""; first = 0; count = 0
 
@@ -247,7 +248,8 @@ def     load_data_func(strx, context):
         res = localdb.getall()
     else:
         res = localdb.getrange(first, count)
-        print("res", res)
+        if context.myconfx.pgdebug > 2:
+            print("res", res)
 
     if not res:
         res = []
@@ -313,7 +315,8 @@ def     get_data_func(strx, context):
 
 def     include_func(strx, context):
 
-    #print("include_function called", strx, os.getcwd(), context, __file__)
+    #print("include_func()", strx, dir(context.mainclass))
+    #print("include_func()", strx, context.fname)
 
     # Expand arguments
     ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.global_table)[0]
@@ -321,22 +324,29 @@ def     include_func(strx, context):
     for aa in ssss:
         ss += aa
     sss = str.split(ss)
+
     #print("args spaced:", sss)
 
-    # Travel down the dependency list
-    while True:
-        fname = os.path.dirname(context) + os.sep + sss[2]
-        if os.path.isfile(fname):
+    fname = ""
+    try:
+        # Travel down the dependency list, start at the same dir as the caller file
+        while True:
+            fname = os.path.dirname(context.fname) + os.sep + sss[2]
+            if os.path.isfile(fname):
+                break
+            fname = os.path.dirname(os.getcwd()) + os.sep + "content/static" + os.sep + sss[2]
+            if os.path.isfile(fname):
+                break
+            fname = os.path.dirname(os.getcwd()) + os.sep + "content/html" + os.sep + sss[2]
+            if os.path.isfile(fname):
+                break
             break
-        fname = os.path.dirname(os.getcwd()) + os.sep + "content/static" + os.sep + sss[2]
-        if os.path.isfile(fname):
-            break
-        fname = os.path.dirname(os.getcwd()) + os.sep + "content/html" + os.sep + sss[2]
-        if os.path.isfile(fname):
-            break
-        break
 
-    #print("trying fname", fname)
+    except:
+            #print(sys.exc_info())
+            wsgi_util.put_exception("find parsed file name")
+
+    print("trying fname", fname)
     try:
         with open(fname, 'r') as fh:
             buff = fh.read()

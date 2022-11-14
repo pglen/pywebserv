@@ -49,7 +49,12 @@ The macro regex is '{ .*? }' [the '?' is for non greedy wild card)
  { image nnn www }      --  Put an image tag in the output, resize width to requested
  { image nnn www hhh }  --  Put an image tag in the output, resize to width / height
 
-The first two forms of the { image } function will preserve the image's aspect ratio.
+                        --  The first two forms of the { image } function will
+                        --  preserve the image's aspect ratio. The image is search for
+                        --  in local / global / ...
+
+{ include fname }       --  Include a file. File read verbatim. Will search for file
+                            in local / global / static directories.
 
 '''
 
@@ -181,7 +186,7 @@ class xWebServer():
     def parse_instance(self, environ, respond):
         import wsgi_global, wsgi_util
 
-        wsgi_util.printenv(environ)
+        #wsgi_util.printenv(environ)
 
         self.environ = environ
 
@@ -288,7 +293,7 @@ class xWebServer():
                 content = callme(self.configx, self.carryon)
 
                 try:
-                    # See if resudial anything
+                    # See if residual anything
                     if hasattr(self.carryon, "localdb"):
                         #print("exiting", self.carryon.localdb)
                         self.carryon.localdb.close()
@@ -311,10 +316,12 @@ class xWebServer():
             return [bytes(content, "utf-8")]
 
         else:
-            # Iterte for other content
-            #print("Looking for file", self.fn)
+            # Iterate for other content
+            if self.configx.verbose:
+                print("Looking for file", self.fn)
+
             found_file = ""
-            while 1:
+            while True:
                 if os.path.exists(self.fn):
                     found_file = self.fn
                     break
@@ -343,25 +350,27 @@ class xWebServer():
                 if os.path.exists(fn2):
                     found_file = fn2
                     break
+
+
                 break
 
             if found_file:
-                #print("found_file", "'" + found_file + "'")
+                if self.configx.verbose:
+                    print("found_file", "'" + found_file + "'")
+
                 self.mtype = mimetypes.guess_type(found_file)[0]
                 if not self.mtype:
                     self.mtype = "text/plain"
                 respond('200 OK', [('Content-Type', self.mtype + ';charset=UTF-8')])
                 fp = util.FileWrapper(open(found_file, "rb"))
                 return fp
-
-            else:       # Error content
-
-                if self.configx.verbose:
-                    print("No such file", "'" + self.fn + "'")
+            else:
+                # Error content
+                print("Cannot find file:",  "'" + os.path.basename(self.fn) + "'")
+                #if self.configx.verbose:
+                #    print("No such file", "'" + self.fn + "'")
                 respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
-
                 #print("error select", self.url, fname)
-
                 # Search for 404 file
                 errfile = ""
                 while True:
@@ -381,6 +390,7 @@ class xWebServer():
                 else:
                     return [b"URL not found. (and 404 file does not exist)."]
 
+    # Parse and re-assemble pats
     def _assem_path(self, splitx):
         #print("assem_path: splitx", splitx)
         ppp = ""
@@ -397,6 +407,7 @@ class xWebServer():
         #print("ppp", ppp)
         return ppp
 
+    # Pad path with an injected name
     def _pad_path(self, fnorg, padname):
         ''' inject last dirname '''
         splitx = os.path.split(fnorg)
@@ -410,6 +421,7 @@ class xWebServer():
         #print("ppp", ppp)
         return ppp
 
+    # Pop the top off the path
     def _pop_path(self, pname):
         ''' pop path head '''
         splitx = pname.split(os.sep)

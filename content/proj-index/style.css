@@ -4,29 +4,9 @@
   box-sizing: border-box;
 }
 
-/*
-
-.col-content {
-  position: relative;
-  height: 2000px;
+div {
+    display: block;
 }
-
-#col_container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-#col1 {
-  float: left;
-}
-
-#col2 {
-  float: right;
-}
-
-*/
-
 
 body {
   font-family: Arial;
@@ -45,13 +25,14 @@ body {
   font-size: 50px;
 }
 
-/* Style the top navigation bar */
+/* Style the top navigation bar
 .topnav {
   overflow: hidden;
   background-color: #333;
 }
+*/
 
-/* Style the topnav links */
+/* Style the topnav links
 .topnav a {
   float: left;
   display: block;
@@ -60,23 +41,27 @@ body {
   padding: 14px 16px;
   text-decoration: none;
 }
+*/
 
-/* Change color on hover */
+/* Change color on hover
 .topnav a:hover {
   background-color: #ddd;
   color: black;
 }
+*/
 
-/* div {
+/*
+div {
  float: none
 }
 */
 
-/* Create two unequal columns that floats next to each other */
 /* Left column */
 .leftcolumn {
   float: left;
   width: 20%;
+  /*padding-left: 20px;*/
+  background-color: #f1f1f1;
 }
 
 /* Create  unequal columns that floats next to each other */
@@ -84,7 +69,8 @@ body {
 .midcolumn {
   float: left;
   width: 60%;
-  padding-left: 20px;
+  /*padding-left: 20px;*/
+  background-color: #f1f1f1;
 }
 
 /* Right column
@@ -93,7 +79,7 @@ body {
   float: left;
   width: 20%;
   background-color: #f1f1f1;
-  padding-left: 20px;
+  /*padding-left: 20px;*/
 }
 
 /* Fake image */
@@ -128,39 +114,26 @@ body {
   margin-top: 20px;
 }
 
-@media screen and (max-width: 1000px)
-    {
-       .leftcolumn, .midcolumn, {
-        width: 100%;
-        padding: 0;
-        float: right;
-        }
-
-     .rightcolumn {
-        padding: 0;
-        width: 100%;
-        }
-  }
-
 /* Responsive layout - when the screen is less than xxx px wide, make the
    columns stack on top of each other instead of next to each other
 */
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 700px) {
+
   .leftcolumn {
     padding: 0;
     width: 100%;
-    float: right;
+    float: left;
   }
   .midcolumn {
     padding: 0;
     width: 100%;
-    float: right;
+    float: left;
   }
   .rightcolumn {
     padding: 0;
     width: 100%;
-    float: right;
+    float: left;
   }
 }
 

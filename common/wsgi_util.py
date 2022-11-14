@@ -276,7 +276,7 @@ def add_local_func(mname, mfunc, table):
         #see if there is an entry already
         for aa in table:
             if aa[0] == mname:
-                print("Duplicate function/macro", mname)
+                print("Duplicate function/macro", mname, mfunc)
                 return True
         table.append([mname, mfunc])
     except:

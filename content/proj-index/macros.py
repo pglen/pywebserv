@@ -1,4 +1,4 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 
 '''
      This is a sample project macro file;
@@ -82,43 +82,58 @@ a:link, a:visited {
 </style>
 '''
 
-## Example bad type for glob
-#_glob_site_bad = ("1", "2")
-## Example bad type for mac
-#_mac_site_bad = ("1", "2")
+def _glob_headurl(strx, context):
 
-# Can add a function too
-#def _glob_sitestyle_func(config, carry):
-#    print(glob_sitestyle2)
+    # Expand arguments
+    sss = wsgi_func.parse_args(strx, context)
+    #print("args spaced:", sss)
+
+    rrr = '''
+        <tr>
+        <td width=25%%> &nbsp;
+        <td valign=bottom>
+                <a href=%s>
+                <img src=/siteicons/dot.png />
+                </a>
+        <td> &nbsp;
+        <td align=left>
+        <font size=+1>
+        <a href=%s> %s </a><br>
+        <td width=25%%> &nbsp;
+    ''' % (sss[1], sss[1], sss[2])
+
+    return rrr
 
 _glob_site_left = '''
-<table width=100% border=0>
-    <tr><td bgcolor={ tabhead } align=center colspan=2 height=36>
-    <font size=+1><b>Main Navigation</b>
-    <tr><td height=6>
-    <tr><td colspan=2 align=center><a href=/index.html>
-        <img src="/media/united_planet_logo.png" title="Main Logo">
-        </a>
 
-    <tr><td height=6>
-    <tr><td width=30%> &nbsp;
-    <td>
-        <li><font size=+1><a href=index.html>Home Page</a>
-        <li><a href=log.html>Log Page</a>
-        <li><a href=index.html>Blog Page</a>
-        <li><a href=index.html>Personal Page</a>
-        <li><a href=index.html>Tech Page</a>
-        <li><a href=index.html>Another Page</a>
-        <li><a href=more.html>More <br> &nbsp;  &nbsp; (test for broken link)</a>
-    <tr><td height=12>
-    <tr><td colspan=2 style="text-align:justify;">
-    &nbsp;
+    <table border=0 align=center>
+        <tr><td bgcolor={ tabhead } align=center colspan=3 height=36>
+            <font size=+1><b>Main Navigation</b>
+        <tr>
+            <td height=6 colspan=3>
+        <tr>
+            <td> &nbsp;
+            <td align=center>
+                <a href=/index.html>
+                <img src="/media/united_planet_logo_300.png" title="Main Logo">
 
-    <!--&nbsp <img src=siteicons/media-skip-backward.png title="Backward Front">
-    -->
-    <tr><td height=8 align=center colspan=2>
-    <!-- <img src="/media/upp_2_small.png" title="Logo"> -->
- </table>
+                </a>
+            <td> &nbsp
+    </table>
+
+    <table border=0 align=center>
+        <tr>
+        { headurl index.html Home&nbsp;Page }
+        { headurl log.html Log&nbsp;Page }
+        { headurl index.html Blog&nbsp;Page }
+        { headurl index.html Personal&nbsp;Page }
+        { headurl index.html Tech&nbsp;Page }
+        { headurl index.html Another&nbsp;Page }
+        { headurl broken.html Broken&nbsp;Page }
+
+        <tr><td height=12 colspan=3>
+
+    </table>
 
 '''
 
@@ -143,41 +158,43 @@ _mac_mission_statement = '''
 
 _mac_main_center = '''
 
-    <table width=100% border=1>
-    <tr><td valign=top>
-     <table width=100% border=0>
+     <table border=0>
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
-        { mission_statement }
+
+        <table border=0>
+            <tr><td>
+            { mission_statement }
+        </table>
+
         { loadData proj-edit xx 0 4 }
 
         <!-- len={ xxDataLen }<br> -->
 
-        <table width=100% border=0>
+        <table border=0>
             <tr valign=top>
             <td valign=middle bgcolor=#cccccc> &nbsp; << &nbsp;
-            { article 0 } { article 1 } { article 2 } { article 3 }
-            <td valign=middle bgcolor=#cccccc> &nbsp; >>  &nbsp;
+            { article 0 }
+            <td valign=middle bgcolor=#cccccc>
+            { article 1 }
+            <td valign=middle bgcolor=#cccccc>
+            { article 2 }
+            <td valign=middle bgcolor=#cccccc> &nbsp; >> &nbsp;
          </table>
-
-        <!-- <video width="800" height="600" controls>
-          <source src="/media/henryProject_1.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-            </video>   -->
 
        <!-- { feed_data } -->
 
-        <table width=100% border=0>
+        <table border=0>
             <tr valign=top>
             { imgrow } { imgrow } { imgrow }
          </table>
-     </table>
-   </table>
+    </table>
+
 
 '''
 
 _mac_nav = '''
-<table width=100% border=0>
+<table border=0>
     <tr align=center>
         <td align=right>
             &nbsp <img src=/siteicons/media-skip-backward.png title="Backward Front">
@@ -190,8 +207,12 @@ _mac_nav = '''
 </table>
 '''
 
+# This one is made global
+
 _glob_site_right = '''
-<td width=20% valign=top>
+
+  <!-- <td width=20% valign=top> -->
+
   <table border=0 width=100% cellpadding=3>
     <tr><td bgcolor={ tabhead } height=36 align=center>
         <font size=+1> <b>Misc</b>
@@ -269,14 +290,12 @@ _mac_header2 = '''
 
 _mac_header = '''
 
-    <table width=100% { sitecolor } border=0>
-    <tr  height=36>
-    <td align=left width=30%> &nbsp; &nbsp; <font size=+2>
+    <table { sitecolor } width=100% border=0>
+    <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
      <a href=index.html> <b>{ CompanyName }</b> </a>
      </font>
-
-            <td>
-                <table width=100% border=0>
+            <td align=center>
+                <table width=100%  border=0>
                     <tr align=center>
                         <td>
                         <td> <a href=index.html>
@@ -306,6 +325,7 @@ _glob_site_footer = '''
     </table>
 '''
 
+_mac_feed_data = ''' FD '''
 
 _mac_imgrow = '''
   <tr>  <td width=10>

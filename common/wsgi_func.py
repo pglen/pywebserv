@@ -35,9 +35,13 @@ def     parse_args(strx, context):
     for aa in ssss:
         # Filter delimiters
             ss += aa
+    #print("Args pre decoded:", ssss)
 
     sss = str.split(ss)
-    #print("Args decoded:", sss)
+
+    if context.myconfx.pgdebug > 1:
+        print("Args decoded:", sss)
+
     ddd = []
     for aa in sss:
         if aa != '[' and aa != ']' and aa != '{' and aa != '}':
@@ -346,7 +350,9 @@ def     include_func(strx, context):
             #print(sys.exc_info())
             wsgi_util.put_exception("find parsed file name")
 
-    print("trying fname", fname)
+    if context.myconfx.pgdebug > 2:
+        print("include fname", fname)
+
     try:
         with open(fname, 'r') as fh:
             buff = fh.read()

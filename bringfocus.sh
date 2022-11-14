@@ -7,6 +7,7 @@
 FF=`xdotool search --name "Mozilla Firefox" | tail -1`
 #echo $FF
 xdotool windowactivate --sync $FF
+sleep 1
 xdotool key ctrl+r
 
 # Bring focus back to your editor

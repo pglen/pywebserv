@@ -33,6 +33,7 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
    * Image re-size from { vars } arguments ex: { image any.png 800 }
    * First test site (see below)
    * Apache binding tested via the WSGI interface
+   * Working out the details
 
 ### Development
 
@@ -65,6 +66,7 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
 |  /content/proj*      |  applications / projects |
 |  /content/siteicons/ |  icons                   |
 |  /content/media/     |  image content           |
+|  /content/css/       |  global css files        |
 |  /content/common/    |  python scripts (wsgi interface) |
 |  /content/static/    |  static (non changing) content |
 
@@ -112,6 +114,7 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
     Tue 28.Jun.2022 Created unitedplanetpeace.com proto site
     Sat 16.Jul.2022 Site dev continues
     Sun 13.Aug.2022 Restructured main OBJ creation
+    Sun 13.Nov.2022 Added dynamic / responsive page feature
 
     Also see 'git log' for more
 

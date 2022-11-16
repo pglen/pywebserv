@@ -22,20 +22,30 @@ def     parse_args(strx, context):
     '''
     Expand arguments, return arr of argument strings, including command
     The latest one filters delimiters
-    Added local table variable expansion
+
+    Mon 14.Nov.2022 Added local table variable expansion.
+
     '''
 
     fff = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, context.local_table)[0]
     eee = ' '.join(fff)
-    #print("Args loc expanded:", eee)
+
+
+    if context.myconfx.pgdebug > 2:
+        print("Args loc expanded:", eee)
+
     ssss = wsgi_parse.parse_buffer(eee, "\[ .*? \]", context, wsgi_global.global_table)[0]
-    #print("Args expanded:", ssss)
+
+    if context.myconfx.pgdebug > 2:
+        print("Args expanded:", ssss)
 
     ss = ""
     for aa in ssss:
         # Filter delimiters
             ss += aa
-    #print("Args pre decoded:", ssss)
+
+    if context.myconfx.pgdebug > 4:
+        print("Args pre decoded:", ssss)
 
     sss = str.split(ss)
 
@@ -49,13 +59,16 @@ def     parse_args(strx, context):
     #print("Args filtered:", ddd)
     return ddd
 
-def     deep_func(strx, context):
-    return "Deep from code"
-
-def     crap_func(strx, context):
-    return "<b>crap</b> from code"
+#def     deep_func(strx, context):
+#    return "Deep from code"
+#
+#def     crap_func(strx, context):
+#    return "<b>crap</b> from code"
+#
 
 def     app_one_func(strx, context):
+
+    ''' Example app function '''
 
     content = '''<table width=100% border=0>
         <tr><td align=center bgcolor=#cccccc><b>APP ONE</b><br>
@@ -76,13 +89,12 @@ def     app_one_func(strx, context):
 def     app_two_func(strx, context):
 
 
-    content = "App2 here"
-    return content
-
-
     '''
     Mock calendar. Does nothing but presents a calendar looking user interface
     '''
+
+    content = "App2 here"
+    return content
 
     try:
         content = '''<table width=100% border=1>
@@ -279,7 +291,7 @@ def     load_data_func(strx, context):
 
 def     get_data_func(strx, context):
 
-    '''
+    '''!
      ----------------------------------------------------------------
      Retrieve from pre loaded table
 
@@ -318,6 +330,8 @@ def     get_data_func(strx, context):
 # I wish the http standard had this one command
 
 def     include_func(strx, context):
+
+    '''! Include a file and present it verbatim '''
 
     #print("include_func()", strx, dir(context.mainclass))
     #print("include_func()", strx, context.fname)
@@ -376,7 +390,7 @@ def     build_initial_table():
         wsgi_global.gltable.add_one_func("getData",  get_data_func)
         wsgi_global.gltable.add_one_func("loadData", load_data_func)
         wsgi_global.gltable.add_one_func("include",  include_func)
-        wsgi_global.gltable.add_one_func("deep",     deep_func)
+        #wsgi_global.gltable.add_one_func("deep",     deep_func)
 
         # Examples
         wsgi_global.gltable.add_one_func("app_one",  app_one_func)

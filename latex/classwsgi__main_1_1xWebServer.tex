@@ -1,0 +1,168 @@
+\hypertarget{classwsgi__main_1_1xWebServer}{}\doxysection{wsgi\+\_\+main.\+x\+Web\+Server Class Reference}
+\label{classwsgi__main_1_1xWebServer}\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+
+
+This class has all the info we would need for page generation.  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classwsgi__main_1_1xWebServer_a5e82ba2019204b96df75b1443bbfda87}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, \mbox{\hyperlink{classwsgi__main_1_1xWebServer_af025b8b276e932a96dc4264dc73c971d}{environ}}, respond)
+\begin{DoxyCompactList}\small\item\em Decorate the class instance with data from the environment. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{classwsgi__main_1_1xWebServer_a834a3fbf1256c0fcc310cc0788586388}{parse\+\_\+instance}} (self, \mbox{\hyperlink{classwsgi__main_1_1xWebServer_af025b8b276e932a96dc4264dc73c971d}{environ}}, respond)
+\item 
+def \mbox{\hyperlink{classwsgi__main_1_1xWebServer_a2524c3126310e73d7513e613ab0b98ae}{process\+\_\+request}} (self, \mbox{\hyperlink{classwsgi__main_1_1xWebServer_a16f06a04d825d75da5012933ff72351e}{request}}, respond)
+\begin{DoxyCompactList}\small\item\em This executes the request, after the main initializer parsed everything. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_aded53e3e5e037e28c5e2ca11cfe27e54}{carryon}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_a1813ccc783d0165ebaca5ec1cb5e7b7d}{configx}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_a3ce2fba858a6bb2c82bf80e297f48020}{stime}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_a5246e7235c45a07bcde8a00d9adbad88}{logfp}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_af025b8b276e932a96dc4264dc73c971d}{environ}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_a88fadb10e6772329df489479f300f579}{query}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_a848d0e309f2fb1c1898e05d7ab90bdd7}{cookie}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_a5a0392afc57fe582e9be0bc1d0862b35}{method}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_a87164736c199e04d7786f171cf1b6baf}{request\+\_\+org}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_a16f06a04d825d75da5012933ff72351e}{request}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_a5d7c11deac6150b778fd009fd95045d5}{url}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_aa598b772776653c2a102a5b4b68022d7}{fn}}
+\item 
+\mbox{\hyperlink{classwsgi__main_1_1xWebServer_a0067b22925e06a76d4acf262775ea866}{mtype}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This class has all the info we would need for page generation. 
+
+Add urls and functions to complete the reply. The return value of the process\+\_\+request function is the output to the client. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a5e82ba2019204b96df75b1443bbfda87}\label{classwsgi__main_1_1xWebServer_a5e82ba2019204b96df75b1443bbfda87}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def wsgi\+\_\+main.\+x\+Web\+Server.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{environ,  }\item[{}]{respond }\end{DoxyParamCaption})}
+
+
+
+Decorate the class instance with data from the environment. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a834a3fbf1256c0fcc310cc0788586388}\label{classwsgi__main_1_1xWebServer_a834a3fbf1256c0fcc310cc0788586388}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!parse\_instance@{parse\_instance}}
+\index{parse\_instance@{parse\_instance}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{parse\_instance()}{parse\_instance()}}
+{\footnotesize\ttfamily def wsgi\+\_\+main.\+x\+Web\+Server.\+parse\+\_\+instance (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{environ,  }\item[{}]{respond }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a2524c3126310e73d7513e613ab0b98ae}\label{classwsgi__main_1_1xWebServer_a2524c3126310e73d7513e613ab0b98ae}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!process\_request@{process\_request}}
+\index{process\_request@{process\_request}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{process\_request()}{process\_request()}}
+{\footnotesize\ttfamily def wsgi\+\_\+main.\+x\+Web\+Server.\+process\+\_\+request (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{request,  }\item[{}]{respond }\end{DoxyParamCaption})}
+
+
+
+This executes the request, after the main initializer parsed everything. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_aded53e3e5e037e28c5e2ca11cfe27e54}\label{classwsgi__main_1_1xWebServer_aded53e3e5e037e28c5e2ca11cfe27e54}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!carryon@{carryon}}
+\index{carryon@{carryon}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{carryon}{carryon}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+carryon}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a1813ccc783d0165ebaca5ec1cb5e7b7d}\label{classwsgi__main_1_1xWebServer_a1813ccc783d0165ebaca5ec1cb5e7b7d}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!configx@{configx}}
+\index{configx@{configx}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{configx}{configx}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+configx}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a848d0e309f2fb1c1898e05d7ab90bdd7}\label{classwsgi__main_1_1xWebServer_a848d0e309f2fb1c1898e05d7ab90bdd7}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!cookie@{cookie}}
+\index{cookie@{cookie}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{cookie}{cookie}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+cookie}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_af025b8b276e932a96dc4264dc73c971d}\label{classwsgi__main_1_1xWebServer_af025b8b276e932a96dc4264dc73c971d}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!environ@{environ}}
+\index{environ@{environ}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{environ}{environ}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+environ}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_aa598b772776653c2a102a5b4b68022d7}\label{classwsgi__main_1_1xWebServer_aa598b772776653c2a102a5b4b68022d7}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!fn@{fn}}
+\index{fn@{fn}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{fn}{fn}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+fn}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a5246e7235c45a07bcde8a00d9adbad88}\label{classwsgi__main_1_1xWebServer_a5246e7235c45a07bcde8a00d9adbad88}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!logfp@{logfp}}
+\index{logfp@{logfp}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{logfp}{logfp}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+logfp}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a5a0392afc57fe582e9be0bc1d0862b35}\label{classwsgi__main_1_1xWebServer_a5a0392afc57fe582e9be0bc1d0862b35}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!method@{method}}
+\index{method@{method}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{method}{method}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+method}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a0067b22925e06a76d4acf262775ea866}\label{classwsgi__main_1_1xWebServer_a0067b22925e06a76d4acf262775ea866}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!mtype@{mtype}}
+\index{mtype@{mtype}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{mtype}{mtype}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+mtype}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a88fadb10e6772329df489479f300f579}\label{classwsgi__main_1_1xWebServer_a88fadb10e6772329df489479f300f579}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!query@{query}}
+\index{query@{query}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{query}{query}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+query}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a16f06a04d825d75da5012933ff72351e}\label{classwsgi__main_1_1xWebServer_a16f06a04d825d75da5012933ff72351e}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!request@{request}}
+\index{request@{request}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{request}{request}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+request}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a87164736c199e04d7786f171cf1b6baf}\label{classwsgi__main_1_1xWebServer_a87164736c199e04d7786f171cf1b6baf}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!request\_org@{request\_org}}
+\index{request\_org@{request\_org}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{request\_org}{request\_org}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+request\+\_\+org}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a3ce2fba858a6bb2c82bf80e297f48020}\label{classwsgi__main_1_1xWebServer_a3ce2fba858a6bb2c82bf80e297f48020}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!stime@{stime}}
+\index{stime@{stime}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{stime}{stime}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+stime}
+
+\mbox{\Hypertarget{classwsgi__main_1_1xWebServer_a5d7c11deac6150b778fd009fd95045d5}\label{classwsgi__main_1_1xWebServer_a5d7c11deac6150b778fd009fd95045d5}} 
+\index{wsgi\_main.xWebServer@{wsgi\_main.xWebServer}!url@{url}}
+\index{url@{url}!wsgi\_main.xWebServer@{wsgi\_main.xWebServer}}
+\doxysubsubsection{\texorpdfstring{url}{url}}
+{\footnotesize\ttfamily wsgi\+\_\+main.\+x\+Web\+Server.\+url}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{wsgi__main_8py}{wsgi\+\_\+main.\+py}}\end{DoxyCompactItemize}

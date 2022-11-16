@@ -196,7 +196,8 @@ def process_default(configx, context):
 
     if configx.pgdebug > 5:
         if context.local_table:
-            dump_table("Local Table:", context.local_table)
+            #dump_table("Local Table:", context.local_table)
+            dump_table_funcs("Local Table Functs:", context.local_table)
 
     try:
         if not context.template:
@@ -204,9 +205,10 @@ def process_default(configx, context):
         else:
             template = os.path.dirname(context.fname) + os.sep + context.template
     except:
-        put_exception("Cannot create template");
+        put_exception("Cannot create / open template");
 
-    #print("using template", template)
+    if configx.verbose:
+        print("using template", template)
 
     if template and os.path.exists(template):
         buff = ""
@@ -230,6 +232,14 @@ def dump_table(strx, tabx):
     print (strx)
     for aa in tabx:
         print ("'" + aa[0] + "' = ", unescape(str(aa[1])[:24]), end="\n")
+    print()
+
+def dump_table_funcs(strx, tabx):
+    ''' Dump named internal table functions '''
+    print (strx)
+    for aa in tabx:
+        if type(aa[1]) == type(dump_table_funcs):
+            print ("'" + aa[0] + "' = ", str(aa[1]) + "'")
     print()
 
 def unescape(strx):

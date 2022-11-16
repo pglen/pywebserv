@@ -82,7 +82,7 @@ a:link, a:visited {
 </style>
 '''
 
-def _glob_headurl(strx, context):
+def _func_headurl(strx, context):
 
     # Expand arguments
     sss = wsgi_func.parse_args(strx, context)
@@ -114,9 +114,13 @@ _glob_site_left = '''
         <tr>
             <td> &nbsp;
             <td align=center>
+                <img src="/media/upp.png" title="Main">
+            <td> &nbsp;
+        <tr>
+            <td> &nbsp;
+            <td>
                 <a href=/index.html>
                 <img src="/media/united_planet_logo_300.png" title="Main Logo">
-
                 </a>
             <td> &nbsp
     </table>
@@ -330,7 +334,7 @@ _mac_feed_data = ''' FD '''
 _mac_imgrow = '''
   <tr>  <td width=10>
   <td width=20>
-  <div class=up-class> <font size=+2>Hello rotated text</font></div>
+  <!-- <div class=up-class> <font size=+2>Hello rotated text</font></div> -->
 
   <td width=10>
      <td align=center>
@@ -353,5 +357,8 @@ _mac_imgrow = '''
 '''
 
 wsgi_util.add_all_vars(locals().copy(), common.local_table)
+
+#for aa in common.local_table:
+#    print (aa)
 
 # EOF

@@ -106,7 +106,7 @@ class Table():
             #see if there is an entry already
             for aa in global_table:
                 if aa[0] == mname:
-                    print("Duplicate macro", mname)
+                    print("Duplicate macro:", mname)
                     return 1
             global_table.append([mname, mfunc])
         except:
@@ -219,7 +219,6 @@ def     getprojects(mainclass):
         for automatic inclusion into the site.
         The initial proj-ect dir was called 'projects'
     '''
-
 
     pdir = "proj"
     dirs = os.listdir(".")

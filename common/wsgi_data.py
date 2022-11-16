@@ -36,7 +36,7 @@ def soft_opendb(carry, modname):
 
 class wsgiSql():
 
-    ''' The data store for the web server. Simple sqlite data files.
+    '''! The data store for the web server. Simple sqlite data files.
       one global file is created, and a local file may be created on
       a per project basis
       '''

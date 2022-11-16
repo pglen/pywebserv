@@ -104,25 +104,23 @@ def _parse_one(buff, context, tablex, regex):
 
 def recursive_parse(buff, context, local_table):
 
-    #if Config.pgdebug > 3:
-    #    print("recursive_parse() buff:", wsgi_util.unescape(buff[:12]))
+    #if context:
+    #    print("context", context, context.myconfx.pgdebug)
 
-    #if local_table:
-    #    wsgi_util.dump_table("Local Table:", local_table)
+    #print("recursive_parse() buff:", wsgi_util.unescape(buff[:12]))
 
-    #if global_table:
-    #wsgi_util.dump_table("Global Table:", wsgi_global.global_table)
+    # if local_table:
+    #   if context.myconfx.pgdebug > 3:
+    #       wsgi_util.dump_table("Local Table:", local_table)
 
-    parsed2 = ""
+    # Pre set the stage vars
+    parsed2 = ""; parsed3 = ""; parsed4 = ""
 
     # Do local table first, so it overrides global
     if local_table:
-        #if Config.verbose:
-        #    print("local_table len: ", len(local_table))
-
-        #print("LOCAL")
         try:
             parsed2 = _parse_one(buff, context,  local_table, _regex)
+            #print("parsed2", parsed2)
         except:
             wsgi_util.put_exception("exception in local parser", )
             parsed2 = buff
@@ -130,13 +128,26 @@ def recursive_parse(buff, context, local_table):
         parsed2 = buff
 
     # Recursively process
-    #print("GLOBAL")
     try:
         parsed3 = _parse_one(parsed2, context,  wsgi_global.global_table, _regex)
     except:
         wsgi_util.put_exception("exception in global parser", )
-        parsed3 = buff
+        parsed3 = parsed2
 
-    return parsed3
+    ## Do local table again as global expansion may uncover new items
+    # Please do not have complex interdependent macros, as it defeats
+    # the purpose of this subsystem
+
+    if local_table:
+        try:
+            parsed4 = _parse_one(parsed3, context,  local_table, _regex)
+            #print("parsed4", parsed4)
+        except:
+            wsgi_util.put_exception("exception in local parser second run", )
+            parsed4 = parsed3
+    else:
+        parsed4 = parsed3
+
+    return parsed4
 
 # EOF

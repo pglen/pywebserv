@@ -1,26 +1,34 @@
 #!/usr/bin/env python3
 
-''' The simplest web server. This directory is at the root
-of the web server, and sub directories may assume the following functions:
 
-    data            for database related
-    content         where the files live
-        siteicons       icons for this site
-        media           images, media
-        static          files that may be presented as is
-        Proj-*          python and html / css files that make up the site
-            index.py    included by default
-            macros.py   macros included in project
-            common.py   common to project
+'''!  \mainpage
 
-  To create a <b>new project</b>, add a new directory that starts with "proj"
- (like "proj-000") and populate the files. At least one python file is needed.
+ The simplest web server. This directory is at the root of the web server.
 
-    To create a <b>new page</b>, add a new python file, and call the
+ The sub directories listed below contain the following functionality:
+
+        common              the code for the server
+        data                for database related
+        content             where the content files live
+            siteicons       icons for this site
+            media           images, media
+            static          files that may be presented as is
+            proj-*          python and html / css files that make up the site
+                index.py    included by default
+                macros.py   macros included in project
+                common.py   common to this project
+
+&nbsp;To create a <b>new web project</b>, add a new directory that starts with "proj"
+ (like "proj-index") and populate the files. At least one python file is needed,
+ must be named 'index.py'
+
+&nbsp;To create a <b>new web page</b>, add a new python file, and call the
 URL registration function(s) within. The server redirects the url
 to the function you specify.
 
-  add_one_url("/", got_index, "index.html")
+            add_one_url("/index.html",  got_index,            "index.html")
+            add_one_url("/",            got_index,            "index.html")
+                         ^__URL         ^__function to call   ^__template to use
 
  To create a new 'macro' use the add macro function with the macro name
 and the name of the function that is executed by the macro. The macro
@@ -28,33 +36,64 @@ will be replaced by the return value of the function. The macro
 is created by surrounding braces with a space. Like: { mymacro }
 The macro regex is '{ .*? }' [the '?' is for non greedy wild card)
 
-  add_one_func("mymacro", my_img_func)
+  add_one_func("mymacro",  my_macro_func)
 
   Macro 'auto' files:
 
-    The variables in the files start with "_mac_" will become local
+     The variables in the files start with "_mac_" will become local
     macros, that can be  referenced on this page.
-    Variables start with "_glob_" wil become global that can be
+    Variables start with "_glob_" will become global that can be
     referenced on the whole site. See: ./contents/Proj-xxx/macros.py
+    The variables start with "_func_" will become local functions
 
      The project files are imported under a try: except clause, so ordinarily,
-    nothing in this file can down the site, can only down the particular page.
-    (for example a syntax error)
+    a mistake (like syntax error) can down the site, only the particular
+    page / project.
+
     However, some conditions (like missing site dependencies)
      CAN down the site.
 
- Builtin macros:
+ # The built in macros:   (see source for complete list)
 
- { image nnn }          --  Put an image tag nnn in the output
- { image nnn www }      --  Put an image tag in the output, resize width to requested
- { image nnn www hhh }  --  Put an image tag in the output, resize to width / height
+ ### { image nnn [ www ] [ hhh ] }
 
-                        --  The first two forms of the { image } function will
-                        --  preserve the image's aspect ratio. The image is search for
-                        --  in local / global / ...
+Put an image html tag nnn in the output. The optional arguments create the following:
 
-{ include fname }       --  Include a file. File read verbatim. Will search for file
-                            in local / global / static directories.
+        image nnn www
+
+Put an image tag in the output, resize width to requested. Preserve the
+image's aspect ratio.
+
+        image nnn www hhh
+
+Put an image tag in the output, re-size to width / height. The re-sized image is
+cached and presented on the next call.
+
+The images are searched for in local / global / static ... directories;
+
+ ### { include fname }
+
+--  Include a file. Read and present file verbatim. Will search
+for a file in local / global / static / css directories. Most useful
+for common project headers / footers.
+
+ ## Commenting out macros:
+
+  Normally a macro is delimited by { macro }, so changing the delimiter will
+make it a non macro. In the examples we use underscore like this: {_macro }
+The parser will print the string as normal, so to hide it from the browser
+we add the html comments around it. Like: <!-- {_macro } -->
+
+ ## Space in macros arguments:
+
+ The macro arguments are parsed by assuming the space character as the delimiter.
+The work around is to use the HTML &nbsp; space symbol. Like: Hello&nbsp;World
+
+ ## Unrecognized macros:
+
+ The macros that are not recognized are printed verbatim into the HTML stream.
+This is to signal the developer that the macro is not valid.
+
 
 '''
 
@@ -62,7 +101,7 @@ import sys, os, mimetypes, time, datetime, getopt, traceback
 
 def tracex(xstr):
 
-    '''  Trace current fault.
+    '''!  Trace current fault.
          This was crafted, so the apache run time can access it without any includes.
       '''
 
@@ -97,16 +136,16 @@ _ = gettext.gettext
 
 class comline():
 
-    ''' Command line action defines '''
+    '''! Command line action defines '''
 
     CLEAR_CONFIG = False
     SHOW_CONFIG = False
     SHOW_TIMING = False
-    USE_STDOUT = False
+    USE_STDOUT = False     ##!< Variable values
 
 class Myconf():
 
-    ''' Simplified config for propagating command line to runtime '''
+    '''! Simplified config for propagating command line to runtime '''
 
     def __init__(self):
         self.verbose = 0;
@@ -118,7 +157,7 @@ class Myconf():
 
 class xWebServer():
 
-    '''
+    '''!
      This class has all the info we would need for page generation. Add urls and functions
      to complete the reply. The return value of the process_request function is the
      output to the client.
@@ -126,7 +165,7 @@ class xWebServer():
 
     def __init__(self, environ, respond):
 
-        ''' Decorate the class instance with data from the environment '''
+        '''! Decorate the class instance with data from the environment '''
 
         # import here so apache wsgi interface gets the files
         import wsgi_global, wsgi_content, wsgi_util
@@ -248,7 +287,7 @@ class xWebServer():
 
     def _translate_url(self, config, url):
 
-        ''' return details for a url '''
+        '''! return details for a url '''
 
         import wsgi_global, wsgi_content, wsgi_util
         #print("Looking up", url)
@@ -262,7 +301,7 @@ class xWebServer():
 
     def process_request(self, request, respond):
 
-        '''
+        '''!
             This executes the request, after the main initializer
             parsed everything
         '''
@@ -367,6 +406,8 @@ class xWebServer():
             else:
                 # Error content
                 print("Cannot find file:",  "'" + os.path.basename(self.fn) + "'")
+                print("Request was:",  "'" + self.url + "'")
+
                 #if self.configx.verbose:
                 #    print("No such file", "'" + self.fn + "'")
                 respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
@@ -409,7 +450,7 @@ class xWebServer():
 
     # Pad path with an injected name
     def _pad_path(self, fnorg, padname):
-        ''' inject last dirname '''
+        '''! inject last dirname '''
         splitx = os.path.split(fnorg)
         #print("splitx", splitx)
         ppp = ""
@@ -423,7 +464,7 @@ class xWebServer():
 
     # Pop the top off the path
     def _pop_path(self, pname):
-        ''' pop path head '''
+        '''! pop path head '''
         splitx = pname.split(os.sep)
         #print("splitx", splitx)
         ppp = ""
@@ -446,7 +487,7 @@ mainclass = None
 
 def application(environ, respond):
 
-    '''
+    '''!
     WSGI main entry point. The web server (like apache) will call this.
     '''
 
@@ -478,7 +519,7 @@ def application(environ, respond):
         if not mainclass:
             try:
                 mainclass = xWebServer(environ, respond)
-                myconf =  Myconf()
+                myconf =  Myconf()   ##!< Myconf in WSGI
             except:
                 wsgi_util.put_exception("Creating Server OBJ")
                 return "Bad Server"
@@ -532,7 +573,7 @@ if __name__ == '__main__':
 
     global myconf
 
-    myconf =  Myconf()
+    myconf =  Myconf()      ##!< Myconf global
 
     opts = []; args = []
 
@@ -599,7 +640,7 @@ if __name__ == '__main__':
 
     class NoLoggingWSGIRequestHandler(simple_server.WSGIRequestHandler):
 
-        ''' Override parent's logging '''
+        '''! Override parent's logging '''
 
         def log_message(self, format, *args):
             # Do just a little bit of logging on stdout

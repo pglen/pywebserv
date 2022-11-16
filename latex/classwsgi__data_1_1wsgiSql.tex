@@ -1,0 +1,164 @@
+\hypertarget{classwsgi__data_1_1wsgiSql}{}\doxysection{wsgi\+\_\+data.\+wsgi\+Sql Class Reference}
+\label{classwsgi__data_1_1wsgiSql}\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+
+
+The data store for the web server.  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_adcc72c4b46523b10f8f644b5bbe07ebb}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a651821bf8a3e8150e04f0026e1b05c4c}{file}}, \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a37dc5c40042ae5993dc8f34bbd101c0c}{table}}=\char`\"{}initial\char`\"{})
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_aa4e2b07e697eae0b5f389881f9c3ad1c}{get}} (self, kkk)
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a45f55418af5c06fcf6b2ff961b80e07b}{getbyid}} (self, kkk)
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a01c9d3f42799939324c06ffb2943e9ab}{getrange}} (self, skip, count)
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a52b6c6c40bc40325026e4e4e350af906}{put}} (self, key, val, val2, val3, val4)
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_aed2681080a16feeeee1ea461604728da}{putlog}} (self, key, val, val2, val3, val4)
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a7666c0e33ef3d7c607197f47f5aa4835}{getall}} (self)
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a0ad7c167c9ec83b2d425aa586b9b85c6}{getcount}} (self)
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a9037d7ba74ea039d953a3e7b269388ba}{rmall}} (self)
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_ae445bf7b25d62e3cc16151942e229fc7}{close}} (self)
+\item 
+def \mbox{\hyperlink{classwsgi__data_1_1wsgiSql_ad98b25a366e8ac093936376312dfd5db}{\+\_\+\+\_\+delete\+\_\+\+\_\+}} (self)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a37dc5c40042ae5993dc8f34bbd101c0c}{table}}
+\item 
+\mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a651821bf8a3e8150e04f0026e1b05c4c}{file}}
+\item 
+\mbox{\hyperlink{classwsgi__data_1_1wsgiSql_aa75cf7a4e709cdc6ca377299de23eeaa}{conn}}
+\item 
+\mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a5ab2dafcd775dac41128d524763db424}{c}}
+\item 
+\mbox{\hyperlink{classwsgi__data_1_1wsgiSql_a6060bb228be7e451c6a5a831bfff50d3}{table2}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The data store for the web server. 
+
+Simple sqlite data files. one global file is created, and a local file may be created on a per project basis 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_adcc72c4b46523b10f8f644b5bbe07ebb}\label{classwsgi__data_1_1wsgiSql_adcc72c4b46523b10f8f644b5bbe07ebb}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{file,  }\item[{}]{table = {\ttfamily \char`\"{}initial\char`\"{}} }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_ad98b25a366e8ac093936376312dfd5db}\label{classwsgi__data_1_1wsgiSql_ad98b25a366e8ac093936376312dfd5db}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!\_\_delete\_\_@{\_\_delete\_\_}}
+\index{\_\_delete\_\_@{\_\_delete\_\_}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{\_\_delete\_\_()}{\_\_delete\_\_()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+\_\+\+\_\+delete\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_ae445bf7b25d62e3cc16151942e229fc7}\label{classwsgi__data_1_1wsgiSql_ae445bf7b25d62e3cc16151942e229fc7}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!close@{close}}
+\index{close@{close}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+close (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_aa4e2b07e697eae0b5f389881f9c3ad1c}\label{classwsgi__data_1_1wsgiSql_aa4e2b07e697eae0b5f389881f9c3ad1c}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!get@{get}}
+\index{get@{get}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+get (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{kkk }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_a7666c0e33ef3d7c607197f47f5aa4835}\label{classwsgi__data_1_1wsgiSql_a7666c0e33ef3d7c607197f47f5aa4835}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!getall@{getall}}
+\index{getall@{getall}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{getall()}{getall()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+getall (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_a45f55418af5c06fcf6b2ff961b80e07b}\label{classwsgi__data_1_1wsgiSql_a45f55418af5c06fcf6b2ff961b80e07b}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!getbyid@{getbyid}}
+\index{getbyid@{getbyid}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{getbyid()}{getbyid()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+getbyid (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{kkk }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_a0ad7c167c9ec83b2d425aa586b9b85c6}\label{classwsgi__data_1_1wsgiSql_a0ad7c167c9ec83b2d425aa586b9b85c6}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!getcount@{getcount}}
+\index{getcount@{getcount}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{getcount()}{getcount()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+getcount (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_a01c9d3f42799939324c06ffb2943e9ab}\label{classwsgi__data_1_1wsgiSql_a01c9d3f42799939324c06ffb2943e9ab}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!getrange@{getrange}}
+\index{getrange@{getrange}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{getrange()}{getrange()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+getrange (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{skip,  }\item[{}]{count }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_a52b6c6c40bc40325026e4e4e350af906}\label{classwsgi__data_1_1wsgiSql_a52b6c6c40bc40325026e4e4e350af906}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!put@{put}}
+\index{put@{put}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{put()}{put()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+put (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{key,  }\item[{}]{val,  }\item[{}]{val2,  }\item[{}]{val3,  }\item[{}]{val4 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_aed2681080a16feeeee1ea461604728da}\label{classwsgi__data_1_1wsgiSql_aed2681080a16feeeee1ea461604728da}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!putlog@{putlog}}
+\index{putlog@{putlog}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{putlog()}{putlog()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+putlog (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{key,  }\item[{}]{val,  }\item[{}]{val2,  }\item[{}]{val3,  }\item[{}]{val4 }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} Special function to write to the log.
+    Use sqliteviewer to see it.
+    Usinf Sqlite prevents all sorts of cross log issues
+\end{DoxyVerb}
+ \mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_a9037d7ba74ea039d953a3e7b269388ba}\label{classwsgi__data_1_1wsgiSql_a9037d7ba74ea039d953a3e7b269388ba}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!rmall@{rmall}}
+\index{rmall@{rmall}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{rmall()}{rmall()}}
+{\footnotesize\ttfamily def wsgi\+\_\+data.\+wsgi\+Sql.\+rmall (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_a5ab2dafcd775dac41128d524763db424}\label{classwsgi__data_1_1wsgiSql_a5ab2dafcd775dac41128d524763db424}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!c@{c}}
+\index{c@{c}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{c}{c}}
+{\footnotesize\ttfamily wsgi\+\_\+data.\+wsgi\+Sql.\+c}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_aa75cf7a4e709cdc6ca377299de23eeaa}\label{classwsgi__data_1_1wsgiSql_aa75cf7a4e709cdc6ca377299de23eeaa}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!conn@{conn}}
+\index{conn@{conn}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{conn}{conn}}
+{\footnotesize\ttfamily wsgi\+\_\+data.\+wsgi\+Sql.\+conn}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_a651821bf8a3e8150e04f0026e1b05c4c}\label{classwsgi__data_1_1wsgiSql_a651821bf8a3e8150e04f0026e1b05c4c}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!file@{file}}
+\index{file@{file}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{file}{file}}
+{\footnotesize\ttfamily wsgi\+\_\+data.\+wsgi\+Sql.\+file}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_a37dc5c40042ae5993dc8f34bbd101c0c}\label{classwsgi__data_1_1wsgiSql_a37dc5c40042ae5993dc8f34bbd101c0c}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!table@{table}}
+\index{table@{table}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{table}{table}}
+{\footnotesize\ttfamily wsgi\+\_\+data.\+wsgi\+Sql.\+table}
+
+\mbox{\Hypertarget{classwsgi__data_1_1wsgiSql_a6060bb228be7e451c6a5a831bfff50d3}\label{classwsgi__data_1_1wsgiSql_a6060bb228be7e451c6a5a831bfff50d3}} 
+\index{wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}!table2@{table2}}
+\index{table2@{table2}!wsgi\_data.wsgiSql@{wsgi\_data.wsgiSql}}
+\doxysubsubsection{\texorpdfstring{table2}{table2}}
+{\footnotesize\ttfamily wsgi\+\_\+data.\+wsgi\+Sql.\+table2}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+common/\mbox{\hyperlink{wsgi__data_8py}{wsgi\+\_\+data.\+py}}\end{DoxyCompactItemize}

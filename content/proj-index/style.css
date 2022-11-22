@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-div {
+   div {
     display: block;
 }
 
@@ -50,40 +50,70 @@ body {
 }
 */
 
-/*
-div {
- float: none
-}
-*/
-
+/* -------------------------------------------------------------------- */
 /* Column container */
+
 .row {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
 }
-
 /* Left column */
 .leftcolumn {
   flex: 20%;
-  /*padding-left: 20px;*/
+  order 0;
   background-color: #f1f1f1;
+  padding-left: 20px;
+  /*visibility: collapse;*/
+  /*overflow: hidden;*/
 }
-
-/* Create  unequal columns that floats next to each other */
-/* Left column */
+/* Mid column */
 .midcolumn {
-  flex: 60%;
-  /*padding-left: 20px;*/
+  flex: 55%;
+  order: 0;
   background-color: #f1f1f1;
+  padding-left: 20px;
 }
-
-/* Right column
-*/
+/* Right column */
 .rightcolumn {
   flex: 20%;
+  order: 0;
   background-color: #f1f1f1;
-  /*padding-left: 20px;*/
+  padding-left: 20px;
 }
+
+/* -------------------------------------------------------------------- */
+
+@media screen and (max-width:800px) {
+
+/*
+    .row {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    .midcolumn {
+      flex: 100%;
+      order: 0;
+      background-color: white;
+      padding: 20px;
+    }
+    .leftcolumn {
+      flex: 100%;
+      order: 1;
+      background-color: #f1f1f1;
+      padding: 20px;
+    }
+    .rightcolumn {
+      order: 2;
+      flex: 100%;
+      background-color: white;
+      padding: 20px;
+    }
+
+*/
+}
+
+/* -------------------------------------------------------------------- */
 
 /* Fake image */
 .fakeimg {
@@ -121,24 +151,6 @@ div {
    columns stack on top of each other instead of next to each other
 */
 
-@media screen and (max-width: 700px) {
-
-  .leftcolumn {
-    padding: 0;
-    width: 100%;
-    float: left;
-  }
-  .midcolumn {
-    padding: 0;
-    width: 100%;
-    float: left;
-  }
-  .rightcolumn {
-    padding: 0;
-    width: 100%;
-    float: left;
-  }
-}
 
 </style>
 

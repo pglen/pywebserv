@@ -1,6 +1,6 @@
  #!/usr/bin/env python3
 
-import sys
+import  sys, os
 import  wsgi_util, wsgi_func, wsgi_global, wsgi_data
 
 '''
@@ -9,9 +9,9 @@ import  wsgi_util, wsgi_func, wsgi_global, wsgi_data
 
 from . import common
 
-ppp = __file__.split('/')
-modname = ppp[-2]
-#print("modname", modname)
+modname = __file__.split(os.sep)[-2]
+#print("modname", "'" + modname + "'")
+
 
 _mac_feedwidth = '800'
 _mac_ShortCName = ''' United Planet Peace '''

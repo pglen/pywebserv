@@ -15,6 +15,5 @@ var searchData=
   ['configx_40',['Configx',['../classwsgi__conf_1_1Configx.html',1,'wsgi_conf']]],
   ['conn_41',['conn',['../classwsgi__data_1_1wsgiSql.html#aa75cf7a4e709cdc6ca377299de23eeaa',1,'wsgi_data::wsgiSql']]],
   ['cookie_42',['cookie',['../classwsgi__main_1_1xWebServer.html#a848d0e309f2fb1c1898e05d7ab90bdd7',1,'wsgi_main::xWebServer']]],
-  ['copyright_43',['copyright',['../namespaceconf.html#a33fa97cf51dcb25970fbf53f10159589',1,'conf']]],
-  ['crap_5ffunc_44',['crap_func',['../namespacewsgi__func.html#aaebff665833866ba307ef054acfaadd0',1,'wsgi_func']]]
+  ['copyright_43',['copyright',['../namespaceconf.html#a33fa97cf51dcb25970fbf53f10159589',1,'conf']]]
 ];

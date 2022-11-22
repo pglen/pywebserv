@@ -89,7 +89,9 @@ def put_exception(xstr):
             #cumm += str(traceback.format_tb(c, 10))
             ttt = traceback.extract_tb(c)
             for aa in ttt:
-                cumm += "File: " + os.path.basename(aa[0]) + \
+                # do not print sys
+                if "importlib" not in aa[0]:
+                    cumm += "File: " + os.path.basename(aa[0]) + \
                         " Line: " + str(aa[1]) + "\n" +  \
                     "   Context: " + aa[2] + " -> " + aa[3] + "\n"
         except:

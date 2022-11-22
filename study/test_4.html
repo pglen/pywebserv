@@ -25,7 +25,7 @@ body {
 
 /* Style the top navigation bar */
 .navbar {
-  display: flex;
+  /*display: flex;*/
   background-color: #333;
 }
 
@@ -43,33 +43,64 @@ body {
   color: black;
 }
 
+/* ---------------------------------------------------------------- */
+
 /* Column container */
+
 .row {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
 }
 
-/* Create two unequal columns that sits next to each other */
+/* Create two unequal columns that sit next to each other */
 /* Sidebar/left column */
+
 .side {
   flex: 20%;
+  order: 0;
   background-color: #f1f1f1;
   padding: 20px;
 }
-
 /* Main column */
 .main {
   flex: 60%;
+  order: 1;
   background-color: white;
   padding: 20px;
 }
-
 /* Rigth column */
 .right {
+  order: 2;
   flex: 20%;
   background-color: white;
   padding: 20px;
 }
+
+@media screen and (max-width:700px) {
+    .side {
+      flex: 20%;
+      order: 1;
+      background-color: #f1f1f1;
+      padding: 20px;
+    }
+    /* Main column */
+    .main {
+      flex: 60%;
+      order: 0;
+      background-color: white;
+      padding: 20px;
+    }
+    /* Rigth column */
+    .right {
+      order: 2;
+      flex: 20%;
+      background-color: white;
+      padding: 20px;
+    }
+}
+
+/* ---------------------------------------------------------------------- */
 
 /* Fake image, just for this example */
 .fakeimg {
@@ -95,7 +126,6 @@ body {
 </head>
 <body>
 
-
 <!-- Header -->
 <div class="header">
   <h1>My Website</h1>
@@ -112,6 +142,28 @@ body {
 
 <!-- The flexible grid (content) -->
 <div class="row">
+
+    <div class="main">
+        <h1>Data Displayed Here</h1>
+        <table border=1 width=100%>
+        <tr><td>
+        <h2>TITLE 1 HEADING</h2>
+
+        <h5>Title description, Dec 7, 2017</h5>
+        <div class="fakeimg" style="height:200px;">Image</div>
+        <p>Some text..</p>
+        <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+        <br>
+        <hr>
+        <tr><td>
+        <h2>TITLE 2 HEADING</h2>
+        <h5>Title description, Sep 2, 2017</h5>
+        <div class="fakeimg" style="height:200px;">Image</div>
+        <p>Some text..</p>
+        <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+        </table>
+    </div>
+
   <div class="side">
     <h2>About Me</h2>
     <h5>Photo of me:</h5>
@@ -131,26 +183,7 @@ body {
     <div class="fakeimg" style="height:60px;">Image</div><br>
     <div class="fakeimg" style="height:60px;">Image</div>
   </div>
-  <div class="main">
-    <h1>Data Displayed Here</h1>
-    <table border=1 width=100%>
-    <tr><td>
-    <h2>TITLE 1 HEADING</h2>
 
-    <h5>Title description, Dec 7, 2017</h5>
-    <div class="fakeimg" style="height:200px;">Image</div>
-    <p>Some text..</p>
-    <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-    <br>
-    <hr>
-    <tr><td>
-    <h2>TITLE 2 HEADING</h2>
-    <h5>Title description, Sep 2, 2017</h5>
-    <div class="fakeimg" style="height:200px;">Image</div>
-    <p>Some text..</p>
-    <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-    </table>
-  </div>
 
   <div class="right">
    <h2>About Them</h2>

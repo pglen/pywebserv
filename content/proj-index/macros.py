@@ -148,7 +148,7 @@ _mac_mission_statement = '''
     <font size=+0><br></font>
     <font size=+2><center><b>World Wide Globalization Message.</b></center><p></font>
     &nbsp; &nbsp; The pace of globalization has exceeded expectations. This institution is searching
-    for new ways of existence, and recommending solutions. Because true globalization, done right, can
+    for new ways of co-existence, and recommending solutions. Because true globalization, done right, can
     end hunger, and can terminate all wars. May create a better existence for all, via connecting supply
     and demand without bounds. And it will establish a new, peaceful equilibrium.
      Globalization may create a happier human race with higher quality of life and more balance.
@@ -160,6 +160,17 @@ _mac_mission_statement = '''
     you can. Every one of us makes an impact.<p>
 '''
 
+_mac_founding_statement = '''
+<tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
+    <font size=-1>Founding Statement:<br></font>
+    <font size=+1><center><b>The Founding Father's and Founding Mother's era.</b></center><p></font>
+    &nbsp; &nbsp; Many countries have gone through their democratic \"Founding\" era. An era
+    in which a system of justice is established. An equitable order of distributing
+    power and resources is created, which assures fair and equal representation for all. <br>
+    &nbsp; &nbsp; However, some countries have not gone through this 'Founding' era. The UPP is set out to bring
+    this Founding Father's and Founding Mother's era to the whole planet.<br>
+'''
+
 _mac_main_center = '''
 
      <table border=0>
@@ -169,6 +180,7 @@ _mac_main_center = '''
         <table border=0>
             <tr><td>
             { mission_statement }
+        { founding_statement }
         </table>
 
         { loadData proj-edit xx 0 4 }
@@ -182,8 +194,6 @@ _mac_main_center = '''
             <td valign=middle bgcolor=#cccccc>
             { article 1 }
             <td valign=middle bgcolor=#cccccc>
-            { article 2 }
-            <td valign=middle bgcolor=#cccccc> &nbsp; >> &nbsp;
          </table>
 
        <!-- { feed_data } -->
@@ -275,7 +285,7 @@ _mac_header2 = '''
             <tr><td>
             <a href=index.html>
             <font size=+2><b>Welcome to UPP, </a> </font> <br>
-            &nbsp; &nbsp; &nbsp; the site for United Planet Peace
+            <!-- &nbsp; &nbsp; &nbsp; the site for United Planet Peace -->
             <!-- (under construction, check back later) --!>
 
             <td align=right>

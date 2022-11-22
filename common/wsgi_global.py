@@ -183,7 +183,7 @@ def  _load_project(pdir, mainclass):
                         fff = fp.read().split()
                         mod = importlib.__import__(mname, globals(), locals(), fff, 0)
                     except:
-                        wsgi_util.put_exception("Cannot import module: '%s'" % fname)
+                        wsgi_util.put_exception("Cannot import module: '%s'" % (fname, ))
                         msg = "Module %s failed to load" % aa
                         #print("msg", msg)
                         ret = [msg.encode("utf-8"),]

@@ -58,6 +58,7 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
 }
+
 /* Left column */
 .leftcolumn {
   flex: 20%;
@@ -84,33 +85,32 @@ body {
 
 /* -------------------------------------------------------------------- */
 
-@media screen and (max-width:800px) {
+@media (max-width:850px) {
 
-/*
     .row {
         flex-direction: row;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
     }
+
     .midcolumn {
       flex: 100%;
-      order: 0;
+      order: 1;
       background-color: white;
       padding: 20px;
     }
     .leftcolumn {
       flex: 100%;
-      order: 1;
+      order: 2;
       background-color: #f1f1f1;
       padding: 20px;
     }
     .rightcolumn {
-      order: 2;
+      order: 3;
       flex: 100%;
       background-color: white;
       padding: 20px;
     }
 
-*/
 }
 
 /* -------------------------------------------------------------------- */

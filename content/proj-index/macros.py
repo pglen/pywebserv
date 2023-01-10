@@ -328,9 +328,12 @@ _mac_header = '''
 '''
 
 _glob_site_footer = '''
-    <table width=100% { sitecolor }>
+    <table border=0 width=100% background=#eeeeee>
+        <tr><td width=100% colspan=3>
+            <img src=/media/city_scape_xsmall.png width=100%>
         <tr  height=48>
         <td align=left width=45%>
+
         &nbsp; &nbsp; <font size=+2> <b>Contact Site Admin</b> </font><b>peterglen99@gmail.com</b>
                 <td> Copyright (C) Peter Glen; Released to Open Source
                 <td align=right>

@@ -27,16 +27,100 @@ _glob_misscol = "#eeeeee"
 _mac_CompanyName = '''UPP the United Planet Peace'''
 
 _glob_sitestyle = '''
+
 <style>
-.container {
-  position: relative;
-  width: 50%;
+
+* {
+  box-sizing: border-box;
 }
+
+   div {
+    display: block;
+}
+
+body {
+  font-family: Arial;
+  padding: 10px;
+  background: #f1f1f1;
+}
+
+/* Header/Blog Title */
+.header {
+  /*padding: 30px;*/
+  text-align: center;
+  background: white;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+/* Style the top navigation bar
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+*/
+
+/* Style the topnav links
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+*/
+
+/* Change color on hover
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+*/
+
+/* -------------------------------------------------------------------- */
+/* Column container */
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+/* Left column */
+.leftcolumn {
+  flex: 20%;
+  order 0;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+  /*visibility: collapse;*/
+  /*overflow: hidden;*/
+}
+/* Mid column */
+.midcolumn {
+  flex: 55%;
+  order: 0;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+}
+/* Right column */
+.rightcolumn {
+  flex: 20%;
+  order: 0;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+}
+
+/* -------------------------------------------------------------------- */
+
 .plain {
     #border: 0;
     #background-color: #333333;
     border-radius: 0px;
 }
+
 .image {
   opacity: 1;
   display: inline;
@@ -45,6 +129,7 @@ _glob_sitestyle = '''
   backface-visibility: hidden;
   //corner-radius: 15px;
 }
+
 img {
   opacity: 1;
   display: inline;
@@ -79,7 +164,59 @@ a:link, a:visited {
     padding: 10px;
     max-width: 800px;
 }
+
+@media (max-width:650px) {
+
+    .midcolumn {
+      flex: 100%;
+      order: 1;
+      background-color: white;
+      padding: 20px;
+    }
+    .leftcolumn {
+      flex: 100%;
+      order: 2;
+      background-color: #f1f1f1;
+      padding: 20px;
+    }
+    .rightcolumn {
+      order: 3;
+      flex: 100%;
+      background-color: white;
+      padding: 20px;
+    }
+}
+
+@media (max-width:550px) {
+
+    .row {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .midcolumn {
+      flex: 100%;
+      order: 1;
+      background-color: white;
+      padding: 20px;
+    }
+    .leftcolumn {
+      flex: 100%;
+      order: 2;
+      background-color: #f1f1f1;
+      padding: 20px;
+    }
+    .rightcolumn {
+      order: 3;
+      flex: 100%;
+      backgrou	background-color: white;
+      padding: 20px;
+    }
+
+}
+
 </style>
+
 '''
 
 def _func_headurl(strx, context):
@@ -328,11 +465,14 @@ _mac_header = '''
 '''
 
 _glob_site_footer = '''
-    <table width=100% { sitecolor }>
+    <table border=0 width=100% background=#eeeeee>
+        <tr><td width=100% colspan=3>
+            <img src=/media/city_scape_xsmall.png width=100%>
         <tr  height=48>
         <td align=left width=45%>
+
         &nbsp; &nbsp; <font size=+2> <b>Contact Site Admin</b> </font><b>peterglen99@gmail.com</b>
-                <td> Copyright (C) Peter Glen; Released to Open Source
+                <td> Copyright (C) Peter Glen; Site Source Released under Open Source
                 <td align=right>
                     <img src=/siteicons/system-log-out.png class=image title="Log Out / Leave">
                     &nbsp; &nbsp;

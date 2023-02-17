@@ -120,8 +120,8 @@ def     got_index(config, carry):
 # Add all the functions for the urls; this function is called
 # When the url is accessed
 
-#wsgi_global.add_one_url("/resp/",  got_index, "index.html", __file__)
-wsgi_global.add_one_url("/resp/",  got_index, "resp.html", __file__)
+wsgi_global.add_one_url("/resp/",  got_index, "index.html", __file__)
+#wsgi_global.add_one_url("/resp/",  got_index, "resp.html", __file__)
 wsgi_global.add_one_url("/resp/index.html", got_index, "index.html", __file__)
 wsgi_global.add_one_url("/resp/resp.html", got_index, "resp.html", __file__)
 

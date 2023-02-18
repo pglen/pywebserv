@@ -49,7 +49,7 @@ def     parse_args(strx, context):
 
     sss = str.split(ss)
 
-    if context.myconfx.pgdebug > 1:
+    if context.myconfx.pgdebug > 3:
         print("Args decoded:", sss)
 
     ddd = []
@@ -232,7 +232,8 @@ def     load_data_func(strx, context):
     '''
 
     ddd = parse_args(strx, context)
-    if context.myconfx.pgdebug > 1:
+
+    if context.myconfx.pgdebug > 3:
         print("load_data_func() ddd", ddd)
 
     prefix = ""; first = 0; count = 0

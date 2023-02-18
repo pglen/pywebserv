@@ -19,7 +19,7 @@ from wsgi_func  import *
 global_table = [
     ["spacer",          "<table><tr><td></table>"],
     ["linespacer",      "<tr><td height=8>"],
-    ["sitecolor",       "bgcolor=#aaffbb"],
+    #["sitecolor",       "bgcolor=#aaffbb"],
     ["feedwidth",       "400"],
     ["feedheight",      "300"],
     ["thumbwidth",      "120"],
@@ -35,12 +35,22 @@ class UrlMap():
     ''' This class stores the URL to function mapping '''
 
     def __init__(self):
-
         self.urls = []
 
     def dump(self):
+        def ph(): pass
+        ret = ""
         for aa in self.urls:
-            print("url", aa)
+            if type(aa[1]) ==  type(ph):
+                #print("url F", wsgi_util.strpad(aa[0]),  \
+                #    wsgi_util.strpad(aa[1].__name__), aa[2])
+                bb = aa[1].__name__
+            else:
+                bb = aa[1]
+
+            ret += wsgi_util.strpad(str(aa[0])) + \
+                       wsgi_util.strpad(str(bb)) + str(aa[2]) + "\n"
+        return ret
 
     def add(self, url, func, page, fname):
         # Got one already?
@@ -50,14 +60,18 @@ class UrlMap():
         self.urls.append((url, func, page, fname))
 
     def lookup(self, url):
+
         #print("Looking up url", url)
+
         for aa in self.urls:
             #print("src url", aa[0], aa[1])
             if aa[0] == url:
                 return aa[1], aa[2], aa[3]
+
+        # Not found ...
         return None, None, None
 
-    # find first level of URL
+    # Find first level of URL
     def revlookup(self, rev):
         rrr = rev.split(os.sep)
         for aa in self.urls:
@@ -121,7 +135,8 @@ class Table():
 
     def dump_table(self):
         for aa in global_table:
-            print("'" + aa[0] + "' = ", end = " ")
+            nnn = wsgi_util.strpad("'" + str(aa[0]) + "'")
+            print(nnn, " = ", end = " ")
             #print("type", type(aa[1]))
 
             if type(aa[1]) == type(""):
@@ -183,7 +198,7 @@ def  _load_project(pdir, mainclass):
                         fff = fp.read().split()
                         mod = importlib.__import__(mname, globals(), locals(), fff, 0)
                     except:
-                        wsgi_util.put_exception("Cannot import module: '%s'" % (fname, ))
+                        put_exception("Cannot import module: '%s'" % (fname, ))
                         msg = "Module %s failed to load" % aa
                         #print("msg", msg)
                         ret = [msg.encode("utf-8"),]
@@ -197,14 +212,14 @@ def  _load_project(pdir, mainclass):
                         xx = compile(cmd, "<string>", 'exec')
                         exec(xx)
                     except:
-                        wsgi_util.put_exception("Cannot initialize module: '%s' " % aa)
+                        put_exception("Cannot initialize module: '%s' " % aa)
                         msg = "Module %s failed to init" % aa
                         ret = [msg.encode("utf-8"),]
                         return ret
                     '''
     except:
         #print("Cannot import guest project", sys.exc_info())
-        wsgi_util.put_exception("Cannot import:")
+        put_exception("Cannot import:")
         ret = [b"Some modules failed to load"]
 
     return ret

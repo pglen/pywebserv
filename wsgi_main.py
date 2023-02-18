@@ -148,337 +148,16 @@ class Myconf():
     '''! Simplified config for propagating command line to runtime '''
 
     def __init__(self):
+
+        # The sync routine will re-create it all
         self.verbose = 0;
         self.pgdebug = 0;
+        self.benchmark = 0;
         self.show_keys  = 0
         self.port = 8000
+        pass
 
 # ------------------------------------------------------------------------
-
-class xWebServer():
-
-    '''!
-     This class has all the info we would need for page generation. Add urls and functions
-     to complete the reply. The return value of the process_request function is the
-     output to the client.
-    '''
-
-    def __init__(self, environ, respond):
-
-        '''! Decorate the class instance with data from the environment '''
-
-        # import here so apache wsgi interface gets the files
-        import wsgi_global, wsgi_content, wsgi_util
-        import wsgi_data, wsgi_func, wsgi_parse, wsgi_conf
-
-        #self.mark = time.perf_counter()
-        #wsgi_util.printenv(environ)
-
-        self.carryon = wsgi_conf.CarryOn()
-        self.configx = wsgi_conf.Configx()
-
-        self.configx.mainclass = self
-        self.configx.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
-        self.configx.datapath = self.configx.mypath + "content" + os.sep
-
-        #if self.config.pgdebug > 1:
-        #    print("self.config.mypath", self.config.mypath)
-        #    print("self.config.datapath", self.config.datapath)
-
-        self.stime = datetime.datetime.now()
-
-        #try:
-        #    self.sql = wsgi_data.wsgiSql(self.configx.datapath + "data/wsgi_main.sqlt")
-        #except:
-        #    print("Warn: Cannot create database", sys.exc_info())
-        #
-
-        logd = self.configx.datapath + "data"
-        if not os.access(logd, os.X_OK):
-            os.mkdir(logd)
-        logf = self.configx.datapath + "data/wsgi_main.log"
-        try:
-            self.logfp = open(logf, "a+")
-        except:
-            import getpass
-            print(getpass.getuser())
-            print("Cannot open log %s %s" % (getpass.getuser(), logf), sys.exc_info())
-            self.logfp = None
-
-        if self.logfp:
-            # Print less stuff
-            if not "siteicons" in environ['PATH_INFO']:
-                sss = [environ['REQUEST_METHOD'], environ['PATH_INFO']]
-                print( str(self.stime), *sss, file=self.logfp, flush=True)
-
-            #print( str(self.stime), environ, file=self.logfp, flush=True)
-
-        #if self.config.pgdebug > 8:
-        #    wsgi_util.printenv(environ, True)
-        #print(environ['wsgi.version'])
-        #print("Loaded in ", self.mypath)
-        #wsgi_util.print_httpenv(environ)
-
-        wsgi_func.build_initial_table()
-        wsgi_func.build_initial_rc()
-
-    def parse_instance(self, environ, respond):
-        import wsgi_global, wsgi_util
-
-        #wsgi_util.printenv(environ)
-
-        self.environ = environ
-
-        self.query = ""
-        if 'QUERY_STRING' in environ:
-            self.query = parse_qs(environ['QUERY_STRING'], keep_blank_values=True)
-            if self.configx.pgdebug > 2:
-                if self.query:
-                    print("QUERY_STRING", self.query)
-
-        self.cookie = ""
-        if 'HTTP_COOKIE' in environ:
-            self.cookie = environ['HTTP_COOKIE'].split("=")
-            #if self.config.pgdebug > 4:
-            #    print("HTTP_COOKIE", self.cookie)
-
-        self.method = ""
-        if 'REQUEST_METHOD' in environ:
-            self.method = environ['REQUEST_METHOD']
-            #if self.config.pgdebug > 4:
-            #    print("REQUEST_METHOD", self.method)
-
-        self.request_org = ""
-        self.request = {}
-        if 'CONTENT_LENGTH' in environ:
-            if self.method == 'POST':
-                try:
-                    content_length = int(environ['CONTENT_LENGTH']) # <--- Gets the size of data
-                    #print("content_length", content_length) # <--- Gets the data itself
-                    self.request_org = environ['wsgi.input'].read(content_length).decode()
-                    #print("Request_org", self.request_org)
-                    self.request = parse_qsl(str(self.request_org), keep_blank_values=True)
-                    #if self.config.pgdebug > 2:
-                    #    if self.request:
-                    #        print("Request", self.request)
-
-                except:
-                    print("No post data", sys.exc_info())
-                    import wsgi_util
-                    wsgi_util.put_exception("No post data")
-                    pass
-
-        self.url = ""
-        if 'PATH_INFO' in environ:
-            self.url = environ['PATH_INFO']
-        #print("self.url", self.url)
-
-        splitx = os.path.split(self.url)
-        #splitx = self.url.split(os.sep)
-
-        tmpname = self._assem_path(splitx)
-        self.fn = self.configx.datapath +  tmpname
-        self.fn = os.path.normpath(self.fn)
-
-        #print("self.fn", self.fn)
-        self.mtype = mimetypes.guess_type(self.fn)[0]
-        if not self.mtype:
-            self.mtype = "text/plain"
-
-    def _translate_url(self, config, url):
-
-        '''! return details for a url '''
-
-        import wsgi_global, wsgi_content, wsgi_util
-        #print("Looking up", url)
-        par = urlparse(url)
-        got, tmpl, filen = wsgi_global.urlmap.lookup(par.path)
-        #print("_translate_url from", url, "Got ", got, tmpl, filen)
-        return got, tmpl, filen
-
-    # --------------------------------------------------------------------
-    #  Dynamic content - overrides static
-
-    def process_request(self, request, respond):
-
-        '''!
-            This executes the request, after the main initializer
-            parsed everything
-        '''
-        import wsgi_global, wsgi_content, wsgi_util
-
-        #print("serving", self.url, self.fn)
-        #print("url map", wsgi_global.urlmap.dump())
-
-        try:
-            callme, template, fname = self._translate_url(self.configx, self.url)
-        except:
-            wsgi_util.put_exception("When calling proj entry")
-            return
-
-        if(callme):
-            content = ""
-            try:
-                self.carryon.url = self.url
-                self.carryon.query = self.query
-                self.carryon.request = self.request
-                self.carryon.template = template
-                self.carryon.fname = fname
-                global myconf
-                self.carryon.myconfx = myconf
-
-                #self.carryon.print()
-                #print("Callback",  self.fn, self.url)
-                content = callme(self.configx, self.carryon)
-
-                try:
-                    # See if residual anything
-                    if hasattr(self.carryon, "localdb"):
-                        #print("exiting", self.carryon.localdb)
-                        self.carryon.localdb.close()
-                except:
-                    print("Error on exit cleaup")
-
-            except:
-                wsgi_util.put_exception("At process_request " + str(fname))
-                respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
-
-                fn5 = self.configx.datapath + "html/500.html"
-                if os.path.exists(fn5):
-                    content = wsgi_content.got_500(self.configx, fn5, self.query)
-                    #print("got 505", content)
-                else:
-                    content = "Empty results from page assembly."
-                return [bytes(content, "utf-8")]
-
-            respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
-            return [bytes(content, "utf-8")]
-
-        else:
-            # Iterate for other content
-            if self.configx.verbose:
-                print("Looking for file", self.fn)
-
-            found_file = ""
-            while True:
-                if os.path.exists(self.fn):
-                    found_file = self.fn
-                    break
-
-                rev = wsgi_global.urlmap.revlookup(self.url)
-                popped = self._pop_path(self.url)
-                #print("rev:", rev, "got popped:", popped,)
-                if rev:
-                    fn2 = rev[0] + popped
-                    if os.path.exists(fn2):
-                        found_file = fn2
-                        break
-
-                fn2 = self._pad_path(self.fn, "static")
-                if os.path.exists(fn2):
-                    found_file = fn2
-                    break
-
-                fn2 = self._pad_path(self.fn, "html")
-                if os.path.exists(fn2):
-                    found_file = fn2
-                    break
-
-                fn2 = self.configx.datapath + os.sep + "css" + os.sep \
-                                        + os.path.basename(self.url)
-                if os.path.exists(fn2):
-                    found_file = fn2
-                    break
-
-
-                break
-
-            if found_file:
-                if self.configx.verbose:
-                    print("found_file", "'" + found_file + "'")
-
-                self.mtype = mimetypes.guess_type(found_file)[0]
-                if not self.mtype:
-                    self.mtype = "text/plain"
-                respond('200 OK', [('Content-Type', self.mtype + ';charset=UTF-8')])
-                fp = util.FileWrapper(open(found_file, "rb"))
-                return fp
-            else:
-                # Error content
-                print("Cannot find file:",  "'" + os.path.basename(self.fn) + "'")
-                print("Request was:",  "'" + self.url + "'")
-
-                #if self.configx.verbose:
-                #    print("No such file", "'" + self.fn + "'")
-                respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
-                #print("error select", self.url, fname)
-                # Search for 404 file
-                errfile = ""
-                while True:
-                    fn4 =  os.path.dirname(self.fn) + os.sep + "404.html"
-                    if os.path.exists(fn4):
-                        errfile = fn4
-                        break
-                    fn4 = self.configx.datapath +  "html/404.html"
-                    if os.path.exists(fn4):
-                        errfile = fn4
-                        break
-                    break
-
-                if errfile:
-                    content = wsgi_content.got_404(self.configx, errfile, self.query)
-                    return [bytes(content, "utf-8")]
-                else:
-                    return [b"URL not found. (and 404 file does not exist)."]
-
-    # Parse and re-assemble pats
-    def _assem_path(self, splitx):
-        #print("assem_path: splitx", splitx)
-        ppp = ""
-        for aa in range(len(splitx)):
-            #print("re-assemble", splitx[aa])
-            if aa == len(splitx)-1:
-                # Empty last file name, index wanted
-                if splitx[aa] == "":
-                    ppp = os.path.join(ppp, "/index.html")
-                else:
-                    ppp = os.path.join(ppp, splitx[aa])
-            else:
-                ppp = os.path.join(ppp, splitx[aa])
-        #print("ppp", ppp)
-        return ppp
-
-    # Pad path with an injected name
-    def _pad_path(self, fnorg, padname):
-        '''! inject last dirname '''
-        splitx = os.path.split(fnorg)
-        #print("splitx", splitx)
-        ppp = ""
-        for aa in range(len(splitx)):
-            #print("re-assemble", splitx[aa])
-            if aa == len(splitx)-1:
-                ppp = os.path.join(ppp, padname)
-            ppp = os.path.join(ppp, splitx[aa])
-        #print("ppp", ppp)
-        return ppp
-
-    # Pop the top off the path
-    def _pop_path(self, pname):
-        '''! pop path head '''
-        splitx = pname.split(os.sep)
-        #print("splitx", splitx)
-        ppp = ""
-        for aa in range(len(splitx)):
-            #print("re-assemble", splitx[aa])
-            if aa == 1:
-                pass
-            else:
-                ppp += splitx[aa]
-                if  aa != len(splitx)-1:
-                    ppp+= os.sep
-
-        #print("pop_path: pname", pname, "ppp", ppp)
-        return ppp
 
 mainclass = None
 
@@ -491,9 +170,12 @@ def application(environ, respond):
     WSGI main entry point. The web server (like apache) will call this.
     '''
 
-    mark = time.perf_counter()
+    global myconf, mainclass
 
-    #print("Started:", environ['PATH_INFO'])
+    if myconf.verbose > 1:
+        print("Started:", environ['PATH_INFO'])
+
+    time_mark = time.perf_counter()
 
     try:
         # Make sure we are landing here
@@ -503,30 +185,51 @@ def application(environ, respond):
         os.chdir(mypath + os.sep + "content");
         sys.path.append(mypath + os.sep + "content")
 
-        import wsgi_util, wsgi_content, wsgi_global, wsgi_conf
+        import wsgi_util, wsgi_content, wsgi_global, wsgi_conf, wsgi_class
 
         #wsgi_util.append_file("Started Server Page\n")
 
-        global usr_cnt, mainclass, myconf
-
+        #global usr_cnt
         #usr_cnt += 1
-        #print("Query arrived", os.getpid(), usr_cnt)
-
-        #if ".html" in environ['PATH_INFO']:
-        #    print("tdelta0", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
 
         # Only do it one time (not for dev deployment)
+        #print("Query arrived", os.getpid(), usr_cnt)
+        #if ".html" in environ['PATH_INFO']:
+        #    print("tdelta0", environ['PATH_INFO'], "%.4f" %
+        #                ( (time.perf_counter() - time_mark) * 1000), "ms")
+
+        if not myconf:
+            myconf =  Myconf()   ##!< Myconf in WSGI
+
         if not mainclass:
             try:
-                mainclass = xWebServer(environ, respond)
-                myconf =  Myconf()   ##!< Myconf in WSGI
+                mainclass = wsgi_class.xWebServer(environ, respond)
+
+                if mainclass.configx.pgdebug > 1:
+                    print("Created instance")
+
             except:
                 wsgi_util.put_exception("Creating Server OBJ")
-                return "Bad Server"
+                respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
+                msg = b"The server cannot create an instance of its main class."
+                return [msg,]
 
-        # re - decorate
-        mainclass.configx.pgdebug = myconf.pgdebug
-        mainclass.configx.verbose = myconf.verbose
+        # re - decorate (sync command line config)
+        mainclass.configx.sync(myconf)
+        if myconf.verbose > 2:
+            print(mainclass.configx.getvals())
+
+        #wsgi_util.dump_global_table()
+
+        if mainclass.configx.pgdebug > 1:
+            wsgi_util.printenv(environ, False)
+
+        if mainclass.configx.benchmark:
+            print("tdelta0", environ['PATH_INFO'], "%.4f" %
+                ( (time.perf_counter() - time_mark) * 1000), "ms")
+
+        # Optimize this to load the current project only
+        #print("Curr proj", environ['PATH_INFO'])
 
         try:
             wsgi_global.getprojects(mainclass)
@@ -534,28 +237,56 @@ def application(environ, respond):
             wsgi_util.put_exception("Loading Projects")
 
         #print("Main object inited", mainclass)
-        #if ".html" in environ['PATH_INFO']:
-        #    print("tdelta1", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
+
+        if mainclass.configx.benchmark:
+            print("tdelta1", environ['PATH_INFO'], "%.4f" %
+                ( (time.perf_counter() - time_mark) * 1000), "ms")
 
         mainclass.parse_instance(environ, respond)
 
-        #if ".html" in environ['PATH_INFO']:
-        #    print("tdelta2", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
+        if mainclass.configx.benchmark:
+            print("tdelta2", environ['PATH_INFO'], "%.4f" %
+                               ( (time.perf_counter() - time_mark) * 1000), "ms")
 
-        wdata = mainclass.process_request(environ, respond)
+        wdata = ""
+        try:
+            wdata = mainclass.process_request(environ, respond)
+        except:
+            print("Exception in process request", sys.exc_info())
+            #tracex("Exception in process_request:")
+            # We hadle it with the caller, after printing some stuff
+            raise
 
-        #respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
-        #wdata = [bytes("hello", "utf-8"), ]
-
-        #if ".html" in environ['PATH_INFO']:
-        #    print("tdelta", environ['PATH_INFO'], "%.4f" % ( (time.perf_counter() - mark) * 1000), "ms")
-
+        if mainclass.configx.benchmark:
+            print("tdelta3", environ['PATH_INFO'], "%.4f" %
+                               ( (time.perf_counter() - time_mark) * 1000), "ms")
+        # All went OK
         return wdata
 
     except:
-        #print("Exception in main:", sys.exc_info())
-        tracex("Exception in main:")
-        content = "Script error"
+        print("Exception in main:", sys.exc_info())
+        #tracex("Exception in main, trace:")
+        content = "Script error; on requesting URL: '" + environ['PATH_INFO'] + "'"
+
+        if myconf.verbose:
+            print("Error in main", sys.exc_info())
+
+        # Search for 500 file
+        errfile = ""
+        while True:
+            fn4 = mainclass.configx.datapath +  "html/500.html"
+            if os.path.isfile(fn4):
+                errfile = fn4
+                break
+            break
+
+        if errfile:
+            #print("found error file", errfile)
+            content = wsgi_content.got_500(mainclass.configx, errfile, "")
+        else:
+            content = "Error on presenting 500 file. Please contact admin."
+
+        respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
         return [bytes(content, "utf-8"),]
 
 def xversion():
@@ -563,8 +294,20 @@ def xversion():
     #sys.exit(0)
 
 def xhelp():
-    print("Helping 1.0")
-    print("d:h?vV:fxctoktp:")
+    print("wsgi_main.py: web server command line and WSGI driver")
+    print("Use: wsgi_main [options] ")
+    print(" Where options may be:")
+    print("    -d level     --  set debug level [0-10]")
+    print("    -h           --  help (this screen) alias: ?")
+    print("    -v           --  increase verbosity 0 = none 1 = some 2 = more ...")
+    print("    -V:          --  Show version")
+    print("    -p port      --  Set port to listen on")
+    print("    -b           --  print benchmark timing info")
+    print("    -x           --  Reserved ")
+    print("    -c           --  Reserved ")
+    print("    -o           --  Reserved ")
+    print("    -t           --  Reserved ")
+
     sys.exit(0)
 
 # ------------------------------------------------------------------------
@@ -577,16 +320,16 @@ if __name__ == '__main__':
 
     opts = []; args = []
 
+    myopts = "d:h?vV:xcotp:b"
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "d:h?vV:fxctoktp:",
+        opts, args = getopt.getopt(sys.argv[1:], myopts,
                         ["debug=", "help", "help", "verbose", "version", ])
 
     except getopt.GetoptError as err:
         print(_("Invalid option(s) on command line:"), err)
         sys.exit(1)
 
-
-    # Outdated parsing ... for now, leave it as is
+    # Outdated parsing ... for now, leave it as is (has good points to it)
     for aa in opts:
         #print("opt", "'" + aa[0] + "'", aa[1])
         if aa[0] == "-d" or aa[0] == "--debug":
@@ -610,9 +353,8 @@ if __name__ == '__main__':
         if aa[0] == "-V" or aa[0] == "--version":
             xversion()
         if aa[0] == "-v" or aa[0] == "--verbose":
-            myconf.verbose = 1
-        if aa[0] == "-f":
-            myconf.full_screen = True
+            #print("Setting verbose")
+            myconf.verbose += 1
         if aa[0] == "-x":
             comline.CLEAR_CONFIG = True
         if aa[0] == "-c":
@@ -621,11 +363,12 @@ if __name__ == '__main__':
             comline.SHOW_TIMING = True
         if aa[0] == "-o":
             comline.USE_STDOUT = True
-        if aa[0] == "-k":
-            myconf.show_keys = True
         if aa[0] == "-t":
             print("Tracing ON")
             sys.settrace(tracer)
+        if aa[0] == "-b":
+            myconf.benchmark = 1
+            #print("Benchmark ON")
 
     print("\n===== Starting HTTPD on port {}, control-C to stop".format(myconf.port))
 

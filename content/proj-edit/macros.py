@@ -72,7 +72,7 @@ def imgrow_data(strx, context):
 
     sss = wsgi_func.parse_args(strx, context)
     foot = '''<td width=10> <td>  '''
-    print("arg sss", sss)
+    #print("arg sss", sss)
     data = fill_data(context.localdb, int(sss[1]))
     #print("data", data)
     strx = '''
@@ -252,16 +252,22 @@ _mac_header = '''
         <form method=post>
             <tr><td>
             <a href=index.html>
-            <font size=+2><b>Welcome to UPP Site Editor, </a> </font> <br>
-            &nbsp; &nbsp; &nbsp; the site for United Planet Peace
+            <font size=+2><center><b>Welcome to UPP Site Editor, </a> </font> <br>
+            <!-- &nbsp; &nbsp; &nbsp;  -->
+            the editing site for United Planet Peace<br>
+            <font size=-1 color=red>Authorized users only</center></font>
+
             <!-- (under construction, check back later) --!>
-                <td align=right>
-                 <font size=-1>Quick feedback:</font>  &nbsp;
+             <td align=right width=40%>
+                <!--
+                <font size=-1>Quick feedback:</font>  &nbsp;
                 <input type=text name="feedname" onfocus="{ clr }" value=" Your Name" size=10>
                 <input type=text name="feedtit"  onfocus="{ clr }" value=" Feddback Title" size=10>
                 <input type=text name="feedtxt"  onfocus="{ clr }" value=" Feedback Content" size=12>
                 <input type=submit name='feedSUB' value='Submit'>
+                 -->
             <td>
+
         </form>
             <td align=right width=18%>
                 Search site: &nbsp; <input type=text value="" size=12>

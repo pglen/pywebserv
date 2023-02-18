@@ -21,7 +21,7 @@ from . import common
 
 def got_index(config, carry):
 
-    if config.verbose:
+    if config.verbose > 1:
         print("got_index() url", carry.url)
 
     if config.pgdebug > 1:
@@ -76,7 +76,8 @@ try:
     #print("Initializing", "'" + __file__ + "'" )
     # Add default enties to table
     wsgi_global.add_one_url("/editor/", got_index,   "index.html", __file__)
-    wsgi_global.add_one_url("/editor/index.html",   got_index, "index.html", __file__)
+    #wsgi_global.add_one_url("/editor", got_index,   "index.html", __file__)
+    wsgi_global.add_one_url("/editor/index.html",  got_index, "index.html", __file__)
     wsgi_global.add_one_url("/editor/editor.html",  editor.got_editor, "editor.html", __file__)
 
 except:

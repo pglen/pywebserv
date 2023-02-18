@@ -8,9 +8,12 @@
         referenced on the whole site.
 
      This file is imported under a try: except clause, so ordinarily,
-    nothing in this file can down the site, can only down this page.
-    (for example a syntax error) However, some conditions (like missing
-    site dependencies) CAN down the site.
+    nothing in this file can down the site.
+
+      This file can only down this page. (for example a syntax
+      error) However, some conditions (like missing site dependencies)
+      CAN down the site.
+
 '''
 
 import os, sys, time
@@ -21,8 +24,9 @@ import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 from . import common
 
-_glob_tabhead = "#ccffcc"
-_glob_misscol = "#eeeeee"
+_glob_tabhead   = "#ccffcc"
+_glob_misscol   = "#eeeeee"
+_glob_sitecolor = "#aaffbb"
 
 _mac_CompanyName = '''UPP the United Planet Peace'''
 
@@ -421,7 +425,8 @@ _mac_header2 = '''
         <form method=post>
             <tr><td>
             <a href=index.html>
-            <font size=+2><b>Welcome to UPP, </a> </font> <br>
+            <font size=+2><center><b>Welcome to UPP, </a> </center></font> <br>
+
             <!-- &nbsp; &nbsp; &nbsp; the site for United Planet Peace -->
             <!-- (under construction, check back later) --!>
 
@@ -443,7 +448,7 @@ _mac_header = '''
 
     <table { sitecolor } width=100% border=0>
     <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
-     <a href=index.html> <b>{ CompanyName }</b> </a>
+     <a href=index.html><b>{ CompanyName }</b></a>
      </font>
             <td align=center>
                 <table width=100%  border=0>

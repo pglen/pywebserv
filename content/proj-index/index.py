@@ -23,7 +23,7 @@ from . import common
 
 def got_index(config, carry):
 
-    if config.verbose:
+    if config.verbose > 1:
         print("got_index() url = '%s'" % carry.url)
 
     if config.pgdebug > 1:
@@ -94,8 +94,8 @@ Initialize the current module
 try:
     # Add default enties to tables
     wsgi_global.add_one_url("/", got_index, "index.html", __file__)
-    wsgi_global.add_one_url("/test_resize.html", got_index, "test_resize.html", __file__)
     wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
+    wsgi_global.add_one_url("/test_resize.html", got_index, "test_resize.html", __file__)
     wsgi_global.add_one_url("/log.html", got_log, "log.html", __file__)
 
     wsgi_global.gltable.add_one_func("show_submit", show_submit_func)

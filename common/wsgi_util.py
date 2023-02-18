@@ -193,7 +193,7 @@ def process_default(configx, context):
 
     #print("using template", context.template, "fname", context.fname)
 
-    if configx.verbose:
+    if configx.verbose > 1:
         print("process_default() with local_table len ", len(context.local_table))
 
     if configx.pgdebug > 5:
@@ -209,7 +209,7 @@ def process_default(configx, context):
     except:
         put_exception("Cannot create / open template");
 
-    if configx.verbose:
+    if configx.verbose > 1:
         print("using template", template)
 
     if template and os.path.exists(template):
@@ -385,6 +385,12 @@ def add_global_vars(locvars, table):
         print("Exception on add_local_vars", sys.exc_info())
         put_exception("loc")
 
+def dump_global_table():
+
+    print("Global Table:")
+    wsgi_global.gltable.dump_table()
+    print("Global Table End")
+
 # ------------------------------------------------------------------------
 # This is a collection of all automatic var adds
 
@@ -397,5 +403,16 @@ def add_all_vars(locvars, table):
     # This adds global the variables pre - marked for a purpose
     add_global_vars(locvars, table)
     add_global_funcs(locvars, table)
+
+def strpad(strx, pad = 18):
+
+    if len(strx) < pad:
+        dd =  pad - len(strx)
+        stry = strx + " " * dd
+    else:
+        stry = strx
+
+    #return "'" + stry  + "'"
+    return stry
 
 # EOF

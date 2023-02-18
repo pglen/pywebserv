@@ -21,7 +21,7 @@ git:
 	git add .
 	git commit -m "$(AUTOCHECK)"
 	git push
-	git push local
+	#git push local
 
 run:
 	./wsgi_server.py
@@ -36,6 +36,7 @@ deb:  build build3
 	./build-deb.sh
 
 clean:
+	./clean.sh
 
 md5:
 	echo duoing md5

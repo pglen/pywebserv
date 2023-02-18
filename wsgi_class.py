@@ -79,7 +79,7 @@ class xWebServer():
         wsgi_func.build_initial_rc()
 
     def parse_instance(self, environ, respond):
-        import wsgi_global, wsgi_util
+        #import wsgi_global, wsgi_util
 
         #wsgi_util.printenv(environ)
 
@@ -120,7 +120,7 @@ class xWebServer():
 
                 except:
                     print("No post data", sys.exc_info())
-                    import wsgi_util
+                    #import wsgi_util
                     wsgi_util.put_exception("No post data")
                     pass
 
@@ -145,7 +145,9 @@ class xWebServer():
 
         '''! return details for a url '''
 
-        import wsgi_global, wsgi_content, wsgi_util
+        import wsgi_global
+        #import wsgi_content, wsgi_util
+
         #print("Looking up", url)
         par = urlparse(url)
 
@@ -180,7 +182,8 @@ class xWebServer():
             This executes the request, after the main initializer
             parsed everything
         '''
-        import wsgi_global, wsgi_content, wsgi_util
+
+        #import wsgi_global, wsgi_content, wsgi_util
 
         #respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
         #return [bytes("Cannot do shit", 'utf-8')]
@@ -230,7 +233,8 @@ class xWebServer():
                     print("Error on exit cleaup")
 
             except:
-                wsgi_util.put_exception("At process_request " + str(fname))
+                #self.process_request
+                wsgi_util.put_exception("At process_request" + str(fname))
 
                 fn5 = self.configx.datapath + "html/500.html"
                 if os.path.exists(fn5):
@@ -298,6 +302,8 @@ class xWebServer():
 
                 if os.path.isfile(found_file):
                     #print("responding with file")
+                    from wsgiref import util
+
                     respond('200 OK', [('Content-Type', self.mtype + ';charset=UTF-8')])
                     fp = util.FileWrapper(open(found_file, "rb"))
                     return fp

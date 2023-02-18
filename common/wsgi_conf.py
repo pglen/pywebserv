@@ -7,7 +7,7 @@
 
 #import builtins
 
-#from wsgi_util import *
+import wsgi_util
 
 # Config global; After testing some crap, this was the simplest
 
@@ -50,7 +50,7 @@ class Configx:
         sss = ""
         arr = self._fillarr(self)
         for aa in arr:
-            sss += wsgi_util.strpad2(str(aa), 14) + "  " + \
+            sss += wsgi_util.strpad(str(aa), 14) + "  " + \
                   str(getattr(self, aa)) + "\n"
 
         # Replaced this for automation

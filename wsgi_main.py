@@ -172,8 +172,22 @@ def application(environ, respond):
 
     global myconf, mainclass
 
-    if myconf.verbose > 1:
-        print("Started:", environ['PATH_INFO'])
+    # Scan for command from wsgi
+    #for kk in environ.keys():
+    #    if 'WSGI_PARAMS' == kk:
+    #        #print(kk, environ[kk])
+    #        wsgi_comm = environ[kk]
+
+    wsgi_comm  = environ.get('WSGI_PARAMS')
+    if not wsgi_comm: wsgi_comm = ""
+    else: print("wsgi_comm", wsgi_comm)
+
+    #if myconf.verbose > 1:
+    #try:
+    #    #print("Started:")
+    #    print(environ['WSGI_PARAMS'])
+    #except:
+    #    pass
 
     time_mark = time.perf_counter()
 
@@ -198,8 +212,19 @@ def application(environ, respond):
         #    print("tdelta0", environ['PATH_INFO'], "%.4f" %
         #                ( (time.perf_counter() - time_mark) * 1000), "ms")
 
-        if not myconf:
+        # this config comes from the command line ...
+        #    ... we patch env into it from wsgi
+        try:
+            if not myconf:
+                myconf =  Myconf()   ##!< Myconf in WSGI
+        except:
             myconf =  Myconf()   ##!< Myconf in WSGI
+
+        if "-b" in wsgi_comm:
+            myconf.benchmark = 1
+
+        if "-v" in wsgi_comm:
+            myconf.verbose = 1
 
         if not mainclass:
             try:
@@ -264,8 +289,8 @@ def application(environ, respond):
         return wdata
 
     except:
-        print("Exception in main:", sys.exc_info())
-        #tracex("Exception in main, trace:")
+        #print("Exception in main:", sys.exc_info())
+        tracex("Exception in main, trace:")
         content = "Script error; on requesting URL: '" + environ['PATH_INFO'] + "'"
 
         if myconf.verbose:
@@ -284,7 +309,7 @@ def application(environ, respond):
             #print("found error file", errfile)
             content = wsgi_content.got_500(mainclass.configx, errfile, "")
         else:
-            content = "Error on presenting 500 file. Please contact admin."
+            content = "Error on presenting the '500' file. Please contact the admin."
 
         respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
         return [bytes(content, "utf-8"),]
@@ -312,10 +337,11 @@ def xhelp():
 
 # ------------------------------------------------------------------------
 
+
+
 if __name__ == '__main__':
 
     global myconf
-
     myconf =  Myconf()      ##!< Myconf global
 
     opts = []; args = []

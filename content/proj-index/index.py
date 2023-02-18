@@ -106,4 +106,3 @@ except:
     print("Cannot add module globals:", "'" + modname + "'", sys.exc_info())
 
 # EOF
-

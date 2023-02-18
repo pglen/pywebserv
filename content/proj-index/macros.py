@@ -287,7 +287,8 @@ _mac_mission_statement = '''
 <tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
     <font size=-1>Mission Statement:</font>
     <font size=+0><br></font>
-    <font size=+2><center><b>World Wide Globalization Message.</b></center><p></font>
+    <font size=+1><center><b>World Wide Globalization Message.</b></center><p></font>
+     <div style="text-align: justify;">
     &nbsp; &nbsp; The pace of globalization has exceeded expectations. This institution is searching
     for new ways of co-existence, and recommending solutions. Because true globalization, done right, can
     end hunger, and can terminate all wars. May create a better existence for all, via connecting supply
@@ -299,17 +300,38 @@ _mac_mission_statement = '''
     for our existence, and the basis for everything else. Please look around for ideas on
     the site, approve or disapprove as you feel, and please help if you so desire. And help
     you can. Every one of us makes an impact.<p>
+    </div>
 '''
 
 _mac_founding_statement = '''
 <tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
     <font size=-1>Founding Statement:<br></font>
     <font size=+1><center><b>The Founding Father's and Founding Mother's era.</b></center><p></font>
+    <div style="text-align: justify;">
     &nbsp; &nbsp; Many countries have gone through their democratic \"Founding\" era. An era
     in which a system of justice is established. An equitable order of distributing
-    power and resources is created, which assures fair and equal representation for all. <br>
+    power and resources is created, which assures fair and equal representation for all.
     &nbsp; &nbsp; However, some countries have not gone through this 'Founding' era. The UPP is set out to bring
     this Founding Father's and Founding Mother's era to the whole planet.<br>
+    </div>
+'''
+
+_mac_target_statement = '''
+
+<tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
+    <font size=-1>Target Statement:<br></font>
+    <font size=+1><center><b>Uniform Global Standards for Governance</b></center></font>
+    <div style="text-align: justify;"><br>
+    &nbsp; &nbsp; There are plenty of organizations to help each other in
+    cooperating internationally; mostly aiding / controlling inter-governmental
+    affairs. And there are plenty of enforcement instruments.
+    However, the most important instrument is missing: Containment of the
+    Leadership. In the twenty first century, there should be standards of
+    leadership, standards of govenance and especally, standards for justice.
+    Term limits for every position. High standards for democracy, accountability and equality.
+    UPP is set out to create a framework where these shortcomings are addressed.
+    Globally. The whole planet.<p>
+    </div>
 '''
 
 _mac_main_center = '''
@@ -320,8 +342,10 @@ _mac_main_center = '''
 
         <table border=0>
             <tr><td>
-            { mission_statement }
+        { mission_statement }
         { founding_statement }
+        { target_statement }
+
         </table>
 
         { loadData proj-edit xx 0 4 }

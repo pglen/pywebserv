@@ -16,7 +16,7 @@ modname = ppp[plen-2] + "-" + ppp[plen-1]
 
 import os, sys, random, datetime, time
 
-sys.path.append("../")
+sys.path.append(".." + os.sep)
 
 from . import common
 

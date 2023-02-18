@@ -76,15 +76,14 @@ try:
     #print("Initializing", "'" + __file__ + "'" )
     # Add default enties to table
     wsgi_global.urlmap.add_one_url("/editor/", got_index,   "index.html", __file__)
-    #wsgi_global.add_one_url("/editor", got_index,   "index.html", __file__)
     wsgi_global.urlmap.add_one_url("/editor/index.html",  got_index, "index.html", __file__)
     wsgi_global.urlmap.add_one_url("/editor/editor.html",  editor.got_editor, "editor.html", __file__)
+    #wsgi_global.urlmap.add_one_url("/editor", got_index,   "index.html", __file__)
 
     #wsgi_util.dump_table("Global Table", wsgi_global.global_table)
     #wsgi_util.dump_global_table()
 
 except:
     print("Cannot initialize", modname, sys.exc_info())
-
 
 # EOF

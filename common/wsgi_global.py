@@ -6,10 +6,8 @@ import sys, time, importlib
 
 # Get strings and functions
 
-from wsgi_style import *
-from wsgi_res   import *
-from wsgi_func  import *
 import wsgi_util
+from wsgi_func  import *
 
 # A list of variables and strings. Making an error here will down the site.
 # The newly defined local macro can override the global one. Make sure you do not expect
@@ -108,7 +106,8 @@ class UrlMap():
         try:
             self.add(url, mfunc, mpage, fname)
         except:
-            print("Cannot add url map", sys.exc_info())
+            wsgi_util.put_exception("Cannot add URL map")
+            #print("Cannot add url map", sys.exc_info())
 
     # ------------------------------------------------------------------------
 # URL to function table, global
@@ -152,7 +151,9 @@ class Table():
                     return 1
             self.mytable.append([mname, mfunc])
         except:
-            print("Cannot add global table item", sys.exc_info())
+            #print("Cannot add global table item", sys.exc_info())
+            wsgi_util.put_exception("Cannot add global table item")
+
         return 0
 
     def lookup_item(self, item):

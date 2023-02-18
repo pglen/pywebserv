@@ -1,15 +1,15 @@
  #!/usr/bin/env python3
 
-''' The simplest web server's
+'''
+    The simplest web server's
     data file for in-line resources
 '''
-
 
 #''' This is a test header'''
 
 header = '''
 
-    <table width=100% { sitecolor } border=0>
+    <table width=100% bgcolor={ sitecolor } border=0>
     <tr  height=36>
     <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
      <a href=index.html> <b>{ CompanyName }</b> </a>
@@ -34,14 +34,21 @@ header = '''
     </table>
 '''
 
+siteemail = '''
+admin@unitedplanetpeace.com
+'''
+
 footer = '''
+    <table border=0 bgcolor={ sitecolor }>
     <tr  height=48>
-    <td align=left width=45%>
-    &nbsp; &nbsp; <font size=+2> <b>Contact Site Admin</b> </font><b>peterglen99@gmail.com</b>
-            <td> Copyright (C) Open Source
+    <td align=center width=35%>
+    <font size=+2> <b>Contact Site Admin</b> </font>
+    <b>{ siteemail }</b>
+            <td align=center> Copyright (C) Open Source
             <td align=right>
                 <img src=/siteicons/system-log-out.png class=image title="Log Out / Leave">
                 &nbsp; &nbsp;
+    </table>
 '''
 
 imgrow = '''
@@ -157,6 +164,5 @@ bigtext = '''
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
 '''
-
 
 # EOF

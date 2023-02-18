@@ -52,15 +52,6 @@ class Configx:
         for aa in arr:
             sss += wsgi_util.strpad(str(aa), 14) + "  " + \
                   str(getattr(self, aa)) + "\n"
-
-        # Replaced this for automation
-        #sss += "mypath: " +     self.mypath + "\n"
-        #sss += "datapath: " +   self.datapath + "\n"
-        #sss += "verbose: " +    str(self.verbose) + "\n"
-        #sss += "pgdebug: " +    str(self.pgdebug) + "\n"
-        #sss += "port: " +       str(self.port) + "\n"
-        #sss += "benchmark: " +  str(self.benchmark) + "\n"
-
         return sss
 
     # Sync one class's extra methods to the other class

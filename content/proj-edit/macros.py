@@ -248,7 +248,7 @@ _mac_right = '''
 _mac_clr = ''' if(this.value[0]==' ')this.value='' '''
 
 _mac_header = '''
-    <table width=100% border=0>
+    <table width=100% bgcolor={ sitecolor } border=0>
         <form method=post>
             <tr><td>
             <a href=index.html>

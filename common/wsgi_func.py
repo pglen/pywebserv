@@ -88,7 +88,6 @@ def     app_one_func(strx, context):
 
 def     app_two_func(strx, context):
 
-
     '''
     Mock calendar. Does nothing but presents a calendar looking user interface
     '''
@@ -401,20 +400,34 @@ def     build_initial_table():
         #print("Cannot build global table", sys.exc_info())
         wsgi_util.put_exception("Cannot build global initital table")
 
+init_rc =  [   \
+    ("header",          wsgi_res.header),
+    ("footer",          wsgi_res.footer),
+    ("siteemail",       wsgi_res.siteemail),
+    ("bigtext",         wsgi_res.bigtext),
+    ("imgrow",          wsgi_res.imgrow),
+    ("mystyle",         wsgi_style.mystyle),
+    ("xarticle",        wsgi_res.article),
+    ("xarticle2",       wsgi_res.article2),
+    ("spacer",          "<table><tr><td></table>"),
+    ("linespacer",      "<tr><td height=8>"),
+    ("sitecolor",       "#aaffbb"),
+    ("feedwidth",       "400"),
+    ("feedheight",      "300"),
+    ("thumbwidth",      "120"),
+    ("thumbheight",     "80"),
+    ("nullcolor",       "#cccccc"),
+    ]
+
 def     build_initial_rc():
 
-    ''' The initial table for the global resource items
+    '''
+        The initial table for the global resource items
         The user resources may override any of this
     '''
     try:
-        wsgi_global.gl_table.add_one_func("header",   wsgi_res.header)
-        wsgi_global.gl_table.add_one_func("footer",   wsgi_res.footer)
-        wsgi_global.gl_table.add_one_func("bigtext",  wsgi_res.bigtext)
-        wsgi_global.gl_table.add_one_func("imgrow",   wsgi_res.imgrow)
-        wsgi_global.gl_table.add_one_func("mystyle",  wsgi_style.mystyle)
-
-        wsgi_global.gl_table.add_one_func("xarticle",  wsgi_res.article)
-        wsgi_global.gl_table.add_one_func("xarticle2", wsgi_res.article2)
+        for aa in init_rc:
+            wsgi_global.gl_table.add_one_func(aa[0], aa[1])
 
     except:
         #print("Cannot build global rc", sys.exc_info())

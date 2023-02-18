@@ -10,21 +10,11 @@ import wsgi_util
 from wsgi_func  import *
 
 # A list of variables and strings. Making an error here will down the site.
-# The newly defined local macro can override the global one. Make sure you do not expect
-# nested override, as the macro is expanded with locals first, globals second;
+# The newly defined local macro can override the global one. Make sure you do
+# not expect nested override, as the macro is expanded with locals first,
+# globals second;
 # The local macro will not override the macro that is uncovered by global
 # macro expansion;
-
-global_table_init = [
-    ["spacer",          "<table><tr><td></table>"],
-    ["linespacer",      "<tr><td height=8>"],
-    ["sitecolor",       "bgcolor=#aaffbb"],
-    ["feedwidth",       "400"],
-    ["feedheight",      "300"],
-    ["thumbwidth",      "120"],
-    ["thumbheight",     "80"],
-    ["nullcolor",       "#cccccc"],
-  ]
 
 # ------------------------------------------------------------------------
 # URL to function mapping
@@ -93,11 +83,13 @@ class UrlMap():
     def     add_one_url(self, url, mfunc, mpage = None, fname = ""):
 
         '''
-        Add a url and a function here. Also, an optional template. The template is assumed
-        to be in the same directory as the script. If no template is added, the following
-        places will be searched: the project "./" directory,  the /static/ directory.
-        If the template cannot be found, the return value of the function output is delivered as
-        it was generated without template substitution.
+        Add a url and a function here. Also, an optional template. The template
+        is assumed to be in the same directory as the script. If no template is
+        added, the following places will be searched:
+                the project "./" directory,
+                the /static/ directories.
+        If the template cannot be found, the return value of the function
+        output is delivered as it was generated without template substitution.
         '''
 
         if not mpage:
@@ -109,21 +101,16 @@ class UrlMap():
             wsgi_util.put_exception("Cannot add URL map")
             #print("Cannot add url map", sys.exc_info())
 
-    # ------------------------------------------------------------------------
-# URL to function table, global
-
-urlmap =  UrlMap()
+urlmap =  UrlMap()      # URL to function table, global
 
 # ------------------------------------------------------------------------
-# Add a new project function;
+# The main table template
 
 class Table():
 
     def __init__(self):
 
         self.mytable = []
-        for aa in global_table_init:
-            self.mytable.append(aa)
 
     def add_one_func(self, mname, mfunc, mpage = None, fname=None):
         '''
@@ -144,11 +131,12 @@ class Table():
 
         #global global_table
         try:
-            #see if there is an entry already
-            for aa in self.mytable:
-                if aa[0] == mname:
-                    #print("Duplicate macro:", mname)
-                    return 1
+            #see if there is an entry already disabled: Sat 18.Feb.2023
+            #for aa in self.mytable:
+            #    if aa[0] == mname:
+            #        #print("Duplicate macro:", mname)
+            #        return 1
+
             self.mytable.append([mname, mfunc])
         except:
             #print("Cannot add global table item", sys.exc_info())
@@ -162,23 +150,33 @@ class Table():
                 return aa[1:]
         return ""
 
+    def _dump_rec(self, aa):
+        nnn = wsgi_util.strpad(str(aa[0]))
+        print(nnn, " = ", end = " ")
+        #print("type", type(aa[1]))
+
+        if type(aa[1]) == type(""):
+            print("'" + aa[1][:36].replace("\n", "\\n") + "'")
+        elif type(aa[1]) == type([]):
+            print("ARR ", aa[1][0])
+        else:
+            print("'" + aa[1].__name__ + "()" +"'")
+
     def dump_table(self):
-        for aa in self.mytable:
-            nnn = wsgi_util.strpad("'" + str(aa[0]) + "'")
-            print(nnn, " = ", end = " ")
-            #print("type", type(aa[1]))
 
-            if type(aa[1]) == type(""):
-                print("'" + aa[1][:24].replace("\n", "\\n") + "'")
-            elif type(aa[1]) == type([]):
-                print("ARR ", aa[1][0])
-            else:
-                print("'" + aa[1].__name__ + "()" +"'")
+        #for aa in self.mytable:
+        #    self._dump_rec(aa)
+        #print("----")
 
-gl_table = Table()
+        # Dump reverse
+        lenx = len(self.mytable)
+        for cc in range(lenx-1, -1, -1):
+            self._dump_rec(self.mytable[cc])
 
+gl_table = Table()              # Decleare one global table
 
 # ------------------------------------------------------------------------
+# Worker for loading one project
 
 def  _load_project(pdir, mainclass):
 
@@ -229,7 +227,7 @@ def  _load_project(pdir, mainclass):
     return ret
 
 # ------------------------------------------------------------------------
-# Load all projects from dirs starting with "proj"
+# Load all projects from subdirs starting with the name "proj"
 
 def     getprojects(mainclass):
 

@@ -15,28 +15,6 @@ import wsgi_global, wsgi_parse
 
 verbose = 0
 
-class  wContext():
-
-    def __init__(self, config, url, query):
-
-        self.config = config
-        self.url = url
-        self.query = query
-
-        self.request = None
-        self.template = None
-        self.fname  = None
-        self.local_table  = None
-
-    def printvals(self):
-        #print("config", self.config)
-        print("url=", self.url, end=" - ")
-        print("query=", self.query, end=" - ")
-        print("request=", self.request, end=" - ")
-        print("template=", self.template, end=" - ")
-        print("fname=", self.fname)
-        #print("local_table len:", len(self.local_table))
-
 # ------------------------------------------------------------------------
 
 def  resolve_template(config, fn, name):
@@ -199,7 +177,8 @@ def process_default(configx, context):
     if configx.pgdebug > 5:
         if context.local_table:
             #dump_table("Local Table:", context.local_table)
-            dump_table_funcs("Local Table Functs:", context.local_table)
+            #dump_table_funcs("Local Table Functs:", context.local_table)
+            pass
 
     try:
         if not context.template:
@@ -229,20 +208,21 @@ def process_default(configx, context):
     return content
 
 
-def dump_table(strx, tabx):
+def dump_local_table(tabx):
     ''' Dump named internal table '''
-    print (strx)
-    for aa in tabx:
-        print ("'" + aa[0] + "' = ", unescape(str(aa[1])[:24]), end="\n")
-    print()
 
-def dump_table_funcs(strx, tabx):
-    ''' Dump named internal table functions '''
-    print (strx)
+    print("Local Table:")
     for aa in tabx:
-        if type(aa[1]) == type(dump_table_funcs):
-            print ("'" + aa[0] + "' = ", str(aa[1]) + "'")
-    print()
+        print (strpad(aa[0]) + " = ", unescape(str(aa[1])[:36]), end="\n")
+    print("Local Table End")
+
+#def dump_table_funcs(strx, tabx):
+#    ''' Dump named internal table functions '''
+#    print (strx)
+#    for aa in tabx:
+#        if type(aa[1]) == type(dump_table_funcs):
+#            print ("'" + aa[0] + "' = ", str(aa[1]) + "'")
+#    print()
 
 def unescape(strx):
     ''' expand new lines etc ... to \\n '''

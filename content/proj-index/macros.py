@@ -468,9 +468,9 @@ _mac_header2 = '''
 # ------------------------------------------------------------------------
 # Override main macros
 
-_mac_header = '''
+_glob_header = '''
 
-    <table { sitecolor } width=100% border=0>
+    <table width=99% bgcolor={ sitecolor } border=0>
     <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
      <a href=index.html><b>{ CompanyName }</b></a>
      </font>
@@ -493,18 +493,36 @@ _mac_header = '''
     </table>
 '''
 
-_glob_site_footer = '''
-    <table border=0 width=100% background=#eeeeee>
-        <tr><td width=100% colspan=3>
-            <img src=/media/city_scape_xsmall.png width=100%>
-        <tr  height=48>
-        <td align=left width=45%>
+_glob_footer2 = '''
+    <tr  height=47 { bgcolor } >
+    <td align=center width=35%>
+    <font size=+2> <b>Contact zSite Admin</b> </font>
+    <b>{ siteemail }</b>
+            <td align=center> Copyright (C) Open Source
+            <td align=right>
+                <img src=/siteicons/system-log-out.png class=image title="Log Out / Leave">
+                &nbsp; &nbsp;
+'''
 
-        &nbsp; &nbsp; <font size=+2> <b>Contact Site Admin</b> </font><b>peterglen99@gmail.com</b>
-                <td> Copyright (C) Peter Glen; Site Source Released under Open Source
-                <td align=right>
-                    <img src=/siteicons/system-log-out.png class=image title="Log Out / Leave">
-                    &nbsp; &nbsp;
+#_glob_site_footer = '''
+_glob_footer = '''
+    <table width=100%  border=0>
+        <tr><td width=100% colspan=3>
+        <img src=/media/city_scape_xsmall.png width=100%>
+        <tr><td>
+        <table  width=100% bgcolor={ sitecolor }>
+            <tr>
+            <td align=center width=30%>
+                    &nbsp; &nbsp; <font size=+2>
+                    <b>Contact Site Admin</b></font><br>
+                    <b>{ siteemail }</b>
+
+            <td align=center >
+                Copyright (C) Peter Glen; <br>Site Source Released under Open Source
+            <td align=right>
+                <img src=/siteicons/system-log-out.png class=image title="Log Out / Leave">
+                &nbsp; &nbsp;
+        </table>
     </table>
 '''
 
@@ -537,8 +555,7 @@ _mac_imgrow = '''
 
 wsgi_util.add_all_vars(locals().copy(), common.local_table)
 
-#print("Local Table")
-#for aa in common.local_table:
-#    print (aa)
+#wsgi_util.dump_global_table()
+wsgi_util.dump_local_table(common.local_table)
 
 # EOF

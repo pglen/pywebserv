@@ -38,20 +38,26 @@ The macro regex is '{ .*? }' [the '?' is for non greedy wild card)
 
   add_one_func("mymacro",  my_macro_func)
 
-  Macro 'auto' files:
+  Macro 'auto' action files:
 
      The variables in the files start with "_mac_" will become local
     macros, that can be  referenced on this page.
-    Variables start with "_glob_" will become global that can be
-    referenced on the whole site. See: ./contents/Proj-xxx/macros.py
     The variables start with "_func_" will become local functions
 
+    Variables start with "_glob_" will become global that can be
+    referenced on the whole site. See: ./contents/Proj-xxx/macros.py
+    Please note that the global macros override previous definitions,
+    so the last definition is the active one.
+    This may not be the behavior you want, so name macros accordingly,
+    or use local macros.  ex: footer or site_footer or index_footer
+
+     In case there is any doubt, use the dump_global_macros() function.
+
      The project files are imported under a try: except clause, so ordinarily,
-    a mistake (like syntax error) can down the site, only the particular
+    a mistake (like syntax error) can NOT down the site, only the particular
     page / project.
 
-    However, some conditions (like missing site dependencies)
-     CAN down the site.
+    However, some conditions (like missing site dependencies) CAN down the site.
 
  # The built in macros:   (see source for complete list)
 
@@ -132,29 +138,6 @@ variable, we can set the web server config, as follows.
 
 import sys, os, mimetypes, time, datetime, getopt, traceback
 
-def tracex(xstr):
-
-    '''!  Trace current fault.
-         This was crafted, so the apache run time can access it without any includes.
-      '''
-
-    cumm = xstr + " "
-    a,b,c = sys.exc_info()
-    #print(a,b,c)
-    if a != None:
-        cumm += str(a) + " " + str(b) + "\n"
-        try:
-            #cumm += str(traceback.format_tb(c, 10))
-            ttt = traceback.extract_tb(c)
-            for aa in ttt:
-                #print( "trace stack item ", aa)
-                cumm += " *** File: " + os.path.basename(aa[0]) + \
-                        " Line: " + str(aa[1]) + "\n" +  \
-                    "   Context: " + aa[2] + " -> " + aa[3] + "\n"
-        except:
-            print( "Could not print trace stack. ", sys.exc_info())
-    print(cumm)
-
 try:
     from urllib.parse import urlparse, unquote, parse_qs, parse_qsl
 except ImportError:
@@ -228,8 +211,12 @@ def application(environ, respond):
         os.chdir(mypath + os.sep + "content");
         sys.path.append(mypath + os.sep + "content")
 
-        import wsgi_util, wsgi_content, wsgi_global, wsgi_conf, wsgi_class
+    except:
+        print("Cannot import dependent files")
 
+    import wsgi_util, wsgi_content, wsgi_global, wsgi_conf, wsgi_class
+
+    try:
         #wsgi_util.append_file("Started Server Page\n")
 
         #global usr_cnt
@@ -309,7 +296,7 @@ def application(environ, respond):
         try:
             wdata = mainclass.process_request(environ, respond)
         except:
-            print("Exception in process request", sys.exc_info())
+            wsgi_util.put_exception("Exception in process request")
             #tracex("Exception in process_request:")
             # We hadle it with the caller, after printing some stuff
             raise
@@ -322,7 +309,9 @@ def application(environ, respond):
 
     except:
         #print("Exception in main:", sys.exc_info())
-        tracex("Exception in main, trace:")
+        wsgi_util.put_exception("Exception in main")
+        #tracex("Exception in main, trace:")
+
         content = "Script error; on requesting URL: '" + environ['PATH_INFO'] + "'"
 
         if myconf.verbose:

@@ -513,6 +513,7 @@ _mac_imgrow = '''
 
 wsgi_util.add_all_vars(locals().copy(), common.local_table)
 
+#print("Local Table")
 #for aa in common.local_table:
 #    print (aa)
 

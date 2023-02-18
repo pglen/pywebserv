@@ -9,6 +9,7 @@ import sys, time, importlib
 from wsgi_style import *
 from wsgi_res   import *
 from wsgi_func  import *
+import wsgi_util
 
 # A list of variables and strings. Making an error here will down the site.
 # The newly defined local macro can override the global one. Make sure you do not expect
@@ -16,10 +17,10 @@ from wsgi_func  import *
 # The local macro will not override the macro that is uncovered by global
 # macro expansion;
 
-global_table = [
+global_table_init = [
     ["spacer",          "<table><tr><td></table>"],
     ["linespacer",      "<tr><td height=8>"],
-    #["sitecolor",       "bgcolor=#aaffbb"],
+    ["sitecolor",       "bgcolor=#aaffbb"],
     ["feedwidth",       "400"],
     ["feedheight",      "300"],
     ["thumbwidth",      "120"],
@@ -85,7 +86,31 @@ class UrlMap():
                 pass
         return ""
 
-# ------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
+    # Add functions to URL map
+    # One may override any file; in that case the values are filled in
+
+    # We build it dynamically, so error is flagged
+
+    def     add_one_url(self, url, mfunc, mpage = None, fname = ""):
+
+        '''
+        Add a url and a function here. Also, an optional template. The template is assumed
+        to be in the same directory as the script. If no template is added, the following
+        places will be searched: the project "./" directory,  the /static/ directory.
+        If the template cannot be found, the return value of the function output is delivered as
+        it was generated without template substitution.
+        '''
+
+        if not mpage:
+            mpage = "index.html"
+
+        try:
+            self.add(url, mfunc, mpage, fname)
+        except:
+            print("Cannot add url map", sys.exc_info())
+
+    # ------------------------------------------------------------------------
 # URL to function table, global
 
 urlmap =  UrlMap()
@@ -96,7 +121,10 @@ urlmap =  UrlMap()
 class Table():
 
     def __init__(self):
-        pass
+
+        self.mytable = []
+        for aa in global_table_init:
+            self.mytable.append(aa)
 
     def add_one_func(self, mname, mfunc, mpage = None, fname=None):
         '''
@@ -118,23 +146,23 @@ class Table():
         #global global_table
         try:
             #see if there is an entry already
-            for aa in global_table:
+            for aa in self.mytable:
                 if aa[0] == mname:
-                    print("Duplicate macro:", mname)
+                    #print("Duplicate macro:", mname)
                     return 1
-            global_table.append([mname, mfunc])
+            self.mytable.append([mname, mfunc])
         except:
             print("Cannot add global table item", sys.exc_info())
         return 0
 
     def lookup_item(self, item):
-        for aa in global_table:
+        for aa in self.mytable:
             if aa[0] == item:
                 return aa[1:]
         return ""
 
     def dump_table(self):
-        for aa in global_table:
+        for aa in self.mytable:
             nnn = wsgi_util.strpad("'" + str(aa[0]) + "'")
             print(nnn, " = ", end = " ")
             #print("type", type(aa[1]))
@@ -146,33 +174,8 @@ class Table():
             else:
                 print("'" + aa[1].__name__ + "()" +"'")
 
-gltable = Table()
+gl_table = Table()
 
-# ------------------------------------------------------------------------
-# Add functions to URL map
-# One may override any file; in that case the values are filled in
-
-# We build it dynamically, so error is flagged
-
-def     add_one_url(url, mfunc, mpage = None, fname=""):
-
-    '''
-    Add a url and a function here. Also, an optional template. The template is assumed
-    to be in the same directory as the script. If no template is added, the following
-    places will be searched: the project "./" directory,  the /static/ directory.
-    If the template cannot be found, the return value of the function output is delivered as
-    it was generated without template substitution.
-    '''
-
-    global urlmap
-
-    if not mpage:
-        mpage = "index.html"
-
-    try:
-        urlmap.add(url, mfunc, mpage, fname)
-    except:
-        print("Cannot add url map", sys.exc_info())
 
 # ------------------------------------------------------------------------
 
@@ -198,7 +201,7 @@ def  _load_project(pdir, mainclass):
                         fff = fp.read().split()
                         mod = importlib.__import__(mname, globals(), locals(), fff, 0)
                     except:
-                        put_exception("Cannot import module: '%s'" % (fname, ))
+                        wsgi_util.put_exception("Cannot import module: '%s'" % (fname, ))
                         msg = "Module %s failed to load" % aa
                         #print("msg", msg)
                         ret = [msg.encode("utf-8"),]
@@ -212,14 +215,14 @@ def  _load_project(pdir, mainclass):
                         xx = compile(cmd, "<string>", 'exec')
                         exec(xx)
                     except:
-                        put_exception("Cannot initialize module: '%s' " % aa)
+                        wsgi_util.put_exception("Cannot initialize module: '%s' " % aa)
                         msg = "Module %s failed to init" % aa
                         ret = [msg.encode("utf-8"),]
                         return ret
                     '''
     except:
         #print("Cannot import guest project", sys.exc_info())
-        put_exception("Cannot import:")
+        wsgi_util.put_exception("Cannot import:")
         ret = [b"Some modules failed to load"]
 
     return ret

@@ -282,7 +282,6 @@ try:
     wsgi_util.add_local_func("mid_rows", mid_rows, common.local_table)
     wsgi_util.add_local_func("imgrow_data", imgrow_data, common.local_table)
 
-
 except:
     #print("Exception on editor init vars", sys.exc_info())
     wsgi_util.put_exception("in Editor Index")

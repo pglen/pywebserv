@@ -8,7 +8,7 @@
  The sub directories listed below contain the following functionality:
 
         common              the code for the server
-        data                for database related
+        data                for database and log related (write to it)
         content             where the content files live
             siteicons       icons for this site
             media           images, media
@@ -94,6 +94,39 @@ The work around is to use the HTML &nbsp; space symbol. Like: Hello&nbsp;World
  The macros that are not recognized are printed verbatim into the HTML stream.
 This is to signal the developer that the macro is not valid.
 
+ ## The WSGI interface
+
+ Changed (temporarily) all the group settings to .www-data; (chown .www-data *)
+this way the web server can access the server files without opening up
+everything to 'other'. (public) This way chmod o-rwx does not
+disable server access;
+
+  After deployment, please remember to change it back
+to whatever the user appropriate settings are.
+
+  The data directory is given write access for logs and data.
+
+  The WSGI listens to the environment variable "WSGI_PARAMS". With this
+variable, we can set the web server config, as follows.
+
+    SetEnv "WSGI_PARAMS" "-b"
+    SetEnv "WSGI_PARAMS" "-v"
+    SetEnv "WSGI_PARAMS" "-b -v"
+
+    The -b enables benchmark printouts, the -v enables verbosity.
+    Disable these for production deployment.
+
+  The bencmark printout:
+
+    tdelta0     prints stage one   timing (initialization)
+    tdelta1     prints stage two   timing (parse URL, load)
+    tdelta2     prints stage three timing (parse file)
+    tdelta3     prints stage four  timing (present)
+
+    Restart server when changing configuration.
+
+    >>> sudo systemctl restart apache2
+
 
 '''
 
@@ -172,22 +205,18 @@ def application(environ, respond):
 
     global myconf, mainclass
 
-    # Scan for command from wsgi
+    # Scan for command from wsgi (disabled)
     #for kk in environ.keys():
     #    if 'WSGI_PARAMS' == kk:
     #        #print(kk, environ[kk])
     #        wsgi_comm = environ[kk]
 
     wsgi_comm  = environ.get('WSGI_PARAMS')
-    if not wsgi_comm: wsgi_comm = ""
-    else: print("wsgi_comm", wsgi_comm)
-
-    #if myconf.verbose > 1:
-    #try:
-    #    #print("Started:")
-    #    print(environ['WSGI_PARAMS'])
-    #except:
-    #    pass
+    # Patch it to a string
+    if not wsgi_comm:
+        wsgi_comm = ""
+    else:
+        print("wsgi_comm", wsgi_comm)
 
     time_mark = time.perf_counter()
 
@@ -213,13 +242,15 @@ def application(environ, respond):
         #                ( (time.perf_counter() - time_mark) * 1000), "ms")
 
         # this config comes from the command line ...
-        #    ... we patch env into it from wsgi
+        #    ... we patch the env var into it from wsgi
         try:
             if not myconf:
                 myconf =  Myconf()   ##!< Myconf in WSGI
         except:
+            # Create if not there
             myconf =  Myconf()   ##!< Myconf in WSGI
 
+        # Not over complicating things
         if "-b" in wsgi_comm:
             myconf.benchmark = 1
 
@@ -259,6 +290,7 @@ def application(environ, respond):
         try:
             wsgi_global.getprojects(mainclass)
         except:
+            import wsgi_util
             wsgi_util.put_exception("Loading Projects")
 
         #print("Main object inited", mainclass)
@@ -336,8 +368,6 @@ def xhelp():
     sys.exit(0)
 
 # ------------------------------------------------------------------------
-
-
 
 if __name__ == '__main__':
 

@@ -129,7 +129,7 @@ def recursive_parse(buff, context, local_table):
 
     # Recursively process
     try:
-        parsed3 = _parse_one(parsed2, context,  wsgi_global.global_table, _regex)
+        parsed3 = _parse_one(parsed2, context,  wsgi_global.gl_table.mytable, _regex)
     except:
         wsgi_util.put_exception("exception in global parser", )
         parsed3 = parsed2

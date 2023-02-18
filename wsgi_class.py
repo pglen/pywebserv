@@ -37,12 +37,11 @@ class xWebServer():
         self.configx.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
         self.configx.datapath = self.configx.mypath + "content" + os.sep
 
-        #if self.config.pgdebug > 1:
-        #    print("self.config.mypath", self.config.mypath)
-        #    print("self.config.datapath", self.config.datapath)
+        if self.configx.pgdebug > 1:
+            print("self.configx.mypath", self.config.mypath)
+            print("self.configx.datapath", self.config.datapath)
 
         self.start_time = datetime.datetime.now()
-        #self.headers_sent = False
 
         #try:
         #    self.sql = wsgi_data.wsgiSql(self.configx.datapath + "data/wsgi_main.sqlt")
@@ -183,12 +182,10 @@ class xWebServer():
             parsed everything
         '''
 
-        #import wsgi_global, wsgi_content, wsgi_util
+        import wsgi_global, wsgi_content
 
         #respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
         #return [bytes("Cannot do shit", 'utf-8')]
-
-        self.headers_sent = False # New request, allow fresh header
 
         if self.configx.verbose > 1:
             print("process_request", self.url, self.fn)
@@ -233,11 +230,11 @@ class xWebServer():
                     print("Error on exit cleaup")
 
             except:
-                #self.process_request
                 wsgi_util.put_exception("At process_request" + str(fname))
 
                 fn5 = self.configx.datapath + "html/500.html"
-                if os.path.exists(fn5):
+                if os.path.isfile(fn5):
+
                     content = wsgi_content.got_500(self.configx, fn5, self.query)
                     #print("got 500", content)
                 else:
@@ -249,9 +246,7 @@ class xWebServer():
             if self.configx.verbose > 1:
                 print("process_request4", callme, template)
 
-            if not self.headers_sent:
-              self.headers_sent = True
-              respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
+            respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
 
             return [bytes(content, "utf-8")]
 
@@ -323,21 +318,23 @@ class xWebServer():
                 #    print("No such file", "'" + self.fn + "'")
                 respond('404 Not Found', [('Content-Type', 'text/html;charset=UTF-8')])
                 #print("error select", self.url, fname)
-                # Search for 404 file
+
+                # Search for 404 file, allow project 404 to override
                 errfile = ""
                 while True:
                     fn4 =  os.path.dirname(self.fn) + os.sep + "404.html"
-                    if os.path.exists(fn4):
+                    if os.path.isfile(fn4):
                         errfile = fn4
                         break
                     fn4 = self.configx.datapath +  "html/404.html"
-                    if os.path.exists(fn4):
+                    if os.path.isfile(fn4):
                         errfile = fn4
                         break
                     break
 
                 if errfile:
-                    content = wsgi_content.got_404(self.configx, errfile, self.query)
+                    #import wsgi_content
+                    content = wsgi_content.got_404(self.configx, errfile, self.query, self.fn)
                     return [bytes(content, "utf-8")]
                 else:
                     return [b"URL not found. (and 404 file does not exist)."]

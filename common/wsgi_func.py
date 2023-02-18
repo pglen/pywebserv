@@ -34,7 +34,7 @@ def     parse_args(strx, context):
     if context.myconfx.pgdebug > 2:
         print("Args loc expanded:", eee)
 
-    ssss = wsgi_parse.parse_buffer(eee, "\[ .*? \]", context, wsgi_global.global_table)[0]
+    ssss = wsgi_parse.parse_buffer(eee, "\[ .*? \]", context, wsgi_global.gl_table.mytable)[0]
 
     if context.myconfx.pgdebug > 2:
         print("Args expanded:", ssss)
@@ -272,14 +272,14 @@ def     load_data_func(strx, context):
         res = []
 
     # The data is returned as macros, the page can reference
-    wsgi_global.gltable.add_one_func(prefix + "DLen", str(len(res)))
-    wsgi_global.gltable.add_one_func(prefix + "Data", res )
+    wsgi_global.gl_table.add_one_func(prefix + "DLen", str(len(res)))
+    wsgi_global.gl_table.add_one_func(prefix + "Data", res )
 
     #for aa in res:
     #    cnt2 = 0
     #    wsgi_global.add_one_func(prefix + "RecLen%d" % cnt2, str(len(aa)))
     #    for bb in aa:
-    #        wsgi_global.gltable.add_one_func(prefix + "Dat%d-%d" % (cnt, cnt2), str(bb) )
+    #        wsgi_global.gl_table.add_one_func(prefix + "Dat%d-%d" % (cnt, cnt2), str(bb) )
     #        cnt2 += 1
     #    cnt += 1
 
@@ -316,7 +316,7 @@ def     get_data_func(strx, context):
     #print("ddd", ddd)
 
     try:
-        item = wsgi_global.gltable.lookup_item(\
+        item = wsgi_global.gl_table.lookup_item(\
                         ddd[1] + "Data")[0][int(ddd[2])][int(ddd[3])]
         #print("item", item)
     except IndexError:
@@ -338,7 +338,7 @@ def     include_func(strx, context):
     #print("include_func()", strx, context.fname)
 
     # Expand arguments
-    ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.global_table)[0]
+    ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.gl_table.mytable)[0]
     ss = ""
     for aa in ssss:
         ss += aa
@@ -387,15 +387,15 @@ def     build_initial_table():
 
     try:
         # Built ins
-        wsgi_global.gltable.add_one_func("image",    image_func)
-        wsgi_global.gltable.add_one_func("getData",  get_data_func)
-        wsgi_global.gltable.add_one_func("loadData", load_data_func)
-        wsgi_global.gltable.add_one_func("include",  include_func)
-        #wsgi_global.gltable.add_one_func("deep",     deep_func)
+        wsgi_global.gl_table.add_one_func("image",    image_func)
+        wsgi_global.gl_table.add_one_func("getData",  get_data_func)
+        wsgi_global.gl_table.add_one_func("loadData", load_data_func)
+        wsgi_global.gl_table.add_one_func("include",  include_func)
+        #wsgi_global.gl_table.add_one_func("deep",     deep_func)
 
         # Examples
-        wsgi_global.gltable.add_one_func("app_one",  app_one_func)
-        wsgi_global.gltable.add_one_func("app2",     app_two_func)
+        wsgi_global.gl_table.add_one_func("app_one",  app_one_func)
+        wsgi_global.gl_table.add_one_func("app2",     app_two_func)
 
     except:
         #print("Cannot build global table", sys.exc_info())
@@ -407,14 +407,14 @@ def     build_initial_rc():
         The user resources may override any of this
     '''
     try:
-        wsgi_global.gltable.add_one_func("header",   wsgi_res.header)
-        wsgi_global.gltable.add_one_func("footer",   wsgi_res.footer)
-        wsgi_global.gltable.add_one_func("bigtext",  wsgi_res.bigtext)
-        wsgi_global.gltable.add_one_func("imgrow",   wsgi_res.imgrow)
-        wsgi_global.gltable.add_one_func("mystyle",  wsgi_style.mystyle)
+        wsgi_global.gl_table.add_one_func("header",   wsgi_res.header)
+        wsgi_global.gl_table.add_one_func("footer",   wsgi_res.footer)
+        wsgi_global.gl_table.add_one_func("bigtext",  wsgi_res.bigtext)
+        wsgi_global.gl_table.add_one_func("imgrow",   wsgi_res.imgrow)
+        wsgi_global.gl_table.add_one_func("mystyle",  wsgi_style.mystyle)
 
-        wsgi_global.gltable.add_one_func("xarticle",  wsgi_res.article)
-        wsgi_global.gltable.add_one_func("xarticle2", wsgi_res.article2)
+        wsgi_global.gl_table.add_one_func("xarticle",  wsgi_res.article)
+        wsgi_global.gl_table.add_one_func("xarticle2", wsgi_res.article2)
 
     except:
         #print("Cannot build global rc", sys.exc_info())

@@ -93,14 +93,14 @@ Initialize the current module
 
 try:
     # Add default enties to tables
-    wsgi_global.add_one_url("/", got_index, "index.html", __file__)
-    wsgi_global.add_one_url("/index.html", got_index, "index.html", __file__)
-    wsgi_global.add_one_url("/test_resize.html", got_index, "test_resize.html", __file__)
-    wsgi_global.add_one_url("/log.html", got_log, "log.html", __file__)
+    wsgi_global.urlmap.add_one_url("/", got_index, "index.html", __file__)
+    wsgi_global.urlmap.add_one_url("/index.html", got_index, "index.html", __file__)
+    wsgi_global.urlmap.add_one_url("/test_resize.html", got_index, "test_resize.html", __file__)
+    wsgi_global.urlmap.add_one_url("/log.html", got_log, "log.html", __file__)
 
-    wsgi_global.gltable.add_one_func("show_submit", show_submit_func)
-    #wsgi_global.gltable.add_one_func("fill_data", fill_data)
-    wsgi_global.gltable.add_one_func("CompanyName", "UPP, United Planet Peace")
+    wsgi_global.gl_table.add_one_func("show_submit", show_submit_func)
+    wsgi_global.gl_table.add_one_func("CompanyName", "UPP, United Planet Peace")
+    #wsgi_global.gl_table.add_one_func("fill_data", fill_data)
 
 except:
     print("Cannot add module globals:", "'" + modname + "'", sys.exc_info())

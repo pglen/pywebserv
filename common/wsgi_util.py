@@ -288,7 +288,7 @@ def add_local_func(mname, mfunc, table):
         #see if there is an entry already
         for aa in table:
             if aa[0] == mname:
-                print("Duplicate function/macro", mname, mfunc)
+                #print("Duplicate function/macro", mname, mfunc)
                 return True
         table.append([mname, mfunc])
     except:
@@ -337,7 +337,7 @@ def add_global_funcs(locvars, table):
                 # Do not add hidden
                 if "_gfunc_" == aa[:7]:
                     #print("Adding global func2", aa)
-                    wsgi_global.gltable.add_one_func(aa[7:], locvars[aa])
+                    wsgi_global.gl_table.add_one_func(aa[7:], locvars[aa])
 
     except:
         print("Exception on add_global_funcs", sys.exc_info())
@@ -380,7 +380,7 @@ def add_global_vars(locvars, table):
             if "_glob_" in aa[:6]:
                 if _check_type(locvars, aa):
                     continue
-                wsgi_global.gltable.add_one_func(aa[6:], locvars[aa])
+                wsgi_global.gl_table.add_one_func(aa[6:], locvars[aa])
     except:
         print("Exception on add_local_vars", sys.exc_info())
         put_exception("loc")
@@ -388,7 +388,7 @@ def add_global_vars(locvars, table):
 def dump_global_table():
 
     print("Global Table:")
-    wsgi_global.gltable.dump_table()
+    wsgi_global.gl_table.dump_table()
     print("Global Table End")
 
 # ------------------------------------------------------------------------
@@ -412,7 +412,15 @@ def strpad(strx, pad = 18):
     else:
         stry = strx
 
-    #return "'" + stry  + "'"
+    return stry
+
+def strtrim(strx, trim = 18):
+
+    if len(strx) > trim - 3:
+        hhh = trim // 2
+        stry = strx[:hhh] + " ... " + strx[-hhh:]
+    else:
+        stry = strx
     return stry
 
 # EOF

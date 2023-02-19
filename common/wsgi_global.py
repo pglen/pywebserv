@@ -57,6 +57,11 @@ class UrlMap():
             if aa[0] == url:
                 return aa[1], aa[2], aa[3]
 
+        lenx = len(self.urls)
+        for cc in range(lenx-1, -1, -1):
+            if self.urls[cc] == url:
+                return aa[1], aa[2], aa[3]
+
         # Not found ...
         return None, None, None
 

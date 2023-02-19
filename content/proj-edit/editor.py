@@ -48,19 +48,21 @@ def got_editor(config, carry):
             #print("res:", res)
             if res:
                 carry.cdata += "<table>"
-                carry.cdata += "<tr><td>arg 1 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa1>" + res[1] + "</textarea><p>"
-                carry.cdata += "<tr><td>arg 2 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa2>" + res[2] + "</textarea><p>"
-                carry.cdata += "<tr><td>arg 3 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa3>" + res[3] + "</textarea><p>"
-                carry.cdata += "<tr><td>arg 4 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa4>" + res[4] + "</textarea><p>"
+                carry.cdata += "<tr><td>key   <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa1>" + res[1] + "</textarea><p>"
+                carry.cdata += "<tr><td>arg 1 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa2>" + res[2] + "</textarea><p>"
+                carry.cdata += "<tr><td>arg 2 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa3>" + res[3] + "</textarea><p>"
+                carry.cdata += "<tr><td>arg 3 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa4>" + res[4] + "</textarea><p>"
+                carry.cdata += "<tr><td>arg 4 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa5>" + res[5] + "</textarea><p>"
                 carry.cdata += "</table>"
 
         if carry.request[0][1] == "Add New":
             #print ("adding new data")
             carry.cdata += "<table>"
-            carry.cdata += "<tr><td>arg 1 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa1>"  + "</textarea><p>"
-            carry.cdata += "<tr><td>arg 2 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa2>"  + "</textarea><p>"
-            carry.cdata += "<tr><td>arg 3 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa3>"  + "</textarea><p>"
-            carry.cdata += "<tr><td>arg 4 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa4>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>key   <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa1>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>arg 1 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa2>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>arg 2 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa3>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>arg 3 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa4>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>arg 4 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa5>"  + "</textarea><p>"
             carry.cdata += "</table>"
 
         if carry.request[0][1] == "Del":

@@ -5,12 +5,24 @@
 import sys, os, mimetypes, time, sqlite3, uuid
 import wsgi_util
 
+sys.path.append("../..")
+from  pydbase import twincore
+from  pydbase import pypacker
+
+# If this is set, use PYDB else use SQLITE
+
+USE_PYDB    = True
+
 # Do we have database handle already?
 
-def soft_opendb(carry, modname):
+def soft_opendb(carry, modname, suffix = ""):
 
-    dbname = "data/%s.sqlt" % modname
-    #print("database", "data/%s.sqlt" % modname)
+    if USE_PYDB:
+        dbname = "data/%s%s.pydb" % (modname, suffix)
+    else:
+        dbname = "data/%s%s.sqlt" % (modname, suffix)
+
+    print("database name", dbname)
 
     needopen = False
     if not hasattr(carry, "localdb"):
@@ -18,21 +30,70 @@ def soft_opendb(carry, modname):
     else:
         # see if DB is OK
         try:
-            conn = sqlite3.connect(file)
-            c = conn.cursor()
-            c.execute("select count(*) from " + self.table + "")
-            conn.close()
+            if USE_PYDB:
+                #conn = pyd
+                pass
+            else:
+                conn = sqlite3.connect(file)
+                c = conn.cursor()
+                c.execute("select count(*) from " + self.table + "")
+                conn.close()
         except:
             #print("Cannot open/create db:", file, sys.exc_info())
             needopen = True
 
     if needopen:
         try:
-            carry.localdb = wsgiSql(dbname)
+            if USE_PYDB:
+                carry.localdb = wsgipydb(dbname)
+            else:
+                carry.localdb = wsgiSql(dbname)
         except:
             print("Cannot open database", dbname)
             wsgi_util.put_exception("Open database %s") % dbname
 
+class wsgipydb():
+
+    '''! The data store for the web server. Simple PYDB data files.
+      '''
+
+    def __init__(self, file, table = "initial"):
+
+        self.table = table
+        self.file = file
+        self.packer = pypacker.packbin()
+
+        self.db = twincore.TwinCore(self.file)
+
+    def getcount(self):
+        ret = self.db.getdbsize()
+        return ret
+
+    def put(self, key, val, val2, val3, val4):
+        #print("put", key, "vals", val, val2, val3, val4)
+        sss = self.packer.encode_data("", (val, val2, val3, val4))
+        #print("sss", sss)
+        ddd = self.packer.decode_data(sss)
+        #print("ddd", ddd)
+        self.db.save_data(key, sss)
+
+    def  getbyid(self, kkk):
+        #print("byid", kkk)
+        sss = self.db.get_rec(kkk)
+        #print("sss[0]", sss[0], "sss[1]", sss[1].decode("utf-8") )
+        ddd = self.packer.decode_data(sss[1].decode("utf-8"))
+        #print("ddd", *ddd[0])
+        return sss[0].decode("utf-8"), *ddd[0]
+
+    def close(self):
+        print("Closed PYDB", self.file)
+        #self.conn.close()
+        #self.db.__del__()
+
+    def __delete__(self):
+        print("delete pydb", self)
+
+# ------------------------------------------------------------------------
 
 class wsgiSql():
 

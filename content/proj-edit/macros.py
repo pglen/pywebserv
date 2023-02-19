@@ -31,7 +31,6 @@ def fill_data(localdb, recnum):
         res = "Empty record"
     return res
 
-
 _mac_center_top = '''
  <table width=100% { sitecolor } border=0>
     <tr  height=36>
@@ -71,25 +70,27 @@ _mac_editrow = '''
 def imgrow_data(strx, context):
 
     sss = wsgi_func.parse_args(strx, context)
-    foot = '''<td width=10> <td>  '''
+    foot = "" #'''<td> <td>  '''
     #print("arg sss", sss)
     data = fill_data(context.localdb, int(sss[1]))
     #print("data", data)
     strx = '''
     <form action=editor.html method=post>
     <tr style=\"background-color:%s\">
-    <td>
+
     ''' %  sss[2]
 
     #print("context.trcolor", context.trcolor)
 
-    for aa in data[1:]:
+    for aa in data:
         strx += "<td> <font>%s</font> " % aa
 
     strx += '''
-        <input type=submit id=idsub name=ed_%s value="Edit" >
-        <input type=submit id=idsub name=del_%s value="Del" >
-        <td>
+        <td width=10>
+        <input type=submit id=idsub name=ed_%s  value="Edit" >
+        <br>
+        <input type=submit id=idsub name=del_%s value="  Del " >
+
     </form>
     ''' %  (sss[1], sss[1])
     return strx
@@ -170,30 +171,37 @@ def imgrow_data(strx, context):
 
 def mid_rows(strx, context):
 
-    #print(strx, context)
+    print("mid_rows", strx, context)
+
     ret = '''
     <tr> <td colspan=7 align=center>
             <p><font size=+3>Data Review</font>
+            <br>
     '''
 
     try:
-        context.localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
+        wsgi_data.soft_opendb(context, modname)
     except:
         print("Could not create local data for %s" % modname)
         wsgi_util.put_exception("opening SQL")
         return
 
-    ret += "<table border=0>"
+    ret += "<table border=0 width=100%>"
     recs = context.localdb.getcount()
-    for aa in range(recs):
-        if (aa % 2) == 0:
-            trcolor = "#ddeedd"
-        else:
-            trcolor = "#cceecc"
+    print("got", recs, " records")
 
-        #print("trcolor", trcolor)
-        # Starting at one
-        ret +=   " { imgrow_data [ %d ] [ %s ] }" % (aa+1, trcolor)
+    if not recs:
+        ret += "<tr><td align=center>No Data"
+    else:
+        for aa in range(recs):
+            if (aa % 2) == 0:
+                trcolor = "#ddeedd"
+            else:
+                trcolor = "#cceecc"
+
+            #print("row", aa, "trcolor", trcolor)
+            # Starting at one
+            ret +=   " { imgrow_data [ %d ] [ %s ] }" % (aa, trcolor)
 
     ret += "</table>"
     #context.localdb.close()

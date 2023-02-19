@@ -556,6 +556,6 @@ _mac_imgrow = '''
 wsgi_util.add_all_vars(locals().copy(), common.local_table)
 
 #wsgi_util.dump_global_table()
-wsgi_util.dump_local_table(common.local_table)
+#wsgi_util.dump_local_table(common.local_table)
 
 # EOF

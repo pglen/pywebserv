@@ -37,7 +37,7 @@ def got_index(config, carry):
 
     if carry.request:
 
-        #print("carry.request", carry.request)
+        print("carry.request", carry.request)
 
         rq = []
         for aa in carry.request:
@@ -50,7 +50,7 @@ def got_index(config, carry):
             wsgi_data.soft_opendb(carry, modname)
 
             #localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
-            carry.localdb.put(rq[0], rq[1], rq[2], rq[3], "")
+            carry.localdb.put(rq[0], rq[1], rq[2], rq[3], rq[4])
 
             #localdb.close()
             # Measure time needed
@@ -74,11 +74,14 @@ Initialize the current module
 
 try:
     #print("Initializing", "'" + __file__ + "'" )
-    # Add default enties to table
-    wsgi_global.urlmap.add_one_url("/editor/", got_index,   "index.html", __file__)
-    wsgi_global.urlmap.add_one_url("/editor/index.html",  got_index, "index.html", __file__)
-    wsgi_global.urlmap.add_one_url("/editor/editor.html",  editor.got_editor, "editor.html", __file__)
+    # These are test entries
+    #wsgi_global.urlmap.add_one_url("/editor2/", got_index,   "index.html", __file__)
     #wsgi_global.urlmap.add_one_url("/editor", got_index,   "index.html", __file__)
+
+    # Add default enties to table
+    wsgi_global.urlmap.add_one_url("/editor/", got_index, "index.html", __file__)
+    wsgi_global.urlmap.add_one_url("/editor/index.html",  got_index, "index.html", __file__)
+    wsgi_global.urlmap.add_one_url("/editor/editor.html", editor.got_editor, "editor.html", __file__)
 
     #wsgi_util.dump_table("Global Table", wsgi_global.global_table)
     #wsgi_util.dump_global_table()

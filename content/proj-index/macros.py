@@ -221,9 +221,24 @@ a:link, a:visited {
 
 </style>
 
+<script language="javascript">
+function toggle(tt, dt) {
+    var ele = document.getElementById(tt);
+    var text = document.getElementById(dt);
+    if(ele.style.display == "block") {
+            ele.style.display = "none";
+        text.innerHTML = "<font size=-1>show again ...</font>";
+    }
+    else {
+        ele.style.display = "block";
+        text.innerHTML = "<font size=-1>hide</font>";
+    }
+}
+</script>
+
 '''
 
-def _func_headurl(strx, context):
+def _glob_headurl(strx, context):
 
     # Expand arguments
     sss = wsgi_func.parse_args(strx, context)
@@ -280,57 +295,76 @@ _glob_site_left = '''
 
     </table>
 
+#<tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
+
 '''
 
 _mac_mission_statement = '''
 
-<tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
+
     <font size=-1>Mission Statement:</font>
-    <font size=+0><br></font>
-    <font size=+1><center><b>World Wide Globalization Message.</b></center><p></font>
-     <div style="text-align: justify;">
-    &nbsp; &nbsp; The pace of globalization has exceeded expectations. This institution is searching
-    for new ways of co-existence, and recommending solutions. Because true globalization, done right, can
-    end hunger, and can terminate all wars. May create a better existence for all, via connecting supply
-    and demand without bounds. And it will establish a new, peaceful equilibrium.
-     Globalization may create a happier human race with higher quality of life and more balance.
-      For EVERYBODY. <p>
-    &nbsp; &nbsp; The term globalization is used in the context of global cooperation.
-    We live in an inseparable entity, our planet, Earth. This is the basis
-    for our existence, and the basis for everything else. Please look around for ideas on
-    the site, approve or disapprove as you feel, and please help if you so desire. And help
-    you can. Every one of us makes an impact.<p>
+    <a id="displayText" href="javascript:toggle('toggleText', 'displayText');">
+        <font size=-1>show</font></a>
+
+    <div id="toggleText" style="display: none">
+        <font size=+1><center><b>World Wide Globalization Message.</b></center><p></font>
+        <div style="text-align: justify;">
+        &nbsp; &nbsp; The pace of globalization has exceeded expectations. This institution is searching
+        for new ways of co-existence, and recommending solutions. Because true globalization, done right, can
+        end hunger, and can terminate all wars. May create a better existence for all, via connecting supply
+        and demand without bounds. And it will establish a new, peaceful equilibrium.
+         Globalization may create a happier human race with higher quality of life and more balance.
+          For EVERYBODY. <p>
+        &nbsp; &nbsp; The term globalization is used in the context of global cooperation.
+        We live in an inseparable entity, our planet, Earth. This is the basis
+        for our existence, and the basis for everything else. Please look around for ideas on
+        the site, approve or disapprove as you feel, and please help if you so desire. And help
+        you can. Every one of us makes an impact.<p>
+        </div>
+    </div>
+
+'''
+
+#<tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
+
+_mac_founding_statement = '''
+
+    <font size=-1>Founding Statement:</font>
+    <a id="displayText2" href="javascript:toggle('toggleText2', 'displayText2');">
+        <font size=-1>show</font></a>
+    <div id="toggleText2" style="display: none">
+        <font size=+1><center><b>The Founding Father's and Founding Mother's era.</b></center><p></font>
+        <div style="text-align: justify;">
+        &nbsp; &nbsp; Many countries have gone through their democratic \"Founding\" era. An era
+        in which a system of justice is established. An equitable order of distributing
+        power and resources is created, which assures fair and equal representation for all.
+        &nbsp; &nbsp; However, some countries have not gone through this 'Founding' era. The UPP is set out to bring
+        this Founding Father's and Founding Mother's era to the whole planet.<br>
+        </div>
     </div>
 '''
 
-_mac_founding_statement = '''
-<tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
-    <font size=-1>Founding Statement:<br></font>
-    <font size=+1><center><b>The Founding Father's and Founding Mother's era.</b></center><p></font>
-    <div style="text-align: justify;">
-    &nbsp; &nbsp; Many countries have gone through their democratic \"Founding\" era. An era
-    in which a system of justice is established. An equitable order of distributing
-    power and resources is created, which assures fair and equal representation for all.
-    &nbsp; &nbsp; However, some countries have not gone through this 'Founding' era. The UPP is set out to bring
-    this Founding Father's and Founding Mother's era to the whole planet.<br>
-    </div>
-'''
+#<tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
 
 _mac_target_statement = '''
 
-<tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
-    <font size=-1>Target Statement:<br></font>
-    <font size=+1><center><b>Uniform Global Standards for Governance</b></center></font>
-    <div style="text-align: justify;"><br>
-    &nbsp; &nbsp; There are plenty of organizations to help each other in
-    cooperating internationally; mostly aiding / controlling inter-governmental
-    affairs. And there are plenty of enforcement instruments.
-    However, the most important instrument is missing: Containment of the
-    Leadership. In the twenty first century, there should be standards of
-    leadership, standards of govenance and especally, standards for justice.
-    Term limits for every position. High standards for democracy, accountability and equality.
-    UPP is set out to create a framework where these shortcomings are addressed.
-    Globally. The whole planet.<p>
+
+    <font size=-1>Target Statement:</font>
+    <a id="displayText3" href="javascript:toggle('toggleText3', 'displayText3');">
+    <font size=-1>show</font></a>
+    <div id="toggleText3" style="display: none">
+        <font size=+1><center><b>Uniform Global Standards for Governance</b></center></font>
+        <div style="text-align: justify;"><br>
+        &nbsp; &nbsp; There are plenty of organizations to help each other in
+        cooperating internationally; mostly aiding / controlling inter-governmental
+        affairs. And there are plenty of enforcement instruments.
+        However, the most important instrument is missing: Containment of the
+        Leadership. In the twenty first century, there should be standards of
+        leadership, standards of govenance and especally, standards for justice.
+        Term limits for every position. High standards for democracy, accountability and equality.
+        UPP is set out to create a framework where these shortcomings are addressed.
+        Globally. The whole planet.<p>
+        </div>
     </div>
 '''
 
@@ -339,13 +373,23 @@ _mac_main_center = '''
      <table border=0>
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
-
-        <table border=0>
+        <table border=0 width=100%>
             <tr><td>
-        { mission_statement }
-        { founding_statement }
-        { target_statement }
+            Read our Mission / Founding / Target statments
+            <a id="displayText4" href="javascript:toggle('toggleText4', 'displayText4');">
+            <font size=-1>show ...</font></a>
 
+            <tr><td>
+                <div id="toggleText4" style="display: none">
+                    <div>
+                    <table border=0 width=100%>
+                        <tr><td>&nbsp; &nbsp; { mission_statement }
+                        <tr><td>&nbsp; &nbsp; { founding_statement }
+                        <tr><td>&nbsp; &nbsp; { target_statement }
+                     </table>
+                    </div>
+                </div>
+            </table>
         </table>
 
         { loadData proj-edit xx 0 4 }

@@ -18,6 +18,8 @@ _mac_ShortCName = ''' United Planet Peace '''
 
 # ------------------------------------------------------------------------
 
+gl_arr = []
+
 def fill_data(localdb, recnum):
 
     #print("data file", "data/%s_data.sqlt" % modname)
@@ -25,11 +27,20 @@ def fill_data(localdb, recnum):
     #print("recnum", recnum)
     #print("all", localdb.getall())
 
+    global gl_arr
     res = localdb.getbyid(recnum)
-    #print("res", res)
-    if not res:
-        res = "Empty record"
-    return res
+    if res[0] not in gl_arr:
+        gl_arr.append(res[0])
+        return res
+
+    print("skip:", recnum, res)
+
+    return None
+
+    ##print("res", res)
+    #if not res:
+    #    res = "Empty record"
+    #return res
 
 _mac_center_top = '''
  <table width=100% { sitecolor } border=0>
@@ -73,6 +84,9 @@ def imgrow_data(strx, context):
     foot = "" #'''<td> <td>  '''
     #print("arg sss", sss)
     data = fill_data(context.localdb, int(sss[1]))
+    if not data:
+        return
+
     #print("data", data)
     strx = '''
     <form action=editor.html method=post>
@@ -83,6 +97,7 @@ def imgrow_data(strx, context):
     #print("context.trcolor", context.trcolor)
 
     for aa in data:
+        aa = wsgi_util.strtrim(aa)
         strx += "<td> <font>%s</font> " % aa
 
     strx += '''
@@ -189,6 +204,9 @@ def mid_rows(strx, context):
     ret += "<table border=0 width=100%>"
     recs = context.localdb.getcount()
     print("got", recs, " records")
+
+    global gl_arr
+    gl_arr = []
 
     if not recs:
         ret += "<tr><td align=center>No Data"

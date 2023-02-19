@@ -22,7 +22,7 @@ def soft_opendb(carry, modname, suffix = ""):
     else:
         dbname = "data/%s%s.sqlt" % (modname, suffix)
 
-    print("database name", dbname)
+    #print("database name", dbname)
 
     needopen = False
     if not hasattr(carry, "localdb"):
@@ -49,7 +49,7 @@ def soft_opendb(carry, modname, suffix = ""):
             else:
                 carry.localdb = wsgiSql(dbname)
         except:
-            print("Cannot open database", dbname)
+            #print("Cannot open database", dbname)
             wsgi_util.put_exception("Open database %s") % dbname
 
 class wsgipydb():
@@ -62,7 +62,6 @@ class wsgipydb():
         self.table = table
         self.file = file
         self.packer = pypacker.packbin()
-
         self.db = twincore.TwinCore(self.file)
 
     def getcount(self):
@@ -79,7 +78,7 @@ class wsgipydb():
 
     def  getbyid(self, kkk):
         #print("byid", kkk)
-        sss = self.db.get_rec(kkk)
+        sss = self.db.get_rec(int(kkk))
         #print("sss[0]", sss[0], "sss[1]", sss[1].decode("utf-8") )
         ddd = self.packer.decode_data(sss[1].decode("utf-8"))
         #print("ddd", *ddd[0])

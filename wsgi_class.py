@@ -11,6 +11,8 @@ except ImportError:
 
 from wsgiref import simple_server, util
 
+#from common import wsgi_util
+
 class xWebServer():
 
     '''!
@@ -31,11 +33,15 @@ class xWebServer():
         #wsgi_util.printenv(environ)
 
         self.carryon = wsgi_conf.CarryOn()
-        self.configx = wsgi_conf.Configx()
+        self.carryon.mainclass = self
+        self.carryon.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
+        self.carryon.environ = environ
 
+        self.configx = wsgi_conf.Configx()
         self.configx.mainclass = self
         self.configx.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
         self.configx.datapath = self.configx.mypath + "content" + os.sep
+        self.carryon.datapath = self.configx.datapath
 
         if self.configx.pgdebug > 1:
             print("self.configx.mypath", self.config.mypath)
@@ -182,7 +188,7 @@ class xWebServer():
             parsed everything
         '''
 
-        import wsgi_global, wsgi_content
+        import wsgi_global, wsgi_content, wsgi_util
 
         #respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
         #return [bytes("Cannot do shit", 'utf-8')]

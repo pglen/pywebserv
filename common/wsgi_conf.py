@@ -9,6 +9,22 @@
 
 import wsgi_util
 
+def fillxarr(selfx):
+    #def dummy(): pass
+    arr = []
+    for aa in dir(selfx):
+        # Filter out all sys args and methods
+        if aa[:2] == "__":
+            continue
+        #print(aa, type(getattr(self, aa)))
+        if type(getattr(selfx, aa)) == \
+                        type(getattr(selfx, "__init__")):
+            continue
+        #print(aa, getattr(self, 	aa))
+        arr.append(aa)
+    return arr
+
+
 # Config global; After testing some crap, this was the simplest
 
 class Configx:
@@ -71,25 +87,19 @@ class CarryOn:
     Parameters are going around all the way to processing
     '''
     def __init__(self):
-
         self.environ = None
         self.mainclass = None
 
-    def tostr(self):
-        print("environ:", Carryon.environ, "mainclass:", Configx.pgdebug)
-
     def getvals(self):
         strx = ""
-        strx += "self.carryon.url " + self.url + "\n"
-        strx += "self.carryon.query " +   self.query + "\n"
-        strx += "self.carryon.request " +  self.request + "\n"
-        strx += "self.carryon.tmplate " + self.template + "\n"
-        strx += "self.carryon.fname " +   self.fname + "\n"
+        arr = fillxarr(self)
+        #print("arr", arr)
+        for aa in arr:
+            bb = str(getattr(self, aa))
+            bb  = wsgi_util.strtrim(bb, 36)
+            strx += wsgi_util.strpad(str(aa)) + \
+                         " = " + bb + "\n"
         return strx
 
-#def showvals():
-#
-#    return "Verb = " + str(Config.verbose),  "Deb = " + str(Config.pgdebug)
-#
 
 # EOF

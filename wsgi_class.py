@@ -38,14 +38,18 @@ class xWebServer():
         self.carryon.environ = environ
 
         self.configx = wsgi_conf.Configx()
+        self.carryon.configx = self.configx
+
         self.configx.mainclass = self
         self.configx.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
         self.configx.datapath = self.configx.mypath + "content" + os.sep
-        self.carryon.datapath = self.configx.datapath
 
         if self.configx.pgdebug > 1:
             print("self.configx.mypath", self.config.mypath)
             print("self.configx.datapath", self.config.datapath)
+
+        if self.configx.pgdebug > 2:
+            print(self.configx.getvals())
 
         self.start_time = datetime.datetime.now()
 
@@ -218,7 +222,9 @@ class xWebServer():
                 self.carryon.fname = fname
                 self.carryon.myconfx = self.configx
 
-                #self.carryon.print()
+                if self.configx.pgdebug > 2:
+                    print(self.carryon.getvals())
+
                 #print("Callback",  self.fn, self.url)
                 try:
                     content = callme(self.configx, self.carryon)

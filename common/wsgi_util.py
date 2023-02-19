@@ -384,7 +384,11 @@ def add_all_vars(locvars, table):
     add_global_vars(locvars, table)
     add_global_funcs(locvars, table)
 
+# ------------------------------------------------------------------------
+
 def strpad(strx, pad = 18):
+
+    ''' pad string '''
 
     if len(strx) < pad:
         dd =  pad - len(strx)
@@ -396,11 +400,21 @@ def strpad(strx, pad = 18):
 
 def strtrim(strx, trim = 18):
 
+    ''' trim string '''
+
     if len(strx) > trim - 3:
         hhh = trim // 2
         stry = strx[:hhh] + " ... " + strx[-hhh:]
     else:
         stry = strx
     return stry
+
+def strupt(strx, trim = 24):
+
+    ''' Unescape, pad and trim string '''
+
+    strx2 = unescape(strx)
+    strx2 = strtrim(strx2, trim)
+    return strx2
 
 # EOF

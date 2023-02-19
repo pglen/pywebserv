@@ -171,6 +171,7 @@ class Myconf():
         self.benchmark = 0;
         self.show_keys  = 0
         self.port = 8000
+        self.parse_verbose = 0
         pass
 
 # ------------------------------------------------------------------------
@@ -264,7 +265,7 @@ def application(environ, respond):
 
         #wsgi_util.dump_global_table()
 
-        if mainclass.configx.pgdebug > 1:
+        if mainclass.configx.pgdebug > 4:
             wsgi_util.printenv(environ, False)
 
         if mainclass.configx.benchmark:
@@ -349,10 +350,12 @@ def xhelp():
     print("    -V:          --  Show version")
     print("    -p port      --  Set port to listen on")
     print("    -b           --  print benchmark timing info")
-    print("    -x           --  Reserved ")
-    print("    -c           --  Reserved ")
-    print("    -o           --  Reserved ")
-    print("    -t           --  Reserved ")
+    print("    -s           --  Show parse substitutions, more -s for increased output")
+
+    #print("    -x           --  Reserved ")
+    #print("    -c           --  Reserved ")
+    #print("    -o           --  Reserved ")
+    #print("    -t           --  Reserved ")
 
     sys.exit(0)
 
@@ -365,7 +368,7 @@ if __name__ == '__main__':
 
     opts = []; args = []
 
-    myopts = "d:h?vV:xcotp:b"
+    myopts = "d:h?vV:xcotp:bs"
     try:
         opts, args = getopt.getopt(sys.argv[1:], myopts,
                         ["debug=", "help", "help", "verbose", "version", ])
@@ -375,15 +378,26 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Outdated parsing ... for now, leave it as is (has good points to it)
+
+    # Pre parse for some options
+    for aa in opts:
+        if aa[0] == "-v":
+            myconf.verbose += 1
+
+    # Parse proper
     for aa in opts:
         #print("opt", "'" + aa[0] + "'", aa[1])
+
         if aa[0] == "-d" or aa[0] == "--debug":
             try:
                 myconf.pgdebug = int(aa[1])
-                #print( _("Running at debug level:"),  self.configx.pgdebug)
+                if myconf.verbose:
+                    print( _("Running at debug level:"),  myconf.pgdebug)
             except:
                 myconf.pgdebug = 0
                 print(_("Exception on setting debug level"), sys.exc_info())
+                #print(_("Debug level not a number, set to 0"))
+                sys.exit(0)
 
         if aa[0] == "-p" or aa[0] == "--port":
             try:
@@ -391,15 +405,27 @@ if __name__ == '__main__':
             except:
                 myconf.port = 0
                 print(_("Exception on setting port"), sys.exc_info())
+                sys.exit(0)
 
-        # Most of these are placeholders
         if aa[0] == "-h" or  aa[0] == "--help" or aa[0] == "-?":
             xhelp()
         if aa[0] == "-V" or aa[0] == "--version":
             xversion()
-        if aa[0] == "-v" or aa[0] == "--verbose":
-            #print("Setting verbose")
-            myconf.verbose += 1
+
+        if aa[0] == "-t":
+            if myconf.verbose:
+                print("Tracing ON")
+            sys.settrace(tracer)
+        if aa[0] == "-b":
+            myconf.benchmark = 1
+            if myconf.verbose:
+                print("Benchmark ON")
+        if aa[0] == "-s":
+            myconf.parse_verbose += 1
+            if myconf.verbose:
+                print("Parser verbosity set to:", myconf.parse_verbose)
+
+        # Most of these are placeholders
         if aa[0] == "-x":
             comline.CLEAR_CONFIG = True
         if aa[0] == "-c":
@@ -408,12 +434,6 @@ if __name__ == '__main__':
             comline.SHOW_TIMING = True
         if aa[0] == "-o":
             comline.USE_STDOUT = True
-        if aa[0] == "-t":
-            print("Tracing ON")
-            sys.settrace(tracer)
-        if aa[0] == "-b":
-            myconf.benchmark = 1
-            #print("Benchmark ON")
 
     print("\n===== Starting HTTPD on port {}, control-C to stop".format(myconf.port))
 

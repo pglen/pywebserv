@@ -5,12 +5,9 @@
     recursively.
 '''
 
-#import builtins
-
 import wsgi_util
 
 def fillxarr(selfx):
-    #def dummy(): pass
     arr = []
     for aa in dir(selfx):
         # Filter out all sys args and methods
@@ -47,7 +44,6 @@ class Configx:
         return "verb:"+ str(self.verbose) + " deb:" + str(self.pgdebug)
 
     def _fillarr(self, selfx):
-        #def dummy(): pass
         arr = []
         for aa in dir(selfx):
             # Filter out all sys args and methods
@@ -79,8 +75,6 @@ class Configx:
             #print("aa", aa)
             setattr(self, aa, getattr(syncto, aa))
 
-#builtins.Config = Configx
-
 class CarryOn:
 
     '''
@@ -100,6 +94,5 @@ class CarryOn:
             strx += wsgi_util.strpad(str(aa)) + \
                          " = " + bb + "\n"
         return strx
-
 
 # EOF

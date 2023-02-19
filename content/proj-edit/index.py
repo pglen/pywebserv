@@ -9,7 +9,7 @@
 '''
 
 import os, sys, time
-import wsgi_util, wsgi_func, wsgi_data, wsgi_global,  wsgi_util
+import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 #print("Loading", "'" + os.path.basename(__file__)  + "'" )
 modname = __file__.split('/')[-2]

@@ -29,11 +29,16 @@ def _parse_items(item, context, table):
         #if item2[1][2:-2] == aa[0]:
         if item2[1] == aa[0]:
             if type(aa[1]) == str:
-                #print("item:", item, "str =", wsgi_util.unescape(aa[1][:24]))
+                if context.configx.parse_verbose:
+                    print("str: ",  context.url, wsgi_util.strpad(item),
+                             wsgi_util.strupt(aa[1]))
                 return aa[1]
 
             if type(aa[1]) == type(_parse_items):
-                #print("item:", item, "func=", aa[1])
+                # print(context.getvals())
+                if context.configx.parse_verbose:
+                    print("func:", context.url, wsgi_util.strpad(item),
+                            aa[1].__name__)
                 try:
                     cccc = aa[1](item, context)
                 except:

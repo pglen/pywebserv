@@ -31,12 +31,12 @@ def     parse_args(strx, context):
     eee = ' '.join(fff)
 
 
-    if context.myconfx.pgdebug > 2:
+    if context.myconfx.pgdebug > 5:
         print("Args loc expanded:", eee)
 
     ssss = wsgi_parse.parse_buffer(eee, "\[ .*? \]", context, wsgi_global.gl_table.mytable)[0]
 
-    if context.myconfx.pgdebug > 2:
+    if context.myconfx.pgdebug > 5:
         print("Args expanded:", ssss)
 
     ss = ""
@@ -44,12 +44,12 @@ def     parse_args(strx, context):
         # Filter delimiters
             ss += aa
 
-    if context.myconfx.pgdebug > 4:
+    if context.myconfx.pgdebug > 6:
         print("Args pre decoded:", ssss)
 
     sss = str.split(ss)
 
-    if context.myconfx.pgdebug > 3:
+    if context.myconfx.pgdebug > 5:
         print("Args decoded:", sss)
 
     ddd = []

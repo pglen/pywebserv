@@ -33,8 +33,7 @@ def fill_data(localdb, recnum):
         gl_arr.append(res[0])
         return res
 
-    print("skip:", recnum, res)
-
+    print("skip:", recnum, wsgi_util.strupt(res[0]))
     return None
 
     ##print("res", res)
@@ -84,31 +83,37 @@ def imgrow_data(strx, context):
     foot = "" #'''<td> <td>  '''
     #print("arg sss", sss)
     data = fill_data(context.localdb, int(sss[1]))
+
+    # The fill data will filter duplicates for us
     if not data:
         return
 
     #print("data", data)
+    if (context.rec_cnt % 2) == 0:
+        trcolor = "#ddeedd"
+    else:
+        trcolor = "#cceecc"
+    context.rec_cnt += 1
+
     strx = '''
     <form action=editor.html method=post>
-    <tr style=\"background-color:%s\">
-
-    ''' %  sss[2]
-
-    #print("context.trcolor", context.trcolor)
+    <tr style=\"background-color:%s\">''' %  trcolor
 
     for aa in data:
         aa = wsgi_util.strtrim(aa)
         strx += "<td> <font>%s</font> " % aa
 
+    # add footer
     strx += '''
         <td width=10>
         <input type=submit id=idsub name=ed_%s  value="Edit" >
         <br>
         <input type=submit id=idsub name=del_%s value="  Del " >
+        </form>
+        ''' %  (sss[1], sss[1])
 
-    </form>
-    ''' %  (sss[1], sss[1])
     return strx
+
 
     strx = '''
     <tr> <td width=10>
@@ -211,15 +216,12 @@ def mid_rows(strx, context):
     if not recs:
         ret += "<tr><td align=center>No Data"
     else:
-        for aa in range(recs):
-            if (aa % 2) == 0:
-                trcolor = "#ddeedd"
-            else:
-                trcolor = "#cceecc"
-
-            #print("row", aa, "trcolor", trcolor)
-            # Starting at one
-            ret +=   " { imgrow_data [ %d ] [ %s ] }" % (aa, trcolor)
+        #for aa in range(recs):
+        context.rec_cnt = 0
+        # Starting at the end
+        for aa in range(recs-1, -1, -1):
+            ddd = "{ imgrow_data [ %d ] }" % (aa)
+            ret +=  ddd
 
     ret += "</table>"
     #context.localdb.close()
@@ -270,6 +272,7 @@ _mac_right = '''
             { app3 }
         </table>
 '''
+
 # Clear text box when the first char is space (empty)
 _mac_clr = ''' if(this.value[0]==' ')this.value='' '''
 

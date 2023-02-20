@@ -29,17 +29,11 @@ def fill_data(localdb, recnum):
 
     global gl_arr
     res = localdb.getbyid(recnum)
-    if res[0] not in gl_arr:
-        gl_arr.append(res[0])
-        return res
-
-    print("skip:", recnum, wsgi_util.strupt(res[0]))
-    return None
-
-    ##print("res", res)
-    #if not res:
-    #    res = "Empty record"
-    #return res
+    if res[0] in gl_arr:
+        #print("skip:", recnum, wsgi_util.strupt(res[0]))
+        return None
+    gl_arr.append(res[0])
+    return (str(recnum), *res)
 
 _mac_center_top = '''
  <table width=100% { sitecolor } border=0>
@@ -79,39 +73,42 @@ _mac_editrow = '''
 
 def imgrow_data(strx, context):
 
-    sss = wsgi_func.parse_args(strx, context)
-    foot = "" #'''<td> <td>  '''
-    #print("arg sss", sss)
-    data = fill_data(context.localdb, int(sss[1]))
+    #sss = wsgi_func.parse_args(strx, context)
 
-    # The fill data will filter duplicates for us
-    if not data:
-        return
+    foot = "" #''' <td> #'''<td>
+    strx = '''<form action=editor.html method=post>'''
 
-    #print("data", data)
-    if (context.rec_cnt % 2) == 0:
-        trcolor = "#ddeedd"
-    else:
-        trcolor = "#cceecc"
-    context.rec_cnt += 1
+    #print(context.getvals())
 
-    strx = '''
-    <form action=editor.html method=post>
-    <tr style=\"background-color:%s\">''' %  trcolor
+    if not context.xdata:
+        print("No data in context",)
+        str += "No Data"
+        strx += "</form>"
+        return strx
 
-    for aa in data:
-        aa = wsgi_util.strtrim(aa)
-        strx += "<td> <font>%s</font> " % aa
+    cnt = 0
+    for onerec in context.xdata:
+        if (cnt % 2) == 0:
+            trcolor = "#ddeedd"
+        else:
+            trcolor = "#cceecc"
+        strx += '''<tr style=\"background-color:%s\">''' %  trcolor
+
+        for bb in onerec[1:]:
+            bb = wsgi_util.strtrim(bb)
+            strx += "<td > <font>%s</font> " % bb
+        cnt += 1
+        # Buttons
+        strx += '''
+            <td width=10>
+            <input type=submit id=idsub name=ed_%s  value="Edit" >
+            <br>
+            <input type=submit id=idsub name=del_%s value="  Del " >
+            </form>
+            ''' %  (onerec[1], onerec[1])
 
     # add footer
-    strx += '''
-        <td width=10>
-        <input type=submit id=idsub name=ed_%s  value="Edit" >
-        <br>
-        <input type=submit id=idsub name=del_%s value="  Del " >
-        </form>
-        ''' %  (sss[1], sss[1])
-
+    # deleted
     return strx
 
 
@@ -191,7 +188,7 @@ def imgrow_data(strx, context):
 
 def mid_rows(strx, context):
 
-    print("mid_rows", strx, context)
+    #print("mid_rows", strx, context)
 
     ret = '''
     <tr> <td colspan=7 align=center>
@@ -208,7 +205,7 @@ def mid_rows(strx, context):
 
     ret += "<table border=0 width=100%>"
     recs = context.localdb.getcount()
-    print("got", recs, " records")
+    #print("got", recs, " records")
 
     global gl_arr
     gl_arr = []
@@ -216,12 +213,20 @@ def mid_rows(strx, context):
     if not recs:
         ret += "<tr><td align=center>No Data"
     else:
-        #for aa in range(recs):
-        context.rec_cnt = 0
+        context.xdata = []
         # Starting at the end
         for aa in range(recs-1, -1, -1):
-            ddd = "{ imgrow_data [ %d ] }" % (aa)
-            ret +=  ddd
+            #print("arg sss", sss)
+            ddd = fill_data(context.localdb, aa)
+            if ddd:
+                context.xdata.append(ddd)
+            #print("con xdata", context.xdata)
+
+        # check for end
+        #context.xdata.append((str(aa), "END", "", "", "", "", "") )
+
+        # Render it
+        ret +=  "{ imgrow_data }"
 
     ret += "</table>"
     #context.localdb.close()
@@ -256,7 +261,7 @@ _mac_add_new = '''
 
 _mac_right = '''
     <td valign=top width=20%>
-        <table width=100% cellpadding=3 border=1>
+        <table width=100% cellpadding=3 border=0>
         <tr><td bgcolor={ tabhead } height=36 align=center>
             <font size=+1> <b>Misc</b>
         <tr><td>

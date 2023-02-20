@@ -25,9 +25,10 @@ import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 from . import common
 
-_glob_tabhead   = "#ccffcc"
+_glob_tabhead   = "#ccffcc { tabhead }"
 _glob_misscol   = "#eeeeee"
 _glob_sitecolor = "#aaffbb"
+
 
 _mac_CompanyName = '''UPP the United Planet Peace'''
 
@@ -161,7 +162,7 @@ a:link, a:visited {
 .up-class {
     writing-mode: sideways-lr;
     text-orientation: mixed;
-    //background-color:  #aaffaa;
+    background-color:  #aaffaa;
 }
 .textx {
     border-radius: 10px;
@@ -293,10 +294,7 @@ _glob_site_left = '''
         { headurl broken.html Broken&nbsp;Page }
 
         <tr><td height=12 colspan=3>
-
     </table>
-
-#<tr><td fgcolor=white style="bgcolor: { xmisscol }; color:black">
 
 '''
 
@@ -399,11 +397,11 @@ _mac_main_center = '''
 
         <table border=0>
             <tr valign=top>
-            <td valign=middle bgcolor=#cccccc> &nbsp; << &nbsp;
+            <td valign=middle bgcolor=#cccccc> &nbsp; << &nbsp; &nbsp;
             { article 0 }
             <td valign=middle bgcolor=#cccccc>
             { article 1 }
-            <td valign=middle bgcolor=#cccccc>
+            <td valign=middle bgcolor=#cccccc> &nbsp; >> &nbsp; &nbsp;
          </table>
 
        <!-- { feed_data } -->

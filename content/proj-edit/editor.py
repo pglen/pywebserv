@@ -43,13 +43,13 @@ def got_editor(config, carry):
 
         if carry.request[0][1] == "Edit":
             rq = carry.request[0][0].split("_")
-            #atprint("rq edit data", rq[1])
+            print("rq edit data", rq[1])
             #global gl_arr
             #gl_arr = []
-            res = macros.fill_data(carry.localdb, int(rq[1]))
+            res = macros.fill_data(carry.localdb, 1) #int(rq[1][3:]))
             print("res:", res)
             if res:
-                carry.cdata += "<table>"
+                carry.cdata += "<table border=1>"
 
                 for aa in range(len(res)):
                     carry.cdata += \
@@ -61,7 +61,7 @@ def got_editor(config, carry):
 
         if carry.request[0][1] == "Add New":
             #print ("adding new data")
-            carry.cdata += "<table>"
+            carry.cdata += "<table border=1>"
             carry.cdata += "<tr><td>key   <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa1>"  + "</textarea><p>"
             carry.cdata += "<tr><td>arg 1 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa2>"  + "</textarea><p>"
             carry.cdata += "<tr><td>arg 2 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa3>"  + "</textarea><p>"

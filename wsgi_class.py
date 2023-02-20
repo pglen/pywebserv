@@ -400,3 +400,5 @@ class xWebServer():
         #print("pop_path: pname", pname, "ppp", ppp)
         return ppp
 
+# hashx signature: 0xc0be5309
+

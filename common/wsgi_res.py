@@ -34,10 +34,6 @@ header = '''
     </table>
 '''
 
-siteemail = '''
-admin@unitedplanetpeace.com
-'''
-
 footer = '''
     <table border=0 bgcolor={ sitecolor }>
     <tr  height=48>
@@ -107,6 +103,10 @@ article2 = '''
 art_header = '''
 Dynamic header
 '''
+var = "this is var "
+
+# This expands a couple of times ....
+recursive = "'pre recurse { recursive } post recurse'"
 
 bigtext = '''
                 { var } substitution is { no problem } here.

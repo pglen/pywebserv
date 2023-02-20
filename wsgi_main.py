@@ -88,7 +88,14 @@ for common project headers / footers.
   Normally a macro is delimited by { macro }, so changing the delimiter will
 make it a non macro. In the examples we use underscore like this: {_macro }
 The parser will print the string as normal, so to hide it from the browser
-we add the html comments around it. Like: <!-- {_macro } -->
+we add the html comments around it. Like:
+
+                <!-- {_macro } -->
+
+  Please note that the rendering engine will try to render within
+     HTML comments. The macro below is still expanded, but not shown.
+
+                <!--  { getData xx %s 15 } -->
 
  ## Space in macros arguments:
 
@@ -126,8 +133,8 @@ variable, we can set the web server config, as follows.
 
     tdelta0     prints stage one   timing (initialization)
     tdelta1     prints stage two   timing (parse URL, load)
-    tdelta2     prints stage three timing (parse file)
-    tdelta3     prints stage four  timing (present)
+    tdelta2     prints stage three timing (parse instance)
+    tdelta3     prints stage four  timing (parse file)
 
     Restart server when changing configuration.
 
@@ -150,6 +157,7 @@ gettext.bindtextdomain('pyedpro', './locale/')
 gettext.textdomain('pyedpro')
 _ = gettext.gettext
 
+import validate
 class comline():
 
     '''! Command line action defines '''
@@ -172,6 +180,7 @@ class Myconf():
         self.show_keys  = 0
         self.port = 8000
         self.parse_verbose = 0
+        self.parse_inline = 0
         pass
 
 # ------------------------------------------------------------------------
@@ -351,11 +360,8 @@ def xhelp():
     print("    -p port      --  Set port to listen on")
     print("    -b           --  print benchmark timing info")
     print("    -s           --  Show parse substitutions, more -s for increased output")
-
-    #print("    -x           --  Reserved ")
-    #print("    -c           --  Reserved ")
-    #print("    -o           --  Reserved ")
-    #print("    -t           --  Reserved ")
+    print("    -i           --  Show parse substitutions inline")
+    print("    -a           --  Validate file ")
 
     sys.exit(0)
 
@@ -368,9 +374,10 @@ if __name__ == '__main__':
 
     opts = []; args = []
 
-    myopts = "d:h?vV:xcotp:bs"
+    myopts  = "h?vxcotbsVi"
+    argopts = "d:p:a:"
     try:
-        opts, args = getopt.getopt(sys.argv[1:], myopts,
+        opts, args = getopt.getopt(sys.argv[1:], myopts + argopts,
                         ["debug=", "help", "help", "verbose", "version", ])
 
     except getopt.GetoptError as err:
@@ -411,6 +418,7 @@ if __name__ == '__main__':
             xhelp()
         if aa[0] == "-V" or aa[0] == "--version":
             xversion()
+            sys.exit(0)
 
         if aa[0] == "-t":
             if myconf.verbose:
@@ -423,9 +431,24 @@ if __name__ == '__main__':
         if aa[0] == "-s":
             myconf.parse_verbose += 1
             if myconf.verbose:
-                print("Parser verbosity set to:", myconf.parse_verbose)
+                print("Parser expression verbosity set to:", myconf.parse_verbose)
 
-        # Most of these are placeholders
+        if aa[0] == "-i":
+            myconf.parse_inline += 1
+            if myconf.verbose:
+                print("Parser inline set to:", myconf.parse_inline)
+
+        if aa[0] == "-a":
+            if myconf.verbose:
+                print("Validate file:", aa[1])
+            oldx, newx = validate.validate(aa[1])
+            if oldx != newx:
+                print("File changed.")
+            if myconf.verbose:
+                print(oldx, newx)
+            sys.exit(0)
+
+# Most of these are placeholders
         if aa[0] == "-x":
             comline.CLEAR_CONFIG = True
         if aa[0] == "-c":
@@ -475,3 +498,4 @@ if __name__ == '__main__':
             break
 
 # EOF
+# hashx signature: 0xb6291782

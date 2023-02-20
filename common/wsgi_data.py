@@ -85,9 +85,10 @@ class wsgipydb():
         return sss[0].decode("utf-8"), *ddd[0]
 
     def close(self):
-        print("Closed PYDB", self.file)
+        #print("Closed PYDB", self.file)
         #self.conn.close()
         #self.db.__del__()
+        pass
 
     def __delete__(self):
         print("delete pydb", self)

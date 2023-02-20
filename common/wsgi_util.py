@@ -417,4 +417,5 @@ def strupt(strx, trim = 24):
     strx2 = strtrim(strx2, trim)
     return strx2
 
+
 # EOF

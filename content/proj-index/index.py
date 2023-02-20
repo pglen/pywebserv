@@ -40,6 +40,7 @@ def got_index(config, carry):
     if carry.request:
         process_submit(carry.request)
     carry.local_table = common.local_table
+
     content = wsgi_util.process_default(config, carry)
     return content
 
@@ -66,7 +67,7 @@ def process_submit(request):
 
     sss = []
     # Save it
-    for aa in request[:-1]:  # do not post last (submit entry)
+    for aa in request[:-1]:  # do not post last (submit button entry)
         bb = wsgi_swear.filter_words(aa[1])
         #print("de-sweared", bb)
         sss.append(bb)

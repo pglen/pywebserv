@@ -209,7 +209,7 @@ def  _load_project(pdir, mainclass):
                         msg = "Module %s failed to load" % aa
                         #print("msg", msg)
                         ret = [msg.encode("utf-8"),]
-                        # Keep loading
+                        # Keep loading more
                         continue
 
                     ''' did not work

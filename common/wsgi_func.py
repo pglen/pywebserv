@@ -304,10 +304,7 @@ def     get_data_func(strx, context):
      Example:
                { getData xx %s 5 }
 
-     Please note that the rendering engine will try to render within
-     HTML comments. The macro below is still expanded.
 
-              <!--  { getData xx %s 15 } -->
     '''
 
     ddd = parse_args(strx, context)
@@ -401,14 +398,21 @@ def     build_initial_table():
         wsgi_util.put_exception("Cannot build global initital table")
 
 init_rc =  [   \
-    ("header",          wsgi_res.header),
-    ("footer",          wsgi_res.footer),
-    ("siteemail",       wsgi_res.siteemail),
-    ("bigtext",         wsgi_res.bigtext),
-    ("imgrow",          wsgi_res.imgrow),
-    ("mystyle",         wsgi_style.mystyle),
-    ("xarticle",        wsgi_res.article),
-    ("xarticle2",       wsgi_res.article2),
+
+    #("header",          wsgi_res.header),
+    #("footer",          wsgi_res.footer),
+    #("bigtext",         wsgi_res.bigtext),
+    #("var",             wsgi_res.var),
+    #("imgrow",          wsgi_res.imgrow),
+    #("mystyle",         wsgi_style.mystyle),
+    #("xarticle",        wsgi_res.article),
+    #("xarticle2",       wsgi_res.article2),
+    #("recursive",       wsgi_res.recursive),     # Do not add this, just for testing
+    #("nullcolor",       "#cccccc"),
+
+    # This junk added parse ms 2.x time ... de activated it
+
+    ("siteemail",       "admin@unitedplanetpeace.com"),
     ("spacer",          "<table><tr><td></table>"),
     ("linespacer",      "<tr><td height=8>"),
     ("sitecolor",       "#aaffbb"),
@@ -416,7 +420,6 @@ init_rc =  [   \
     ("feedheight",      "300"),
     ("thumbwidth",      "120"),
     ("thumbheight",     "80"),
-    ("nullcolor",       "#cccccc"),
     ]
 
 def     build_initial_rc():

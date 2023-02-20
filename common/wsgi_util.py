@@ -213,7 +213,7 @@ def dump_local_table(tabx):
 
     print("Local Table:")
     for aa in tabx:
-        print (strpad(aa[0]) + " = ", unescape(str(aa[1])[:36]), end="\n")
+        print (wsgi_str.strpad(aa[0]) + " = ", wsgi_str.strunesc(str(aa[1])[:36]), end="\n")
     print("Local Table End")
 
 #def dump_table_funcs(strx, tabx):
@@ -224,18 +224,6 @@ def dump_local_table(tabx):
 #            print ("'" + aa[0] + "' = ", str(aa[1]) + "'")
 #    print()
 
-def unescape(strx):
-    ''' expand new lines etc ... to \\n '''
-    ret = "'"
-    for aa in strx:
-        if aa == "\r":
-            ret += "\\r"
-        elif aa == "\n":
-            ret += "\\n"
-        else:
-            ret += aa
-    ret += "'"
-    return ret
 
 def add_locals(locs, local_table):
 
@@ -385,37 +373,6 @@ def add_all_vars(locvars, table):
     add_global_funcs(locvars, table)
 
 # ------------------------------------------------------------------------
-
-def strpad(strx, pad = 18):
-
-    ''' pad string '''
-
-    if len(strx) < pad:
-        dd =  pad - len(strx)
-        stry = strx + " " * dd
-    else:
-        stry = strx
-
-    return stry
-
-def strtrim(strx, trim = 18):
-
-    ''' trim string '''
-
-    if len(strx) > trim - 3:
-        hhh = trim // 2
-        stry = strx[:hhh] + " ... " + strx[-hhh:]
-    else:
-        stry = strx
-    return stry
-
-def strupt(strx, trim = 24):
-
-    ''' Unescape, pad and trim string '''
-
-    strx2 = unescape(strx)
-    strx2 = strtrim(strx2, trim)
-    return strx2
 
 
 # EOF

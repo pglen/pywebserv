@@ -157,7 +157,6 @@ gettext.bindtextdomain('pyedpro', './locale/')
 gettext.textdomain('pyedpro')
 _ = gettext.gettext
 
-import validate
 class comline():
 
     '''! Command line action defines '''
@@ -181,6 +180,7 @@ class Myconf():
         self.port = 8000
         self.parse_verbose = 0
         self.parse_inline = 0
+        self.validate = False
         pass
 
 # ------------------------------------------------------------------------
@@ -225,6 +225,7 @@ def application(environ, respond):
         print("Cannot import dependent files")
 
     import wsgi_util, wsgi_content, wsgi_global, wsgi_conf, wsgi_class
+    import validate
 
     try:
         #wsgi_util.append_file("Started Server Page\n")
@@ -351,7 +352,7 @@ def xversion():
 
 def xhelp():
     print("wsgi_main.py: web server command line and WSGI driver")
-    print("Use: wsgi_main [options] ")
+    print("Use: wsgi_main [options] [validate_names]")
     print(" Where options may be:")
     print("    -d level     --  set debug level [0-10]")
     print("    -h           --  help (this screen) alias: ?")
@@ -361,7 +362,7 @@ def xhelp():
     print("    -b           --  print benchmark timing info")
     print("    -s           --  Show parse substitutions, more -s for increased output")
     print("    -i           --  Show parse substitutions inline")
-    print("    -a           --  Validate file ")
+    print("    -a           --  Validate files in command arguments")
 
     sys.exit(0)
 
@@ -369,13 +370,16 @@ def xhelp():
 
 if __name__ == '__main__':
 
+    import validate
+    from common import wsgi_str
+
     global myconf
     myconf =  Myconf()      ##!< Myconf global
 
     opts = []; args = []
 
-    myopts  = "h?vxcotbsVi"
-    argopts = "d:p:a:"
+    myopts  = "h?vxcotbsVia"
+    argopts = "d:p:"
     try:
         opts, args = getopt.getopt(sys.argv[1:], myopts + argopts,
                         ["debug=", "help", "help", "verbose", "version", ])
@@ -440,13 +444,8 @@ if __name__ == '__main__':
 
         if aa[0] == "-a":
             if myconf.verbose:
-                print("Validate file:", aa[1])
-            oldx, newx = validate.validate(aa[1])
-            if oldx != newx:
-                print("File changed.")
-            if myconf.verbose:
-                print(oldx, newx)
-            sys.exit(0)
+                print("Validate files:", aa[1])
+            myconf.validate = True
 
 # Most of these are placeholders
         if aa[0] == "-x":
@@ -457,6 +456,19 @@ if __name__ == '__main__':
             comline.SHOW_TIMING = True
         if aa[0] == "-o":
             comline.USE_STDOUT = True
+
+    if myconf.validate:
+        ret = 0
+        #print("args", args)
+        for aa in args:
+            oldx, newx = validate.validate(aa)
+            if oldx != newx:
+                print("File", wsgi_str.strpad("'" + aa + "'"),  "changed, new hashx", newx)
+                ret |= 1
+            if myconf.verbose:
+                print("Old hashx:", wsgi_str.strpad(oldx), "New hashx:", newx)
+        sys.exit(ret)
+
 
     print("\n===== Starting HTTPD on port {}, control-C to stop".format(myconf.port))
 
@@ -498,4 +510,6 @@ if __name__ == '__main__':
             break
 
 # EOF
-# hashx signature: 0xb6291782
+# hashx signature: 0x5b67a5cc
+# hashx signature: 0x45f37e6c
+

@@ -62,7 +62,7 @@ class Configx:
         sss = ""
         arr = self._fillarr(self)
         for aa in arr:
-            sss += wsgi_util.strpad(str(aa), 14) + "  " + \
+            sss += wsgi_str.strpad(str(aa), 14) + "  " + \
                   str(getattr(self, aa)) + "\n"
         return sss
 
@@ -90,8 +90,8 @@ class CarryOn:
         #print("arr", arr)
         for aa in arr:
             bb = str(getattr(self, aa))
-            bb  = wsgi_util.strtrim(bb, 36)
-            strx += wsgi_util.strpad(str(aa)) + \
+            bb  = wsgi_str.strtrim(bb, 36)
+            strx += wsgi_str.strpad(str(aa)) + \
                          " = " + bb + "\n"
         return strx
 

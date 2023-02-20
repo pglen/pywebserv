@@ -16,7 +16,7 @@ def got_404(config, url, query, fn = ""):
     '''
 
     local_table = []
-    fn2 = wsgi_util.strtrim(os.path.basename(fn))
+    fn2 = wsgi_str.strtrim(os.path.basename(fn))
     wsgi_util.add_local_func("errfname", fn2, local_table)
 
     #wsgi_util.dump_table("Local Table", local_table)

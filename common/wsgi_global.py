@@ -31,14 +31,14 @@ class UrlMap():
         ret = ""
         for aa in self.urls:
             if type(aa[1]) ==  type(ph):
-                #print("url F", wsgi_util.strpad(aa[0]),  \
-                #    wsgi_util.strpad(aa[1].__name__), aa[2])
+                #print("url F", wsgi_str.strpad(aa[0]),  \
+                #    wsgi_str.strpad(aa[1].__name__), aa[2])
                 bb = aa[1].__name__
             else:
                 bb = aa[1]
 
-            ret += wsgi_util.strpad(str(aa[0])) + \
-                       wsgi_util.strpad(str(bb)) + str(aa[2]) + "\n"
+            ret += wsgi_str.strpad(str(aa[0])) + \
+                       wsgi_str.strpad(str(bb)) + str(aa[2]) + "\n"
         return ret
 
     def add(self, url, func, page, fname):
@@ -156,7 +156,7 @@ class Table():
         return ""
 
     def _dump_rec(self, aa):
-        nnn = wsgi_util.strpad(str(aa[0]))
+        nnn = wsgi_str.strpad(str(aa[0]))
         print(nnn, " = ", end = " ")
         #print("type", type(aa[1]))
 

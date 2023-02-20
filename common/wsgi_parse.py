@@ -6,7 +6,7 @@
 '''
 
 import sys, os, time, re, traceback
-import wsgi_global, wsgi_util
+import wsgi_global, wsgi_util, wsgi_str
 
 _MAX_RECURSE = 50
 _regex = "{ .*? }"
@@ -31,8 +31,8 @@ def _parse_items(item, context, table):
         if item2[1] == aa[0]:
             if type(aa[1]) == str:
                 if context.configx.parse_verbose:
-                    print("str: ",  context.url, wsgi_util.strpad(item),
-                             wsgi_util.strupt(aa[1]))
+                    print("str: ",  context.url, wsgi_str.strpad(item),
+                             wsgi_str.strupt(aa[1]))
 
                 #if context.configx.parse_inline and not in_arg :
                 #    return "<!-- expanded var from: " + aa[0] + " -->" + aa[1]
@@ -42,7 +42,7 @@ def _parse_items(item, context, table):
             if type(aa[1]) == type(_parse_items):
                 # print(context.getvals())
                 if context.configx.parse_verbose:
-                    print("func:", context.url, wsgi_util.strpad(item),
+                    print("func:", context.url, wsgi_str.strpad(item),
                             aa[1].__name__)
                 try:
                     cccc = aa[1](item, context)
@@ -76,7 +76,7 @@ def parse_buffer(buff, regex, context, table):
         arr.append(buff[prog:bbb])
         #print("match", buff[bbb:eee])
         conv = _parse_items(buff[bbb:eee], context, table)
-        #print("conv", wsgi_util.strupt(conv))
+        #print("conv", wsgi_str.strupt(conv))
         arr.append(conv)
         prog += frag.end()
         count += 1
@@ -124,7 +124,7 @@ def recursive_parse(buff, context, local_table):
     #if context:
     #    print("context", context, context.myconfx.pgdebug)
 
-    #print("recursive_parse() buff:", wsgi_util.unescape(buff[:12]))
+    #print("recursive_parse() buff:", wsgi_str.strunesc(buff[:12]))
 
     # if local_table:
     #   if context.myconfx.pgdebug > 3:
@@ -147,7 +147,7 @@ def recursive_parse(buff, context, local_table):
         else:
             parsed2 = buff
 
-        print("Local %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
+        #print("Local %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
 
         # Recursively process
         try:
@@ -156,7 +156,7 @@ def recursive_parse(buff, context, local_table):
             wsgi_util.put_exception("exception in global parser", )
             parsed3 = parsed2
 
-        print("global %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
+        #print("global %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
 
         ## Do local table again as global expansion may uncover new items
         # Please do not have complex interdependent macros, as it defeats
@@ -179,7 +179,7 @@ def recursive_parse(buff, context, local_table):
         else:
             parsed4 = parsed3
 
-        print("re-local %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
+        #print("re-local %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
 
         #buff = parsed3
 
@@ -189,7 +189,7 @@ def recursive_parse(buff, context, local_table):
 
         break
 
-    print("Full %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
+    #print("Full %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
 
     return parsed4
 

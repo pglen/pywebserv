@@ -8,7 +8,6 @@ gettext.bindtextdomain('pyedpro', './locale/')
 gettext.textdomain('pyedpro')
 _ = gettext.gettext
 
-# Be sure to replace it with this exact string (or else in need parsing)
 SIGX = "hashx signature"
 
 def hexx(num):
@@ -129,3 +128,6 @@ if __name__ == '__main__':
             print ("%sModified file" % ttt, wsgi_str.strpad(aa), "Old hash:",
                                     wsgi_str.strpad(ohashx, 10), "New hash:",  hashx)
     sys.exit(ret)
+# hashx signature 0x5ce23ee8
+More stuff
+New test

@@ -181,7 +181,7 @@ class Myconf():
         self.parse_verbose = 0
         self.parse_inline = 0
         self.validate = False
-        pass
+        self.checksum = False
 
 # ------------------------------------------------------------------------
 
@@ -363,6 +363,7 @@ def xhelp():
     print("    -s           --  Show parse substitutions, more -s for increased output")
     print("    -i           --  Show parse substitutions inline")
     print("    -a           --  Validate files in command arguments")
+    print("    -m           --  Checksum files in command arguments")
 
     sys.exit(0)
 
@@ -378,7 +379,7 @@ if __name__ == '__main__':
 
     opts = []; args = []
 
-    myopts  = "h?vxcotbsVia"
+    myopts  = "h?vxcotbsViam"
     argopts = "d:p:"
     try:
         opts, args = getopt.getopt(sys.argv[1:], myopts + argopts,
@@ -447,6 +448,11 @@ if __name__ == '__main__':
                 print("Validate files:", aa[1])
             myconf.validate = True
 
+        if aa[0] == "-m":
+            if myconf.verbose:
+                print("Checksum file:", aa[1])
+            myconf.checksum = True
+
 # Most of these are placeholders
         if aa[0] == "-x":
             comline.CLEAR_CONFIG = True
@@ -461,14 +467,18 @@ if __name__ == '__main__':
         ret = 0
         #print("args", args)
         for aa in args:
-            oldx, newx = validate.validate(aa)
+            oldx, newx, stell = validate.validate(aa)
             if oldx != newx:
                 print("File", wsgi_str.strpad("'" + aa + "'"),  "changed, new hashx", newx)
                 ret |= 1
             if myconf.verbose:
                 print("Old hashx:", wsgi_str.strpad(oldx), "New hashx:", newx)
         sys.exit(ret)
+    elif myconf.checksum:
+        for aa in args:
+            validate.checksum(aa)
 
+        sys.exit(0)
 
     print("\n===== Starting HTTPD on port {}, control-C to stop".format(myconf.port))
 

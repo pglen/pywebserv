@@ -354,16 +354,20 @@ def xhelp():
     print("wsgi_main.py: web server command line and WSGI driver")
     print("Use: wsgi_main [options] [validate_names]")
     print(" Where options may be:")
-    print("    -d level     --  set debug level [0-10]")
-    print("    -h           --  help (this screen) alias: ?")
-    print("    -v           --  increase verbosity 0 = none 1 = some 2 = more ...")
-    print("    -V:          --  Show version")
-    print("    -p port      --  Set port to listen on")
-    print("    -b           --  print benchmark timing info")
-    print("    -s           --  Show parse substitutions, more -s for increased output")
-    print("    -i           --  Show parse substitutions inline")
-    print("    -a           --  Validate files in command arguments")
-    print("    -m           --  Checksum files in command arguments")
+    print("    -d level  --  set debug level [0-10]")
+    print("    -h        --  help (this screen) alias: ?")
+    print("    -v        --  increase verbosity 0 = none 1 = some 2 = more ...")
+    print("    -V:       --  Show version")
+    print("    -p port   --  Set port to listen on")
+    print("    -b        --  print benchmark timing info")
+    print("    -s        --  Show parse substitutions, more -s for increased output")
+    print("    -i        --  Show parse substitutions inline")
+    print("    -a        --  Validate files in command arguments")
+    print("    -m        --  Mark / checksum files in command arguments")
+    print(" Command line (environment WSGI_OPTIONS) in WSGI:")
+    print("     -b       --  Benchmark timings (output to apache log)")
+    print("     -v       --  Verbose (output to apache log)")
+    print()
 
     sys.exit(0)
 
@@ -474,10 +478,10 @@ if __name__ == '__main__':
             if myconf.verbose:
                 print("Old hashx:", wsgi_str.strpad(oldx), "New hashx:", newx)
         sys.exit(ret)
-    elif myconf.checksum:
-        for aa in args:
-            validate.checksum(aa)
 
+    elif myconf.checksum:
+        #for aa in args:
+        #    validate.checksum(aa)
         sys.exit(0)
 
     print("\n===== Starting HTTPD on port {}, control-C to stop".format(myconf.port))

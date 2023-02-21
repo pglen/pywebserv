@@ -8,7 +8,7 @@ import sys, os, mimetypes, time, re
 
 # Persitent info here
 
-import  wsgi_util, wsgi_data, wsgi_parse, wsgi_global
+import  wsgi_util, wsgi_data, wsgi_parse, wsgi_global, wsgi_str
 
 def got_404(config, url, query, fn = ""):
 

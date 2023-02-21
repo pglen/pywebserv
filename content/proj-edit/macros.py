@@ -1,7 +1,7 @@
  #!/usr/bin/env python3
 
 import  sys, os
-import  wsgi_util, wsgi_func, wsgi_global, wsgi_data
+import  wsgi_util, wsgi_func, wsgi_global, wsgi_data, wsgi_str
 
 '''
     Local macros and data. Register it after init or use the "_mac_ prefix to auto register
@@ -88,6 +88,9 @@ def imgrow_data(strx, context):
 
     cnt = 0
     for onerec in context.xdata:
+
+        #print("onerec", onerec)
+
         if (cnt % 2) == 0:
             trcolor = "#ddeedd"
         else:
@@ -95,17 +98,20 @@ def imgrow_data(strx, context):
         strx += '''<tr style=\"background-color:%s\">''' %  trcolor
 
         for bb in onerec[1:]:
-            bb = wsgi_util.strtrim(bb)
+            bb = wsgi_str.strtrim(bb)
             strx += "<td > <font>%s</font> " % bb
         cnt += 1
+
         # Buttons
-        strx += '''
+        buttstr = '''
             <td width=10>
             <input type=submit id=idsub name=ed_%s  value="Edit" >
             <br>
             <input type=submit id=idsub name=del_%s value="  Del " >
-            </form>
-            ''' %  (onerec[1], onerec[1])
+            ''' %  (onerec[0], onerec[0])
+
+        #print("buttstr", buttstr)
+        strx += buttstr
 
     # add footer
     # deleted

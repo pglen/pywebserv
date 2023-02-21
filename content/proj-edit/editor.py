@@ -1,7 +1,7 @@
  #!/usr/bin/env python3
 
 import sys
-import  wsgi_util, wsgi_func, wsgi_global, wsgi_data
+import  wsgi_util, wsgi_func, wsgi_global, wsgi_data, wsgi_str
 
 from . import common
 from . import macros
@@ -43,11 +43,13 @@ def got_editor(config, carry):
 
         if carry.request[0][1] == "Edit":
             rq = carry.request[0][0].split("_")
-            print("rq edit data", rq[1])
-            #global gl_arr
-            #gl_arr = []
-            res = macros.fill_data(carry.localdb, 1) #int(rq[1][3:]))
+            print("rq edit data:", rq)
+            res = macros.fill_data(carry.localdb, rq[1])
             print("res:", res)
+            if not res:
+               carry.cdata += "Cannot load data for " + str(rq)
+               return
+
             if res:
                 carry.cdata += "<table border=1>"
 
@@ -59,7 +61,7 @@ def got_editor(config, carry):
 
                 carry.cdata += "</table>"
 
-        if carry.request[0][1] == "Add New":
+        elif carry.request[0][1] == "Add New":
             #print ("adding new data")
             carry.cdata += "<table border=1>"
             carry.cdata += "<tr><td>key   <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa1>"  + "</textarea><p>"
@@ -69,11 +71,13 @@ def got_editor(config, carry):
             carry.cdata += "<tr><td>arg 4 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa5>"  + "</textarea><p>"
             carry.cdata += "</table>"
 
-        if carry.request[0][1] == "Del":
+        elif "Del" in carry.request[0][1]:
             rq = carry.request[0][0].split("_")
             #print("rq delete data", rq[1])
-
             #carry.localdb.put("key_" + rq[0], rq[0], rq[1], rq[2], "")
+
+        else:
+            print("Invalid (unimplemented) command code")
 
     carry.local_table = common.local_table
 
@@ -85,7 +89,7 @@ def got_editor(config, carry):
 def one_center(strx, context):
 
     #print("context", context)
-    print(context.getvals())
+    #print(context.getvals())
 
     content = "<form action=index.html method=post >"
     content += "<td width=70% align=center valign=top><p><p>"

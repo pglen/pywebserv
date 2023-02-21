@@ -5,7 +5,7 @@
     recursively.
 '''
 
-import wsgi_util
+import wsgi_util, wsgi_str
 
 def fillxarr(selfx):
     arr = []

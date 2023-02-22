@@ -14,43 +14,52 @@ from  pydbase import pypacker
 USE_PYDB    = True
 
 # Do we have database handle already?
+# This is a regular function, however it interacts with objects ...
+# So object oriented paradigmes apply
 
 def soft_opendb(carry, modname, suffix = ""):
 
-    if USE_PYDB:
-        dbname = "data/%s%s.pydb" % (modname, suffix)
-    else:
-        dbname = "data/%s%s.sqlt" % (modname, suffix)
+    #print("softopen", carry, modname)
 
-    #print("database name", dbname)
+    if USE_PYDB:
+        carry.dbname = "data/%s%s.pydb" % (modname, suffix)
+    else:
+        carry.dbname = "data/%s%s.sqlt" % (modname, suffix)
 
     needopen = False
     if not hasattr(carry, "localdb"):
         needopen = True
     else:
-        # see if DB is OK
-        try:
-            if USE_PYDB:
-                #conn = pyd
-                pass
-            else:
-                conn = sqlite3.connect(file)
-                c = conn.cursor()
-                c.execute("select count(*) from " + self.table + "")
-                conn.close()
-        except:
-            #print("Cannot open/create db:", file, sys.exc_info())
-            needopen = True
+        if not carry.localdb:
+            ccc = True
+
+    #    # see if DB is OK
+    #    try:
+    #        if USE_PYDB:
+    #            pass
+    #        else:
+    #            conn = sqlite3.connect(file)
+    #            c = conn.cursor()
+    #            c.execute("select count(*) from " + self.table + "")
+    #            conn.close()
+    #    except:
+    #        #print("Cannot open/create db:", file, sys.exc_info())
+    #        needopen = True
 
     if needopen:
         try:
             if USE_PYDB:
-                carry.localdb = wsgipydb(dbname)
+                carry.localdb = wsgipydb(carry.dbname)
             else:
-                carry.localdb = wsgiSql(dbname)
+                carry.localdb = wsgiSql(carry.dbname)
         except:
             #print("Cannot open database", dbname)
-            wsgi_util.put_exception("Open database %s") % dbname
+            wsgi_util.put_exception("Open database %s") % carry.localdb
+
+def soft_closedb(carry, modname, suffix = ""):
+
+    print("Soft closing:", carry.dbname, carry.localdb)
+    carry.localdb = None
 
 class wsgipydb():
 
@@ -85,7 +94,8 @@ class wsgipydb():
         return sss[0].decode("utf-8"), *ddd[0]
 
     def close(self):
-        #print("Closed PYDB", self.file)
+        self.db.close()
+        print("Closed PYDB", self.file)
         #self.conn.close()
         #self.db.__del__()
         pass
@@ -196,7 +206,6 @@ class wsgiSql():
         try:
             self.c.execute("select * from " + self.table + \
                              " limit %d offset %d" % (int(count), int(skip) ) )
-
             rr = self.c.fetchall()
         except:
             wsgi_util.put_exception("getrange ")

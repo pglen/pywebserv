@@ -120,14 +120,12 @@ def _parse_one(buff, context, tablex, regex):
 
 def recursive_parse(buff, context, local_table):
 
-
-    #if context:
-    #    print("context", context, context.myconfx.pgdebug)
-
+    #print("contextx", context)
+    #print(context.getvals())
     #print("recursive_parse() buff:", wsgi_str.strunesc(buff[:12]))
 
     # if local_table:
-    #   if context.myconfx.pgdebug > 3:
+    #   if context.configx.pgdebug > 3:
     #       wsgi_util.dump_table("Local Table:", local_table)
     cnt = 0
     sss =   time.perf_counter()
@@ -142,6 +140,7 @@ def recursive_parse(buff, context, local_table):
                 parsed2 = _parse_one(buff, context,  local_table, _regex)
                 #print("parsed2", parsed2)
             except:
+                print(" **** -----------First parser exception ------------------ ****")
                 wsgi_util.put_exception("exception in local parser", )
                 parsed2 = buff
         else:
@@ -153,7 +152,7 @@ def recursive_parse(buff, context, local_table):
         try:
             parsed3 = _parse_one(parsed2, context,  wsgi_global.gl_table.mytable, _regex)
         except:
-            wsgi_util.put_exception("exception in global parser", )
+            #wsgi_util.put_exception("exception in global parser", )
             parsed3 = parsed2
 
         #print("global %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
@@ -174,7 +173,7 @@ def recursive_parse(buff, context, local_table):
                 parsed4 = _parse_one(parsed3, context,  local_table, _regex)
                 #print("parsed4", parsed4)
             except:
-                wsgi_util.put_exception("exception in local parser second run", )
+                #wsgi_util.put_exception("exception in local parser second run", )
                 parsed4 = parsed3
         else:
             parsed4 = parsed3

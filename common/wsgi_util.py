@@ -31,17 +31,17 @@ def  resolve_template(config, fn, name):
     while True:
         fn1 =  os.path.dirname(name) + os.sep + fname2
         #print("test fn1", fn1)
-        if  os.path.exists(fn1):
+        if  os.path.isfile(fn1):
             found = fn1
             break
         fn2 = config.mypath + os.sep + "html"  + fn
         #print("test fn2", fn2)
-        if  os.path.exists(fn2):
+        if  os.path.isfile(fn2):
             found = fn2
             break
         fn3 = config.mypath + os.sep + "html" + fn + ".html"
         #print("test fn3", fn3)
-        if  os.path.exists(fn3):
+        if  os.path.isfile(fn3):
             found = fn3
             break
         break;
@@ -167,31 +167,31 @@ def append_file(strx):
 # ------------------------------------------------------------------------
 # Resolve paths, read file, expand template
 
-def process_default(configx, context):
+def process_default(configx, carryon):
 
     #print("using template", context.template, "fname", context.fname)
 
     if configx.verbose > 1:
-        print("process_default() with local_table len ", len(context.local_table))
+        print("process_default() with local_table len ", len(carryon.local_table))
 
     if configx.pgdebug > 5:
-        if context.local_table:
-            #dump_table("Local Table:", context.local_table)
-            #dump_table_funcs("Local Table Functs:", context.local_table)
+        if carryon.local_table:
+            #dump_table("Local Table:", carryon.local_table)
+            #dump_table_funcs("Local Table Functs:", carryon.local_table)
             pass
 
     try:
-        if not context.template:
-            template = resolve_template(context.config, context.url, context.fname)
+        if not carryon.template:
+            template = resolve_template(carryon.config, carryon.url, carryon.fname)
         else:
-            template = os.path.dirname(context.fname) + os.sep + context.template
+            template = os.path.dirname(carryon.fname) + os.sep + carryon.template
     except:
         put_exception("Cannot create / open template");
 
     if configx.verbose > 1:
         print("using template", template)
 
-    if template and os.path.exists(template):
+    if template and os.path.isfile(template):
         buff = ""
         try:
             with open(template, 'r') as fh:
@@ -200,10 +200,10 @@ def process_default(configx, context):
             print("Cannot read template", sys.exc_info())
 
         # Recursively process
-        content = wsgi_parse.recursive_parse(buff, context, context.local_table)
+        content = wsgi_parse.recursive_parse(buff, carryon, carryon.local_table)
     else:
-        content = "Index file (dyn) " + context.url + " " +  \
-                        context.template + " " + str(context.query) + " "
+        content = "Index file (dyn) " + carryon.url + " " +  \
+                        carryon.template + " " + str(carryon.query) + " "
 
     return content
 

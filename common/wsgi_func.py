@@ -30,13 +30,12 @@ def     parse_args(strx, context):
     fff = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, context.local_table)[0]
     eee = ' '.join(fff)
 
-
-    if context.myconfx.pgdebug > 5:
-        print("Args loc expanded:", eee)
+    #if context.configx.pgdebug > 5:
+    #    print("Args loc expanded:", eee)
 
     ssss = wsgi_parse.parse_buffer(eee, "\[ .*? \]", context, wsgi_global.gl_table.mytable)[0]
 
-    if context.myconfx.pgdebug > 5:
+    if context.configx.pgdebug > 5:
         print("Args expanded:", ssss)
 
     ss = ""
@@ -44,12 +43,12 @@ def     parse_args(strx, context):
         # Filter delimiters
             ss += aa
 
-    if context.myconfx.pgdebug > 6:
+    if context.configx.pgdebug > 6:
         print("Args pre decoded:", ssss)
 
     sss = str.split(ss)
 
-    if context.myconfx.pgdebug > 5:
+    if context.configx.pgdebug > 5:
         print("Args decoded:", sss)
 
     ddd = []
@@ -232,7 +231,7 @@ def     load_data_func(strx, context):
 
     ddd = parse_args(strx, context)
 
-    if context.myconfx.pgdebug > 3:
+    if context.configx.pgdebug > 3:
         print("load_data_func() ddd", ddd)
 
     prefix = ""; first = 0; count = 0
@@ -264,7 +263,7 @@ def     load_data_func(strx, context):
         res = localdb.getall()
     else:
         res = localdb.getrange(first, count)
-        if context.myconfx.pgdebug > 2:
+        if context.configx.pgdebug > 2:
             print("res", res)
 
     if not res:
@@ -361,7 +360,7 @@ def     include_func(strx, context):
             #print(sys.exc_info())
             wsgi_util.put_exception("find parsed file name")
 
-    if context.myconfx.pgdebug > 2:
+    if context.configx.pgdebug > 2:
         print("include fname", fname)
 
     try:

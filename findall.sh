@@ -1,2 +1,2 @@
 #!/bin/bash
-find . -name "*.py" -exec grep -H $1 {} \;
+find . -name "*.py" -exec grep -H "$1" {} \;

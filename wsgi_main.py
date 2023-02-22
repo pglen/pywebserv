@@ -186,6 +186,7 @@ class Myconf():
 # ------------------------------------------------------------------------
 
 mainclass = None
+oldmem = 0
 
 # ------------------------------------------------------------------------
 # WSGI main entry point
@@ -268,9 +269,10 @@ def application(environ, respond):
                 msg = b"The server cannot create an instance of its main class."
                 return [msg,]
 
-        # re - decorate (sync command line config)
+        # re - decorate (sync in command line config)
         mainclass.configx.sync(myconf)
-        if myconf.verbose > 2:
+
+        if mainclass.configx.verbose > 2:
             print(mainclass.configx.getvals())
 
         #wsgi_util.dump_global_table()
@@ -315,7 +317,17 @@ def application(environ, respond):
         if mainclass.configx.benchmark:
             print("tdelta3", environ['PATH_INFO'], "%.4f" %
                                ( (time.perf_counter() - time_mark) * 1000), "ms")
-        # All went OK
+        # This prints appx 24 kbytes
+        #import psutil
+        ##print(psutil.Process(os.getpid()).memory_info().rss, "bytes")
+        #global oldmem
+        #mem = psutil.Process(os.getpid()).memory_info().rss // 1024 ** 2
+        #if mem != oldmem:
+        #    oldmem = mem
+        #    print (mem, "kB")
+        #    #print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
+
+        # All went OK, output it
         return wdata
 
     except:

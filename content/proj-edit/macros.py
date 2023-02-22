@@ -18,22 +18,23 @@ _mac_ShortCName = ''' United Planet Peace '''
 
 # ------------------------------------------------------------------------
 
-gl_arr = []
+def fill_data(carryon, localdb, recnum):
 
-def fill_data(localdb, recnum):
-
-    #print("data file", "data/%s_data.sqlt" % modname)
     #print("localdb", localdb)
     #print("recnum", recnum)
-    #print("all", localdb.getall())
 
-    global gl_arr
     res = localdb.getbyid(recnum)
-    if res[0] in gl_arr:
+    if not res:
+        return "empty field"
+
+    # use hdata as filter for duplicates
+    if res[0] in carryon.hdata:
         #print("skip:", recnum, wsgi_util.strupt(res[0]))
         return None
-    gl_arr.append(res[0])
-    return (str(recnum), *res)
+
+    carryon.hdata.append(res[0])
+    carryon.xdata.append((str(recnum), *res))
+
 
 _mac_center_top = '''
  <table width=100% { sitecolor } border=0>
@@ -75,6 +76,8 @@ def imgrow_data(strx, context):
 
     #sss = wsgi_func.parse_args(strx, context)
 
+    print("imgrow_data", strx, context)
+
     foot = "" #''' <td> #'''<td>
     strx = '''<form action=editor.html method=post>'''
 
@@ -82,7 +85,7 @@ def imgrow_data(strx, context):
 
     if not context.xdata:
         print("No data in context",)
-        str += "No Data"
+        strx += "No Data"
         strx += "</form>"
         return strx
 
@@ -192,9 +195,9 @@ def imgrow_data(strx, context):
 
     return strx
 
-def mid_rows(strx, context):
+def mid_rows(strx, carryon):
 
-    #print("mid_rows", strx, context)
+    #print("mid_rows", strx, carryon)
 
     ret = '''
     <tr> <td colspan=7 align=center>
@@ -203,44 +206,43 @@ def mid_rows(strx, context):
     '''
 
     try:
-        wsgi_data.soft_opendb(context, modname)
+        #print(context.getvals())
+        wsgi_data.soft_opendb(carryon, modname)
     except:
         print("Could not create local data for %s" % modname)
-        wsgi_util.put_exception("opening SQL")
+        wsgi_util.put_exception("Opening databaseL")
         return
 
-    ret += "<table border=0 width=100%>"
-    recs = context.localdb.getcount()
-    #print("got", recs, " records")
-
-    global gl_arr
-    gl_arr = []
-
+    recs = carryon.localdb.getcount()
     if not recs:
         ret += "<tr><td align=center>No Data"
     else:
-        context.xdata = []
+        #print("got", recs, " records")
+
+        ret += "<table border=0 width=100%>"
+        carryon.xdata = []; carryon.hdata = []
         # Starting at the end
         for aa in range(recs-1, -1, -1):
-            #print("arg sss", sss)
-            ddd = fill_data(context.localdb, aa)
-            if ddd:
-                context.xdata.append(ddd)
-            #print("con xdata", context.xdata)
+            fill_data(carryon, carryon.localdb, aa)
 
+        #print("xdata", carryon, carryon.xdata)
         # check for end
-        #context.xdata.append((str(aa), "END", "", "", "", "", "") )
+        #carryon.xdata.append((str(aa), "END", "", "", "", "", "") )
 
         # Render it
         ret +=  "{ imgrow_data }"
 
     ret += "</table>"
+
+    # Remove all data from memory
+    #carryon.xdata = [];
+    carryon.hdata = []
     #context.localdb.close()
     return ret
 
 _mac_center_body = '''
     <table width=100% border=0>
-        <tr><td align=center colspan=6>
+        colspan=6> align=center <tr><td
         { mid_rows }
     </table>
 '''

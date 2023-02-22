@@ -36,22 +36,23 @@ def got_editor(config, carry):
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
     if carry.request:
-
         print("carry.request", carry.request)
-
         wsgi_data.soft_opendb(carry, modname)
+        #print("db", carry.localdb)
 
         if carry.request[0][1] == "Edit":
             rq = carry.request[0][0].split("_")
-            print("rq edit data:", rq)
+            #print("rq edit data:", rq)
             res = macros.fill_data(carry.localdb, rq[1])
-            print("res:", res)
+            #print("res:", res)
             if not res:
-               carry.cdata += "Cannot load data for " + str(rq)
-               return
+                #delete(carry.localdb)
+                print("Cannot load data", rq[1], carry.localdb)
+                content += "Cannot load data for record: " + str(rq[1])
+                return content
 
             if res:
-                carry.cdata += "<table border=1>"
+                carry.cdata += "<table border=0>"
 
                 for aa in range(len(res)):
                     carry.cdata += \
@@ -63,7 +64,7 @@ def got_editor(config, carry):
 
         elif carry.request[0][1] == "Add New":
             #print ("adding new data")
-            carry.cdata += "<table border=1>"
+            carry.cdata += "<table border=0>"
             carry.cdata += "<tr><td>key   <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa1>"  + "</textarea><p>"
             carry.cdata += "<tr><td>arg 1 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa2>"  + "</textarea><p>"
             carry.cdata += "<tr><td>arg 2 <td> : &nbsp;  <td><textarea cols=48 rows=4 name=aa3>"  + "</textarea><p>"
@@ -78,6 +79,8 @@ def got_editor(config, carry):
 
         else:
             print("Invalid (unimplemented) command code")
+
+    wsgi_data.soft_closedb(carry, modname)
 
     carry.local_table = common.local_table
 

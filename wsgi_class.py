@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 
-''' Main server class '''
+'''
+
+    Main server class. This is executed from both the command line and
+    the apache run time. The imports are scattered a little, because the
+    apache run time does not know where the modules are. So when we include a
+    module in a later stage, the module has been told where it is at.
+    (like the 'common' subdir)
+
+'''
 
 import sys, os, mimetypes, time, datetime, getopt, traceback
 
@@ -12,6 +20,7 @@ except ImportError:
 from wsgiref import simple_server, util
 
 #from common import wsgi_util
+
 
 class xWebServer():
 
@@ -32,32 +41,19 @@ class xWebServer():
         self.server_time_mark = time.perf_counter()
         #wsgi_util.printenv(environ)
 
-        self.carryon = wsgi_conf.CarryOn()
-        self.carryon.mainclass = self
-        self.carryon.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
-        self.carryon.environ = environ
-
+        # Create initial
         self.configx = wsgi_conf.Configx()
-        self.carryon.configx = self.configx
-
-        self.configx.mainclass = self
         self.configx.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
-        self.configx.datapath = self.configx.mypath + "content" + os.sep
+        self.configx.datapath =  self.configx.mypath + "content"
 
-        if self.configx.pgdebug > 1:
-            print("self.configx.mypath", self.config.mypath)
-            print("self.configx.datapath", self.config.datapath)
+        if 1: #self.configx.pgdebug > 1:
+            print("self.configx.mypath", self.configx.mypath)
+            print("self.configx.datapath", self.configx.datapath)
 
-        if self.configx.pgdebug > 2:
-            print(self.configx.getvals())
+        #if self.configx.pgdebug > 2:
+            #print(self.configx.getvals())
 
         self.start_time = datetime.datetime.now()
-
-        #try:
-        #    self.sql = wsgi_data.wsgiSql(self.configx.datapath + "data/wsgi_main.sqlt")
-        #except:
-        #    print("Warn: Cannot create database", sys.exc_info())
-        #
 
         logd = self.configx.datapath + "data"
         if not os.access(logd, os.X_OK):
@@ -209,18 +205,33 @@ class xWebServer():
             wsgi_util.put_exception("When calling proj entry")
             return
 
+        import wsgi_conf
+        self.carrydef = wsgi_conf.CarryOn(self)
+        self.carrydef.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
+        self.carrydef.datapath = self.carrydef.mypath + os.sep + "content"
+        self.carrydef.template = template
+        self.carrydef.fname = fname
+        self.carrydef.url = self.url
+        self.carrydef.query = self.query
+        self.carrydef.request = self.request
+        self.carrydef.template = template
+        self.carrydef.fname = fname
+
         if self.configx.verbose > 1:
             print("process_request2", callme, template)
 
         if(callme):
+            #import wsgi_conf
             content = ""
+            # Per request carryon; carried around with object as a reference
             try:
+                self.carryon = wsgi_conf.CarryOn(self)
+                self.carryon.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
                 self.carryon.url = self.url
                 self.carryon.query = self.query
                 self.carryon.request = self.request
                 self.carryon.template = template
                 self.carryon.fname = fname
-                self.carryon.myconfx = self.configx
 
                 if self.configx.pgdebug > 2:
                     print(self.carryon.getvals())
@@ -234,12 +245,13 @@ class xWebServer():
                     wsgi_util.put_exception("render content")
 
                 try:
+                    pass
                     # See if residual anything
-                    if hasattr(self.carryon, "localdb"):
-                        #print("exiting", self.carryon.localdb)
-                        self.carryon.localdb.close()
+                    #if hasattr(self.carryon, "localdb"):
+                    #    #print("exiting", self.carryon.localdb)
+                    #    self.carryon.localdb.close()
                 except:
-                    print("Error on exit cleaup")
+                    print("Error on exit cleanup")
 
             except:
                 wsgi_util.put_exception("At process_request" + str(fname))
@@ -247,7 +259,7 @@ class xWebServer():
                 fn5 = self.configx.datapath + "html/500.html"
                 if os.path.isfile(fn5):
 
-                    content = wsgi_content.got_500(self.configx, fn5, self.query)
+                    content = wsgi_content.got_500(self.carrydef, fn5, self.query)
                     #print("got 500", content)
                 else:
                     content = "Empty results from page assembly."
@@ -345,8 +357,8 @@ class xWebServer():
                     break
 
                 if errfile:
-                    #import wsgi_content
-                    content = wsgi_content.got_404(self.configx, errfile, self.query, self.fn)
+                    import wsgi_conf
+                    content  = wsgi_content.got_404(self.carrydef, errfile, self.query, self.fn)
                     return [bytes(content, "utf-8")]
                 else:
                     return [b"URL not found. (and 404 file does not exist)."]

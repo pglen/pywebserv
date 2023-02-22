@@ -31,17 +31,15 @@ class Configx:
     '''
 
     def __init__(self):
-        self.mypath      = ""
-        self.datapath    = ""
-        self.verbose     = 0
-        self.pgdebug     = 0
-        self.benchmark   = 0
-        self.port        = 8000
-        self.server      = None
-        self.mainclass   = None
 
-    def __str__(self):
-        return "verb:"+ str(self.verbose) + " deb:" + str(self.pgdebug)
+        self.mypath     = ""
+        self.datapath   = ""
+        self.verbose    = 0
+        self.pgdebug    = 0
+        self.benchmark  = 0
+        self.port       = 8000
+        self.server     = None
+        self.mainclass  = None
 
     def _fillarr(self, selfx):
         arr = []
@@ -80,9 +78,13 @@ class CarryOn:
     '''
     Parameters are going around all the way to processing
     '''
-    def __init__(self):
-        self.environ = None
-        self.mainclass = None
+
+    def __init__(self, mc):
+        self.environ    =   None
+        self.mainclass  =   mc
+        self.configx    =   mc.configx
+        self.template   =   ""
+        self.fname   =   ""
 
     def getvals(self):
         strx = ""

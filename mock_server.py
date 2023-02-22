@@ -72,6 +72,22 @@ def append_filename(nnn):
 # ------------------------------------------------------------------------
 # Scan all files in one deep directory
 
+# Wed 22.Feb.2023 data files excempted
+
+def isskip(aaa):
+    ret = False
+    # No need for these files
+    if "__" == aaa[:2]:
+        #print("Skipping __ files", aaa)
+        ret = True
+    if ".git" in aaa:
+        #print("Skipping .git files", aaa)
+        ret = True
+    if "data/" in aaa:
+        #print("Skipping data dir", aaa)
+        ret = True
+    return ret
+
 def  rescan():
     global fnamearr, statarr
 
@@ -80,14 +96,9 @@ def  rescan():
     #print("fnamearr2a", fnamearr2a)
 
     for aaa in fnamearr2a:
+        if isskip(aaa):
+            continue
         if os.path.isdir(aaa):
-            # No need for these files
-            if "__" in aaa:
-                continue
-            if ".git" in aaa:
-                continue
-            if "data" in aaa:
-                continue
             _rescan(aaa)
         if os.path.isfile(aaa):
              append_filename(aaa)
@@ -101,6 +112,9 @@ def _rescan(dirx):
     for aa in range(len(fnamearr2)):
         nnn = dirx + os.sep + fnamearr2[aa]
         #print("nnn", nnn)
+        if isskip(nnn):
+            continue
+
         if os.path.isfile(nnn):
              append_filename(nnn)
         elif os.path.isdir(nnn):
@@ -114,6 +128,8 @@ if __name__ == '__main__':
 
     #path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     #port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
+
+    print("start mock server")
 
     global fnamearr, statarr
 

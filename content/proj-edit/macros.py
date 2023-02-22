@@ -75,10 +75,10 @@ _mac_editrow = '''
 def imgrow_data(strx, context):
 
     #sss = wsgi_func.parse_args(strx, context)
-
-    print("imgrow_data", strx, context)
+    #print("imgrow_data", strx, context)
 
     foot = "" #''' <td> #'''<td>
+
     strx = '''<form action=editor.html method=post>'''
 
     #print(context.getvals())
@@ -213,6 +213,7 @@ def mid_rows(strx, carryon):
         wsgi_util.put_exception("Opening databaseL")
         return
 
+    #print(carryon)
     recs = carryon.localdb.getcount()
     if not recs:
         ret += "<tr><td align=center>No Data"
@@ -236,13 +237,13 @@ def mid_rows(strx, carryon):
 
     # Remove all data from memory
     #carryon.xdata = [];
-    carryon.hdata = []
+    #carryon.hdata = []
     #context.localdb.close()
     return ret
 
 _mac_center_body = '''
     <table width=100% border=0>
-        colspan=6> align=center <tr><td
+        <tr><td align=center>
         { mid_rows }
     </table>
 '''

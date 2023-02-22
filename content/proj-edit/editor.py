@@ -18,13 +18,12 @@ def got_editor(config, carry):
 
     #wsgi_util.printobj(carry)
 
-    content = ""
-    carry.cdata   = ""
+    content = "";  carry.cdata   = ""
 
     if config.verbose:
         print("got_index() url = '%s'" % carry.url)
 
-    if 1: #config.pgdebug > 1:
+    if config.pgdebug > 1:
         print("got_index()", "url:", carry.url, "query:", carry.query,
                  "request", carry.request)
 
@@ -36,31 +35,31 @@ def got_editor(config, carry):
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
     if carry.request:
-        print("carry.request", carry.request)
+        #print("carry.request", carry.request)
         wsgi_data.soft_opendb(carry, modname)
         #print("db", carry.localdb)
 
         if carry.request[0][1] == "Edit":
             rq = carry.request[0][0].split("_")
             #print("rq edit data:", rq)
-            res = macros.fill_data(carry.localdb, rq[1])
+
+            carry.xdata = []; carry.hdata = []
+            macros.fill_data(carry, carry.localdb, rq[1])
+            res = carry.xdata[0]
             #print("res:", res)
             if not res:
                 #delete(carry.localdb)
                 print("Cannot load data", rq[1], carry.localdb)
                 content += "Cannot load data for record: " + str(rq[1])
                 return content
-
-            if res:
-                carry.cdata += "<table border=0>"
-
-                for aa in range(len(res)):
-                    carry.cdata += \
-                        "<tr><td>key   <td> : &nbsp;  " + \
-                            "<td><textarea cols=64 rows=4 name='aa_%d' % aa>" + \
-                                str(res[aa]) + "</textarea><p>"
-
-                carry.cdata += "</table>"
+            carry.cdata += "<table border=0>"
+            #fnames = ("key", "arg 1", "arg 2","arg 3","arg 4", "arg 5")
+            for aa in range(len(res)):
+                carry.cdata += \
+                    "<tr><td> " + "arg %d" % aa + " <td> : &nbsp;  " + \
+                        "<td><textarea cols=64 rows=4 name='aa_%d' % aa>" + \
+                            str(res[aa]) + "</textarea><p>"
+            carry.cdata += "</table>"
 
         elif carry.request[0][1] == "Add New":
             #print ("adding new data")

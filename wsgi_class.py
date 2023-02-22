@@ -46,12 +46,12 @@ class xWebServer():
         self.configx.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
         self.configx.datapath =  self.configx.mypath + "content"
 
-        if 1: #self.configx.pgdebug > 1:
+        if self.configx.pgdebug > 1:
             print("self.configx.mypath", self.configx.mypath)
             print("self.configx.datapath", self.configx.datapath)
 
-        #if self.configx.pgdebug > 2:
-            #print(self.configx.getvals())
+        if self.configx.pgdebug > 2:
+           print(self.configx.getvals())
 
         self.start_time = datetime.datetime.now()
 
@@ -207,8 +207,6 @@ class xWebServer():
 
         import wsgi_conf
         self.carrydef = wsgi_conf.CarryOn(self)
-        self.carrydef.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
-        self.carrydef.datapath = self.carrydef.mypath + os.sep + "content"
         self.carrydef.template = template
         self.carrydef.fname = fname
         self.carrydef.url = self.url

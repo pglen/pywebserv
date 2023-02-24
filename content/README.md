@@ -1,3 +1,4 @@
 Main Content directory.
 
-The directories started with Proj- are project subdirectories.
+  The directories started with proj- are project subdirectories, and will
+be scanned by the server;

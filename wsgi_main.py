@@ -22,12 +22,13 @@
  (like "proj-index") and populate the files. At least one python file is needed,
  must be named 'index.py'
 
-&nbsp;To create a <b>new web page</b>, add a new python file, and call the
+&nbsp;To create a <b>new web page [URL]</b>, add a new python file, and call the
 URL registration function(s) within. The server redirects the url
 to the function you specify.
 
             add_one_url("/index.html",  got_index,            "index.html")
             add_one_url("/",            got_index,            "index.html")
+            --------------------------------------------------------------------
                          ^__URL         ^__function to call   ^__template to use
 
  To create a new 'macro' use the add macro function with the macro name
@@ -48,7 +49,7 @@ The macro regex is '{ .*? }' [the '?' is for non greedy wild card)
     referenced on the whole site. See: ./contents/Proj-xxx/macros.py
     Please note that the global macros override previous definitions,
     so the last definition is the active one.
-    This may not be the behavior you want, so name macros accordingly,
+    This may not be the behavior you want, so name the macros accordingly,
     or use local macros.  ex: footer or site_footer or index_footer
 
      In case there is any doubt, use the dump_global_macros() function.
@@ -58,6 +59,25 @@ The macro regex is '{ .*? }' [the '?' is for non greedy wild card)
     page / project.
 
     However, some conditions (like missing site dependencies) CAN down the site.
+
+      String macros take prececdence over function macros. The -s switch displays
+    the macro expansions on the standard output (hence in the log for apache deployment)
+    The -i will inject the expansion string into the html stream as comments.
+    Disable these in production environment.
+
+         Use: wsgi_main [options] [validate_names]
+         Where options may be:
+            -d level  --  set debug level [0-10]
+            -h        --  help (this screen) alias: ?
+            -v        --  increase verbosity 0 = none 1 = some 2 = more ...
+            -V:       --  Show version
+            -p port   --  Set port to listen on
+            -b        --  print benchmark timing info
+            -s        --  Show parse substitutions, more -s for increased output
+            -i        --  Show parse substitutions inline
+         Command line (environment WSGI_OPTIONS) in WSGI:
+             -b       --  Benchmark timings (output to apache log)
+             -v       --  Verbose (output to apache log)
 
  # The built in macros:   (see source for complete list)
 
@@ -85,7 +105,7 @@ for common project headers / footers.
 
  ## Commenting out macros:
 
-  Normally a macro is delimited by { macro }, so changing the delimiter will
+  Normally a macro is delimited by { macro } syntax, so changing the delimiter will
 make it a non macro. In the examples we use underscore like this: {_macro }
 The parser will print the string as normal, so to hide it from the browser
 we add the html comments around it. Like:
@@ -95,7 +115,7 @@ we add the html comments around it. Like:
   Please note that the rendering engine will try to render within
      HTML comments. The macro below is still expanded, but not shown.
 
-                <!--  { getData xx %s 15 } -->
+                <!--  { getData xx 0 15 } -->
 
  ## Space in macros arguments:
 
@@ -105,25 +125,26 @@ The work around is to use the HTML &nbsp; space symbol. Like: Hello&nbsp;World
  ## Unrecognized macros:
 
  The macros that are not recognized are printed verbatim into the HTML stream.
-This is to signal the developer that the macro is not valid.
+This is to signal the developer that the macro is not valid / expanded.
 
  ## The WSGI interface
 
  Changed (temporarily) all the group settings to .www-data; (chown .www-data *)
 this way the web server can access the server files without opening up
-everything to 'other'. (public) This way chmod o-rwx does not
+everything to 'other'. (public).  Executing chmod o-rwx does not
 disable server access;
 
   After deployment, please remember to change it back
 to whatever the user appropriate settings are.
 
-  The data directory is given write access for logs and data.
+  Make sure the ./content/data directory is given write access for logs and data.
 
   The WSGI listens to the environment variable "WSGI_PARAMS". With this
 variable, we can set the web server config, as follows.
 
-    SetEnv "WSGI_PARAMS" "-b"
+    SetEnv "WSGI_PARAMS" "[-b] [-v]"
     SetEnv "WSGI_PARAMS" "-v"
+    SetEnv "WSGI_PARAMS" "-b"
     SetEnv "WSGI_PARAMS" "-b -v"
 
     The -b enables benchmark printouts, the -v enables verbosity.
@@ -136,10 +157,9 @@ variable, we can set the web server config, as follows.
     tdelta2     prints stage three timing (parse instance)
     tdelta3     prints stage four  timing (parse file)
 
-    Restart server when changing configuration.
+    One needs to restart the server when changing configuration.
 
     >>> sudo systemctl restart apache2
-
 
 '''
 
@@ -199,6 +219,8 @@ def application(environ, respond):
 
     global myconf, mainclass
 
+    #print("start_server", environ['PATH_INFO'])
+
     # Scan for command from wsgi (disabled)
     #for kk in environ.keys():
     #    if 'WSGI_PARAMS' == kk:
@@ -230,7 +252,6 @@ def application(environ, respond):
 
     try:
         #wsgi_util.append_file("Started Server Page\n")
-
         #global usr_cnt
         #usr_cnt += 1
 
@@ -306,6 +327,7 @@ def application(environ, respond):
                                ( (time.perf_counter() - time_mark) * 1000), "ms")
 
         wdata = ""
+
         try:
             wdata = mainclass.process_request(environ, respond)
         except:
@@ -328,6 +350,7 @@ def application(environ, respond):
         #    #print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
 
         # All went OK, output it
+        #print("End", environ['PATH_INFO'])
         return wdata
 
     except:
@@ -364,7 +387,7 @@ def xversion():
 
 def xhelp():
     print("wsgi_main.py: web server command line and WSGI driver")
-    print("Use: wsgi_main [options] [validate_names]")
+    print("Use: wsgi_main [options]")
     print(" Where options may be:")
     print("    -d level  --  set debug level [0-10]")
     print("    -h        --  help (this screen) alias: ?")
@@ -374,14 +397,16 @@ def xhelp():
     print("    -b        --  print benchmark timing info")
     print("    -s        --  Show parse substitutions, more -s for increased output")
     print("    -i        --  Show parse substitutions inline")
-    print("    -a        --  Validate files in command arguments")
-    print("    -m        --  Mark / checksum files in command arguments")
     print(" Command line (environment WSGI_OPTIONS) in WSGI:")
     print("     -b       --  Benchmark timings (output to apache log)")
     print("     -v       --  Verbose (output to apache log)")
     print()
 
-    sys.exit(0)
+    print(" Check related:  (exits after done) use: validate.py")
+    print("    -a        --  Validate files in command arguments")
+    print("    -m        --  Mark / checksum files in command arguments")
+
+    #sys.exit(0)
 
 # ------------------------------------------------------------------------
 
@@ -489,12 +514,13 @@ if __name__ == '__main__':
                 ret |= 1
             if myconf.verbose:
                 print("Old hashx:", wsgi_str.strpad(oldx), "New hashx:", newx)
-        sys.exit(ret)
+        #sys.exit(ret)
 
     elif myconf.checksum:
+        pass
         #for aa in args:
         #    validate.checksum(aa)
-        sys.exit(0)
+        #sys.exit(0)
 
     print("\n===== Starting HTTPD on port {}, control-C to stop".format(myconf.port))
 
@@ -513,19 +539,22 @@ if __name__ == '__main__':
 
         def log_message(self, format, *args):
             # Do just a little bit of logging on stdout
-            if "siteicons" not in args[0] and "media" not in args[0]:
-                print(args[0])
+            #if "siteicons" not in args[0] and "media" not in args[0]:
+            #    print(args[0])
             pass
         #print("Args", sys.argv)
 
     #mypath = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     #port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
 
+    #from wsgiref.validate import validator
+    #val_app =  validator(application)
+    #httpd = simple_server.make_server('', myconf.port, val_app,
+    #                    handler_class=NoLoggingWSGIRequestHandler)
+
     httpd = simple_server.make_server('', myconf.port, application,
-                                                handler_class=NoLoggingWSGIRequestHandler)
-
+                        handler_class=NoLoggingWSGIRequestHandler)
     #print("Begin main args", sys.argv)
-
     while True:
         try:
             httpd.handle_request()

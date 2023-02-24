@@ -15,35 +15,37 @@
 import sys, os, time
 import mimetypes, subprocess
 
-from wsgiref import simple_server, util
+#from wsgiref import simple_server, util
 
-def app(environ, respond):
+#def app(environ, respond):
+#
+#    print("IN app")
+#
+#    fn = os.path.join(path, environ['PATH_INFO'][1:])
+#    if '.' not in fn.split(os.path.sep)[-1]:
+#        fn = os.path.join(fn, 'index.html')
+#    type = mimetypes.guess_type(fn)[0]
+#
+#    if os.path.exists(fn):
+#        respond('200 OK', [('Content-Type', type)])
+#        return [util.FileWrapper(open(fn, "rb"))]
+#    else:
+#        respond('404 Not Found', [('Content-Type', 'text/plain')])
+#        #respond('200 Hello world', [('Content-Type', 'text/plain')])
+#        return [b'not found']
+#        #return "Hello World"
 
-    fn = os.path.join(path, environ['PATH_INFO'][1:])
-    if '.' not in fn.split(os.path.sep)[-1]:
-        fn = os.path.join(fn, 'index.html')
-    type = mimetypes.guess_type(fn)[0]
-
-    if os.path.exists(fn):
-        respond('200 OK', [('Content-Type', type)])
-        return [util.FileWrapper(open(fn, "rb"))]
-    else:
-        respond('404 Not Found', [('Content-Type', 'text/plain')])
-        #respond('200 Hello world', [('Content-Type', 'text/plain')])
-        return [b'not found']
-        #return "Hello World"
-
-def serve():
-        httpd = simple_server.make_server('', port, app)
-        print("Serving {} on port {}, control-C to stop".format(path, port))
-        while True:
-            try:
-                httpd.handle_request()
-            except KeyboardInterrupt:
-                print("Shutting down.")
-                httpd.server_close()
-                raise
-                break
+#def serve():
+#        httpd = simple_server.make_server('', port, app)
+#        print("Serving {} on port {}, control-C to stop".format(path, port))
+#        while True:
+#            try:
+#                httpd.handle_request()
+#            except KeyboardInterrupt:
+#                print("Shutting down.")
+#                httpd.server_close()
+#                raise
+#                break
 
 def _re_open():
     #th = subprocess.Popen(["firefox", "localhost:8000"], close_fds=True)
@@ -89,9 +91,23 @@ def isskip(aaa):
     if "test/" in aaa:
         #print("Skipping data dir", aaa)
         ret = True
+
+    # Make sure the log files do not trigger
+    if aaa[-4:] == ".log":
+        ret = True
+
+    # and python compile files do not trigger restart
+    if aaa[-4:] == ".pyc":
+        ret = True
+
+    # and sqlt files
+    if aaa[-5:] == ".sqlt":
+        ret = True
+
     return ret
 
 def  rescan():
+
     global fnamearr, statarr
 
     fnamearr = []; statarr = []
@@ -103,7 +119,7 @@ def  rescan():
             continue
         if os.path.isdir(aaa):
             _rescan(aaa)
-        if os.path.isfile(aaa):
+        elif os.path.isfile(aaa):
              append_filename(aaa)
     #print("fnamearr", fnamearr)
 
@@ -118,10 +134,11 @@ def _rescan(dirx):
         if isskip(nnn):
             continue
 
-        if os.path.isfile(nnn):
-             append_filename(nnn)
-        elif os.path.isdir(nnn):
+        if os.path.isdir(nnn):
             _rescan(nnn)
+        elif os.path.isfile(nnn):
+             append_filename(nnn)
+
     return None
 
 # ------------------------------------------------------------------------
@@ -131,8 +148,7 @@ if __name__ == '__main__':
 
     #path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     #port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
-
-    print("start mock server")
+    #print("Starting mock server ...")
 
     global fnamearr, statarr
 
@@ -143,25 +159,13 @@ if __name__ == '__main__':
     while True:
 
         #print(th.returncode, th.pid)
-
         flag = False
         for aa in range(len(fnamearr)):
-
-            # Make sure the log files do not trigger
-            if fnamearr[aa][-4:] == ".log":
-                continue
-            # and python compile files do not trigger restart
-            if fnamearr[aa][-4:] == ".pyc":
-                continue
-
-            # and sqlt files
-            if fnamearr[aa][-5:] == ".sqlt":
-                continue
 
             try:
                 stat = os.stat(fnamearr[aa])
             except:
-                pass
+                print("Err on scan:", sys.exc_info())
                 continue;
 
             if statarr[aa] != stat.st_mtime:

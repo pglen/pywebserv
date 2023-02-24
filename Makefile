@@ -18,13 +18,14 @@ AUTOCHECK=autocheck
 endif
 
 git:
+	rm -f test/*
 	git add .
 	git commit -m "$(AUTOCHECK)"
 	git push
 	#git push local
 
 run:
-	./wsgi_server.py
+	./mock_server.py
 
 test:
 	@make -C client test
@@ -39,7 +40,7 @@ clean:
 	./clean.sh
 
 md5:
-	echo duoing md5
+	echo doing md5
 
 
 

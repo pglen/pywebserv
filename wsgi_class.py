@@ -41,6 +41,8 @@ class xWebServer():
         self.server_time_mark = time.perf_counter()
         #wsgi_util.printenv(environ)
 
+        self.start_time = datetime.datetime.now()
+
         # Create initial
         self.configx = wsgi_conf.Configx()
         self.configx.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
@@ -52,8 +54,6 @@ class xWebServer():
 
         if self.configx.pgdebug > 2:
            print(self.configx.getvals())
-
-        self.start_time = datetime.datetime.now()
 
         logd = self.configx.datapath + "data"
         if not os.access(logd, os.X_OK):
@@ -71,7 +71,7 @@ class xWebServer():
             # Print less stuff
             if not "siteicons" in environ['PATH_INFO']:
                 sss = [environ['REQUEST_METHOD'], environ['PATH_INFO']]
-                print( str(self.start_time), *sss, file=self.logfp, flush=True)
+                print(str(self.start_time), *sss, file=self.logfp, flush=True)
 
             #print( str(self.start_time), environ, file=self.logfp, flush=True)
 

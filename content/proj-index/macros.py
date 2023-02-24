@@ -25,10 +25,15 @@ import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 from . import common
 
+_glob_siteemail =  "admin@unitedplanetpeace.com"
 _glob_tabhead   = "#ccffcc { tabhead }"
 _glob_misscol   = "#eeeeee"
+
+# String parsed before function
 _glob_sitecolor = "#aaffbb"
 
+#def _func_sitecolor(strx, context):
+#    return "#aaffff"
 
 _mac_CompanyName = '''UPP the United Planet Peace'''
 
@@ -92,13 +97,12 @@ body {
 .row {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 /* Left column */
 .leftcolumn {
-  flex: 20%;
-  order 0;
+  flex: 25%;
   background-color: #f1f1f1;
   padding-left: 20px;
   /*visibility: collapse;*/
@@ -106,15 +110,13 @@ body {
 }
 /* Mid column */
 .midcolumn {
-  flex: 55%;
-  order: 0;
+  flex: 50%;
   background-color: #f1f1f1;
   padding-left: 20px;
 }
 /* Right column */
 .rightcolumn {
-  flex: 20%;
-  order: 0;
+  flex: 25%;
   background-color: #f1f1f1;
   padding-left: 20px;
 }
@@ -171,7 +173,14 @@ a:link, a:visited {
     max-width: 800px;
 }
 
-@media (max-width:650px) {
+
+@media (max-width:600px) {
+
+    .row {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
 
     .midcolumn {
       flex: 100%;
@@ -193,32 +202,29 @@ a:link, a:visited {
     }
 }
 
-@media (max-width:550px) {
+@media (min-width:600px) and (max-width:1000px) {
 
-    .row {
-        flex-direction: row;
-        flex-wrap: wrap;
+  .row {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
     }
 
-    .midcolumn {
-      flex: 100%;
-      order: 1;
-      background-color: white;
-      padding: 20px;
-    }
     .leftcolumn {
-      flex: 100%;
-      order: 2;
       background-color: #f1f1f1;
       padding: 20px;
+      flex: 25%;
+    }
+    .midcolumn {
+      background-color: white;
+      padding: 20px;
+      flex: 75%;
     }
     .rightcolumn {
-      order: 3;
-      flex: 100%;
-      backgrou	background-color: white;
+      background-color: white;
       padding: 20px;
+      flex: 100%;
     }
-
 }
 
 </style>
@@ -248,8 +254,8 @@ def _glob_headurl(strx, context):
 
     rrr = '''
         <tr>
-        <td width=25%%> &nbsp;
-        <td valign=bottom>
+        <td width=50%%> &nbsp;
+        <td valign=center>
                 <a href=%s>
                 <img src=/siteicons/dot.png />
                 </a>
@@ -257,23 +263,23 @@ def _glob_headurl(strx, context):
         <td align=left>
         <font size=+1>
         <a href=%s> %s </a><br>
-        <td width=25%%> &nbsp;
+        <td width=50%%> &nbsp;
     ''' % (sss[1], sss[1], sss[2])
 
     return rrr
 
 _glob_site_left = '''
 
-    <table border=0 align=center>
+    <table border=0 align=center width=100%>
         <tr><td bgcolor={ tabhead } align=center colspan=3 height=36>
             <font size=+1><b>Main Navigation</b>
         <tr>
-            <td height=6 colspan=3>
+            <td height=6>
         <tr>
-            <td> &nbsp;
+            <td width=50%> &nbsp;
             <td align=center>
                 <img src="/media/upp.png" title="Main">
-            <td> &nbsp;
+            <td width=50%> &nbsp;
         <tr>
             <td> &nbsp;
             <td>
@@ -283,7 +289,7 @@ _glob_site_left = '''
             <td> &nbsp
     </table>
 
-    <table border=0 align=center>
+    <table border=0 align=center width=100%>
         <tr>
         { headurl index.html Home&nbsp;Page }
         { headurl log.html Log&nbsp;Page }
@@ -293,7 +299,7 @@ _glob_site_left = '''
         { headurl index.html Another&nbsp;Page }
         { headurl broken.html Broken&nbsp;Page }
 
-        <tr><td height=12 colspan=3>
+        <tr><td height=12>
     </table>
 
 '''
@@ -500,7 +506,7 @@ _mac_header2 = '''
             <td align=right>
                  <font size=-1>Quick feedback:</font>  &nbsp;
                 <input type=text name="feedname" onfocus="{ clr }" value=" Your Name" size=10>
-                <input type=text name="feedtit"  onfocus="{ clr }" value=" Feddback Title" size=10>
+                <input type=text name="feedtit"  onfocus="{ clr }" value=" Feddback Title" size=10> <br>
                 <input type=text name="feedtxt"  onfocus="{ clr }" value=" Feedback Content" size=12>
                 <input type=submit name='feedSUB' value='Submit'>
             <td>
@@ -534,17 +540,6 @@ _glob_header = '''
                 <img src=/siteicons/mail-forward.png class=image title="Mail / Contact Us">
                 <a href=index.html> <img src=/siteicons/application-exit.png title="Enter / Log In"></a>
     </table>
-'''
-
-_glob_footer2 = '''
-    <tr  height=47 { bgcolor } >
-    <td align=center width=35%>
-    <font size=+2> <b>Contact zSite Admin</b> </font>
-    <b>{ siteemail }</b>
-            <td align=center> Copyright (C) Open Source
-            <td align=right>
-                <img src=/siteicons/system-log-out.png class=image title="Log Out / Leave">
-                &nbsp; &nbsp;
 '''
 
 #_glob_site_footer = '''

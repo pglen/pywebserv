@@ -8,7 +8,9 @@
 import sys, os, time, re, traceback
 import wsgi_global, wsgi_util, wsgi_str
 
-_MAX_RECURSE = 50
+_MAX_RECURSE = 10           # This many recursions
+_MAX_REPARSE = 2            # This many passes
+
 _regex = "{ .*? }"
 _regex2 = "\[ .*? \]"
 
@@ -29,16 +31,19 @@ def _parse_items(item, context, table):
         #print("aa", aa)
         #if item2[1][2:-2] == aa[0]:
         if item2[1] == aa[0]:
+            # String expansion
             if type(aa[1]) == str:
                 if context.configx.parse_verbose:
                     print("str: ",  context.url, wsgi_str.strpad(item),
-                             wsgi_str.strupt(aa[1]))
+                             wsgi_str.strupt(aa[1],40))
 
-                #if context.configx.parse_inline and not in_arg :
-                #    return "<!-- expanded var from: " + aa[0] + " -->" + aa[1]
-
+                # This polluted inside the tag
+                if context.configx.parse_inline and not in_arg :
+                    #print("\n<!-- print var from: " + aa[0] + " -->" + aa[1])
+                    pass
                 return aa[1]
 
+            # Function?
             if type(aa[1]) == type(_parse_items):
                 # print(context.getvals())
                 if context.configx.parse_verbose:
@@ -53,7 +58,7 @@ def _parse_items(item, context, table):
                 #print("cccc", cccc[:12])
 
                 if context.configx.parse_inline and not in_arg :
-                    return "<!-- expanded func from: " + aa[0] + " -->" + cccc
+                    return "<!-- expanded func from: " + aa[0] + " -->\n" + cccc
 
                 return cccc
     return item
@@ -163,33 +168,31 @@ def recursive_parse(buff, context, local_table):
         # Remeber max 10 levels in and 4 levels across tables
 
         # Mon 20.Feb.2023 deleted in favour of repeat logic
-
-        #if parsed2 == parsed3:
-        #    # All done ...
-        #    break
-
-        if local_table:
-            try:
-                parsed4 = _parse_one(parsed3, context,  local_table, _regex)
-                #print("parsed4", parsed4)
-            except:
-                #wsgi_util.put_exception("exception in local parser second run", )
-                parsed4 = parsed3
-        else:
-            parsed4 = parsed3
-
+        #if local_table:
+        #    try:
+        #        parsed4 = _parse_one(parsed3, context,  local_table, _regex)
+        #        #print("parsed4", parsed4)
+        #    except:
+        #        #wsgi_util.put_exception("exception in local parser second run", )
+        #        parsed4 = parsed3
+        #else:
+        #    parsed4 = parsed3
         #print("re-local %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
+        #buff = parsed4
 
-        #buff = parsed3
+        # Are we done yet?
+        if cnt > _MAX_REPARSE:
+            break
 
-        #if cnt > 1:
-        #    break
-        #cnt += 1
+        cnt += 1
+        # Loop back
+        buff = parsed3
 
-        break
+        #break
 
     #print("Full %.4f" % ( (time.perf_counter() - sss) * 1000), "ms")
 
-    return parsed4
+    #return parsed4
+    return parsed3
 
 # EOF

@@ -408,13 +408,12 @@ init_rc =  [   \
     #("xarticle2",       wsgi_res.article2),
     #("recursive",       wsgi_res.recursive),     # Do not add this, just for testing
     #("nullcolor",       "#cccccc"),
+    #("sitecolor",       "#aaffbb"),
 
-    # This junk added parse ms 2.x time ... de activated it
+    # This junk (above) added to parse time  2+ msec ... de activated it
 
-    ("siteemail",       "admin@unitedplanetpeace.com"),
     ("spacer",          "<table><tr><td></table>"),
     ("linespacer",      "<tr><td height=8>"),
-    ("sitecolor",       "#aaffbb"),
     ("feedwidth",       "400"),
     ("feedheight",      "300"),
     ("thumbwidth",      "120"),

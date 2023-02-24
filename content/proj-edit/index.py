@@ -36,7 +36,7 @@ def got_index(config, carry):
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
 
     if carry.request:
-        #print("carry.request", carry.request)
+        print("carry.request", carry.request)
         rq = []
         for aa in carry.request:
             rq.append(aa[1])

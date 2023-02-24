@@ -111,7 +111,7 @@ def     app_two_func(strx, context):
         wday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         content += "<tr>"
         for cc in range(7):
-            content += "<td> <font size=-1>" + wday[cc]
+            content += "\n<td> <font size=-1>" + wday[cc]
         for aa in range(5):
             content += "<tr>"
             for bb in range(7):
@@ -129,7 +129,7 @@ def     app_two_func(strx, context):
                 else:
                     content += "<td> <font size=-1>" + "&nbsp;"
 
-        content += "</table>"
+        content += "</table>\n"
 
     except:
         print("Exception on app_two_func", sys.exc_info())

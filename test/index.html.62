@@ -1,0 +1,541 @@
+
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+   div {
+    display: block;
+}
+
+body {
+  font-family: Arial;
+  padding: 10px;
+  background: #f1f1f1;
+}
+
+/* Header/Blog Title */
+.header {
+  /*padding: 30px;*/
+  text-align: center;
+  background: white;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+/* Style the top navigation bar
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+*/
+
+/* Style the topnav links
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+*/
+
+/* Change color on hover
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+*/
+
+/* -------------------------------------------------------------------- */
+/* Column container */
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+/* Left column */
+.leftcolumn {
+  flex: 20%;
+  order 0;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+  /*visibility: collapse;*/
+  /*overflow: hidden;*/
+}
+/* Mid column */
+.midcolumn {
+  flex: 55%;
+  order: 0;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+}
+/* Right column */
+.rightcolumn {
+  flex: 20%;
+  order: 0;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+}
+
+/* -------------------------------------------------------------------- */
+
+.plain {
+    #border: 0;
+    #background-color: #333333;
+    border-radius: 0px;
+}
+
+.image {
+  opacity: 1;
+  display: inline;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+  //corner-radius: 15px;
+}
+
+img {
+  opacity: 1;
+  display: inline;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+  border-radius: 15px;
+}
+.container {
+  position: relative;
+  width: 50%;
+}
+.container:hover .image {
+  opacity: 0.3;
+}
+.container:hover .middle {
+  opacity: 1;
+}
+a:link, a:visited {
+    //color: black;
+    text-decoration: none;
+    decoration: none;
+}
+.up-class {
+    writing-mode: sideways-lr;
+    text-orientation: mixed;
+    background-color:  #aaffaa;
+}
+.textx {
+    border-radius: 10px;
+    background-color:  #cccccc;
+    padding: 10px;
+    max-width: 800px;
+}
+
+@media (max-width:650px) {
+
+    .midcolumn {
+      flex: 100%;
+      order: 1;
+      background-color: white;
+      padding: 20px;
+    }
+    .leftcolumn {
+      flex: 100%;
+      order: 2;
+      background-color: #f1f1f1;
+      padding: 20px;
+    }
+    .rightcolumn {
+      order: 3;
+      flex: 100%;
+      background-color: white;
+      padding: 20px;
+    }
+}
+
+@media (max-width:550px) {
+
+    .row {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .midcolumn {
+      flex: 100%;
+      order: 1;
+      background-color: white;
+      padding: 20px;
+    }
+    .leftcolumn {
+      flex: 100%;
+      order: 2;
+      background-color: #f1f1f1;
+      padding: 20px;
+    }
+    .rightcolumn {
+      order: 3;
+      flex: 100%;
+      backgrou	background-color: white;
+      padding: 20px;
+    }
+
+}
+
+</style>
+
+<script language="javascript">
+function toggle(tt, dt) {
+    var ele = document.getElementById(tt);
+    var text = document.getElementById(dt);
+    if(ele.style.display == "block") {
+            ele.style.display = "none";
+        text.innerHTML = "<font size=-1>show again ...</font>";
+    }
+    else {
+        ele.style.display = "block";
+        text.innerHTML = "<font size=-1>hide</font>";
+    }
+}
+</script>
+
+
+
+    <table width=100% bgcolor=#aaffbb border=0>
+        <form method=post>
+            <tr><td>
+            <a href=index.html>
+            <font size=+2><center><b>Welcome to UPP Site Editor, </a> </font> <br>
+            <!-- &nbsp; &nbsp; &nbsp;  -->
+            the editing site for United Planet Peace<br>
+            <font size=-1 color=red>Authorized users only</center></font>
+
+            <!-- (under construction, check back later) --!>
+             <td align=right width=40%>
+                <!--
+                <font size=-1>Quick feedback:</font>  &nbsp;
+                <input type=text name="feedname" onfocus=" if(this.value[0]==' ')this.value='' " value=" Your Name" size=10>
+                <input type=text name="feedtit"  onfocus=" if(this.value[0]==' ')this.value='' " value=" Feddback Title" size=10>
+                <input type=text name="feedtxt"  onfocus=" if(this.value[0]==' ')this.value='' " value=" Feedback Content" size=12>
+                <input type=submit name='feedSUB' value='Submit'>
+                 -->
+            <td>
+
+        </form>
+            <td align=right width=18%>
+                Search site: &nbsp; <input type=text value="" size=12>
+                <td align=right>
+                <img src=/siteicons/mail-forward.png class=image title="Mail / Contact Us">
+                <a href=index.html> <img src=/siteicons/application-exit.png title="Enter / Log In"></a>
+    </table>
+
+    <table width=100%  cellspacing=2 cellpadding=0 border=0>
+        <tr><td bgcolor=#eeeeee width=15% valign=top>
+            
+
+    <table border=0 align=center>
+        <tr><td bgcolor=#ccffcc #ccffcc #ccffcc { tabhead } align=center colspan=3 height=36>
+            <font size=+1><b>Main Navigation</b>
+        <tr>
+            <td height=6 colspan=3>
+        <tr>
+            <td> &nbsp;
+            <td align=center>
+                <img src="/media/upp.png" title="Main">
+            <td> &nbsp;
+        <tr>
+            <td> &nbsp;
+            <td>
+                <a href=/index.html>
+                <img src="/media/united_planet_logo_300.png" title="Main Logo">
+                </a>
+            <td> &nbsp
+    </table>
+
+    <table border=0 align=center>
+        <tr>
+        
+        <tr>
+        <td width=25%> &nbsp;
+        <td valign=bottom>
+                <a href=index.html>
+                <img src=/siteicons/dot.png />
+                </a>
+        <td> &nbsp;
+        <td align=left>
+        <font size=+1>
+        <a href=index.html> Home&nbsp;Page </a><br>
+        <td width=25%> &nbsp;
+    
+        
+        <tr>
+        <td width=25%> &nbsp;
+        <td valign=bottom>
+                <a href=log.html>
+                <img src=/siteicons/dot.png />
+                </a>
+        <td> &nbsp;
+        <td align=left>
+        <font size=+1>
+        <a href=log.html> Log&nbsp;Page </a><br>
+        <td width=25%> &nbsp;
+    
+        
+        <tr>
+        <td width=25%> &nbsp;
+        <td valign=bottom>
+                <a href=index.html>
+                <img src=/siteicons/dot.png />
+                </a>
+        <td> &nbsp;
+        <td align=left>
+        <font size=+1>
+        <a href=index.html> Blog&nbsp;Page </a><br>
+        <td width=25%> &nbsp;
+    
+        
+        <tr>
+        <td width=25%> &nbsp;
+        <td valign=bottom>
+                <a href=index.html>
+                <img src=/siteicons/dot.png />
+                </a>
+        <td> &nbsp;
+        <td align=left>
+        <font size=+1>
+        <a href=index.html> Personal&nbsp;Page </a><br>
+        <td width=25%> &nbsp;
+    
+        
+        <tr>
+        <td width=25%> &nbsp;
+        <td valign=bottom>
+                <a href=index.html>
+                <img src=/siteicons/dot.png />
+                </a>
+        <td> &nbsp;
+        <td align=left>
+        <font size=+1>
+        <a href=index.html> Tech&nbsp;Page </a><br>
+        <td width=25%> &nbsp;
+    
+        
+        <tr>
+        <td width=25%> &nbsp;
+        <td valign=bottom>
+                <a href=index.html>
+                <img src=/siteicons/dot.png />
+                </a>
+        <td> &nbsp;
+        <td align=left>
+        <font size=+1>
+        <a href=index.html> Another&nbsp;Page </a><br>
+        <td width=25%> &nbsp;
+    
+        
+        <tr>
+        <td width=25%> &nbsp;
+        <td valign=bottom>
+                <a href=broken.html>
+                <img src=/siteicons/dot.png />
+                </a>
+        <td> &nbsp;
+        <td align=left>
+        <font size=+1>
+        <a href=broken.html> Broken&nbsp;Page </a><br>
+        <td width=25%> &nbsp;
+    
+
+        <tr><td height=12 colspan=3>
+    </table>
+
+
+            
+<td valign=top>
+
+     <center>
+     
+ <table width=100% #aaffbb border=0>
+    <tr  height=36>
+    <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
+    <a href=index.html> <b> United Planet Peace </b> </a>
+    </font>
+        <td>
+        <table width=100% border=0>
+            <tr align=center>
+                <td>
+                <td> <a href=index.html>
+                     <img src=/siteicons/go-home.png class=image title="Back to home page"> </a>
+                <td> <img src=/siteicons/emblem-default.png class=image title="Go forward">
+                <td> <img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
+                <td> <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
+                <td>
+        </table>
+
+     </table>
+
+
+     
+    <table width=100% border=0>
+        <tr><td align=center>
+        
+    <tr> <td colspan=7 align=center>
+            <p><font size=+3>Data Review</font>
+            <br>
+    <table border=0 width=100%><form action=editor.html method=post>
+
+<tr style="background-color:#ddeedd">
+      <td>16wwwww
+      <td>10
+      <td>111111
+      <td>22
+      <td>33
+            <td width=10>
+            <input type=submit id=idsub name=ed_17  value="Edit" >
+            <br>
+            <input type=submit id=idsub name=del_17 value="  Del " >
+            
+
+<tr style="background-color:#cceecc">
+      <td>10
+      <td>111111
+      <td>22
+      <td>33
+      <td>44
+            <td width=10>
+            <input type=submit id=idsub name=ed_16  value="Edit" >
+            <br>
+            <input type=submit id=idsub name=del_16 value="  Del " >
+            
+
+<tr style="background-color:#ddeedd">
+      <td>11
+      <td>22
+      <td>33
+      <td>44
+      <td>44
+            <td width=10>
+            <input type=submit id=idsub name=ed_10  value="Edit" >
+            <br>
+            <input type=submit id=idsub name=del_10 value="  Del " >
+            
+
+<tr style="background-color:#cceecc">
+      <td>int. char ... ре времен
+      <td>vvvvvvvvv ... vvvvvvvvv
+      <td>vvwwwwwww ... wwwwwwwww
+      <td>xxxxxxxxx ... xxxxxxxxx
+      <td>yyyyyyyyy ... yyyyyyyyy
+            <td width=10>
+            <input type=submit id=idsub name=ed_9  value="Edit" >
+            <br>
+            <input type=submit id=idsub name=del_9 value="  Del " >
+            
+
+<tr style="background-color:#ddeedd">
+      <td>Времена г ... ре времен
+      <td>wwww
+      <td>wwwwww
+      <td>wwwwwwwwwwwwww
+      <td>wwwwwww
+            <td width=10>
+            <input type=submit id=idsub name=ed_7  value="Edit" >
+            <br>
+            <input type=submit id=idsub name=del_7 value="  Del " >
+            
+
+<tr style="background-color:#cceecc">
+      <td>Времена г ... ре времен
+      <td>wwww
+      <td>
+      <td>
+      <td>wwwwwww
+            <td width=10>
+            <input type=submit id=idsub name=ed_3  value="Edit" >
+            <br>
+            <input type=submit id=idsub name=del_3 value="  Del " >
+            
+
+<tr style="background-color:#ddeedd">
+      <td>qqqqqqqq
+      <td>wwwwwww
+      <td>eeeeeeee
+      <td>rrrrrrrr
+      <td>ttttttttt
+            <td width=10>
+            <input type=submit id=idsub name=ed_2  value="Edit" >
+            <br>
+            <input type=submit id=idsub name=del_2 value="  Del " >
+            
+
+<tr style="background-color:#cceecc">
+      <td>111
+      <td>222
+      <td>333
+      <td>444
+      <td>5555
+            <td width=10>
+            <input type=submit id=idsub name=ed_1  value="Edit" >
+            <br>
+            <input type=submit id=idsub name=del_1 value="  Del " >
+            </table>
+
+    </table>
+
+
+            
+    <table width=100% border=0>
+        <tr align=center>
+            <td align=right>
+                &nbsp <img src=/siteicons/media-skip-backward.png title="Backward Front">
+                &nbsp <img src=/siteicons/media-seek-backward.png title=Backward>
+                <td width=150px>
+                &nbsp; Navigation &nbsp;
+                <td align=left>
+                &nbsp <img src=/siteicons/media-seek-forward.png title=Forward>
+                &nbsp <img src=/siteicons/media-skip-forward.png title="Forward Front">
+    </table>
+
+            
+    <form action=editor.html method=post>
+    <input type=submit name='add_new' value='Add New'>
+    </form>
+
+            
+
+  <!-- <td width=20% valign=top> -->
+
+  <table border=0 width=100% cellpadding=3>
+    <tr><td bgcolor=#ccffcc #ccffcc #ccffcc { tabhead } height=36 align=center>
+        <font size=+1> <b>Misc</b>
+    <tr><td>
+    <tr><td>
+        &nbsp; &nbsp;
+        <b>Last column, maybe ads</b><br>
+        cogito ero sum cogito ero sum cogito ero sum
+        cogito ero sum cogito ero sum cogito ero sum
+        cogito ero sum cogito ero sum cogito ero sum
+        { deep }<br>
+        <table width=100% border=0>
+        <tr><td align=center bgcolor=#cccccc><b>APP ONE</b><br>
+        <tr><td>
+        <tr><td>code for app 1 comes here
+        <tr><td>code for app 1 comes here
+        <tr><td>code for app 1 comes here
+        <tr><td>code for app 1 comes here
+        <tr><td>code for app 1 comes here
+        <tr><td>
+        </table>
+         <p>
+        App2 here <p>
+        { testapp3 }
+</table>
+
+    </table>
+{ site_footer }
+

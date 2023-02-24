@@ -52,8 +52,8 @@ _mac_center_top = '''
                 <td> <img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
                 <td> <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
                 <td>
-        </table>
-     </table>
+        </table>\n
+     </table>\n
 '''
 
 _mac_edit_center = '''
@@ -86,7 +86,7 @@ def imgrow_data(strx, context):
     if not context.xdata:
         print("No data in context",)
         strx += "No Data"
-        strx += "</form>"
+        strx += "</form>\n"
         return strx
 
     cnt = 0
@@ -98,11 +98,11 @@ def imgrow_data(strx, context):
             trcolor = "#ddeedd"
         else:
             trcolor = "#cceecc"
-        strx += '''<tr style=\"background-color:%s\">''' %  trcolor
+        strx += '''\n\n<tr style=\"background-color:%s\">''' %  trcolor
 
         for bb in onerec[1:]:
             bb = wsgi_str.strtrim(bb)
-            strx += "<td > <font>%s</font> " % bb
+            strx += "\n      <td>%s" % bb
         cnt += 1
 
         # Buttons
@@ -180,8 +180,8 @@ def imgrow_data(strx, context):
                   Image row text Image row text Image row text Image row text
                   Image row text Image row text Image row text Image row text
                   </div>
-            </table>
-       </table>
+            </table>\n
+       </table>\n
     '''
 
     desc = '''
@@ -233,11 +233,10 @@ def mid_rows(strx, carryon):
         # Render it
         ret +=  "{ imgrow_data }"
 
-    ret += "</table>"
+    ret += "</table>\n"
 
     # Remove all data from memory
-    #carryon.xdata = [];
-    #carryon.hdata = []
+    #carryon.xdata = []; carryon.hdata = []
     #context.localdb.close()
     return ret
 
@@ -280,10 +279,6 @@ _mac_right = '''
             cogito ergo sum cogito ergo sum cogito ero sum
             cogito ero sum cogito ero sum cogito ero sum
             cogito ero sum cogito ero sum cogito ero sum
-            { deep }<br>
-            { app_one } <p>
-            { app2 } <p>
-            { app3 }
         </table>
 '''
 

@@ -86,6 +86,9 @@ def isskip(aaa):
     if "data/" in aaa:
         #print("Skipping data dir", aaa)
         ret = True
+    if "test/" in aaa:
+        #print("Skipping data dir", aaa)
+        ret = True
     return ret
 
 def  rescan():

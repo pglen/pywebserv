@@ -448,7 +448,7 @@ _glob_site_right = '''
         { deep }<br>
         { app_one } <p>
         { app2 } <p>
-        { app3 }
+        { testapp3 }
 </table>
 '''
 

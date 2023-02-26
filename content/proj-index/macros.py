@@ -173,7 +173,6 @@ a:link, a:visited {
     max-width: 800px;
 }
 
-
 @media (max-width:600px) {
 
     .row {
@@ -397,17 +396,15 @@ _mac_main_center = '''
             </table>
         </table>
 
-        { loadData proj-edit xx 0 4 }
-
-        <!-- len={ xxDataLen }<br> -->
-
         <table border=0>
             <tr valign=top>
-            <td valign=middle bgcolor=#cccccc> &nbsp; << &nbsp; &nbsp;
+            <td valign=middle bgcolor=#cccccc> &nbsp; << &nbsp;
             { article 0 }
             <td valign=middle bgcolor=#cccccc>
             { article 1 }
-            <td valign=middle bgcolor=#cccccc> &nbsp; >> &nbsp; &nbsp;
+            <td valign=middle bgcolor=#cccccc>
+            { article 2 }
+            <td valign=middle bgcolor=#cccccc> &nbsp; >> &nbsp;
          </table>
 
        <!-- { feed_data } -->
@@ -445,22 +442,31 @@ _glob_site_right = '''
     <tr><td bgcolor={ tabhead } height=36 align=center>
         <font size=+1> <b>Misc</b>
     <tr><td>
-    <tr><td>
+    <tr><td align=center>
         &nbsp; &nbsp;
-        <b>Last column, maybe ads</b><br>
-        cogito ero sum cogito ero sum cogito ero sum
-        cogito ero sum cogito ero sum cogito ero sum
-        cogito ero sum cogito ero sum cogito ero sum
-        { deep }<br>
+        <b>Last column, maybe ads</b><p>
+        cogito ergo sum cogito ergo sum cogito ergo sum
+        cogito ergo sum cogito ergo sum cogito ergo sum
+        cogito ergo sum cogito ergo sum cogito ergo sum
+        <br>
         { app_one } <p>
-        { app2 } <p>
-        { testapp3 }
+        { app_two } <p>
 </table>
 '''
 
 def _func_article(strx, context):
 
     ddd = wsgi_func.parse_args(strx, context)
+    print("ddd", ddd)
+
+    #print("article", context.prog)
+    #print("article res", context.res)
+    #print("_func_article", context)
+
+    idx = context.prog + int(ddd[1])
+    res = context.res
+
+    print("res[0]", res[0])
 
     sss = '''
     <td>
@@ -469,21 +475,20 @@ def _func_article(strx, context):
             <table border=0 bgcolor=#f5f5f5>
             <tr>
                 <tr><td colspan=2>
-                <font size=+2> { getData xx %s 1 }
+                <font size=+2> %s
                 <tr>
                 <td>
                 { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
                 <td>
-                    { getData xx %s 2 }
+                    %s
                 <tr><td colspan=2>
-                    { getData xx %s 3 }
                 <tr><td colspan=2 style="text-alignment:justify">
-                    { getData xx %s 4 }<br>
-                    { getData xx %s 5 }<br>
-                    <!-- { getData xx %s 6 }<br> -->
+                    %s <br>
+                    %s<br>
             </table>
         </table>
-    ''' % (ddd[1], ddd[1], ddd[1], ddd[1], ddd[1], ddd[1], )
+    ''' % ( res[idx][2], res[idx][3], res[idx][4], res[idx][5])
+
     return sss
 
 _mac_article5 = '''Hello'''
@@ -520,8 +525,12 @@ _mac_header2 = '''
 _glob_header = '''
 
     <table width=99% bgcolor={ sitecolor } border=0>
-    <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
-     <a href=index.html><b>{ CompanyName }</b></a>
+    <td align=center width=30%> &nbsp; &nbsp;
+    <font size=+2>
+        <a href=index.html><b>{ CompanyName }</b></a>
+    </font><br>
+     <font color=red>
+         Please Note, that Site is Under Construction
      </font>
             <td align=center>
                 <table width=100%  border=0>

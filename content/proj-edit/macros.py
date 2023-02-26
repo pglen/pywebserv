@@ -18,24 +18,6 @@ _mac_ShortCName = ''' United Planet Peace '''
 
 # ------------------------------------------------------------------------
 
-def fill_data(carryon, localdb, recnum):
-
-    #print("localdb", localdb)
-    #print("recnum", recnum)
-
-    res = localdb.getbyid(recnum)
-    if not res:
-        return "empty field"
-
-    # use hdata as filter for duplicates
-    if res[0] in carryon.hdata:
-        #print("skip:", recnum, wsgi_util.strupt(res[0]))
-        return None
-
-    carryon.hdata.append(res[0])
-    carryon.xdata.append((str(recnum), *res))
-
-
 _mac_center_top = '''
  <table width=100% { sitecolor } border=0>
     <tr  height=36>
@@ -221,14 +203,17 @@ def mid_rows(strx, carryon):
         #print("got", recs, " records")
 
         ret += "<table border=0 width=100%>"
-        carryon.xdata = []; carryon.hdata = []
+        carryon.xdata = [];  hdata = []
         # Starting at the end
         for aa in range(recs-1, -1, -1):
-            fill_data(carryon, carryon.localdb, aa)
-
-        #print("xdata", carryon, carryon.xdata)
-        # check for end
-        #carryon.xdata.append((str(aa), "END", "", "", "", "", "") )
+            res = carryon.localdb.getbyord(aa)
+            if not res:
+                 continue
+            # use hdata as filter for duplicates
+            if not res[0] in hdata:
+                #print("skip:", recnum, wsgi_util.strupt(res[0]))
+                hdata.append(res[0])
+                carryon.xdata.append((str(aa), *res))
 
         # Render it
         ret +=  "{ imgrow_data }"

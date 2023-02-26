@@ -41,12 +41,12 @@ def got_editor(config, carry):
 
         if carry.request[0][1] == "Edit":
             rq = carry.request[0][0].split("_")
-            #print("rq edit data:", rq)
+            print("rq edit data:", rq)
 
             carry.xdata = []; carry.hdata = []
-            macros.fill_data(carry, carry.localdb, rq[1])
-            res = carry.xdata[0]
-            #print("res:", res)
+            #macros.fill_data(carry, carry.localdb, rq[1])
+            res = carry.localdb.getbyord(rq[1])
+            print("res:", res)
             if not res:
                 #delete(carry.localdb)
                 print("Cannot load data", rq[1], carry.localdb)
@@ -54,11 +54,14 @@ def got_editor(config, carry):
                 return content
             carry.cdata += "<table border=0>"
             #fnames = ("key", "arg 1", "arg 2","arg 3","arg 4", "arg 5")
-            for aa in range(len(res)):
+            carry.cdata += "Key: '" +  str(res[0]) + "'<p>"
+            carry.cdata += "<input type=hidden name=key value=%s" % (str(res[0])) + ">"
+
+            for aa in range(len(res)-1):
                 carry.cdata += \
-                    "<tr><td> " + "arg %d" % aa + " <td> : &nbsp;  " + \
-                        "<td><textarea cols=64 rows=4 name='aa_%d' % aa>" + \
-                            str(res[aa]) + "</textarea><p>"
+                    "<tr><td> " + "arg %d" % (aa) + " <td> : &nbsp;  " + \
+                        "<td><textarea cols=64 rows=4 name='aa_%d'" % (aa) + ">" + \
+                            str(res[aa+1]) + "</textarea><p>"
             carry.cdata += "</table>"
 
         elif carry.request[0][1] == "Add New":
@@ -73,9 +76,7 @@ def got_editor(config, carry):
 
         elif "Del" in carry.request[0][1]:
             rq = carry.request[0][0].split("_")
-            #print("rq delete data", rq[1])
-            #carry.localdb.put("key_" + rq[0], rq[0], rq[1], rq[2], "")
-
+            print("rq delete data", rq[1])
         else:
             print("Invalid (unimplemented) command code")
 
@@ -97,12 +98,20 @@ def one_center(strx, context):
     content += "<td width=70% align=center valign=top><p><p>"
 
     if context.request[0][1] == "Edit":
-        content += "Record %d" % int(context.request[0][0][3:])
-    else:
+        content += "Editing Record Num: %d" % int(context.request[0][0][3:])
+    elif context.request[0][1] == "Add New":
         content += "New Record "
+    elif "Del" in context.request[0][1]:
+        content += "Delete"
+    else:
+        content += "Invalid context"
 
-    content += "<p><p> " + context.cdata  + "<p>"
-    content += "<input type=submit value='Save Data'>"
+    content += "<p> " + context.cdata  + "<p>"
+
+    if context.request[0][1] == "Edit" or \
+            context.request[0][1] == "Add New":
+        content += "<input type=submit value='Save Data'>"
+
     content += "</form >"
     return content
 
@@ -114,4 +123,3 @@ except:
     #print("Exception on editor init vars", sys.exc_info())
     wsgi_util.put_exception("in Editor")
     raise
-

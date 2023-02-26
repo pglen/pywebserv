@@ -5,7 +5,7 @@
 import sys, os, mimetypes, time, sqlite3, uuid
 import wsgi_util
 
-sys.path.append("../..")
+sys.path.append("..")
 from  pydbase import twincore
 from  pydbase import pypacker
 
@@ -85,19 +85,36 @@ class wsgipydb():
         #print("ddd", ddd)
         self.db.save_data(key, sss)
 
-    def  getbyid(self, kkk):
-        #print("byid", kkk)
-        sss = self.db.get_rec(int(kkk))
+    def getrange(self, beg, count = 1):
+        ccc = self.db.getdbsize()
+        print("getrange", beg, count)
+        res =  self.getbyord(beg)
+        return res
+
+    def  getall(self):
+        ccc = self.db.getdbsize()
+        check = [] ;  arr = []
+        for aa in range(ccc - 1, -1, -1):
+            aaa = self.db.get_rec(aa)
+            if aaa[0] not in check:
+                check.append(aaa[0])
+                aaa[0] = aaa[0].decode()
+                ddd = self.packer.decode_data(aaa[1].decode("utf-8"))
+                # Save ordinal and key / data
+                arr.append((aa, aaa[0], *ddd[0]))
+        return arr
+
+    def  getbyord(self, numx):
+        #print("by ord", numx)
+        sss = self.db.get_rec(int(numx))
         #print("sss[0]", sss[0], "sss[1]", sss[1].decode("utf-8") )
         ddd = self.packer.decode_data(sss[1].decode("utf-8"))
         #print("ddd", *ddd[0])
         return sss[0].decode("utf-8"), *ddd[0]
 
     def close(self):
-        self.db.close()
-        print("Closed PYDB", self.file)
-        #self.conn.close()
-        #self.db.__del__()
+        print("Soft Closed PYDB", self.file)
+        self.db = None
         pass
 
     def __delete__(self):
@@ -177,7 +194,7 @@ class wsgiSql():
     # --------------------------------------------------------------------
     # Return None if no data
 
-    def  getbyid(self, kkk):
+    def  getbyord(self, kkk):
 
         #print("byid", kkk)
         rr = None
@@ -199,7 +216,7 @@ class wsgiSql():
     # --------------------------------------------------------------------
     # Return None if no data
 
-    def  getrange(self, skip, count):
+    def  getrange(self, skip, count = 1):
 
         #print("byid", kkk)
         rr = None

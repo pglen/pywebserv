@@ -13,7 +13,7 @@ except:
     print("Must install PIL");
 
 import wsgi_util, wsgi_style, wsgi_res, wsgi_global
-import wsgi_parse, wsgi_data
+import wsgi_parse, wsgi_data, wsgi_str
 
 # ------------------------------------------------------------------------
 
@@ -69,14 +69,14 @@ def     app_one_func(strx, context):
 
     ''' Example app function '''
 
-    content = '''<table width=100% border=0>
-        <tr><td align=center bgcolor=#cccccc><b>APP ONE</b><br>
+    content = '''<table width=100% border=0 bgcolor=#dddddd>
+        <tr><td align=center bgcolor=#cccccc><b>APP ONE (Some Strings?)</b><br>
         <tr><td>
-        <tr><td>code for app 1 comes here
-        <tr><td>code for app 1 comes here
-        <tr><td>code for app 1 comes here
-        <tr><td>code for app 1 comes here
-        <tr><td>code for app 1 comes here
+        <tr><td  align=center>code for app 1 comes here
+        <tr><td  align=center>code for app 1 comes here
+        <tr><td  align=center>code for app 1 comes here
+        <tr><td  align=center>code for app 1 comes here
+        <tr><td  align=center>code for app 1 comes here
         <tr><td>
         </table>
         '''
@@ -91,48 +91,82 @@ def     app_two_func(strx, context):
     Mock calendar. Does nothing but presents a calendar looking user interface
     '''
 
-    content = "App2 here"
-    return content
+    #content = "App Two here"
+    #return content
 
     try:
-        content = '''<table width=100% border=1>
+        content = '''<table width=100% border=0  bgcolor=#dddddd>
             <tr><td align=center bgcolor=#cccccc colspan=7><b>APP TWO (Calendar?)</b><br>
         '''
         #        <tr><td>code for app 2 comes here
         dt = datetime.datetime.now()
-        anchor = dt.day % 7;
-        mon = anchor - dt.weekday()
 
+        dt2 = datetime.datetime.now()
+        from calendar import monthrange
         rrr = monthrange(dt2.year, dt2.month)
-        print("dt", dt.weekday(), dt.day, mon, anchor, "rrr", rrr)
 
-        content += "<tr><td colspan=5>"
+        #anchor = dt.day % 7;
+        mon = rrr[0]
+        anchor =	 dt.weekday()
+
+        "day", dt.weekday(), #print("dt", dt.day, "mon", mon, "anchor", anchor, "rrr", rrr)
+
+        content += "<tr><td colspan=7>"
         cnt = 0; cnt2 = 0;
         wday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         content += "<tr>"
         for cc in range(7):
-            content += "\n<td> <font size=-1>" + wday[cc]
+            content += "\n<td  align=center> <font size=-1>" + wday[cc]
+
         for aa in range(5):
             content += "<tr>"
             for bb in range(7):
-                #aa*7 + bb + 1
-                if cnt > rrr:
-                    break
+                #prog = aa*7 + bb + 1
+                #if cnt2 >= rrr[1]:
+                #    break
+
                 cnt += 1
-                if cnt > mon:
-                    content += "<td> <font size=-1>" + str(cnt2+1)
+                if cnt > mon and cnt2 < rrr[1]:
                     cnt2 += 1
-                    if random.randint(0, 255) % 4 == 0:
-                        content += "*"
+
+                    if cnt2 == dt.day:
+                        #print("today")
+                        bgcolor="#eeeeee"
+                        color = "#888888"
                     else:
-                        content += "&nbsp;"
+                        bgcolor="#dddddd"
+                        color = "#000000"
+
+                    content += "<td align=center bgcolor=" + bgcolor + ">"
+                    decor = 0
+                    #if random.randint(0, 255) % 4 == 0:
+                    #    decor = 1;
+
+                    decor = cnt2 % 4 == 0
+                    if decor:
+                        content += "<a href=noting>"
+                    else:
+                        content += " &nbsp; "
+
+                    content += "<font size=-1>" + str(cnt2)
+                    content += "</font>"
+
+                    if decor:
+                        content += "*</a>"
+                    else:
+                        content += " &nbsp; "
                 else:
-                    content += "<td> <font size=-1>" + "&nbsp;"
+                    content += "<td align=center> -"
+
 
         content += "</table>\n"
 
     except:
-        print("Exception on app_two_func", sys.exc_info())
+        wsgi_util.put_exception("Exception on app_two_func")
+
+        # Note that we still complete the table, so the site keeps going
+        content += "</table>\n"
+
     return content
 
 def     image_func(strx, context):
@@ -220,73 +254,48 @@ def     load_data_func(strx, context):
        Arguments:
            arg[0]      command name
            arg[1]      name of module to get the data from
-           arg[2]      prefix of this set
-           arg[3]      optional: fist record
-           arg[4]      optional: record count
 
      Example:
-               { loadData proj-edit xx }
+               { loadData proj-edit }
 
     '''
+
+    print("load_data_func", context)
 
     ddd = parse_args(strx, context)
 
     if context.configx.pgdebug > 3:
         print("load_data_func() ddd", ddd)
 
-    prefix = ""; first = 0; count = 0
-
-    if len(ddd) > 2:
-        prefix = ddd[2]
-    if len(ddd) > 3:
-        first = int(ddd[3])
-    if len(ddd) > 4:
-        count = int(ddd[4])
-
-    #print("cwd", os.getcwd())
-    #print("prefix", prefix, "first", first, "count", count)
-
-    # Get data from the editor;
+    # Get data from the editor project;
     # Careful, passing the wrong filename, it will be created
     try:
-        fff = "./data/%s.sqlt" % ddd[1]
-        localdb = wsgi_data.wsgiSql(fff)
+        fff = "./data/%s.pydb" % ddd[1]
+        localdb = wsgi_data.wsgipydb(fff)
+
     except Exception as e:
         print("Could not create / open local data for '%s'" % fff, e)
-        wsgi_util.put_exception("get data")
+        wsgi_util.put_exception("open / get data")
         return ""
 
-    #print("strx", strx, modname)
-    cnt = 0
+    context.prog = 0
+    # The data is added to the top of the context object
+    context.res = localdb.getall()
 
-    if  count == 0:
-        res = localdb.getall()
-    else:
-        res = localdb.getrange(first, count)
-        if context.configx.pgdebug > 2:
-            print("res", res)
+    # Dump it
+    if context.configx.pgdebug > 2:
+        for aa in context.res:
+            print("res", wsgi_str.strpad(wsgi_str.strupt(str(aa[0]))),
+                        wsgi_str.strupt(str(aa[1:])))
 
-    if not res:
-        res = []
-
+    # Sat 25.Feb.2023 deactivted -- data is now in context variable
     # The data is returned as macros, the page can reference
-    wsgi_global.gl_table.add_one_func(prefix + "DLen", str(len(res)))
-    wsgi_global.gl_table.add_one_func(prefix + "Data", res )
+    #wsgi_global.gl_table.add_one_func(prefix + "DLen", str(len(res)))
+    #wsgi_global.gl_table.add_one_func(prefix + "Data", res )
 
-    #for aa in res:
-    #    cnt2 = 0
-    #    wsgi_global.add_one_func(prefix + "RecLen%d" % cnt2, str(len(aa)))
-    #    for bb in aa:
-    #        wsgi_global.gl_table.add_one_func(prefix + "Dat%d-%d" % (cnt, cnt2), str(bb) )
-    #        cnt2 += 1
-    #    cnt += 1
-
-    localdb.close()
-
-    #wsgi_global.dump_table()
+    #localdb.close()
 
     return ""
-
 
 def     get_data_func(strx, context):
 
@@ -296,27 +305,24 @@ def     get_data_func(strx, context):
 
        Arguments:
            arg[0]      command name
-           arg[1]      prefix of this set
-           arg[2]      index of row
-           arg[3]      index of col
+           arg[1]      index of row
 
      Example:
-               { getData xx %s 5 }
-
+               { getData 1 }
 
     '''
 
     ddd = parse_args(strx, context)
-    #wsgi_global.dump_table()
-    #print("ddd", ddd)
+    print("ddd", ddd)
+    print("context.prog", context.prog)
 
     try:
         item = wsgi_global.gl_table.lookup_item(\
-                        ddd[1] + "Data")[0][int(ddd[2])][int(ddd[3])]
+                        ddd[1] + "Data")[0][int(ddd[1])][int(ddd[2])]
         #print("item", item)
     except IndexError:
         #wsgi_util.put_exception("get data")
-        item = "No data at %s:%s" % (ddd[2], ddd[3])
+        item = "No data at %s:%s" % (ddd[1], ddd[2])
     except:
         wsgi_util.put_exception("get data")
         item = "Error"
@@ -383,14 +389,14 @@ def     build_initial_table():
     try:
         # Built ins
         wsgi_global.gl_table.add_one_func("image",    image_func)
-        wsgi_global.gl_table.add_one_func("getData",  get_data_func)
-        wsgi_global.gl_table.add_one_func("loadData", load_data_func)
+        #wsgi_global.gl_table.add_one_func("getData",  get_data_func)
+        wsgi_global.gl_table.add_one_func("load_data", load_data_func)
         wsgi_global.gl_table.add_one_func("include",  include_func)
         #wsgi_global.gl_table.add_one_func("deep",     deep_func)
 
         # Examples
-        wsgi_global.gl_table.add_one_func("app_one",  app_one_func)
-        wsgi_global.gl_table.add_one_func("app2",     app_two_func)
+        wsgi_global.gl_table.add_one_func("app_one",    app_one_func)
+        wsgi_global.gl_table.add_one_func("app_two",    app_two_func)
 
     except:
         #print("Cannot build global table", sys.exc_info())

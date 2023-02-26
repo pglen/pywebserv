@@ -240,9 +240,12 @@ def application(environ, respond):
         # Make sure we are landing here
         mypath = os.path.dirname(os.path.realpath(__file__));
         sys.path.append(mypath)
+        #print("mypath", mypath)
         sys.path.append(mypath + os.sep + "common")
-        os.chdir(mypath + os.sep + "content");
         sys.path.append(mypath + os.sep + "content")
+        sys.path.append(mypath + os.sep + "pydbase")
+
+        os.chdir(mypath + os.sep + "content");
 
     except:
         print("Cannot import dependent files")

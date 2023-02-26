@@ -10,48 +10,19 @@
     Restarts if any of the files in current dir changed and project dir
     changed; calls the bringfocus batch job to refresh browser
 
+    History:
+        Wed 22.Feb.2023  Filtered log / data / __pyxx files out
+        Sat 25.Feb.2023  Managed to refresh without focus change
+
 '''
 
 import sys, os, time
 import mimetypes, subprocess
 
-#from wsgiref import simple_server, util
-
-#def app(environ, respond):
-#
-#    print("IN app")
-#
-#    fn = os.path.join(path, environ['PATH_INFO'][1:])
-#    if '.' not in fn.split(os.path.sep)[-1]:
-#        fn = os.path.join(fn, 'index.html')
-#    type = mimetypes.guess_type(fn)[0]
-#
-#    if os.path.exists(fn):
-#        respond('200 OK', [('Content-Type', type)])
-#        return [util.FileWrapper(open(fn, "rb"))]
-#    else:
-#        respond('404 Not Found', [('Content-Type', 'text/plain')])
-#        #respond('200 Hello world', [('Content-Type', 'text/plain')])
-#        return [b'not found']
-#        #return "Hello World"
-
-#def serve():
-#        httpd = simple_server.make_server('', port, app)
-#        print("Serving {} on port {}, control-C to stop".format(path, port))
-#        while True:
-#            try:
-#                httpd.handle_request()
-#            except KeyboardInterrupt:
-#                print("Shutting down.")
-#                httpd.server_close()
-#                raise
-#                break
-
 def _re_open():
     #th = subprocess.Popen(["firefox", "localhost:8000"], close_fds=True)
     #th = subprocess.Popen(["xvkbd", "-window", "Firefox", "-text", "\Cr"])
     th = subprocess.Popen(["./bringfocus.sh"], shell=True)
-    #return th
     pass
 
 def _re_serve():

@@ -41,6 +41,11 @@ def got_index(config, carry):
         process_submit(carry.request)
     carry.local_table = common.local_table
 
+    #{ load_data proj-edit }
+
+    # Call this before parse
+    wsgi_func.load_data_func("load_data proj-edit", carry)
+
     content = wsgi_util.process_default(config, carry)
     return content
 

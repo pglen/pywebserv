@@ -41,7 +41,8 @@ def got_index(config, carry):
         for aa in carry.request:
             rq.append(aa[1])
 
-        #print("data rq", rq)
+        print("data rq", rq)
+
         try:
             #startt = time.perf_counter()
             wsgi_data.soft_opendb(carry, modname)

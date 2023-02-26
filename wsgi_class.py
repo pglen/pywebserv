@@ -46,7 +46,7 @@ class xWebServer():
         # Create initial
         self.configx = wsgi_conf.Configx()
         self.configx.mypath = os.path.dirname(os.path.realpath(__file__)) + os.sep
-        self.configx.datapath =  self.configx.mypath + "content"
+        self.configx.datapath =  self.configx.mypath + "content" + os.sep
 
         if self.configx.pgdebug > 1:
             print("self.configx.mypath", self.configx.mypath)

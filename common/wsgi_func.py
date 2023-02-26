@@ -260,7 +260,7 @@ def     load_data_func(strx, context):
 
     '''
 
-    print("load_data_func", context)
+    #print("load_data_func", context)
 
     ddd = parse_args(strx, context)
 

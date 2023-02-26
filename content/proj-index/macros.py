@@ -398,12 +398,16 @@ _mac_main_center = '''
 
         <table border=0>
             <tr valign=top>
-            <td valign=middle bgcolor=#cccccc> &nbsp; << &nbsp;
+             <td valign=middle bgcolor=#cccccc
+                style="cursor:pointer" onclick="location.href='index.html?step=1'">
+                &nbsp; << &nbsp;
+
             { article 0 }
             <td valign=middle bgcolor=#cccccc>
             { article 1 }
             <td valign=middle bgcolor=#cccccc>
             { article 2 }
+
             <td valign=middle bgcolor=#cccccc> &nbsp; >> &nbsp;
          </table>
 
@@ -457,16 +461,15 @@ _glob_site_right = '''
 def _func_article(strx, context):
 
     ddd = wsgi_func.parse_args(strx, context)
-    print("ddd", ddd)
 
-    #print("article", context.prog)
+    #print("ddd", ddd)
     #print("article res", context.res)
     #print("_func_article", context)
 
     idx = context.prog + int(ddd[1])
     res = context.res
 
-    print("res[0]", res[0])
+    #print("res[0]", res[0])
 
     sss = '''
     <td>

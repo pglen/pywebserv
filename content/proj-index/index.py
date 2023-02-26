@@ -37,6 +37,15 @@ def got_index(config, carry):
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
 
+    #print("carry.request", carry.request)
+    print("carry.query", carry.query)
+
+    if carry.query:
+        if "step" in carry.query:
+            print("step", carry.query['step'] )
+            if hasattr(carry, "prog"):
+                carry.prog += 1
+
     if carry.request:
         process_submit(carry.request)
     carry.local_table = common.local_table

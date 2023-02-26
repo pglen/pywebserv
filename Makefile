@@ -22,7 +22,7 @@ git:
 	git add .
 	git commit -m "$(AUTOCHECK)"
 	git push
-	#git push local
+	git push local
 
 run:
 	./mock_server.py

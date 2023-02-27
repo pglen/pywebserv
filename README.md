@@ -35,9 +35,11 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
    * Apache binding tested via the WSGI interface
    * Working out the details
 
+ The web site 'upp' can be seen as a working example.
+
 ### Development
 
-   Assuming Linux / Firefox setup; start the wsgi_server.py in a terminal. This will
+   Assuming Linux / Firefox setup; start the ./mock_server.py in a terminal. This will
    start a web server, and serve the site on port 8000. Connect firefox to localhost:8000.
    Edit away; When a file is modified, the 'wsgi_server' utility will refresh
    the firefox page. Instant feedback without the load / refresh cycle. Natually, other
@@ -132,6 +134,8 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
         enco b'HYMZwQ=='
         org4 1234
 
+  The cookie handing is using this encryption for self check. See source
+for details.
 
 ### History:
 
@@ -147,10 +151,14 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
     Sat 16.Jul.2022 Site dev continues
     Sun 13.Aug.2022 Restructured main OBJ creation
     Sun 13.Nov.2022 Added dynamic / responsive page feature
+    Sun 26.Feb.2023 Added encryption and safe cookies
 
     Also see 'git log' for more
 
 ## Apache config (example on port 7777)
+
+ Please replace your directory / script location as appropriate. Note that
+the server is in test mode, exposes itself on port 7777;
 
 	Listen 7777
 

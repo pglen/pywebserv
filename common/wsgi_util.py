@@ -5,7 +5,7 @@
     recursively.
 '''
 
-import sys, os, time, re, traceback
+import sys, os, time, re, traceback, datetime
 import wsgi_global, wsgi_parse
 
 #try:
@@ -14,6 +14,18 @@ import wsgi_global, wsgi_parse
 #    print("Cannot import", sys.exc_info())
 
 verbose = 0
+
+def xint(val):
+
+    ''' Safe alternative to int() -- returns 0 if invalid number '''
+
+    try:
+        ret = int(val)
+    except:
+        if verbose > 1:
+            print("Invalid number in parsing int", val)
+        ret = 0
+    return ret
 
 # ------------------------------------------------------------------------
 
@@ -374,5 +386,30 @@ def add_all_vars(locvars, table):
 
 # ------------------------------------------------------------------------
 
+def hash32(strx):
+
+    ''' Deliver a 32 bit hash of the passed entity '''
+
+    #print("hashing", strx)
+    lenx = len(strx);  hashx = int(0)
+    for aa in strx:
+        aaa = ord(aa)
+        hashx +=  int( (aaa << 12) + aaa)
+        hashx &= 0xffffffff
+        hashx = int(hashx << 8) + int(hashx >> 8)
+        hashx &= 0xffffffff
+    return hashx
+
+def set_cookie_header(name, value, minutes=60):
+
+    dt = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
+    fdt = dt.strftime('%a, %d %b %Y %H:%M:%S GMT')
+    secs = minutes * 60
+    vvv = str(value) + "-" + "%08x" % hash32(value)
+    #print("vvv", vvv)
+    ccc = 'Set-Cookie', '{}={}; Expires={}; Max-Age={}; Path=/' \
+                                            .format(name, vvv, fdt, secs)
+    #print("cookie", ccc)
+    return ccc
 
 # EOF

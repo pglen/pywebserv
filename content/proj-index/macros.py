@@ -4,8 +4,18 @@
      This is a sample project macro file;
         Variables start with "_mac_" will become local macros, that can be
         referenced on this page.
+        Variables start with "_func_" wil become functions that can be
+        referenced on this page.
+
         Variables start with "_glob_" wil become global that can be
         referenced on the whole site.
+
+      To see where things expand, and what they expand to, use the -s
+    option on the command line.
+
+     To see it in the rendered HTML, as comments use the -i option.
+    Only function expansions will show, as comments inside tags are
+    not allowed. (vars may appear inside tags)
 
      This file is imported under a try: except clause, so ordinarily,
     nothing in this file can down the site.
@@ -372,6 +382,25 @@ _mac_target_statement = '''
     </div>
 '''
 
+def _func_calcwrap(strx, context):
+
+    dbsize = len(context.res)
+
+    if context.prog >= dbsize - 3:
+        cont = "&nbsp; &nbsp; -- &nbsp; &nbsp;"
+    else:
+        cont = "&nbsp; << &nbsp;"
+    return cont
+
+def _func_calcwrap2(strx, context):
+
+    if context.prog <= 0:
+        cont = "&nbsp;&nbsp; -- &nbsp;&nbsp;"
+    else:
+        cont = "&nbsp; >> &nbsp;"
+    return cont
+
+
 _mac_main_center = '''
 
      <table border=0>
@@ -398,9 +427,10 @@ _mac_main_center = '''
 
         <table border=0>
             <tr valign=top>
-             <td valign=middle bgcolor=#cccccc
-                style="cursor:pointer" onclick="location.href='index.html?step=1'">
-                &nbsp; << &nbsp;
+             <td nowrap=nowrap valign=middle bgcolor=#cccccc
+                style="cursor:pointer"
+                    onclick="location.href='index.html?step={ calcstep 1 }'">
+                { calcwrap }
 
             { article 0 }
             <td valign=middle bgcolor=#cccccc>
@@ -408,7 +438,11 @@ _mac_main_center = '''
             <td valign=middle bgcolor=#cccccc>
             { article 2 }
 
-            <td valign=middle bgcolor=#cccccc> &nbsp; >> &nbsp;
+             <td  nowrap=nowrap valign=middle bgcolor=#cccccc
+                style="cursor:pointer"
+                    onclick="location.href='index.html?step={ calcstep -1 }'">
+                { calcwrap2 }
+
          </table>
 
        <!-- { feed_data } -->
@@ -458,6 +492,25 @@ _glob_site_right = '''
 </table>
 '''
 
+# Get new value of the step for
+
+def _func_calcstep(strx, context):
+
+    ddd = wsgi_func.parse_args(strx, context)
+    #print("ddd", ddd)
+
+    if hasattr(context, "prog"):
+        newval =  context.prog + int(ddd[1])
+        dbsize = len(context.res)
+        #print("dbsize", dbsize)
+        if newval > dbsize - 3:
+            newval = dbsize-3
+        if newval < 0:
+            newval = 0
+        return str(newval)
+    else:
+        return "0"
+
 def _func_article(strx, context):
 
     ddd = wsgi_func.parse_args(strx, context)
@@ -465,6 +518,9 @@ def _func_article(strx, context):
     #print("ddd", ddd)
     #print("article res", context.res)
     #print("_func_article", context)
+
+    if not hasattr(context, "prog"):
+        context.prog = 0
 
     idx = context.prog + int(ddd[1])
     res = context.res
@@ -486,7 +542,7 @@ def _func_article(strx, context):
                     %s
                 <tr><td colspan=2>
                 <tr><td colspan=2 style="text-alignment:justify">
-                    %s <br>
+                    %s<br>
                     %s<br>
             </table>
         </table>

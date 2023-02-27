@@ -84,8 +84,8 @@ class xWebServer():
         wsgi_func.build_initial_rc()
 
     def parse_instance(self, environ, respond):
-        #import wsgi_global, wsgi_util
 
+        #import wsgi_util
         #wsgi_util.printenv(environ)
 
         self.environ = environ
@@ -99,15 +99,16 @@ class xWebServer():
 
         self.cookie = ""
         if 'HTTP_COOKIE' in environ:
-            self.cookie = environ['HTTP_COOKIE'].split("=")
-            #if self.config.pgdebug > 4:
-            #    print("HTTP_COOKIE", self.cookie)
+            #self.cookie = environ['HTTP_COOKIE'].split("=")
+            self.cookie = environ['HTTP_COOKIE']
+            if 1: #self.configx.pgdebug > 4:
+                print("HTTP_COOKIE:", self.cookie)
 
         self.method = ""
         if 'REQUEST_METHOD' in environ:
             self.method = environ['REQUEST_METHOD']
-            #if self.config.pgdebug > 4:
-            #    print("REQUEST_METHOD", self.method)
+            if self.configx.pgdebug > 4:
+                print("REQUEST_METHOD", self.method)
 
         self.request_org = ""
         self.request = {}
@@ -268,7 +269,12 @@ class xWebServer():
             if self.configx.verbose > 1:
                 print("process_request4", callme, template)
 
-            respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
+            headers =  [
+                        ('Content-Type', "text/html" + ';charset=UTF-8'),
+                        wsgi_util.set_cookie_header("Test", "Head", 1),
+                        wsgi_util.set_cookie_header("Test2", "Head2", 1),
+                        ]
+            respond('200 OK', headers)
 
             return [bytes(content, "utf-8")]
 

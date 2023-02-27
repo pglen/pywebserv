@@ -278,7 +278,6 @@ def     load_data_func(strx, context):
         wsgi_util.put_exception("open / get data")
         return ""
 
-    context.prog = 0
     # The data is added to the top of the context object
     context.res = localdb.getall()
 
@@ -296,37 +295,6 @@ def     load_data_func(strx, context):
     #localdb.close()
 
     return ""
-
-def     get_data_func(strx, context):
-
-    '''!
-     ----------------------------------------------------------------
-     Retrieve from pre loaded table
-
-       Arguments:
-           arg[0]      command name
-           arg[1]      index of row
-
-     Example:
-               { getData 1 }
-
-    '''
-
-    ddd = parse_args(strx, context)
-    print("ddd", ddd)
-    print("context.prog", context.prog)
-
-    try:
-        item = wsgi_global.gl_table.lookup_item(\
-                        ddd[1] + "Data")[0][int(ddd[1])][int(ddd[2])]
-        #print("item", item)
-    except IndexError:
-        #wsgi_util.put_exception("get data")
-        item = "No data at %s:%s" % (ddd[1], ddd[2])
-    except:
-        wsgi_util.put_exception("get data")
-        item = "Error"
-    return item
 
 # ------------------------------------------------------------------------
 # I wish the http standard had this one command
@@ -389,7 +357,6 @@ def     build_initial_table():
     try:
         # Built ins
         wsgi_global.gl_table.add_one_func("image",    image_func)
-        #wsgi_global.gl_table.add_one_func("getData",  get_data_func)
         wsgi_global.gl_table.add_one_func("load_data", load_data_func)
         wsgi_global.gl_table.add_one_func("include",  include_func)
         #wsgi_global.gl_table.add_one_func("deep",     deep_func)

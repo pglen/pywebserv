@@ -1,7 +1,7 @@
 # pywebserv Wsgi Web Server
 
 ## WSGI compliant web server
-  
+
  Web server with no dependencies (for security). One might say this is a framework-less framework.
 
 ###  Introduction
@@ -100,6 +100,38 @@ by you, so the simplicity is by no means a limitation.  (Helps to know html/pyth
     See proj-index for an example home page. Also proj* for more
     detailed examples.
     Please note how simple a calendar implementation becomes.
+
+ ## Encryption:
+
+ The encrytion is a simple module in python. It is using the
+ techniques the big boys are using ... backward forward scans an all.
+ Do not be fooled; onece you encrypt; make sure you have the
+ keys etc .. to recover.
+
+ Strength:
+
+  The following section should point to some good (and needed) properties.
+ Changing the cyphertext by one digit, scrambles the whole cyphertext.
+ Same happens with the key; Changing one digit will scramble the cyphertext.
+
+        ./wsgi_crypt.py 1235 qrs
+        tdelta 0.2280 ms
+        org  1235
+        enco b'HnUEIw=='
+        org4 1235
+
+        ./wsgi_crypt.py 1235 qrt
+        tdelta 0.0336 ms
+        org  1235
+        enco b'JJc1zw=='
+        org4 1235
+
+        ./wsgi_crypt.py 1234 qrt
+        tdelta 0.0342 ms
+        org  1234
+        enco b'HYMZwQ=='
+        org4 1234
+
 
 ### History:
 

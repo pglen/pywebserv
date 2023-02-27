@@ -38,16 +38,20 @@ def got_index(config, carry):
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
 
     #print("carry.request", carry.request)
-    print("carry.query", carry.query)
+    #print("carry.query", carry.query)
 
     if carry.query:
         if "step" in carry.query:
-            print("step", carry.query['step'] )
-            if hasattr(carry, "prog"):
-                carry.prog += 1
+            #print("carry.query", carry.query['step'])
+            iii = wsgi_util.xint(carry.query['step'][0])
+            #print("step", iii)
+            carry.prog = iii
+    else:
+        carry.prog = 0
 
     if carry.request:
         process_submit(carry.request)
+
     carry.local_table = common.local_table
 
     #{ load_data proj-edit }

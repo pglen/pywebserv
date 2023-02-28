@@ -5,8 +5,8 @@
     recursively.
 '''
 
-import sys, os, time, re, traceback, datetime
-import wsgi_global, wsgi_parse
+import sys, os, time, re, traceback, datetime, base64
+import wsgi_global, wsgi_parse, wsgi_crypt
 
 #try:
 #    import wsgi_global, wsgi_parse
@@ -183,12 +183,12 @@ def process_default(configx, carryon):
 
     #print("using template", context.template, "fname", context.fname)
 
-    if configx.verbose > 1:
+    if configx.verbose > 3:
         print("process_default() with local_table len ", len(carryon.local_table))
 
     if configx.pgdebug > 5:
         if carryon.local_table:
-            #dump_table("Local Table:", carryon.local_table)
+            dump_table("Local Table:", carryon.local_table)
             #dump_table_funcs("Local Table Functs:", carryon.local_table)
             pass
 
@@ -200,7 +200,7 @@ def process_default(configx, carryon):
     except:
         put_exception("Cannot create / open template");
 
-    if configx.verbose > 1:
+    if configx.verbose > 3:
         print("using template", template)
 
     if template and os.path.isfile(template):
@@ -400,15 +400,52 @@ def hash32(strx):
         hashx &= 0xffffffff
     return hashx
 
+def decode_cookie_header(name, value):
+
+    ''' Decode the encrypted cookie, verify '''
+    name = name.strip()
+    value = value.strip("; ")
+    # Test damage
+    #value = "a" + value
+
+    try:
+        #print("decode_cookie_header", name, value)
+        ddd     = base64.b64decode(value.encode())
+    except:
+         #put_exception("exception on decode_cookie_header")
+         return name + "-Damaged", "Damaged Cookie"
+
+    #print("after base", ddd)
+    deco    = wsgi_crypt.xdecrypt(ddd, "1234")
+    #print("deco", deco)
+    sss = deco.split(b"+", 1)
+    try:
+        hhh = "%08x" % hash32(sss[0].decode())
+        hhh = hhh.encode()
+    except:
+        # No hash arrived, add fake values to trigger damage control
+        hhh = "0"
+        sss = ("No Value", "No value")
+        pass
+    # Hash checks out?
+    if sss[0] !=  hhh:
+        #print("Damaged cookie", sss, hhh)
+        deco = b"Damaged Cookie"
+    return name, sss[1].decode()
+
 def set_cookie_header(name, value, minutes=60):
 
-    dt = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
+    dt = datetime.datetime.utcnow() + datetime.timedelta(minutes=minutes)
     fdt = dt.strftime('%a, %d %b %Y %H:%M:%S GMT')
     secs = minutes * 60
-    vvv = str(value) + "-" + "%08x" % hash32(value)
-    #print("vvv", vvv)
-    ccc = 'Set-Cookie', '{}={}; Expires={}; Max-Age={}; Path=/' \
-                                            .format(name, vvv, fdt, secs)
+    vvv = "%08x" % hash32(value) + "+" + str(value)
+    vvvv = vvv.encode()
+    #print("vvvv", vvvv)
+    org2    = wsgi_crypt.xencrypt(vvvv, "1234")
+    enco        = base64.b64encode(org2).decode()
+    #print("enco", enco)
+    ccc = 'Set-Cookie', '{}={}; Expires={}; Max-Age={}; SameSite=Strict; Path=/' \
+                                            .format(name, enco, fdt, secs)
     #print("cookie", ccc)
     return ccc
 

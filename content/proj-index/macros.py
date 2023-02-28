@@ -432,11 +432,11 @@ _mac_main_center = '''
                     onclick="location.href='index.html?step={ calcstep 1 }'">
                 { calcwrap }
 
-            { article 0 }
+            { slider 0 }
             <td valign=middle bgcolor=#cccccc>
-            { article 1 }
+            { slider 1 }
             <td valign=middle bgcolor=#cccccc>
-            { article 2 }
+            { slider 2 }
 
              <td  nowrap=nowrap valign=middle bgcolor=#cccccc
                 style="cursor:pointer"
@@ -511,13 +511,13 @@ def _func_calcstep(strx, context):
     else:
         return "0"
 
-def _func_article(strx, context):
+def _func_slider(strx, context):
 
     ddd = wsgi_func.parse_args(strx, context)
 
     #print("ddd", ddd)
-    #print("article res", context.res)
-    #print("_func_article", context)
+    #print("slider res", context.res)
+    #print("_func_slider", context)
 
     if not hasattr(context, "prog"):
         context.prog = 0
@@ -534,23 +534,23 @@ def _func_article(strx, context):
             <table border=0 bgcolor=#f5f5f5>
             <tr>
                 <tr><td colspan=2>
-                <font size=+2> %s
+                <font size=+3> %s
                 <tr>
                 <td>
                 { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
                 <td>
                     %s
-                <tr><td colspan=2>
+                <tr><td colspan=2 align=center>
                 <tr><td colspan=2 style="text-alignment:justify">
                     %s<br>
-                    %s<br>
+
+                <tr><td colspan=2 align=center>
+                   <font size=-1> %s</font<br>
             </table>
         </table>
     ''' % ( res[idx][2], res[idx][3], res[idx][4], res[idx][5])
 
     return sss
-
-_mac_article5 = '''Hello'''
 
 _mac_art_header = '''Header here'''
 
@@ -562,7 +562,7 @@ _mac_header2 = '''
         <form method=post>
             <tr><td>
             <a href=index.html>
-            <font size=+2><center><b>Welcome to UPP, </a> </center></font> <br>
+            <font size=+2><center><b>Welcome to UPP, &nbsp; </a> </center></font> <br>
 
             <!-- &nbsp; &nbsp; &nbsp; the site for United Planet Peace -->
             <!-- (under construction, check back later) --!>

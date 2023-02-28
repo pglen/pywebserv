@@ -59,6 +59,9 @@ def isskip(aaa):
     if "data/" in aaa:
         #print("Skipping data dir", aaa)
         ret = True
+    if "tmp/" in aaa:
+        #print("Skipping tmp dir", aaa)
+        ret = True
     if "test/" in aaa:
         #print("Skipping data dir", aaa)
         ret = True

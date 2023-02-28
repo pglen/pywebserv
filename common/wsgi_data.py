@@ -58,7 +58,7 @@ def soft_opendb(carry, modname, suffix = ""):
 
 def soft_closedb(carry, modname, suffix = ""):
 
-    print("Soft closing:", carry.dbname, carry.localdb)
+    #print("Soft closing:", carry.dbname, carry.localdb)
     carry.localdb = None
 
 class wsgipydb():
@@ -77,13 +77,29 @@ class wsgipydb():
         ret = self.db.getdbsize()
         return ret
 
-    def put(self, key, val, val2, val3, val4):
+    def put(self, key, val, val2, val3, val4, val5):
         #print("put", key, "vals", val, val2, val3, val4)
-        sss = self.packer.encode_data("", (val, val2, val3, val4))
+        sss = self.packer.encode_data("", (val, val2, val3, val4, val5))
         #print("sss", sss)
         ddd = self.packer.decode_data(sss)
         #print("ddd", ddd)
         self.db.save_data(key, sss)
+
+    def delrecall(self, rec):
+
+        # Delete all keys on this record
+
+        print("delete", rec)
+        rec = self.getbyord(int(rec))
+        if rec:
+            #print("delrec", rec)
+            #self.db.core_verbose = 2
+            try:
+                self.db.del_rec_bykey(rec[0], maxrec = twincore.INT_MAX)
+            except:
+                #wsgi_util.put_exception("While deleting rec %d" % int(rec))
+                #print("exceWhile deleting rec %d", sys.exc_info()) # % int(rec))
+                pass
 
     def getrange(self, beg, count = 1):
         ccc = self.db.getdbsize()
@@ -96,6 +112,9 @@ class wsgipydb():
         check = [] ;  arr = []
         for aa in range(ccc - 1, -1, -1):
             aaa = self.db.get_rec(aa)
+            if not aaa:
+                continue
+
             if aaa[0] not in check:
                 check.append(aaa[0])
                 aaa[0] = aaa[0].decode()
@@ -108,12 +127,14 @@ class wsgipydb():
         #print("by ord", numx)
         sss = self.db.get_rec(int(numx))
         #print("sss[0]", sss[0], "sss[1]", sss[1].decode("utf-8") )
+        if not sss:
+            return None
         ddd = self.packer.decode_data(sss[1].decode("utf-8"))
         #print("ddd", *ddd[0])
         return sss[0].decode("utf-8"), *ddd[0]
 
     def close(self):
-        print("Soft Closed PYDB", self.file)
+        #print("Soft Closed PYDB", self.file)
         self.db = None
         pass
 

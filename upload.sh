@@ -11,5 +11,6 @@ make clean
 
 #rsync -r -uv --times --exclude .git/ * /mnt/remote-home/upload
 rsync -r -uv --times --exclude .git/ --exclude html/ --exclude latex/ \
-  --rsh "ssh -p2222"  * peterglen@209.124.64.123:/home/peterglen/upload
+ --exclude content/data --exclude content/tmp \
+	 --rsh "ssh -p2222"  * peterglen@209.124.64.123:/home/peterglen/upload
 

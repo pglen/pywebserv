@@ -137,7 +137,7 @@ def     app_two_func(strx, context):
                         bgcolor="#dddddd"
                         color = "#000000"
 
-                    content += "<td align=center bgcolor=" + bgcolor + ">"
+                    content += "<td align=center nowrap=nowrap bgcolor=" + bgcolor + ">"
                     decor = 0
                     #if random.randint(0, 255) % 4 == 0:
                     #    decor = 1;
@@ -148,13 +148,13 @@ def     app_two_func(strx, context):
                     else:
                         content += " &nbsp; "
 
-                    content += "<font size=-1>" + str(cnt2)
-                    content += "</font>"
+                    content += "%2d" % cnt2
 
                     if decor:
                         content += "*</a>"
                     else:
                         content += " &nbsp; "
+
                 else:
                     content += "<td align=center> -"
 
@@ -279,7 +279,10 @@ def     load_data_func(strx, context):
         return ""
 
     # The data is added to the top of the context object
-    context.res = localdb.getall()
+    try:
+        context.res = localdb.getall()
+    except:
+        pass
 
     # Dump it
     if context.configx.pgdebug > 2:

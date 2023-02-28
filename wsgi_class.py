@@ -10,7 +10,7 @@
 
 '''
 
-import sys, os, mimetypes, time, datetime, getopt, traceback
+import sys, os, mimetypes, time, datetime, getopt, traceback, uuid
 
 try:
     from urllib.parse import urlparse, unquote, parse_qs, parse_qsl
@@ -79,16 +79,15 @@ class xWebServer():
 
         #print("Loaded in ", self.mypath)
         #wsgi_util.print_httpenv(environ)
+        #wsgi_util.printenv(environ)
 
         wsgi_func.build_initial_table()
         wsgi_func.build_initial_rc()
 
     def parse_instance(self, environ, respond):
 
-        #import wsgi_util
+        import wsgi_util
         #wsgi_util.printenv(environ)
-
-        self.environ = environ
 
         self.query = ""
         if 'QUERY_STRING' in environ:
@@ -98,11 +97,29 @@ class xWebServer():
                     print("QUERY_STRING", self.query)
 
         self.cookie = ""
+        self.good_cookies = []
+        self.wanted_cookies = []    # This will be sent to the server
+
         if 'HTTP_COOKIE' in environ:
-            #self.cookie = environ['HTTP_COOKIE'].split("=")
             self.cookie = environ['HTTP_COOKIE']
-            if 1: #self.configx.pgdebug > 4:
-                print("HTTP_COOKIE:", self.cookie)
+            if self.configx.pgdebug > 4:
+                if environ['PATH_INFO'][-1:] == "/":
+                    print("HTTP_COOKIE:", self.cookie)
+                    #self.cookie += "a"
+
+            for aa in self.cookie.split(";"):
+                #print("cookie:", aa)
+                bb = aa.split("=", 1)
+                # This is where we decode the encrypted cookie
+                import wsgi_util
+                rrr = wsgi_util.decode_cookie_header(bb[0], bb[1])
+                #print("decoded cookie", rrr)
+                self.good_cookies.append(rrr)
+                if self.configx.verbose > 1:
+                    if environ['PATH_INFO'][-1:] == "/":
+                        print("good cookies", self.good_cookies)
+                if self.configx.verbose > 2:
+                        print("good cookies", self.good_cookies)
 
         self.method = ""
         if 'REQUEST_METHOD' in environ:
@@ -111,29 +128,68 @@ class xWebServer():
                 print("REQUEST_METHOD", self.method)
 
         self.request_org = ""
-        self.request = {}
+        self.request = []
         if 'CONTENT_LENGTH' in environ:
             if self.method == 'POST':
                 try:
-                    content_length = int(environ['CONTENT_LENGTH']) # <--- Gets the size of data
-                    #print("content_length", content_length) # <--- Gets the data itself
-                    self.request_org = environ['wsgi.input'].read(content_length).decode()
+                    # This was a great pain to get this to work ....
+                    import cgi
+                    fields = cgi.FieldStorage(fp=environ['wsgi.input'],
+                                        environ=environ, keep_blank_values=1)
+                    #import wsgi_util
+                    #wsgi_util.printobj(fields)
+
+                    if not "multi" in environ['CONTENT_TYPE']:
+                        #print("parse it here")
+                        for aa in fields:
+                            if aa:
+                                self.request.append(
+                                    (fields[aa].name, fields[aa].value))
+                    else:
+                        for aa in fields:
+                            if aa:
+                                import wsgi_util
+                                #wsgi_util.printobj(fields[aa])
+                                if fields[aa].filename:
+                                    dt = datetime.datetime.now()
+                                    fdt = dt.strftime('%y%m%d-%H_%M-')
+
+                                    fname = self.configx.datapath + \
+                                                "tmp" + os.sep + fdt + fields[aa].filename
+                                    print("Decode file", fname)
+                                    fp = open(fname, "wb")
+                                    fp.write(fields[aa].value)
+                                    fp.close()
+                                    # Remember the file name as a submit variable
+                                    self.request.append(
+                                        (fields[aa].disposition_options['name'], fname) )
+                                else:
+                                    self.request.append(
+                                        (fields[aa].disposition_options['name'],
+                                                    fields[aa].value))
+
+                    #print("got file len = ", len(fff))
                     #print("Request_org", self.request_org)
-                    self.request = parse_qsl(str(self.request_org), keep_blank_values=True)
-                    #if self.config.pgdebug > 2:
-                    #    if self.request:
-                    #        print("Request", self.request)
+                    #self.request = parse_qsl(str(self.request_org), keep_blank_values=True)
+
+                    if 1: #self.config.pgdebug > 2:
+                        if self.request:
+                            self.request.sort()
+                            for aa in self.request:
+                                print("Request", aa)
 
                 except:
-                    print("No post data", sys.exc_info())
-                    #import wsgi_util
+                    #print("No post data", sys.exc_info())
+                    import wsgi_util
                     wsgi_util.put_exception("No post data")
                     pass
 
         self.url = ""
         if 'PATH_INFO' in environ:
             self.url = environ['PATH_INFO']
-        #print("self.url", self.url)
+
+        if self.configx.verbose:
+            print("self.url", self.url)
 
         splitx = os.path.split(self.url)
         #splitx = self.url.split(os.sep)
@@ -157,7 +213,7 @@ class xWebServer():
         #print("Looking up", url)
         par = urlparse(url)
 
-        if self.configx.verbose > 1:
+        if self.configx.verbose > 2:
             print("Translate_url from:", par.path)
 
         got, tmpl, filen = wsgi_global.urlmap.lookup(par.path)
@@ -179,6 +235,26 @@ class xWebServer():
 
         return got, tmpl, filen
 
+    def make_headers(self, mtype, minutes):
+
+        dt = datetime.datetime.utcnow() + datetime.timedelta(minutes=minutes)
+        fdt = dt.strftime('%a, %d %b %Y %H:%M:%S GMT')
+
+        headers =  [
+                    ('Content-Type', mtype + ';charset=UTF-8'),
+                    ('Expires', '%s' % fdt),
+                    ]
+
+        #print("Headers", headers)
+
+        for aa in self.wanted_cookies:
+            #print("setting cookie", aa)
+            import wsgi_util
+            ccc = wsgi_util.set_cookie_header(aa[0], aa[1], aa[2])
+            headers.append(ccc)
+
+        return headers
+
     # --------------------------------------------------------------------
     #  Dynamic content - overrides static
 
@@ -194,10 +270,21 @@ class xWebServer():
         #respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
         #return [bytes("Cannot do shit", 'utf-8')]
 
-        if self.configx.verbose > 1:
-            print("process_request", self.url, self.fn)
+        got_session = 0
+        for aa in self.good_cookies:
+            if "Session" in aa:
+                #print("found good", aa)
+                got_session = 1
+
+        if not got_session:
+            sess = str(uuid.uuid4())
+            print("New Session:", sess)
+            self.wanted_cookies.append(("Session", sess, 1))
 
         if self.configx.verbose > 2:
+            print("process_request", self.url, self.fn)
+
+        if self.configx.verbose > 3:
             print("url map:\n%s\n" % wsgi_global.urlmap.dump())
 
         try:
@@ -216,7 +303,7 @@ class xWebServer():
         self.carrydef.template = template
         self.carrydef.fname = fname
 
-        if self.configx.verbose > 1:
+        if self.configx.verbose > 2:
             print("process_request2", callme, template)
 
         if(callme):
@@ -266,15 +353,10 @@ class xWebServer():
                 respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
                 return [bytes(content, "utf-8")]
 
-            if self.configx.verbose > 1:
+            if self.configx.verbose > 3:
                 print("process_request4", callme, template)
 
-            headers =  [
-                        ('Content-Type', "text/html" + ';charset=UTF-8'),
-                        wsgi_util.set_cookie_header("Test", "Head", 1),
-                        wsgi_util.set_cookie_header("Test2", "Head2", 1),
-                        ]
-            respond('200 OK', headers)
+            respond('200 OK', self.make_headers("text/html", 1))
 
             return [bytes(content, "utf-8")]
 
@@ -313,10 +395,12 @@ class xWebServer():
                 if os.path.isfile(fn2):
                     found_file = fn2
                     break
+
+                # No more items ..
                 break
 
             if found_file:
-                if self.configx.verbose > 1:
+                if self.configx.verbose > 2:
                     print("found_file", "'" + found_file + "'")
 
                 self.mtype = mimetypes.guess_type(found_file)[0]
@@ -325,9 +409,9 @@ class xWebServer():
 
                 if os.path.isfile(found_file):
                     #print("responding with file")
-                    from wsgiref import util
+                    respond('200 OK', self.make_headers(self.mtype, 1))
 
-                    respond('200 OK', [('Content-Type', self.mtype + ';charset=UTF-8')])
+                    from wsgiref import util
                     fp = util.FileWrapper(open(found_file, "rb"))
                     return fp
                 else:

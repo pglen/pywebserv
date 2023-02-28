@@ -201,12 +201,16 @@ def mid_rows(strx, carryon):
         ret += "<tr><td align=center>No Data"
     else:
         #print("got", recs, " records")
-
         ret += "<table border=0 width=100%>"
         carryon.xdata = [];  hdata = []
         # Starting at the end
         for aa in range(recs-1, -1, -1):
-            res = carryon.localdb.getbyord(aa)
+            try:
+                # Read all, no matter what
+                res = carryon.localdb.getbyord(aa)
+            except:
+                pass
+
             if not res:
                  continue
             # use hdata as filter for duplicates

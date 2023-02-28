@@ -35,27 +35,33 @@ def got_index(config, carry):
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
 
+    if carry.query:
+        print("idx carry.query", carry.query)
+
     if carry.request:
-        print("carry.request", carry.request)
-        rq = []
+        #print("idx carry.request", carry.request)
+        rq = [] ; par = []
         for aa in carry.request:
             rq.append(aa[1])
+            par.append(aa[0])
 
-        print("data rq", rq)
-
-        try:
-            #startt = time.perf_counter()
-            wsgi_data.soft_opendb(carry, modname)
-
-            #localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
-            carry.localdb.put(rq[0], rq[1], rq[2], rq[3], rq[4])
-
-            #localdb.close()
-            # Measure time needed
-            #print("database op %f msec " %  ((time.perf_counter() - startt) * 1000))
-        except:
-            print("Cannot put data")
-            wsgi_util.put_exception("in index data")
+        #print("data rq", rq)
+        if len(rq) == 1:
+            if "Confirm" in rq[0]:
+                sss = par[0].split("_")
+                print("rq del id: ", sss[1]);
+                wsgi_data.soft_opendb(carry, modname)
+                carry.localdb.delrecall(sss[1])
+        else:
+            try:
+                #startt = time.perf_counter()
+                wsgi_data.soft_opendb(carry, modname)
+                carry.localdb.put(rq[0], rq[1], rq[2], rq[3], rq[4], rq[5])
+                # Measure time needed
+                #print("database op %f msec " %  ((time.perf_counter() - startt) * 1000))
+            except:
+                print("Cannot put data")
+                wsgi_util.put_exception("in index data")
 
     carry.local_table = common.local_table
     content = wsgi_util.process_default(config, carry)

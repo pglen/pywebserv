@@ -14,6 +14,8 @@ modname = ppp[-2]
     Data Editor; list of data
 '''
 
+field_names = ("Title", "Sidebar","Main Text","Bottom Text", "Image File")
+
 def got_editor(config, carry):
 
     #wsgi_util.printobj(carry)
@@ -34,11 +36,21 @@ def got_editor(config, carry):
         print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
+
+    if not carry.query and not carry.request:
+        sss = "Editor has no task to do in: '%s'" % carry.url
+        #print(sss)
+        carry.cdata = sss
+        carry.local_table = common.local_table
+        sss += wsgi_util.process_default(config, carry)
+        return sss
+
     if carry.query:
         print("editor carry.query", carry.query)
 
     if carry.request:
         print("editor carry.request", carry.request)
+
         wsgi_data.soft_opendb(carry, modname)
         #print("db", carry.localdb)
 
@@ -58,20 +70,21 @@ def got_editor(config, carry):
                 print("Cannot load data", rq[1], carry.localdb)
                 content += "Cannot load data for record: " + str(rq[1])
                 return content
+
+            #print("res", res)
+
             carry.cdata += "<table border=0>"
-            #fnames = ("key", "arg 1", "arg 2","arg 3","arg 4", "arg 5")
-            carry.cdata += "<input type=hidden name=key value=%s" % (str(res[0])) + ">"
+            carry.cdata += "<input type=hidden name=aa_0 value=%s" % (str(res[0])) + ">"
+            carry.cdata += "<input type=hidden name=aa_6 value=%s" % (str(rq[1])) + ">"
 
             for aa in range(len(res)-1):
                 if aa == len(res)-2:
-                    carry.cdata += \
-                    "<tr><td> " + "arg %d" % (aa) + " <td> : &nbsp;  " + \
-                        "<td><textarea readonly cols=64 rows=4 name='aa_%d'" % (aa) + ">" + \
-                            str(res[aa+1]) + "</textarea><p>"
+                    carry.cdata +=  "If image replacement is intended: &nbsp; &nbsp; "\
+                        "<input type=file id=myFile name=aa_5, accept:'image/png, image/jpeg'>"
                 else:
                     carry.cdata += \
-                    "<tr><td> " + "arg %d" % (aa) + " <td> : &nbsp;  " + \
-                        "<td><textarea cols=64 rows=4 name='aa_%d'" % (aa) + ">" + \
+                    "<tr><td> " + "%s" % (field_names[aa]) + " <td> : &nbsp;  " + \
+                        "<td><textarea cols=64 rows=4 name='aa_%d'" % (aa+1) + ">" + \
                             str(res[aa+1]) + "</textarea><p>"
 
             carry.cdata += "</table>"
@@ -91,12 +104,12 @@ def got_editor(config, carry):
             carry.cdata += uuidx
             carry.cdata +=  "</textarea><p>"
 
-            carry.cdata += "<tr><td>Title: <td> &nbsp;  <td><textarea cols=48 rows=4 name=aa2>"  + "</textarea><p>"
-            carry.cdata += "<tr><td>Sidebar: <td> &nbsp;  <td><textarea cols=48 rows=4 name=aa3>"  + "</textarea><p>"
-            carry.cdata += "<tr><td>Main Text: <td> &nbsp;  <td><textarea cols=48 rows=4 name=aa4>"  + "</textarea><p>"
-            carry.cdata += "<tr><td>Bottom Text: <td> &nbsp;  <td><textarea cols=48 rows=4 name=aa5>"  + "</textarea><p>"
-            carry.cdata += "<tr><td>Upload Image:<td> &nbsp; <td align=right>"
-            carry.cdata += "<input type=file id=myFile name=aa6, accept:'image/png, image/jpeg'>"
+            carry.cdata += "<tr><td>" + field_names[0] + "<td> &nbsp;  <td><textarea cols=48 rows=4 name=aa_2>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>" + field_names[1] + "<td> &nbsp;  <td><textarea cols=48 rows=4 name=aa_3>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>" + field_names[2] + "<td> &nbsp;  <td><textarea cols=48 rows=4 name=aa_4>"  + "</textarea><p>"
+            carry.cdata += "<tr><td>" + field_names[3] + "<td> &nbsp;  <td><textarea cols=48 rows=4 name=aa_5>"  + "</textarea><p>"
+            carry.cdata += "<tr><td> Upload Image:<td> &nbsp; <td align=right>"
+            carry.cdata += "<input type=file id=myFile name=aa_6, accept:'image/png, image/jpeg'>"
             carry.cdata += "</table>"
             carry.cdata += "<br><input type=submit value=' Create Record '>"
 

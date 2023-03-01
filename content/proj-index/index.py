@@ -37,6 +37,8 @@ def got_index(config, carry):
                     "request=%s" % carry.request,
                          "template=%s" % carry.template, "fname=%s" % carry.fname)
 
+    content = ""
+
     #print("carry.request", carry.request)
     #print("carry.query", carry.query)
 
@@ -54,12 +56,14 @@ def got_index(config, carry):
 
     carry.local_table = common.local_table
 
-    #{ load_data proj-edit }
+    # Load data (needs early load, so do the function)
+    #content += "{ load_data proj-edit }"
 
     # Call this before parse
     wsgi_func.load_data_func("load_data proj-edit", carry)
+    #wsgi_func.load_data_func("proj-edit", carry)
 
-    content = wsgi_util.process_default(config, carry)
+    content += wsgi_util.process_default(config, carry)
     return content
 
 def got_log(config, carry):

@@ -42,9 +42,6 @@ _glob_misscol   = "#eeeeee"
 # String parsed before function
 _glob_sitecolor = "#aaffbb"
 
-#def _func_sitecolor(strx, context):
-#    return "#aaffff"
-
 _mac_CompanyName = '''UPP the United Planet Peace'''
 
 _glob_sitestyle = '''
@@ -445,8 +442,6 @@ _mac_main_center = '''
 
          </table>
 
-       <!-- { feed_data } -->
-
         <table border=0>
             <tr valign=top>
             { imgrow } { imgrow } { imgrow }
@@ -511,13 +506,16 @@ def _func_calcstep(strx, context):
     else:
         return "0"
 
+# ------------------------------------------------------------------------
+# Present slider
+
 def _func_slider(strx, context):
 
+    sss = ""
     ddd = wsgi_func.parse_args(strx, context)
 
     #print("ddd", ddd)
     #print("slider res", context.res)
-    #print("_func_slider", context)
 
     if not hasattr(context, "prog"):
         context.prog = 0
@@ -525,9 +523,23 @@ def _func_slider(strx, context):
     idx = context.prog + int(ddd[1])
     res = context.res
 
-    #print("res[0]", res[0])
+    if not res:
+        # Patch in something
+                # ID Key  D1        Side Main                Under             Image
+        res = [
+                ["", "", "No Data", "", "Database is empty", "System Message", "X"],
+                ["", "", " &nbsp ", "", "", "", "X"],
+                ["", "", " &nbsp ", "", "", "", "X"],
+              ]
 
-    sss = '''
+    if idx > len(res):
+        idx = 0
+        print("Passed end of data")
+        #sss = "Passed end of data"
+        #return sss
+
+    #print("res", res)
+    sss += '''
     <td>
         <table border=0 bgcolor=#dddddd>
             <tr><td>
@@ -537,7 +549,9 @@ def _func_slider(strx, context):
                 <font size=+3> %s
                 <tr>
                 <td>
-                { image beach-hd.jpeg [ thumbwidth ] [ thumbheight ] }
+
+                { image %s [ thumbwidth ] }
+
                 <td>
                     %s
                 <tr><td colspan=2 align=center>
@@ -548,7 +562,7 @@ def _func_slider(strx, context):
                    <font size=-1> %s</font<br>
             </table>
         </table>
-    ''' % ( res[idx][2], res[idx][3], res[idx][4], res[idx][5])
+    ''' % ( res[idx][2], res[idx][6], res[idx][3], res[idx][4], res[idx][5])
 
     return sss
 
@@ -631,8 +645,6 @@ _glob_footer = '''
         </table>
     </table>
 '''
-
-_mac_feed_data = ''' FD '''
 
 _mac_imgrow = '''
   <tr>  <td width=10>

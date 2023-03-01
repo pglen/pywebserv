@@ -131,58 +131,8 @@ class xWebServer():
         self.request = []
         if 'CONTENT_LENGTH' in environ:
             if self.method == 'POST':
-                try:
-                    # This was a great pain to get this to work ....
-                    import cgi
-                    fields = cgi.FieldStorage(fp=environ['wsgi.input'],
-                                        environ=environ, keep_blank_values=1)
-                    #import wsgi_util
-                    #wsgi_util.printobj(fields)
-
-                    if not "multi" in environ['CONTENT_TYPE']:
-                        #print("parse it here")
-                        for aa in fields:
-                            if aa:
-                                self.request.append(
-                                    (fields[aa].name, fields[aa].value))
-                    else:
-                        for aa in fields:
-                            if aa:
-                                import wsgi_util
-                                #wsgi_util.printobj(fields[aa])
-                                if fields[aa].filename:
-                                    dt = datetime.datetime.now()
-                                    fdt = dt.strftime('%y%m%d-%H_%M-')
-
-                                    fname = self.configx.datapath + \
-                                                "tmp" + os.sep + fdt + fields[aa].filename
-                                    print("Decode file", fname)
-                                    fp = open(fname, "wb")
-                                    fp.write(fields[aa].value)
-                                    fp.close()
-                                    # Remember the file name as a submit variable
-                                    self.request.append(
-                                        (fields[aa].disposition_options['name'], fname) )
-                                else:
-                                    self.request.append(
-                                        (fields[aa].disposition_options['name'],
-                                                    fields[aa].value))
-
-                    #print("got file len = ", len(fff))
-                    #print("Request_org", self.request_org)
-                    #self.request = parse_qsl(str(self.request_org), keep_blank_values=True)
-
-                    if 1: #self.config.pgdebug > 2:
-                        if self.request:
-                            self.request.sort()
-                            for aa in self.request:
-                                print("Request", aa)
-
-                except:
-                    #print("No post data", sys.exc_info())
-                    import wsgi_util
-                    wsgi_util.put_exception("No post data")
-                    pass
+                import wsgi_cgi
+                self.request = wsgi_cgi.parse_cgi(environ, self.configx)
 
         self.url = ""
         if 'PATH_INFO' in environ:

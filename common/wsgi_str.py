@@ -17,13 +17,20 @@ def strpad(strx, pad = 18):
 
     return stry
 
+# ------------------------------------------------------------------------
+
 def strtrim(strx, trim = 18):
 
-    ''' trim string '''
+    ''' trim string ; adapt to bytes type '''
+
+    if type(strx) == str:
+        padd = " ... "
+    else:
+        padd = b" ... "
 
     if len(strx) > trim - 3:
         hhh = trim // 2
-        stry = strx[:hhh] + " ... " + strx[-hhh:]
+        stry = strx[:hhh] + padd + strx[-hhh:]
     else:
         stry = strx
     return stry

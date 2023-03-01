@@ -56,7 +56,18 @@ def got_index(config, carry):
             try:
                 #startt = time.perf_counter()
                 wsgi_data.soft_opendb(carry, modname)
-                carry.localdb.put(rq[0], rq[1], rq[2], rq[3], rq[4], rq[5])
+
+                # Add filename field from old data (if empty)
+                if not rq[5]:
+                    old_rec = carry.localdb.getbyord(rq[6])
+                    if old_rec:
+                        #print("old_rec", old_rec)
+                        rrr = old_rec[5]
+                else:
+                    rrr = rq[5]
+
+                carry.localdb.put(rq[0], rq[1], rq[2], rq[3], rq[4], rrr)
+
                 # Measure time needed
                 #print("database op %f msec " %  ((time.perf_counter() - startt) * 1000))
             except:

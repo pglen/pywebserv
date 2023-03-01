@@ -54,10 +54,10 @@ _mac_editrow = '''
 
 #<font Page Main size=+2>Edit Rows</font>
 
-def imgrow_data(strx, context):
+def row_data(strx, context):
 
     #sss = wsgi_func.parse_args(strx, context)
-    #print("imgrow_data", strx, context)
+    #print("row_data", strx, context)
 
     foot = "" #''' <td> #'''<td>
 
@@ -82,9 +82,10 @@ def imgrow_data(strx, context):
             trcolor = "#cceecc"
         strx += '''\n\n<tr style=\"background-color:%s\">''' %  trcolor
 
+        #for bb in onerec[1:]:
         for bb in onerec[1:]:
-            bb = wsgi_str.strtrim(bb)
-            strx += "\n      <td>%s" % bb
+            bbb = wsgi_str.strtrim(bb)
+            strx += "\n      <td>%s" % bbb
         cnt += 1
 
         # Buttons
@@ -98,10 +99,7 @@ def imgrow_data(strx, context):
         #print("buttstr", buttstr)
         strx += buttstr
 
-    # add footer
-    # deleted
     return strx
-
 
     strx = '''
     <tr> <td width=10>
@@ -115,7 +113,6 @@ def imgrow_data(strx, context):
     '''
 
     strx += str(sss[1])
-
 
     strx += '''
     <tr><td align=center>
@@ -195,32 +192,17 @@ def mid_rows(strx, carryon):
         wsgi_util.put_exception("Opening databaseL")
         return
 
+    ret += "<table border=0 width=100%>"
+
     #print(carryon)
     recs = carryon.localdb.getcount()
     if not recs:
-        ret += "<tr><td align=center>No Data"
+        ret += "<tr><td align=center>No Data / Empty Database"
     else:
         #print("got", recs, " records")
-        ret += "<table border=0 width=100%>"
-        carryon.xdata = [];  hdata = []
-        # Starting at the end
-        for aa in range(recs-1, -1, -1):
-            try:
-                # Read all, no matter what
-                res = carryon.localdb.getbyord(aa)
-            except:
-                pass
-
-            if not res:
-                 continue
-            # use hdata as filter for duplicates
-            if not res[0] in hdata:
-                #print("skip:", recnum, wsgi_util.strupt(res[0]))
-                hdata.append(res[0])
-                carryon.xdata.append((str(aa), *res))
-
+        carryon.xdata = carryon.localdb.getall()
         # Render it
-        ret +=  "{ imgrow_data }"
+        ret +=  "{ row_data }"
 
     ret += "</table>\n"
 
@@ -307,7 +289,7 @@ _mac_header = '''
 try:
     wsgi_util.add_locals(locals().copy(), common.local_table)
     wsgi_util.add_local_func("mid_rows", mid_rows, common.local_table)
-    wsgi_util.add_local_func("imgrow_data", imgrow_data, common.local_table)
+    wsgi_util.add_local_func("row_data", row_data, common.local_table)
 
 except:
     #print("Exception on editor init vars", sys.exc_info())

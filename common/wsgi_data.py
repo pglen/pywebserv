@@ -88,7 +88,6 @@ class wsgipydb():
     def delrecall(self, rec):
 
         # Delete all keys on this record
-
         print("delete", rec)
         rec = self.getbyord(int(rec))
         if rec:
@@ -102,36 +101,47 @@ class wsgipydb():
                 pass
 
     def getrange(self, beg, count = 1):
+        # Get a range of records[ careful dldted records in between
         ccc = self.db.getdbsize()
         print("getrange", beg, count)
         res =  self.getbyord(beg)
         return res
 
     def  getall(self):
+        # get all data, return array
         ccc = self.db.getdbsize()
         check = [] ;  arr = []
         for aa in range(ccc - 1, -1, -1):
-            aaa = self.db.get_rec(aa)
+            aaa = self.getbyord(aa)
+            #print("aaa", aaa)
             if not aaa:
                 continue
-
             if aaa[0] not in check:
                 check.append(aaa[0])
-                aaa[0] = aaa[0].decode()
-                ddd = self.packer.decode_data(aaa[1].decode("utf-8"))
-                # Save ordinal and key / data
-                arr.append((aa, aaa[0], *ddd[0]))
+                # Save ordinal and key and data
+                arr.append((aa, aaa[0], *aaa[1:] ))
+        check = []
         return arr
 
     def  getbyord(self, numx):
+        # Get ordinal, unscramle it
         #print("by ord", numx)
         sss = self.db.get_rec(int(numx))
-        #print("sss[0]", sss[0], "sss[1]", sss[1].decode("utf-8") )
         if not sss:
             return None
-        ddd = self.packer.decode_data(sss[1].decode("utf-8"))
-        #print("ddd", *ddd[0])
-        return sss[0].decode("utf-8"), *ddd[0]
+        #print("sss[0]", sss[0] )#, "sss[1]", sss[1].decode("utf-8") )
+        eee = self.packer.decode_data(sss[1].decode("utf-8"))[0]
+        ddd = []
+        for aa in eee:
+            #print("'" +  aa, end="' ")
+            ddd.append(aa)
+
+        # Patch filename if none
+        if not ddd[4]:
+            ddd[4] = "none"
+        #print()
+
+        return sss[0], *ddd
 
     def close(self):
         #print("Soft Closed PYDB", self.file)

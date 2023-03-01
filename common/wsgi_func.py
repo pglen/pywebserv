@@ -58,13 +58,6 @@ def     parse_args(strx, context):
     #print("Args filtered:", ddd)
     return ddd
 
-#def     deep_func(strx, context):
-#    return "Deep from code"
-#
-#def     crap_func(strx, context):
-#    return "<b>crap</b> from code"
-#
-
 def     app_one_func(strx, context):
 
     ''' Example app function '''
@@ -182,11 +175,20 @@ def     image_func(strx, context):
     sss = parse_args(strx, context)
     #print("Image args:", len(sss), sss)
 
-    iname = "/media/" + sss[1]
+    mmm = "/media/"
+    iname = mmm  + sss[1]
+
+    # See if file exists, else supply a default image
+    if not os.path.isfile(context.configx.datapath + iname):
+        sss[1] = "beach-hd.jpeg"
+        iname = mmm  + sss[1]
+        #print("media image padded to default", iname)
+
     if len(sss) == 2:
         return "<img src=" + iname + ">"
 
     elif len(sss) == 3:
+        # Resize width; Size toward larger aspect ratio
         try:
             basewidth =  int(sss[2])
         except:
@@ -194,9 +196,8 @@ def     image_func(strx, context):
             return "<img src=" + iname + ">"
 
         nnn = "/tmp/res_" + sss[2] + "_" + str(sss[1])
-        cwd = os.getcwd();
-        nnn2 = cwd + nnn
-        iname2 = cwd + iname
+        nnn2 = context.configx.datapath + nnn
+        iname2 = context.configx.datapath + iname
 
         # Note: If resized is older, we generate
         if not os.path.exists(nnn2) or os.stat(nnn2).st_mtime < os.stat(iname2).st_mtime:
@@ -204,8 +205,14 @@ def     image_func(strx, context):
             try:
                 img = Image.open("." + iname)
                 wpercent = (basewidth / float(img.size[0]))
-                hsize = int((float(img.size[1]) * float(wpercent)))
-                img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+                #print("wpercent", wpercent)
+                if  wpercent > 1.:
+                    vsize = int((float(img.size[0]) / float(wpercent)))
+                    img = img.resize((vsize, basewidth), Image.ANTIALIAS)
+                else:
+                    hsize = int((float(img.size[1]) * float(wpercent)))
+                    img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+
                 img.save(nnn2)
             except:
                 print("Exc Image proc.five:", nnn, sys.exc_info())
@@ -215,6 +222,7 @@ def     image_func(strx, context):
         return "<img src=" + nnn + " >"
 
     elif len(sss) == 4:
+        # Resize both width and height
         try:
             basewidth  =  int(sss[2])
             baseheight =  int(sss[3])
@@ -222,10 +230,9 @@ def     image_func(strx, context):
             print("Invalid parameters to image function (4)", sss)
             return "<img src=" + iname + ">"
 
-        cwd = os.getcwd();
         nnn = "/tmp/res_" + sss[2] + "x" + sss[3] + "_" + str(sss[1])
-        nnn2 = cwd + nnn
-        iname2 = cwd + iname
+        nnn2 = context.configx.datapath + nnn
+        iname2 = context.configx.datapath + iname
         #print("nnn", nnn2)
         #print("iname2", iname2)
         try:
@@ -236,7 +243,7 @@ def     image_func(strx, context):
                 img = img.resize((basewidth, baseheight), Image.ANTIALIAS)
                 img.save(nnn2)
         except:
-            print("Exc image proc.six:", iname2, sys.exc_info()[1])
+            print("Cannot open image:", iname2, sys.exc_info()[1])
         else:
             #print("Using cached version", nnn2)
             pass
@@ -257,38 +264,42 @@ def     load_data_func(strx, context):
 
      Example:
                { loadData proj-edit }
-
     '''
 
-    #print("load_data_func", context)
-
     ddd = parse_args(strx, context)
-
     if context.configx.pgdebug > 3:
         print("load_data_func() ddd", ddd)
+
+    # Make sure we pr fill this one to empty
+    context.res = []
 
     # Get data from the editor project;
     # Careful, passing the wrong filename, it will be created
     try:
-        fff = "./data/%s.pydb" % ddd[1]
-        localdb = wsgi_data.wsgipydb(fff)
+        wsgi_data.soft_opendb(context, ddd[1])
+        #fff = "./data/%s.pydb" % ddd[1]
+        #localdb = wsgi_data.wsgipydb(fff)
 
     except Exception as e:
-        print("Could not create / open local data for '%s'" % fff, e)
+        print("Could not create / open local data for '%s'" % ddd[1], e)
         wsgi_util.put_exception("open / get data")
         return ""
 
     # The data is added to the top of the context object
     try:
-        context.res = localdb.getall()
+        context.res = context.localdb.getall()
     except:
+        wsgi_util.put_exception("Getting Data")
         pass
 
     # Dump it
     if context.configx.pgdebug > 2:
-        for aa in context.res:
-            print("res", wsgi_str.strpad(wsgi_str.strupt(str(aa[0]))),
-                        wsgi_str.strupt(str(aa[1:])))
+        if not context.res:
+            print("Empty database")
+        else:
+            for aa in context.res:
+                print("res", wsgi_str.strpad(wsgi_str.strupt(str(aa[0]))),
+                            wsgi_str.strupt(str(aa[1:])))
 
     # Sat 25.Feb.2023 deactivted -- data is now in context variable
     # The data is returned as macros, the page can reference

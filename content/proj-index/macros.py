@@ -180,7 +180,11 @@ a:link, a:visited {
     max-width: 800px;
 }
 
-/* The Modal (background) ------------------------------------------------- */
+/* The Modal Dialog ------------------------------------------------- */
+
+.Clicker {
+  cursor: pointer;
+}
 
 .modal {
   display: none; /* Hidden by default */
@@ -200,19 +204,19 @@ a:link, a:visited {
   bottom: 0;
   background-color: #fefefe;
   width: 90%;
-  //height: 100%;
+  /* height: 100%; */
 }
 
 /* The Close Button */
-.close {
+.closebutt {
   color: black;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.closebutt:hover,
+.closebutt:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
@@ -220,17 +224,20 @@ a:link, a:visited {
 
 .modal-header {
   padding: 2px 8px;
-  background-color: #eeeeee;
+  //background-color: #eeeeee;
   //5cb85c;
   color: black;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {
+    padding: 2px 8px;
+    }
 
 .modal-footer {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  color: white;
+  padding: 2px 8px;
+  //background-color: #eeeeee
+  //5cb85c;
+  color: black;
 }
 
  /* Popup container ---------------------------------------- */
@@ -364,48 +371,76 @@ function myFunction() {
   popup.classList.toggle("show");
 }
 
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-//var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
-//btn.onclick = function() {
-//  modal.style.display = "block";
-//}
+// Declare modal globals
+var mymodal_0, mymodal_1, mymodal_2;
 
 window.onload = function  myLoad() {
-    console.log("myLoad")
-    document.getElementById("clicker").addEventListener("click", function(event)
+    //console.log("myLoad")
+    mymodal_0   = document.getElementById("myModal_0");
+    mymodal_1   = document.getElementById("myModal_1");
+    mymodal_2   = document.getElementById("myModal_2");
+
+    // Take care of openining
+    document.getElementById("clicker_0").addEventListener("click", function(event)
         {
-        //event.preventDefault()
+        //console.log("event listener 0" + event)
+        mymodal_0.style.display = "block";
+
+        fff = document.getElementById("txt_0");
+        //fff.style.display = "none"
+        fff.focus()
         event.stopPropagation()
-        console.log("event listener" + event)
-        modal.style.display = "block";
-        return true;
         });
+
+    document.getElementById("clicker_1").addEventListener("click", function(event)
+        {
+        //console.log("event listener 1" + event)
+        mymodal_1.style.display = "block";
+        event.stopPropagation()
+        });
+    document.getElementById("clicker_2").addEventListener("click", function(event)
+        {
+        //console.log("event listener 2" + event)
+        mymodal_2.style.display = "block";
+        event.stopPropagation()
+        })
+
+    // When the user clicks on body of popup, close the modal
+    document.getElementById("myContent_0").addEventListener("keydown", function(event)
+        {
+        console.log("key event listener" + event)
+        mymodal_0.style.display = "none";
+        event.stopPropagation()
+        })
+    document.getElementById("myContent_0").addEventListener("click", function(event)
+        {
+        mymodal_0.style.display = "none";
+        event.stopPropagation()
+        })
+    document.getElementById("myContent_1").addEventListener("click", function(event)
+        {
+        mymodal_1.style.display = "none";
+        event.stopPropagation()
+        })
+    document.getElementById("myContent_2").addEventListener("click", function(event)
+        {
+        mymodal_2.style.display = "none";
+        event.stopPropagation()
+        })
 };
-
-function showmodal()
-{
-    console.log("showmodal")
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
 
 //console.log("Loading page")
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+  if (event.target == mymodal_0) {
+    mymodal_0.style.display = "none";
+    }
+  if (event.target == mymodal_1) {
+    mymodal_1.style.display = "none";
+    }
+  if (event.target == mymodal_2) {
+    mymodal_2.style.display = "none";
   }
 }
 
@@ -595,9 +630,9 @@ _mac_main_center = '''
 
             { slider 0 }
             <td valign=middle bgcolor=#cccccc>
-            {slider 1 }
+            { slider 1 }
             <td valign=middle bgcolor=#cccccc>
-            {slider 2 }
+            { slider 2 }
 
              <td  nowrap=nowrap valign=middle bgcolor=#cccccc
                 style="cursor:pointer"
@@ -670,6 +705,55 @@ def _func_calcstep(strx, context):
     else:
         return "0"
 
+#<!-- The Modal -->
+
+def add_modal(img, num = 0):
+
+    #print("control", num)
+
+    sss = '''
+
+    <div id="myModal_%d" class="modal">
+      <!-- Modal content -->
+      <div id=myContent_%d class="modal-content">
+            <div class="modal-header">
+            <span class="closebutt">&times;</span>
+            <h2><center>Image preview. Click to close.</h2>
+            </div>
+        <div class="modal-body">
+          <center>
+          { image %s 1000 }
+          <div style="width=0; overflow:hidden; opacity: 0">
+            <input type=button id=txt_0 value="Close">
+          </div>
+
+        </div>
+        <!-- <div class="modal-footer"> -->
+        <!--     <h2>&nbsp;</h2> -->
+        <!-- </div> -->
+      </div>
+    </div>
+    <div class=Clicker id=clicker_%d><font size=-2>Show Image</font>
+    </div>
+    ''' % (num, num, img, num)
+    #print("sss", sss)
+    return sss
+
+def add_popup(img):
+
+    sss = '''
+    <table border=0>
+        <tr><td>
+        { image %s [ thumbwidth ] }
+        <tr><td align=center>
+        <div class="popup" onclick="myFunction()">
+            <font size=-2>Show Image</font>
+        <span class="popuptext" id="myPopup">{ image %s 400 } </span>
+       </div>
+    </table>
+    '''  % img
+    return sss
+
 # ------------------------------------------------------------------------
 # Present slider
 
@@ -704,61 +788,25 @@ def _func_slider(strx, context):
 
     #print("res", res)
 
-    sss += '''
-
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
-          <!-- Modal content -->
-          <div class="modal-content">
-                <div class="modal-header">
-                <span class="close">&times;</span>
-                <h2><center>Image preview.</h2>
-                </div>
-            <div class="modal-body">
-              <center>
-              { image none 800 }
-            </div>
-            <!-- <div class="modal-footer">
-              <h3>Modal Footer</h3>
-             </div> -->
-          </div>
-        </div>
-
-    <!-- Trigger/Open The Modal -->
-    <!-- <button id="myBtn">Open Modal</button> -->
-
-    <div id=clicker><font size=-1>Open Image</font>
-    </div>
-
-
-'''
-
     try:
         sss += '''
         <td>
             <table border=0 bgcolor=#dddddd>
                 <tr><td>
-                <table border=0 bgcolor=#f5f5f5>
-                    <tr><td colspan=2>
-                    <font size=+3> %s</font>
-                        <table border=0>
-                            <tr><td>
-                            { image %s [ thumbwidth ] }
-                            <tr><td align=center>
-                            <div class="popup" onclick="myFunction()">
-                                <font size=-2>Show Image</font>
-                            <span class="popuptext" id="myPopup">{ image %s 400 } </span>
-                           </div>
-                        </table>
-                    <td> %s
-                    <tr><td colspan=2 align=center>
-                    <tr><td colspan=2 style="text-alignment:justify">%s<br>
-                    <tr><td colspan=2 align=right><font size=-1> %s</font<br>
-                </table>
+                <tr><td colspan=2>
+                <font size=+3> %s</font>
+                <tr><td align=center>
+                { image %s [ thumbwidth ] }<br>
+                %s
+                <td>%s
+                <tr><td colspan=2 align=center>
+                <tr><td colspan=2 style="text-alignment:justify">%s<br>
+                <tr><td colspan=2 align=right><font size=-1> %s</font<br>
             </table>
 
-           ''' % ( res[idx][2], res[idx][6], res[idx][6],
+           ''' % ( res[idx][2], res[idx][6], add_modal(res[idx][6], int(ddd[1])),
                         res[idx][3], res[idx][4], res[idx][5])
+
     except:
         # If there is not enough  data .. ignore it
         wsgi_util.put_exception("In display slider")

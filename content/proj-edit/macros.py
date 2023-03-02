@@ -19,12 +19,14 @@ _mac_ShortCName = ''' United Planet Peace '''
 # ------------------------------------------------------------------------
 
 _mac_center_top = '''
+
  <table width=100% { sitecolor } border=0>
     <tr  height=36>
     <td align=center width=30%> &nbsp; &nbsp; <font size=+2>
     <a href=index.html> <b>{ ShortCName }</b> </a>
     </font>
         <td>
+        <!--
         <table width=100% border=0>
             <tr align=center>
                 <td>
@@ -35,15 +37,20 @@ _mac_center_top = '''
                 <td> <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
                 <td>
         </table>\n
+        -->
      </table>\n
 '''
 
 _mac_edit_center = '''
 <td valign=top>
 
-     <center>
-     { center_top }
-     { center_body }
+     <table border=0 width=100%>
+        <tr><td>
+         <center>
+         { center_body }
+         { add_new }
+     </table>
+
 '''
 
 _mac_editrow = '''
@@ -200,7 +207,8 @@ def mid_rows(strx, carryon):
         ret += "<tr><td align=center>No Data / Empty Database"
     else:
         #print("got", recs, " records")
-        carryon.xdata = carryon.localdb.getall()
+        checker = []
+        carryon.xdata = carryon.localdb.getall(checker)
         # Render it
         ret +=  "{ row_data }"
 
@@ -215,6 +223,7 @@ _mac_center_body = '''
     <table width=100% border=0>
         <tr><td align=center>
         { mid_rows }
+        { nav }
     </table>
 '''
 
@@ -235,29 +244,32 @@ _mac_nav = '''
 _mac_add_new = '''
     <form action=editor.html method=post>
     <input type=submit name='add_new' value='Add New'>
+    <hr>
+    <input type=submit name='exp' value='Export'>
+    <input type=submit name='imp' value='Import'>
     </form>
 '''
 
 _mac_right = '''
     <td valign=top width=20%>
-        <table width=100% cellpadding=3 border=0>
-        <tr><td bgcolor={ tabhead } height=36 align=center>
-            <font size=+1> <b>Misc</b>
-        <tr><td>
-        <tr><td align=center>
-            &nbsp; &nbsp;
-            <b>Last column, maybe ads</b><br>
-            cogito ergo sum cogito ergo sum cogito ero sum
-            cogito ero sum cogito ero sum cogito ero sum
-            cogito ero sum cogito ero sum cogito ero sum
+        <table width=100% cellpadding=1 border=1>
+            <tr><td bgcolor={ tabhead } height=36 align=center>
+                <font size=+1> <b>Misc</b>
+            <tr><td>
+            <tr><td align=center>
+                &nbsp; &nbsp;
+                <b>Last column, maybe ads</b><br>
+                cogito ergo sum cogito ergo sum cogito ero sum
+                cogito ero sum cogito ero sum cogito ero sum
+                cogito ero sum cogito ero sum cogito ero sum
         </table>
 '''
 
 # Clear text box when the first char is space (empty)
 _mac_clr = ''' if(this.value[0]==' ')this.value='' '''
 
-_mac_header = '''
-    <table width=100% bgcolor={ sitecolor } border=0>
+_mac_edit_header = '''
+    <table width=100% bgcolor={ sitecolor } border=1>
         <form method=post>
             <tr><td>
             <a href=index.html>
@@ -265,17 +277,18 @@ _mac_header = '''
             <!-- &nbsp; &nbsp; &nbsp;  -->
             the editing site for United Planet Peace<br>
             <font size=-1 color=red>Authorized users only</center></font>
-
-            <!-- (under construction, check back later) --!>
-             <td align=right width=40%>
-                <!--
-                <font size=-1>Quick feedback:</font>  &nbsp;
-                <input type=text name="feedname" onfocus="{ clr }" value=" Your Name" size=10>
-                <input type=text name="feedtit"  onfocus="{ clr }" value=" Feddback Title" size=10>
-                <input type=text name="feedtxt"  onfocus="{ clr }" value=" Feedback Content" size=12>
-                <input type=submit name='feedSUB' value='Submit'>
-                 -->
             <td>
+
+        <table width=100% border=0>
+            <tr align=center>
+                <td>
+                <td> <a href=index.html>
+                     <img src=/siteicons/go-home.png class=image title="Back to home page"> </a>
+                <td> <img src=/siteicons/emblem-default.png class=image title="Go forward">
+                <td> <img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
+                <td> <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
+                <td>
+        </table>\n
 
         </form>
             <td align=right width=18%>

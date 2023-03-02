@@ -45,7 +45,7 @@ def got_index(config, carry):
             rq.append(aa[1])
             par.append(aa[0])
 
-        #print("data rq", rq)
+        print("data rq", rq)
         if len(rq) == 1:
             if "Confirm" in rq[0]:
                 sss = par[0].split("_")

@@ -180,6 +180,115 @@ a:link, a:visited {
     max-width: 800px;
 }
 
+/* The Modal (background) ------------------------------------------------- */
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.3); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  bottom: 0;
+  background-color: #fefefe;
+  width: 90%;
+  //height: 100%;
+}
+
+/* The Close Button */
+.close {
+  color: black;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 8px;
+  background-color: #eeeeee;
+  //5cb85c;
+  color: black;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+ /* Popup container ---------------------------------------- */
+
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+/* Media ----------------------------------------------------------- */
+
 @media (max-width:600px) {
 
     .row {
@@ -248,7 +357,60 @@ function toggle(tt, dt) {
         text.innerHTML = "<font size=-1>hide</font>";
     }
 }
+
+// When the user clicks on <div>, open the popup
+function myFunction() {
+  var popup = document.getElementById("myPopup");
+  popup.classList.toggle("show");
+}
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+//var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+//btn.onclick = function() {
+//  modal.style.display = "block";
+//}
+
+window.onload = function  myLoad() {
+    console.log("myLoad")
+    document.getElementById("clicker").addEventListener("click", function(event)
+        {
+        //event.preventDefault()
+        event.stopPropagation()
+        console.log("event listener" + event)
+        modal.style.display = "block";
+        return true;
+        });
+};
+
+function showmodal()
+{
+    console.log("showmodal")
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+//console.log("Loading page")
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 </script>
+
 
 '''
 
@@ -403,6 +565,8 @@ _mac_main_center = '''
      <table border=0>
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
+
+        </div>
         <table border=0 width=100%>
             <tr><td>
             Read our Mission / Founding / Target statments
@@ -422,7 +586,7 @@ _mac_main_center = '''
             </table>
         </table>
 
-        <table border=0>
+        <table width=100% border=0>
             <tr valign=top>
              <td nowrap=nowrap valign=middle bgcolor=#cccccc
                 style="cursor:pointer"
@@ -431,9 +595,9 @@ _mac_main_center = '''
 
             { slider 0 }
             <td valign=middle bgcolor=#cccccc>
-            { slider 1 }
+            {slider 1 }
             <td valign=middle bgcolor=#cccccc>
-            { slider 2 }
+            {slider 2 }
 
              <td  nowrap=nowrap valign=middle bgcolor=#cccccc
                 style="cursor:pointer"
@@ -533,62 +697,97 @@ def _func_slider(strx, context):
               ]
 
     if idx > len(res):
-        idx = 0
+        #idx = 0
         print("Passed end of data")
         #sss = "Passed end of data"
         #return sss
 
     #print("res", res)
+
     sss += '''
-    <td>
-        <table border=0 bgcolor=#dddddd>
-            <tr><td>
-            <table border=0 bgcolor=#f5f5f5>
-            <tr>
-                <tr><td colspan=2>
-                <font size=+3> %s
-                <tr>
-                <td>
 
-                { image %s [ thumbwidth ] }
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+                <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2><center>Image preview.</h2>
+                </div>
+            <div class="modal-body">
+              <center>
+              { image none 800 }
+            </div>
+            <!-- <div class="modal-footer">
+              <h3>Modal Footer</h3>
+             </div> -->
+          </div>
+        </div>
 
-                <td>
-                    %s
-                <tr><td colspan=2 align=center>
-                <tr><td colspan=2 style="text-alignment:justify">
-                    %s<br>
+    <!-- Trigger/Open The Modal -->
+    <!-- <button id="myBtn">Open Modal</button> -->
 
-                <tr><td colspan=2 align=center>
-                   <font size=-1> %s</font<br>
+    <div id=clicker><font size=-1>Open Image</font>
+    </div>
+
+
+'''
+
+    try:
+        sss += '''
+        <td>
+            <table border=0 bgcolor=#dddddd>
+                <tr><td>
+                <table border=0 bgcolor=#f5f5f5>
+                    <tr><td colspan=2>
+                    <font size=+3> %s</font>
+                        <table border=0>
+                            <tr><td>
+                            { image %s [ thumbwidth ] }
+                            <tr><td align=center>
+                            <div class="popup" onclick="myFunction()">
+                                <font size=-2>Show Image</font>
+                            <span class="popuptext" id="myPopup">{ image %s 400 } </span>
+                           </div>
+                        </table>
+                    <td> %s
+                    <tr><td colspan=2 align=center>
+                    <tr><td colspan=2 style="text-alignment:justify">%s<br>
+                    <tr><td colspan=2 align=right><font size=-1> %s</font<br>
+                </table>
             </table>
-        </table>
-    ''' % ( res[idx][2], res[idx][6], res[idx][3], res[idx][4], res[idx][5])
 
+           ''' % ( res[idx][2], res[idx][6], res[idx][6],
+                        res[idx][3], res[idx][4], res[idx][5])
+    except:
+        # If there is not enough  data .. ignore it
+        wsgi_util.put_exception("In display slider")
+        pass
     return sss
-
-_mac_art_header = '''Header here'''
 
 # Clear text box when the first char is space (empty)
 _mac_clr = ''' if(this.value[0]==' ')this.value='' '''
 
 _mac_header2 = '''
     <table width=100% border=0>
-        <form method=post>
+        <!--<form method=post>-->
             <tr><td>
             <a href=index.html>
             <font size=+2><center><b>Welcome to UPP, &nbsp; </a> </center></font> <br>
 
             <!-- &nbsp; &nbsp; &nbsp; the site for United Planet Peace -->
+
             <!-- (under construction, check back later) --!>
 
             <td align=right>
-                 <font size=-1>Quick feedback:</font>  &nbsp;
+                 <font size=-1>Quickx feedback:</font>  &nbsp;
                 <input type=text name="feedname" onfocus="{ clr }" value=" Your Name" size=10>
                 <input type=text name="feedtit"  onfocus="{ clr }" value=" Feddback Title" size=10> <br>
                 <input type=text name="feedtxt"  onfocus="{ clr }" value=" Feedback Content" size=12>
                 <input type=submit name='feedSUB' value='Submit'>
             <td>
-        </form>
+        <!--</form>-->
+
     </table>
 '''
 
@@ -624,8 +823,7 @@ _glob_header = '''
     </table>
 '''
 
-#_glob_site_footer = '''
-_glob_footer = '''
+_glob_site_footer = '''
     <table width=100%  border=0>
         <tr><td width=100% colspan=3>
         <img src=/media/city_scape_xsmall.png width=100%>
@@ -670,6 +868,11 @@ _mac_imgrow = '''
       Image description Image description Image description Image description Image description
 
 '''
+
+
+
+
+
 
 wsgi_util.add_all_vars(locals().copy(), common.local_table)
 

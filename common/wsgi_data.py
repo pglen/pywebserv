@@ -107,17 +107,19 @@ class wsgipydb():
         res =  self.getbyord(beg)
         return res
 
-    def  getall(self):
+    def  getall(self, checker):
         # get all data, return array
         ccc = self.db.getdbsize()
-        check = [] ;  arr = []
+        arr = []
         for aa in range(ccc - 1, -1, -1):
             aaa = self.getbyord(aa)
             #print("aaa", aaa)
             if not aaa:
                 continue
-            if aaa[0] not in check:
-                check.append(aaa[0])
+            ccc = aaa[0].decode()
+            if ccc not in checker:
+                checker.append(ccc)
+                #print("checker", ccc)
                 # Save ordinal and key and data
                 arr.append((aa, aaa[0], *aaa[1:] ))
         check = []
@@ -343,7 +345,7 @@ class wsgiSql():
     # --------------------------------------------------------------------
     # Get All
 
-    def   getall(self):
+    def   getall(self, checker):
         rr = None
         try:
             self.c.execute("select * from " + self.table + "")

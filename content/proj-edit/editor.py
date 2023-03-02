@@ -74,8 +74,8 @@ def got_editor(config, carry):
             #print("res", res)
 
             carry.cdata += "<table border=0>"
-            carry.cdata += "<input type=hidden name=aa_0 value=%s" % (str(res[0])) + ">"
-            carry.cdata += "<input type=hidden name=aa_6 value=%s" % (str(rq[1])) + ">"
+            carry.cdata += "<input type=hidden name=aa_0 value=%s" % res[0].decode() + ">"
+            carry.cdata += "<input type=hidden name=aa_6 value=%s" % rq[1] + ">"
 
             for aa in range(len(res)-1):
                 if aa == len(res)-2:
@@ -130,11 +130,13 @@ def got_editor(config, carry):
             carry.cdata += "<input type=submit name=rm_%d value='  Cancel Delete  '>  &nbsp; " % int(rq[1])
             carry.cdata += "<input type=submit name=rm_%d value='  Confirm Delete  '>  "  % int(rq[1])
 
-            #content +=
-
         else:
-            content += "<b>invalid opcode</b>"
+            carry.cdata += "<table>"
+            carry.cdata += "<tr><td align=center><font size=+2>" + \
+                            "Invalid / Unimplemented opcode</font><p> '%s'</b>" % \
+                                     carry.request[0][1]
             print("Invalid (unimplemented) command code")
+            carry.cdata += "</table>"
 
     wsgi_data.soft_closedb(carry, modname)
 

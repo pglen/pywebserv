@@ -285,9 +285,10 @@ def     load_data_func(strx, context):
         wsgi_util.put_exception("open / get data")
         return ""
 
+    checker = []
     # The data is added to the top of the context object
     try:
-        context.res = context.localdb.getall()
+        context.res = context.localdb.getall(checker)
     except:
         wsgi_util.put_exception("Getting Data")
         pass

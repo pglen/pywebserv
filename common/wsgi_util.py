@@ -8,13 +8,6 @@
 import sys, os, time, re, traceback, datetime, base64
 import wsgi_global, wsgi_parse, wsgi_crypt
 
-#try:
-#    import wsgi_global, wsgi_parse
-#except:
-#    print("Cannot import", sys.exc_info())
-
-verbose = 0
-
 def xint(val):
 
     ''' Safe alternative to int() -- returns 0 if invalid number '''
@@ -22,8 +15,7 @@ def xint(val):
     try:
         ret = int(val)
     except:
-        if verbose > 1:
-            print("Invalid number in parsing int", val)
+        #print("Invalid number in parsing int", val)
         ret = 0
     return ret
 

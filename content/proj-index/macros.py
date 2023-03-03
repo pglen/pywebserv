@@ -372,75 +372,59 @@ function myFunction() {
 }
 
 // Declare modal globals
-var mymodal_0, mymodal_1, mymodal_2;
+var obj = {}
 
 window.onload = function  myLoad() {
     //console.log("myLoad")
-    mymodal_0   = document.getElementById("myModal_0");
-    mymodal_1   = document.getElementById("myModal_1");
-    mymodal_2   = document.getElementById("myModal_2");
 
-    // Take care of openining
-    document.getElementById("clicker_0").addEventListener("click", function(event)
+    for (aa = 0; aa < 3; aa++)
         {
-        //console.log("event listener 0" + event)
-        mymodal_0.style.display = "block";
+        ss = aa.toString()
+        obj["mymodal_" + ss] = document.getElementById("myModal_" + ss)
 
-        fff = document.getElementById("txt_0");
-        //fff.style.display = "none"
-        fff.focus()
-        event.stopPropagation()
-        });
+        // Take care of openining
+        ooo = document.getElementById("clicker_" + ss)
+        ooo.addEventListener("click", function(event)
+            {
+            obj["mymodal_" + ss].style.display = "block";
+            fff = document.getElementById("txt_" + ss);
+            fff.focus()
+            event.stopPropagation()
+            })
 
-    document.getElementById("clicker_1").addEventListener("click", function(event)
-        {
-        //console.log("event listener 1" + event)
-        mymodal_1.style.display = "block";
-        event.stopPropagation()
-        });
-    document.getElementById("clicker_2").addEventListener("click", function(event)
-        {
-        //console.log("event listener 2" + event)
-        mymodal_2.style.display = "block";
-        event.stopPropagation()
-        })
+        // Take care of closing
+        ccc = document.getElementById("myContent_" + ss)
 
-    // When the user clicks on body of popup, close the modal
-    document.getElementById("myContent_0").addEventListener("keydown", function(event)
-        {
-        console.log("key event listener" + event)
-        mymodal_0.style.display = "none";
-        event.stopPropagation()
-        })
-    document.getElementById("myContent_0").addEventListener("click", function(event)
-        {
-        mymodal_0.style.display = "none";
-        event.stopPropagation()
-        })
-    document.getElementById("myContent_1").addEventListener("click", function(event)
-        {
-        mymodal_1.style.display = "none";
-        event.stopPropagation()
-        })
-    document.getElementById("myContent_2").addEventListener("click", function(event)
-        {
-        mymodal_2.style.display = "none";
-        event.stopPropagation()
-        })
-};
+        // When the user clicks on body of popup, close the modal
+        ccc.addEventListener("keydown", function(event)
+            {
+            console.log("key event listener" + event)
+            obj["mymodal_" + ss].style.display = "none";
+            event.stopPropagation()
+            })
+
+        // The close triggers for click
+        ccc.addEventListener("click", function(event)
+            {
+            obj["mymodal_" + ss].style.display = "none";
+            event.stopPropagation()
+            })
+        }
+}
+
 
 //console.log("Loading page")
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-  if (event.target == mymodal_0) {
-    mymodal_0.style.display = "none";
+  if (event.target == obj.mymodal_0) {
+    obj.mymodal_0.style.display = "none";
     }
-  if (event.target == mymodal_1) {
-    mymodal_1.style.display = "none";
+  if (event.target == obj.mymodal_1) {
+    obj.mymodal_1.style.display = "none";
     }
-  if (event.target == mymodal_2) {
-    mymodal_2.style.display = "none";
+  if (event.target == obj.mymodal_2) {
+    obj.mymodal_2.style.display = "none";
   }
 }
 
@@ -705,14 +689,13 @@ def _func_calcstep(strx, context):
     else:
         return "0"
 
-#<!-- The Modal -->
+#<!-- The Modal dialog -->
 
 def add_modal(img, num = 0):
 
     #print("control", num)
 
     sss = '''
-
     <div id="myModal_%d" class="modal">
       <!-- Modal content -->
       <div id=myContent_%d class="modal-content">
@@ -724,9 +707,9 @@ def add_modal(img, num = 0):
           <center>
           { image %s 1000 }
           <div style="width=0; overflow:hidden; opacity: 0">
-            <input type=button id=txt_0 value="Close">
+            <!-- hidden for focus -->
+            <input type=button id=txt_%d value="Close">
           </div>
-
         </div>
         <!-- <div class="modal-footer"> -->
         <!--     <h2>&nbsp;</h2> -->
@@ -735,7 +718,7 @@ def add_modal(img, num = 0):
     </div>
     <div class=Clicker id=clicker_%d><font size=-2>Show Image</font>
     </div>
-    ''' % (num, num, img, num)
+    ''' % (num, num, img, num, num)
     #print("sss", sss)
     return sss
 

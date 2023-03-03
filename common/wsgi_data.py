@@ -33,19 +33,6 @@ def soft_opendb(carry, modname, suffix = ""):
         if not carry.localdb:
             ccc = True
 
-    #    # see if DB is OK
-    #    try:
-    #        if USE_PYDB:
-    #            pass
-    #        else:
-    #            conn = sqlite3.connect(file)
-    #            c = conn.cursor()
-    #            c.execute("select count(*) from " + self.table + "")
-    #            conn.close()
-    #    except:
-    #        #print("Cannot open/create db:", file, sys.exc_info())
-    #        needopen = True
-
     if needopen:
         try:
             if USE_PYDB:
@@ -56,10 +43,42 @@ def soft_opendb(carry, modname, suffix = ""):
             #print("Cannot open database", dbname)
             wsgi_util.put_exception("Open database %s") % carry.localdb
 
+def soft_openauthdb(carry, modname, suffix = ""):
+
+    #print("softopen", carry, modname)
+
+    if USE_PYDB:
+        carry.authdbname = "data/%s%s.pydb" % (modname, suffix)
+    else:
+        carry.authdbname = "data/%s%s.sqlt" % (modname, suffix)
+
+    needopen = False
+    if not hasattr(carry, "authdb"):
+        needopen = True
+    else:
+        if not carry.authdb:
+            ccc = True
+
+    if needopen:
+        try:
+            if USE_PYDB:
+                carry.authdb = wsgipydb(carry.authdbname)
+            else:
+                carry.authdb = wsgiSql(carry.authdbname)
+        except:
+            #print("Cannot open database", dbname)
+            wsgi_util.put_exception("Open auth database %s") % carry.localdb
+
+
 def soft_closedb(carry, modname, suffix = ""):
 
     #print("Soft closing:", carry.dbname, carry.localdb)
     carry.localdb = None
+
+def soft_closeauthdb(carry, modname, suffix = ""):
+
+    #print("Soft closing:", carry.dbname, carry.localdb)
+    carry.authdb = None
 
 class wsgipydb():
 
@@ -144,6 +163,9 @@ class wsgipydb():
         #print()
 
         return sss[0], *ddd
+
+    def  getbykey(self, numx):
+        pass
 
     def close(self):
         #print("Soft Closed PYDB", self.file)

@@ -226,11 +226,6 @@ class xWebServer():
                 #print("found good", aa)
                 got_session = 1
 
-        if not got_session:
-            sess = str(uuid.uuid4())
-            print("New Session:", sess)
-            self.wanted_cookies.append(("Session", sess, 1))
-
         if self.configx.verbose > 2:
             print("process_request", self.url, self.fn)
 
@@ -252,6 +247,19 @@ class xWebServer():
         self.carrydef.request = self.request
         self.carrydef.template = template
         self.carrydef.fname = fname
+
+        if not got_session:
+            sess = str(uuid.uuid4())
+            print("New Session:", sess)
+            self.wanted_cookies.append(("Session", sess, 1))
+            # Also create a matching data
+
+            import wsgi_data
+            wsgi_data.soft_openauthdb(self.carrydef, "auth")
+            dt = datetime.datetime.utcnow()
+            fdt = dt.strftime('%a, %d %b %Y %H:%M:%S GMT')
+            #   sess, valid, auth, authlevel, date
+            self.carrydef.authdb.put(sess, "0", "0", "0", "0", fdt)
 
         if self.configx.verbose > 2:
             print("process_request2", callme, template)

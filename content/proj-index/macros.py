@@ -372,59 +372,100 @@ function myFunction() {
 }
 
 // Declare modal globals
-var obj = {}
+var mymodal_0, mymodal_1, mymodal_2
 
 window.onload = function  myLoad() {
-    //console.log("myLoad")
 
-    for (aa = 0; aa < 3; aa++)
+    mymodal_0 = document.getElementById("myModal_0")
+    mymodal_1 = document.getElementById("myModal_1")
+    mymodal_2 = document.getElementById("myModal_2")
+
+    /* console.log("myLoad") */
+
+    // Take care of closing
+    ccc = document.getElementById("myContent_0")
+    // When the user clicks on body of popup, close the modal
+    ccc.addEventListener("keydown", function(event)
         {
-        ss = aa.toString()
-        obj["mymodal_" + ss] = document.getElementById("myModal_" + ss)
+        /* console.log("key event listener" + event) */
+        mymodal_0.style.display = "none";
+        event.stopPropagation()
+        })
+    // The close triggers for click
+    ccc.addEventListener("click", function(event)
+        {
+        mymodal_0.style.display = "none";
+        event.stopPropagation()
+        })
 
-        // Take care of openining
-        ooo = document.getElementById("clicker_" + ss)
-        ooo.addEventListener("click", function(event)
-            {
-            obj["mymodal_" + ss].style.display = "block";
-            fff = document.getElementById("txt_" + ss);
-            fff.focus()
-            event.stopPropagation()
-            })
+    ccc = document.getElementById("myContent_1")
+    // When the user clicks on body of popup, close the modal
+    ccc.addEventListener("keydown", function(event)
+        {
+        /* console.log("key event listener" + event) */
+        mymodal_1.style.display = "none";
+        event.stopPropagation()
+        })
+    // The close triggers for click
+    ccc.addEventListener("click", function(event)
+        {
+        mymodal_1.style.display = "none";
+        event.stopPropagation()
+        })
+    ccc = document.getElementById("myContent_2")
+    // When the user clicks on body of popup, close the modal
+    ccc.addEventListener("keydown", function(event)
+        {
+        /* console.log("key event listener" + event) */
+        mymodal_2.style.display = "none";
+        event.stopPropagation()
+        })
+    // The close triggers for click
+    ccc.addEventListener("click", function(event)
+        {
+        mymodal_2.style.display = "none";
+        event.stopPropagation()
+        })
 
-        // Take care of closing
-        ccc = document.getElementById("myContent_" + ss)
-
-        // When the user clicks on body of popup, close the modal
-        ccc.addEventListener("keydown", function(event)
-            {
-            console.log("key event listener" + event)
-            obj["mymodal_" + ss].style.display = "none";
-            event.stopPropagation()
-            })
-
-        // The close triggers for click
-        ccc.addEventListener("click", function(event)
-            {
-            obj["mymodal_" + ss].style.display = "none";
-            event.stopPropagation()
-            })
-        }
-}
-
+    // Take care of openining
+    ooo = document.getElementById("clicker_0")
+    ooo.addEventListener("click", function(event)
+        {
+        mymodal_0.style.display = "block";
+        fff = document.getElementById("txt_0");
+        fff.focus()
+        event.stopPropagation()
+        });
+    ooo = document.getElementById("clicker_1")
+    ooo.addEventListener("click", function(event)
+        {
+        mymodal_1.style.display = "block";
+        fff = document.getElementById("txt_1");
+        fff.focus()
+        event.stopPropagation()
+        });
+    ooo = document.getElementById("clicker_2")
+    ooo.addEventListener("click", function(event)
+        {
+        mymodal_2.style.display = "block";
+        fff = document.getElementById("txt_2");
+        fff.focus()
+        event.stopPropagation()
+        });
+    }
 
 //console.log("Loading page")
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-  if (event.target == obj.mymodal_0) {
-    obj.mymodal_0.style.display = "none";
+  if (event.target == mymodal_0) {
+    mymodal_0.style.display = "none";
     }
-  if (event.target == obj.mymodal_1) {
-    obj.mymodal_1.style.display = "none";
+  if (event.target == mymodal_1) {
+    mymodal_1.style.display = "none";
     }
-  if (event.target == obj.mymodal_2) {
-    obj.mymodal_2.style.display = "none";
+  if (event.target == mymodal_2) {
+    mymodal_2.style.display = "none";
   }
 }
 

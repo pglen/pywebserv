@@ -108,33 +108,33 @@ var = "this is var "
 # This expands a couple of times ....
 recursive = "'pre recurse { recursive } post recurse'"
 
+
+site_top = '''
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="siteicons/favicon.ico">
+    { sitestyle }
+</head>
+<div class="header">
+    { header }
+</div>
+'''
+
+site_bottom = '''
+<div class="footer">
+    { site_footer }
+</div>
+</html>
+'''
+
 bigtext = '''
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
                 { image beach-hd.jpeg 100 }   <p>
                 { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.                `
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
                 hello
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
-                { var } substitution is { no problem } here.
                 { var } substitution is { no problem } here.
                 hello<br>
                 { var } substitution is { no problem } here.

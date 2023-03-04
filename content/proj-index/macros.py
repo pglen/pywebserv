@@ -35,9 +35,9 @@ import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 from . import common
 
-_glob_siteemail =  "admin@unitedplanetpeace.com"
-_glob_tabhead   = "#ccffcc { tabhead }"
-_glob_misscol   = "#eeeeee"
+_glob_siteemail =   "admin@unitedplanetpeace.com"
+_glob_tabhead   =   "#ccffcc { tabhead }"
+_glob_misscol   =   "#eeeeee"
 
 # String parsed before function
 _glob_sitecolor = "#aaffbb"
@@ -62,7 +62,11 @@ body {
   background: #f1f1f1;
 }
 
-/* Header/Blog Title */
+/* Header/Blog Titlefor(int aa = 0; aa < limx; aa++)
+    {
+    // Do stuff
+    }
+ */
 .header {
   /*padding: 30px;*/
   text-align: center;
@@ -175,9 +179,10 @@ a:link, a:visited {
 }
 .textx {
     border-radius: 10px;
-    background-color:  #cccccc;
+    background-color:  #dddddd;
     padding: 10px;
     max-width: 800px;
+    text-align: justify;
 }
 
 /* The Modal Dialog ------------------------------------------------- */
@@ -362,6 +367,22 @@ function toggle(tt, dt) {
     else {
         ele.style.display = "block";
         text.innerHTML = "<font size=-1>hide</font>";
+    }
+}
+
+function toggle3(pp, tt, dt) {
+    var pre = document.getElementById(pp);
+    var ele = document.getElementById(tt);
+    var textx = document.getElementById(dt);
+    if(ele.style.display == "block") {
+        ele.style.display = "none";
+        pre.style.display = "block";
+        textx.innerHTML = "<font size=-1>Show More ...</font>";
+    }
+    else {
+        ele.style.display = "block";
+        pre.style.display = "none";
+        textx.innerHTML = "<font size=-1>Show Less ...</font>";
     }
 }
 
@@ -603,7 +624,8 @@ _mac_target_statement = '''
 
 def _func_calcwrap(strx, context):
 
-    dbsize = len(context.res)
+    res = getattr(context, "proj-edit").res
+    dbsize = len(res)
 
     if context.prog >= dbsize - 3:
         cont = "&nbsp; &nbsp; -- &nbsp; &nbsp;"
@@ -619,9 +641,9 @@ def _func_calcwrap2(strx, context):
         cont = "&nbsp; >> &nbsp;"
     return cont
 
+_mac_center_body = '''
 
-_mac_main_center = '''
-
+    <td>
      <table border=0>
         <tr><td align=center>
         <font size=+2><b>{ header2 } </b></font>
@@ -629,7 +651,7 @@ _mac_main_center = '''
         </div>
         <table border=0 width=100%>
             <tr><td>
-            Read our Mission / Founding / Target statments
+            Read up on our Mission / Founding Statement / Target statments
             <a id="displayText4" href="javascript:toggle('toggleText4', 'displayText4');">
             <font size=-1>show ...</font></a>
 
@@ -668,7 +690,11 @@ _mac_main_center = '''
 
         <table border=0>
             <tr valign=top>
-            { imgrow } { imgrow } { imgrow }
+
+            { imgrow 0 }
+            { imgrow 1 }
+            { imgrow 2 }
+
          </table>
     </table>
 
@@ -700,12 +726,7 @@ _glob_site_right = '''
         <font size=+1> <b>Misc</b>
     <tr><td>
     <tr><td align=center>
-        &nbsp; &nbsp;
-        <b>Last column, maybe ads</b><p>
-        cogito ergo sum cogito ergo sum cogito ergo sum
-        cogito ergo sum cogito ergo sum cogito ergo sum
-        cogito ergo sum cogito ergo sum cogito ergo sum
-        <br>
+        { app_fortune } <p>
         { app_one } <p>
         { app_two } <p>
 </table>
@@ -718,9 +739,11 @@ def _func_calcstep(strx, context):
     ddd = wsgi_func.parse_args(strx, context)
     #print("ddd", ddd)
 
+    res = getattr(context, "proj-edit").res
+
     if hasattr(context, "prog"):
         newval =  context.prog + int(ddd[1])
-        dbsize = len(context.res)
+        dbsize = len(res)
         #print("dbsize", dbsize)
         if newval > dbsize - 3:
             newval = dbsize-3
@@ -747,6 +770,7 @@ def add_modal(img, num = 0):
         <div class="modal-body">
           <center>
           { image %s 1000 }
+
           <div style="width=0; overflow:hidden; opacity: 0">
             <!-- hidden for focus -->
             <input type=button id=txt_%d value="Close">
@@ -787,13 +811,11 @@ def _func_slider(strx, context):
     ddd = wsgi_func.parse_args(strx, context)
 
     #print("ddd", ddd)
-    #print("slider res", context.res)
 
     if not hasattr(context, "prog"):
         context.prog = 0
-
     idx = context.prog + int(ddd[1])
-    res = context.res
+    res  = getattr(context, "proj-edit").res
 
     if not res:
         # Patch in something
@@ -809,9 +831,10 @@ def _func_slider(strx, context):
         print("Passed end of data")
         #sss = "Passed end of data"
         #return sss
-
     #print("res", res)
 
+    part = res[idx][4][:96] + " ... "
+    num = int(ddd[1])
     try:
         sss += '''
         <td>
@@ -820,16 +843,36 @@ def _func_slider(strx, context):
                 <tr><td colspan=2>
                 <font size=+3> %s</font>
                 <tr><td align=center>
-                { image %s [ thumbwidth ] }<br>
-                %s
+                <a href=/media/%s>
+                    { image %s [ thumbwidth ] }<br>
+                </a>
                 <td>%s
                 <tr><td colspan=2 align=center>
-                <tr><td colspan=2 style="text-alignment:justify">%s<br>
-                <tr><td colspan=2 align=right><font size=-1> %s</font<br>
-            </table>
+                <tr><td colspan=2 style="text-alignment:justify">
+                <div id="displayText5_%d">
+                    %s<br>
+                </div>
+                <div id="toggleText5_%d" style="display: none">
+                %s
+                </div>
+                ''' % ( res[idx][2], res[idx][6], res[idx][6],
+                                 res[idx][3],  num, part,
+                                    num, res[idx][4])
 
-           ''' % ( res[idx][2], res[idx][6], add_modal(res[idx][6], int(ddd[1])),
-                        res[idx][3], res[idx][4], res[idx][5])
+                #add_modal(res[idx][6], num),
+
+        rrr = '''
+                 <a id='displayText5a_%d' href="javascript:toggle3('displayText5_%d',
+                                'toggleText5_%d', 'displayText5a_%d'); ">
+                    <font size=-1>Show More ... </font></a>
+                ''' % (num, num, num, num,)
+
+        if  len(res[idx][4]) > 96:
+            sss += rrr
+
+        sss += '''
+            <tr><td colspan=2 align=right><font size=-1> %s</font<br>
+        </table>'''  % res[idx][5]
 
     except:
         # If there is not enough  data .. ignore it
@@ -916,34 +959,52 @@ _glob_site_footer = '''
     </table>
 '''
 
-_mac_imgrow = '''
-  <tr>  <td width=10>
-  <td width=20>
-  <!-- <div class=up-class> <font size=+2>Hello rotated text</font></div> -->
+def _func_imgrow(strx, context):
 
-  <td width=10>
+    ddd = wsgi_func.parse_args(strx, context)
+
+    if not hasattr(context, "prog2"):
+        context.prog2 = 0
+
+    idx = context.prog2 + int(ddd[1])
+    res  = getattr(context, "proj-rows").res
+    print(res)
+
+    sss =  '''
+    <tr> <td width=10>
+    <td width=20>
+    <!-- <div class=up-class> <font size=+2>Hello rotated text</font></div> -->
+
+    <td width=10>
      <td align=center>
-      <table border=0><tr><td align=center width=400>
-       <font size=+2> Image row Header
-      { image beach-hd.jpeg [ feedwidth ] [ feedheight ]  }<p>
+      <table border=0>
+          <tr><td align=center width=400>
+           <font size=+2> %s
+           <a href=/media/beach-hd.jpeg>
+           { image beach-hd.jpeg [ feedwidth ] [ feedheight ]  }
+           <br>
+           </font>
+           </a>
+           <center> Line Under Image  </center>
+          <td width=1>
+          <td align=center> Image description Image description3
+          Image description
+          Image description Image description Image description Image description Image description
 
-         <div class=textx>
-          <font size=+0>
-          Image row text Image row text Image row text Image row text
-          Image row text Image row text Image row text Image row text
-          </div>
-       </table>
+          <tr><td colspan=3>
+             <div class=textx>
+              Image row text Image row text Image row text Image row textx
+              Image row text Image row text Image row text Image row texty
+              Image row text Image row text Image row text Image row textu
+              Image row text Image row text Image row text Image row text
+              Image row text Image row text Image row text Image row text
+              Image row text Image row text Image row text Image row text
+              Image row text Image row text Image row text Image row text
+              </div>
 
-      <td width=10>
-      <td> Image description Image description3
-      Image description
-      Image description Image description Image description Image description Image description
-
-'''
-
-
-
-
+      </table>
+      ''' % "Image row Header"
+    return sss
 
 
 wsgi_util.add_all_vars(locals().copy(), common.local_table)

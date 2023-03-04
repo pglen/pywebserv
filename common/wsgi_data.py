@@ -3,7 +3,7 @@
 ''' The simplest web server '''
 
 import sys, os, mimetypes, time, sqlite3, uuid
-import wsgi_util
+import wsgi_util, wsgi_func, wsgi_str
 
 sys.path.append("..")
 from  pydbase import twincore
@@ -22,26 +22,24 @@ def soft_opendb(carry, modname, suffix = ""):
     #print("softopen", carry, modname)
 
     if USE_PYDB:
-        carry.dbname = "data/%s%s.pydb" % (modname, suffix)
+        dbname = "data/%s%s.pydb" % (modname, suffix)
     else:
-        carry.dbname = "data/%s%s.sqlt" % (modname, suffix)
+        dbname = "data/%s%s.sqlt" % (modname, suffix)
 
-    needopen = False
-    if not hasattr(carry, "localdb"):
-        needopen = True
-    else:
-        if not carry.localdb:
-            ccc = True
+    try:
+        if USE_PYDB:
+            localdb = wsgipydb(dbname)
+        else:
+            localdb = wsgiSql(dbname)
+    except:
+        #print("Cannot open database", dbname)
+        wsgi_util.put_exception("Cannot open database %s") % carry.localdb
 
-    if needopen:
-        try:
-            if USE_PYDB:
-                carry.localdb = wsgipydb(carry.dbname)
-            else:
-                carry.localdb = wsgiSql(carry.dbname)
-        except:
-            #print("Cannot open database", dbname)
-            wsgi_util.put_exception("Open database %s") % carry.localdb
+    return localdb
+
+def soft_closedb(db):
+    db = None
+    pass
 
 def soft_openauthdb(carry, modname, suffix = ""):
 
@@ -68,12 +66,6 @@ def soft_openauthdb(carry, modname, suffix = ""):
         except:
             #print("Cannot open database", dbname)
             wsgi_util.put_exception("Open auth database %s") % carry.localdb
-
-
-def soft_closedb(carry, modname, suffix = ""):
-
-    #print("Soft closing:", carry.dbname, carry.localdb)
-    carry.localdb = None
 
 def soft_closeauthdb(carry, modname, suffix = ""):
 
@@ -418,3 +410,76 @@ class wsgiSql():
 
     def __delete__(self):
         print("delete", self)
+
+class Empty():
+    pass
+
+def     load_data_func(strx, context):
+
+    '''
+    # ------------------------------------------------------------------------
+     Get a row's data; pre load database table as macros.
+
+       Arguments:
+           arg[0]      command name
+           arg[1]      name of module to get the data from
+
+     Example:
+               { loadData proj-edit }
+    '''
+
+    ddd = wsgi_func.parse_args(strx, context)
+
+    if context.configx.pgdebug > 2:
+        print("load_data_func() ddd", ddd)
+
+    # Fri 03.Mar.2023 data is now returned as an var on the carryon
+    # Here we add a class to the context, keyed with the data base / results
+    if not hasattr(context, ddd[1]):
+        setattr(context, ddd[1], Empty())
+    var = getattr(context, ddd[1])
+    var.fname   = ddd[1]        # Just for verification
+    var.db      = None
+    var.data    = None
+
+    # Get data from the editor project;
+    # Careful, passing the wrong filename, it will be created
+    try:
+        var.db = soft_opendb(context, ddd[1])
+    except Exception as e:
+        #print("Could not create / open local data for '%s'" % ddd[1], e)
+        wsgi_util.put_exception("Open database")
+        return res
+
+    if context.configx.pgdebug > 3:
+        print("load_data_func() ddd", ddd, var.db)
+
+    checker = []
+    # The data is added to the top of the context object
+    try:
+        var.res = var.db.getall(checker)
+    except:
+        wsgi_util.put_exception("Getting Data")
+        pass
+
+    # Dump it
+    if context.configx.pgdebug > 2:
+        if not var.res:
+            print("Empty database")
+        else:
+            for aa in var.res:
+                print("res", wsgi_str.strpad(wsgi_str.strupt(str(aa[0]))),
+                            wsgi_str.strupt(str(aa[1:])))
+
+    # Sat 25.Feb.2023 deactivted -- data is now in context variable
+    # The data is returned as macros, the page can reference
+    #wsgi_global.gl_table.add_one_func(prefix + "DLen", str(len(res)))
+    #wsgi_global.gl_table.add_one_func(prefix + "Data", res )
+    #localdb.close()
+
+    #wsgi_util.printobj(context)
+    #wsgi_util.printobj(var)
+
+    return ""
+
+# EOF

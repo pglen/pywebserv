@@ -39,42 +39,55 @@ def got_index(config, carry):
         print("idx carry.query", carry.query)
 
     if carry.request:
-        #print("idx carry.request", carry.request)
+        #print("idx carry.request", carry.request[:24])
         rq = [] ; par = []
         for aa in carry.request:
             rq.append(aa[1])
             par.append(aa[0])
 
-        print("data rq", rq)
+        #print("data rq", rq)
         if len(rq) == 1:
             if "Confirm" in rq[0]:
                 sss = par[0].split("_")
-                print("rq del id: ", sss[1]);
-                wsgi_data.soft_opendb(carry, modname)
-                carry.localdb.delrecall(sss[1])
+                #print("rq del id: ", sss[1]);
+                db = wsgi_data.soft_opendb(carry, modname)
+                db.delrecall(sss[1])
         else:
             try:
                 #startt = time.perf_counter()
-                wsgi_data.soft_opendb(carry, modname)
+                #wsgi_data.load_data_func("load_data proj-edit", carry)
+                #var = getattr(carry, "proj-edit")
+                #print("res", var.res)
 
                 # Add filename field from old data (if empty)
+                db = wsgi_data.soft_opendb(carry, modname)
                 if not rq[5]:
-                    old_rec = carry.localdb.getbyord(rq[6])
+                    old_rec = db.getbyord(rq[6])
                     if old_rec:
                         #print("old_rec", old_rec)
                         rrr = old_rec[5]
                 else:
                     rrr = rq[5]
 
-                carry.localdb.put(rq[0], rq[1], rq[2], rq[3], rq[4], rrr)
+                db.put(rq[0], rq[1], rq[2], rq[3], rq[4], rrr)
+                wsgi_data.soft_closedb(db)
 
                 # Measure time needed
                 #print("database op %f msec " %  ((time.perf_counter() - startt) * 1000))
             except:
-                print("Cannot put data")
-                wsgi_util.put_exception("in index data")
+                #print("Cannot put data")
+                wsgi_util.put_exception("in put index data")
 
     carry.local_table = common.local_table
+
+    #if not carry.query and not carry.request:
+    # Present default
+    #print("<center>Editor has no task to do in: '%s'" % carry.url)
+
+    wsgi_data.load_data_func("load_data proj-edit", carry)
+    #var = getattr(carry, "proj-edit")
+    #print("res", var.res)
+
     content = wsgi_util.process_default(config, carry)
     return content
 

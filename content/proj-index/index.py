@@ -2,11 +2,14 @@
 
 '''
     This is a sample project that is added to the site. The idea here is
-    that nothing in this project can down the site, oly the page.
+    that nothing in this project can down the site, can down only the page.
     (like a syntax error)
     It is imported under a try: except clause, and it is calling only the
     URL registration functions.
     Also, included a default web page function as index.html or as '/'
+
+    The statement above turns out to be false, if this file contains
+    items the site is dependent upon. Naturally, this goes without saying.
 '''
 
 import os, sys, time
@@ -42,26 +45,28 @@ def got_index(config, carry):
     #print("carry.request", carry.request)
     #print("carry.query", carry.query)
 
+    carry.prog = carry.prog2 = 0
     if carry.query:
         if "step" in carry.query:
-            #print("carry.query", carry.query['step'])
             iii = wsgi_util.xint(carry.query['step'][0])
-            #print("step", iii)
             carry.prog = iii
-    else:
-        carry.prog = 0
+        if "step2" in carry.query:
+            iii = wsgi_util.xint(carry.query['step2'][0])
+            carry.prog2 = iii
 
     if carry.request:
         process_submit(carry.request)
 
+    # Decorate before calling main
     carry.local_table = common.local_table
 
     # Load data (needs early load, so do the function)
-    #content += "{ load_data proj-edit }"
+    #<!-- needs to preload data before everything -->
 
-    # Call this before parse
-    wsgi_func.load_data_func("load_data proj-edit", carry)
-    #wsgi_func.load_data_func("proj-edit", carry)
+    # Call this before parse; if used as a macro it will not load as
+    # the parser is not multi pass parser (not practical in python)
+    wsgi_data.load_data_func("load_data proj-rows", carry)
+    wsgi_data.load_data_func("load_data proj-edit", carry)
 
     content += wsgi_util.process_default(config, carry)
     return content
@@ -118,10 +123,11 @@ try:
     # Add default enties to tables
     wsgi_global.urlmap.add_one_url("/", got_index, "index.html", __file__)
     wsgi_global.urlmap.add_one_url("/index.html", got_index, "index.html", __file__)
-    wsgi_global.urlmap.add_one_url("/test_resize.html", got_index, "test_resize.html", __file__)
     wsgi_global.urlmap.add_one_url("/log.html", got_log, "log.html", __file__)
 
+    #wsgi_global.urlmap.add_one_url("/test_resize.html", got_index, "test_resize.html", __file__)
     wsgi_global.gl_table.add_one_func("show_submit", show_submit_func)
+
     wsgi_global.gl_table.add_one_func("CompanyName", "UPP, United Planet Peace")
     #wsgi_global.gl_table.add_one_func("fill_data", fill_data)
 

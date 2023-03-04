@@ -15,6 +15,9 @@ except:
 import wsgi_util, wsgi_style, wsgi_res, wsgi_global
 import wsgi_parse, wsgi_data, wsgi_str
 
+sys.path.append("../pyfortune")
+import fortune
+
 # ------------------------------------------------------------------------
 
 def     parse_args(strx, context):
@@ -60,19 +63,41 @@ def     parse_args(strx, context):
 
 def     app_one_func(strx, context):
 
+
     ''' Example app function '''
 
     content = '''<table width=100% border=0 bgcolor=#dddddd>
-        <tr><td align=center bgcolor=#cccccc><b>APP ONE (Some Strings?)</b><br>
+        <tr><td align=center bgcolor=#cccccc><b>Sponsored</b><br>
         <tr><td>
-        <tr><td  align=center>code for app 1 comes here
-        <tr><td  align=center>code for app 1 comes here
-        <tr><td  align=center>code for app 1 comes here
-        <tr><td  align=center>code for app 1 comes here
-        <tr><td  align=center>code for app 1 comes here
+        <tr><td  align=center>No Sponsors currently
         <tr><td>
+        <tr><td align=center><font size=-2>
+            Contact sales for Advertising in this Space
+
         </table>
+
         '''
+    return content
+
+def     app_fortune(strx, context):
+
+    ''' Fortune app function '''
+
+    #print("dir",os.getcwd())
+
+    fff = fortune.randfortune("datfiles/", 0)
+
+    content = '''<table width=100%% border=0 bgcolor=#dddddd>
+        <tr><td align=center bgcolor=#cccccc><b>Fortunes</b><br>
+        <tr><td>
+        <tr><td  align=center>%s
+        <tr><td>
+        <tr><td align=center><font size=-2>
+            Please note that fortunes are for entertainment only.
+
+        </table>
+        ''' % fff
+
     return content
 
 # ------------------------------------------------------------------------
@@ -84,12 +109,9 @@ def     app_two_func(strx, context):
     Mock calendar. Does nothing but presents a calendar looking user interface
     '''
 
-    #content = "App Two here"
-    #return content
-
     try:
         content = '''<table width=100% border=0  bgcolor=#dddddd>
-            <tr><td align=center bgcolor=#cccccc colspan=7><b>APP TWO (Calendar?)</b><br>
+            <tr><td align=center bgcolor=#cccccc colspan=7><b>Event calendar</b><br>
         '''
         #        <tr><td>code for app 2 comes here
         dt = datetime.datetime.now()
@@ -136,6 +158,7 @@ def     app_two_func(strx, context):
                     #    decor = 1;
 
                     decor = cnt2 % 4 == 0
+                    content += "<font size=-1>"
                     if decor:
                         content += "<a href=noting>"
                     else:
@@ -149,8 +172,10 @@ def     app_two_func(strx, context):
                         content += " &nbsp; "
 
                 else:
-                    content += "<td align=center> -"
+                    content += "<td align=center> "
 
+        content += "<tr><td colspan=7 align=center><font size=-2>"
+        content += "** Calendar events are subject to change"
 
         content += "</table>\n"
 
@@ -252,65 +277,6 @@ def     image_func(strx, context):
 
     return "<img src=/media/broken.png>"
 
-def     load_data_func(strx, context):
-
-    '''
-    # ------------------------------------------------------------------------
-     Get a row's data; pre load database table as macros.
-
-       Arguments:
-           arg[0]      command name
-           arg[1]      name of module to get the data from
-
-     Example:
-               { loadData proj-edit }
-    '''
-
-    ddd = parse_args(strx, context)
-    if context.configx.pgdebug > 3:
-        print("load_data_func() ddd", ddd)
-
-    # Make sure we pr fill this one to empty
-    context.res = []
-
-    # Get data from the editor project;
-    # Careful, passing the wrong filename, it will be created
-    try:
-        wsgi_data.soft_opendb(context, ddd[1])
-        #fff = "./data/%s.pydb" % ddd[1]
-        #localdb = wsgi_data.wsgipydb(fff)
-
-    except Exception as e:
-        print("Could not create / open local data for '%s'" % ddd[1], e)
-        wsgi_util.put_exception("open / get data")
-        return ""
-
-    checker = []
-    # The data is added to the top of the context object
-    try:
-        context.res = context.localdb.getall(checker)
-    except:
-        wsgi_util.put_exception("Getting Data")
-        pass
-
-    # Dump it
-    if context.configx.pgdebug > 2:
-        if not context.res:
-            print("Empty database")
-        else:
-            for aa in context.res:
-                print("res", wsgi_str.strpad(wsgi_str.strupt(str(aa[0]))),
-                            wsgi_str.strupt(str(aa[1:])))
-
-    # Sat 25.Feb.2023 deactivted -- data is now in context variable
-    # The data is returned as macros, the page can reference
-    #wsgi_global.gl_table.add_one_func(prefix + "DLen", str(len(res)))
-    #wsgi_global.gl_table.add_one_func(prefix + "Data", res )
-
-    #localdb.close()
-
-    return ""
-
 # ------------------------------------------------------------------------
 # I wish the http standard had this one command
 
@@ -371,14 +337,14 @@ def     build_initial_table():
 
     try:
         # Built ins
-        wsgi_global.gl_table.add_one_func("image",    image_func)
-        wsgi_global.gl_table.add_one_func("load_data", load_data_func)
-        wsgi_global.gl_table.add_one_func("include",  include_func)
-        #wsgi_global.gl_table.add_one_func("deep",     deep_func)
+        wsgi_global.gl_table.add_one_func("image",      image_func)
+        wsgi_global.gl_table.add_one_func("include",    include_func)
+        wsgi_global.gl_table.add_one_func("load_data",  wsgi_data.load_data_func)
 
-        # Examples
-        wsgi_global.gl_table.add_one_func("app_one",    app_one_func)
-        wsgi_global.gl_table.add_one_func("app_two",    app_two_func)
+        # Example apps
+        wsgi_global.gl_table.add_one_func("app_one",        app_one_func)
+        wsgi_global.gl_table.add_one_func("app_two",        app_two_func)
+        wsgi_global.gl_table.add_one_func("app_fortune",    app_fortune)
 
     except:
         #print("Cannot build global table", sys.exc_info())
@@ -395,8 +361,12 @@ init_rc =  [   \
     #("xarticle",        wsgi_res.article),
     #("xarticle2",       wsgi_res.article2),
     #("recursive",       wsgi_res.recursive),     # Do not add this, just for testing
-    #("nullcolor",       "#cccccc"),
-    #("sitecolor",       "#aaffbb"),
+
+    ("site_top",          wsgi_res.site_top),
+    ("site_bottom",       wsgi_res.site_bottom),
+
+    ("nullcolor",        "#cccccc"),
+    ("sitecolor",        "#aaffbb"),
 
     # This junk (above) added to parse time  2+ msec ... de activated it
 

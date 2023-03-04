@@ -6,7 +6,7 @@
 '''
 
 import sys, os, time, re, traceback, datetime, base64
-import wsgi_global, wsgi_parse, wsgi_crypt
+import wsgi_global, wsgi_parse, wsgi_crypt, wsgi_str
 
 def xint(val):
 
@@ -63,7 +63,7 @@ def put_exception(xstr):
     in the html output stream and the controlling terminal
     '''
 
-    cumm = xstr + " "
+    cumm = "Exception: " + xstr + " "
     a,b,c = sys.exc_info()
     if a != None:
         cumm += str(a) + " " + str(b) + "\n"
@@ -71,11 +71,12 @@ def put_exception(xstr):
             #cumm += str(traceback.format_tb(c, 10))
             ttt = traceback.extract_tb(c)
             for aa in ttt:
-                # do not print sys
+                # do not print sys related entries
                 if "importlib" not in aa[0]:
-                    cumm += "File: " + os.path.basename(aa[0]) + \
-                        " Line: " + str(aa[1]) + "\n" +  \
-                    "   Context: " + aa[2] + " -> " + aa[3] + "\n"
+                    sss = aa[0].split(os.sep); fname = os.sep.join(sss[-3:])
+                    cumm += " File: " + fname +  \
+                            "  Line: " + str(aa[1]) + "\n" +  \
+                            "   Context: " + aa[2] + " -> " + aa[3] + "\n"
         except:
             print( "Could not print trace stack. ", cumm, sys.exc_info())
 
@@ -94,7 +95,7 @@ def printobj(theobj):
         if aa[:2] != "__":
             ooo = getattr(theobj, aa)
             if "method" not in str(type(ooo)):
-                print(aa, "=", ooo)
+                print(aa, "=", wsgi_str.strupt(str(ooo)))
 
 def printenv(environ, all=False):
     print("-----------------")
@@ -423,7 +424,12 @@ def decode_cookie_header(name, value):
     if sss[0] !=  hhh:
         #print("Damaged cookie", sss, hhh)
         deco = b"Damaged Cookie"
-    return name, sss[1].decode()
+    try:
+        ddd = sss[1].decode()
+    except:
+        ddd = sss[1]
+
+    return name, ddd
 
 def set_cookie_header(name, value, minutes=60):
 

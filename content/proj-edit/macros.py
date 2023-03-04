@@ -42,13 +42,18 @@ _mac_center_top = '''
 '''
 
 _mac_edit_center = '''
-<td valign=top>
 
+    <td valign=top bgcolor=#eeeeee>
      <table border=0 width=100%>
-        <tr><td>
-         <center>
-         { center_body }
+        <tr><td align=center>
+        <table width=100% border=0>
+            <tr><td align=center>
+            { mid_rows }
+            { nav }
+        </table>
+
          { add_new }
+
      </table>
 
 '''
@@ -70,16 +75,17 @@ def row_data(strx, context):
 
     strx = '''<form action=editor.html method=post>'''
 
-    #print(context.getvals())
+    res = getattr(context, "proj-edit").res
+    recs = len(res)
 
-    if not context.xdata:
+    if not  recs:
         print("No data in context",)
         strx += "No Data"
         strx += "</form>\n"
         return strx
 
     cnt = 0
-    for onerec in context.xdata:
+    for onerec in res:
 
         #print("onerec", onerec)
 
@@ -185,47 +191,26 @@ def mid_rows(strx, carryon):
 
     #print("mid_rows", strx, carryon)
 
-    ret = '''
+    ret = "<table border=0 width=100%>"
+
+    ret += '''
     <tr> <td colspan=7 align=center>
             <p><font size=+3>Data Review</font>
             <br>
     '''
+    res = getattr(carryon, "proj-edit").res
+    recs = len(res)
 
-    try:
-        #print(context.getvals())
-        wsgi_data.soft_opendb(carryon, modname)
-    except:
-        print("Could not create local data for %s" % modname)
-        wsgi_util.put_exception("Opening databaseL")
-        return
-
-    ret += "<table border=0 width=100%>"
-
-    #print(carryon)
-    recs = carryon.localdb.getcount()
     if not recs:
         ret += "<tr><td align=center>No Data / Empty Database"
     else:
-        #print("got", recs, " records")
-        checker = []
-        carryon.xdata = carryon.localdb.getall(checker)
+        #carryon.xdata = carryon.localdb.getall(checker)
         # Render it
         ret +=  "{ row_data }"
 
     ret += "</table>\n"
 
-    # Remove all data from memory
-    #carryon.xdata = []; carryon.hdata = []
-    #context.localdb.close()
     return ret
-
-_mac_center_body = '''
-    <table width=100% border=0>
-        <tr><td align=center>
-        { mid_rows }
-        { nav }
-    </table>
-'''
 
 _mac_nav = '''
     <table width=100% border=0>
@@ -242,17 +227,20 @@ _mac_nav = '''
 '''
 
 _mac_add_new = '''
-    <form action=editor.html method=post>
-    <input type=submit name='add_new' value='Add New'>
-    <hr>
-    <input type=submit name='exp' value='Export'>
-    <input type=submit name='imp' value='Import'>
-    </form>
+    <table width=80%>
+        <tr><td align=center>
+        <form action=editor.html method=post>
+        <input type=submit name='add_new' value='Add New'>
+        <hr>
+        <input type=submit name='exp' value='Export'>
+        <input type=submit name='imp' value='Import'>
+        </form>
+    </table>
 '''
 
 _mac_right = '''
     <td valign=top width=20%>
-        <table width=100% cellpadding=1 border=1>
+        <table width=100% cellpadding=1 border=0>
             <tr><td bgcolor={ tabhead } height=36 align=center>
                 <font size=+1> <b>Misc</b>
             <tr><td>
@@ -269,7 +257,7 @@ _mac_right = '''
 _mac_clr = ''' if(this.value[0]==' ')this.value='' '''
 
 _mac_edit_header = '''
-    <table width=100% bgcolor={ sitecolor } border=1>
+    <table width=100% bgcolor={ sitecolor } border=0>
         <form method=post>
             <tr><td>
             <a href=index.html>

@@ -60,7 +60,7 @@ def parse_cgi(environ, configx):
                     else:
                         nn = fields[aa].disposition_options['name']
                         vv =  fields[aa].value
-                        print("Multipart regular", nn, vv)
+                        #print("Multipart regular", nn, vv)
                         request.append((nn, vv))
                 else:
                     if hasattr(fields[aa], "name"):
@@ -73,7 +73,7 @@ def parse_cgi(environ, configx):
                     else:
                         vvv = fields[aa][2]
 
-                    print("field", nnn, vvv)
+                    #print("field", nnn, vvv)
                     request.append((nnn, vvv))
 
             except:
@@ -87,7 +87,7 @@ def parse_cgi(environ, configx):
         if request:
             request.sort()
 
-            if 1: #configx.pgdebug > 4:
+            if configx.pgdebug > 4:
                 for aa in request:
                     print("Request", aa)
 

@@ -353,15 +353,15 @@ def     build_initial_table():
 init_rc =  [   \
 
     #("header",          wsgi_res.header),
-    #("footer",          wsgi_res.footer),
     #("bigtext",         wsgi_res.bigtext),
     #("var",             wsgi_res.var),
     #("imgrow",          wsgi_res.imgrow),
-    #("mystyle",         wsgi_style.mystyle),
     #("xarticle",        wsgi_res.article),
     #("xarticle2",       wsgi_res.article2),
     #("recursive",       wsgi_res.recursive),     # Do not add this, just for testing
 
+    ("footer",          wsgi_res.footer),
+    ("mystyle",          wsgi_style.mystyle),
     ("site_top",          wsgi_res.site_top),
     ("site_bottom",       wsgi_res.site_bottom),
 

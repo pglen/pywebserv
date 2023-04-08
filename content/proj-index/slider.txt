@@ -1,0 +1,21 @@
+   <!--
+        <table width=100% border=0>
+            <tr valign=top>
+             <td nowrap=nowrap valign=middle bgcolor=#cccccc
+                style="cursor:pointer"
+                    onclick="location.href='index.html?step={ calcstep 1 }'">
+                { calcwrap }
+
+            {slider 0 }
+            <td valign=middle bgcolor=#cccccc>
+            {slider 1 }
+            <td valign=middle bgcolor=#cccccc>
+            {slider 2 }
+
+             <td  nowrap=nowrap valign=middle bgcolor=#cccccc
+                style="cursor:pointer"
+                    onclick="location.href='index.html?step={ calcstep -1 }'">
+                { calcwrap2 }
+
+         </table>
+        -->

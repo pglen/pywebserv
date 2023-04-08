@@ -84,6 +84,9 @@ class xWebServer():
         wsgi_func.build_initial_table()
         wsgi_func.build_initial_rc()
 
+        self.good_cookies = {}
+        self.wanted_cookies = []    # This will be sent to the server
+
     def parse_instance(self, environ, respond):
 
         import wsgi_util
@@ -97,8 +100,6 @@ class xWebServer():
                     print("QUERY_STRING", self.query)
 
         self.cookie = ""
-        self.good_cookies = []
-        self.wanted_cookies = []    # This will be sent to the server
 
         if 'HTTP_COOKIE' in environ:
             self.cookie = environ['HTTP_COOKIE']
@@ -113,8 +114,8 @@ class xWebServer():
                 # This is where we decode the encrypted cookie
                 import wsgi_util
                 rrr = wsgi_util.decode_cookie_header(bb[0], bb[1])
-                #print("decoded cookie", rrr)
-                self.good_cookies.append(rrr)
+                #print("decoded cookie", rrr[0], rrr[1])
+                self.good_cookies.update( ((rrr[0], rrr[1]),) )
                 if self.configx.verbose > 1:
                     if environ['PATH_INFO'][-1:] == "/":
                         print("good cookies", self.good_cookies)
@@ -202,7 +203,9 @@ class xWebServer():
             import wsgi_util
             ccc = wsgi_util.set_cookie_header(aa[0], aa[1], aa[2])
             headers.append(ccc)
+        #print("headers", headers)
 
+        self.wanted_cookies = []
         return headers
 
     # --------------------------------------------------------------------
@@ -220,11 +223,6 @@ class xWebServer():
         #respond('200 OK', [('Content-Type', "text/html" + ';charset=UTF-8')])
         #return [bytes("Cannot do shit", 'utf-8')]
 
-        got_session = 0
-        for aa in self.good_cookies:
-            if "Session" in aa:
-                #print("found good", aa)
-                got_session = 1
 
         if self.configx.verbose > 2:
             print("process_request", self.url, self.fn)
@@ -248,18 +246,24 @@ class xWebServer():
         self.carrydef.template = template
         self.carrydef.fname = fname
 
-        if not got_session:
+        #got_session = 0
+        #for aa in self.good_cookies:
+        #    if "Session" in aa:
+        #        #print("found good", aa)
+        #        got_session = 1
+        #
+        #if not got_session:
+        #    sess = str(uuid.uuid4())
+        #    print("New Session:", sess)
+        #    self.wanted_cookies.append(("Session", sess, 1))
+        #    # Also create a matching data
+
+        if "Session" not in self.good_cookies:
+            import wsgi_data
             sess = str(uuid.uuid4())
             print("New Session:", sess)
             self.wanted_cookies.append(("Session", sess, 1))
-            # Also create a matching data
 
-            import wsgi_data
-            wsgi_data.soft_openauthdb(self.carrydef, "auth")
-            dt = datetime.datetime.utcnow()
-            fdt = dt.strftime('%a, %d %b %Y %H:%M:%S GMT')
-            #   sess, valid, auth, authlevel, date
-            self.carrydef.authdb.put(sess, "0", "0", "0", "0", fdt)
 
         if self.configx.verbose > 2:
             print("process_request2", callme, template)

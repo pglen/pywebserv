@@ -12,7 +12,6 @@ from . import common
 modname = __file__.split(os.sep)[-2]
 #print("modname", "'" + modname + "'")
 
-
 _mac_feedwidth = '800'
 _mac_ShortCName = ''' United Planet Peace '''
 
@@ -49,7 +48,6 @@ _mac_edit_center = '''
         <table width=100% border=0>
             <tr><td align=center>
             { mid_rows }
-            { nav }
         </table>
 
          { add_new }
@@ -75,7 +73,7 @@ def row_data(strx, context):
 
     strx = '''<form action=editor.html method=post>'''
 
-    res = getattr(context, "proj-edit").res
+    res = getattr(context, context.mydb).res
     recs = len(res)
 
     if not  recs:
@@ -124,9 +122,7 @@ def row_data(strx, context):
         <tr><td align=center>
         <font size=+2> Image row Header
     '''
-
     strx += str(sss[1])
-
     strx += '''
     <tr><td align=center>
     { image beach-hd.jpeg [ feedwidth ]  }
@@ -161,25 +157,13 @@ def row_data(strx, context):
                   <font size=+0>
                   Image row text Image row text Image row text Image row text
                   Image row text Image row text Image row text Image row text
-                  Image row text Image row text Image row text Image row text
-                  Image row text Image row text Image row text Image row text
-                  Image row text Image row text Image row text Image row text
-                  Image row text Image row text Image row text Image row text
-                  Image row text Image row text Image row text Image row text
-                  Image row text Image row text Image row text Image row text
-                  Image row text Image row text Image row text Image row text
-                  Image row text Image row text Image row text Image row text
-                  Image row text Image row text Image row text Image row text
-                  Image row text Image row text Image row text Image row text
                   </div>
             </table>\n
        </table>\n
     '''
 
     desc = '''
-    Image description Image description3
-      Image description
-    Image description Image description Image description Image description Image description
+    Image description Image description
     '''
 
     strx += foot
@@ -195,10 +179,11 @@ def mid_rows(strx, carryon):
 
     ret += '''
     <tr> <td colspan=7 align=center>
-            <p><font size=+3>Data Review</font>
+            <p><font size=+3>Data Review (%s)</font>
             <br>
-    '''
-    res = getattr(carryon, "proj-edit").res
+    ''' % (carryon.mydb)
+
+    res = getattr(carryon, carryon.mydb).res
     recs = len(res)
 
     if not recs:
@@ -226,17 +211,21 @@ _mac_nav = '''
     </table>
 '''
 
-_mac_add_new = '''
-    <table width=80%>
+def add_new(strx, carry):
+
+    strx = '''
+    <table width=80%%>
         <tr><td align=center>
         <form action=editor.html method=post>
         <input type=submit name='add_new' value='Add New'>
+        <input type=hidden name='db' value='%s'>
         <hr>
         <input type=submit name='exp' value='Export'>
         <input type=submit name='imp' value='Import'>
         </form>
     </table>
-'''
+    ''' % (carry.mydb)
+    return strx
 
 _mac_right = '''
     <td valign=top width=20%>
@@ -291,6 +280,7 @@ try:
     wsgi_util.add_locals(locals().copy(), common.local_table)
     wsgi_util.add_local_func("mid_rows", mid_rows, common.local_table)
     wsgi_util.add_local_func("row_data", row_data, common.local_table)
+    wsgi_util.add_local_func("add_new", add_new, common.local_table)
 
 except:
     #print("Exception on editor init vars", sys.exc_info())

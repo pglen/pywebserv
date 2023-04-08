@@ -145,7 +145,7 @@ body {
   display: inline;
   height: auto;
   transition: .5s ease;
-  backface-visibility: hidden;
+  backface-visibility: hidden;                                 
   //corner-radius: 15px;
 }
 
@@ -541,12 +541,15 @@ _glob_site_left = '''
     <table border=0 align=center width=100%>
         <tr>
         { headurl index.html Home&nbsp;Page }
-        { headurl log.html Log&nbsp;Page }
         { headurl index.html Blog&nbsp;Page }
         { headurl index.html Personal&nbsp;Page }
-        { headurl index.html Tech&nbsp;Page }
-        { headurl index.html Another&nbsp;Page }
-        { headurl broken.html Broken&nbsp;Page }
+        { headurl index.html About&nbsp;Page }
+        <!--
+        {headurl log.html Log&nbsp;Page }
+        {headurl index.html Tech&nbsp;Page }
+        {headurl index.html Another&nbsp;Page }
+        {headurl broken.html Broken&nbsp;Page }
+        -->
 
         <tr><td height=12>
     </table>
@@ -651,10 +654,9 @@ _mac_center_body = '''
         </div>
         <table border=0 width=100%>
             <tr><td>
-            Read up on our Mission / Founding Statement / Target statments
+            Read our Mission Statement  / Founding Statement
             <a id="displayText4" href="javascript:toggle('toggleText4', 'displayText4');">
             <font size=-1>show ...</font></a>
-
             <tr><td>
                 <div id="toggleText4" style="display: none">
                     <div>
@@ -668,50 +670,42 @@ _mac_center_body = '''
             </table>
         </table>
 
-        <table width=100% border=0>
-            <tr valign=top>
-             <td nowrap=nowrap valign=middle bgcolor=#cccccc
-                style="cursor:pointer"
-                    onclick="location.href='index.html?step={ calcstep 1 }'">
-                { calcwrap }
-
-            { slider 0 }
-            <td valign=middle bgcolor=#cccccc>
-            { slider 1 }
-            <td valign=middle bgcolor=#cccccc>
-            { slider 2 }
-
-             <td  nowrap=nowrap valign=middle bgcolor=#cccccc
-                style="cursor:pointer"
-                    onclick="location.href='index.html?step={ calcstep -1 }'">
-                { calcwrap2 }
-
-         </table>
 
         <table border=0>
             <tr valign=top>
-
-            { imgrow 0 }
-            { imgrow 1 }
-            { imgrow 2 }
-
+                { nav }
+                { imgrow 0 }
+                { imgrow 1 }
+                { imgrow 2 }
+                { imgrow 3 }
+                { imgrow 4 }
+                { nav }
          </table>
+
     </table>
 
 
 '''
 
 _mac_nav = '''
-<table border=0>
+<table border=0 width=100%>
     <tr align=center>
         <td align=right>
-            &nbsp <img src=/siteicons/media-skip-backward.png title="Backward Front">
+            <a href=index.html?back=1>
+            &nbsp <img src=/siteicons/media-skip-backward.png title="Backward to start">
+            </a>
+            <a href=index.html?back=2>
             &nbsp <img src=/siteicons/media-seek-backward.png title=Backward>
+            </a>
             <td width=150px>
             &nbsp; Navigation &nbsp;
             <td align=left>
+            <a href=index.html?back=3>
             &nbsp <img src=/siteicons/media-seek-forward.png title=Forward>
-            &nbsp <img src=/siteicons/media-skip-forward.png title="Forward Front">
+            </a>
+            <a href=index.html?back=4>
+            &nbsp <img src=/siteicons/media-skip-forward.png title="Forward to end">
+            </a>
 </table>
 '''
 
@@ -828,9 +822,10 @@ def _func_slider(strx, context):
 
     if idx > len(res):
         #idx = 0
-        print("Passed end of data")
+        #print("Passed end of data")
         #sss = "Passed end of data"
         #return sss
+        pass
     #print("res", res)
 
     part = res[idx][4][:96] + " ... "
@@ -962,48 +957,55 @@ _glob_site_footer = '''
 def _func_imgrow(strx, context):
 
     ddd = wsgi_func.parse_args(strx, context)
+    #print("ddd", ddd)
 
     if not hasattr(context, "prog2"):
         context.prog2 = 0
 
     idx = context.prog2 + int(ddd[1])
     res  = getattr(context, "proj-rows").res
-    print(res)
+
+    if not res:
+        # Patch in something
+                # ID Key  D1        Side Main                Under             Image
+        res = [
+                ["", "", "No Data", "No description", "Database is empty", "System Message: Under development", "X"],
+                ["", "", "No Data", "No description", "Database is empty", "System Message", "X"],
+                ["", "", "No Data", "No description", "Database is empty", "System Message", "X"],
+              ]
+    #print("res", res)
 
     sss =  '''
     <tr> <td width=10>
     <td width=20>
-    <!-- <div class=up-class> <font size=+2>Hello rotated text</font></div> -->
-
     <td width=10>
      <td align=center>
-      <table border=0>
+      <table border=0 width=100%%>
           <tr><td align=center width=400>
            <font size=+2> %s
-           <a href=/media/beach-hd.jpeg>
-           { image beach-hd.jpeg [ feedwidth ] [ feedheight ]  }
+           <a href=/media/%s>
+           { image %s [ feedheight ] }
            <br>
            </font>
            </a>
-           <center> Line Under Image  </center>
-          <td width=1>
-          <td align=center> Image description Image description3
-          Image description
-          Image description Image description Image description Image description Image description
+           <!-- <center> Line Under Image  </center> -->
+           <center> %s </center>
 
+          <td width=1>
+          <td align=center>
+          <!--Image description Image description -->
+            %s
           <tr><td colspan=3>
              <div class=textx>
-              Image row text Image row text Image row text Image row textx
-              Image row text Image row text Image row text Image row texty
-              Image row text Image row text Image row text Image row textu
-              Image row text Image row text Image row text Image row text
-              Image row text Image row text Image row text Image row text
-              Image row text Image row text Image row text Image row text
-              Image row text Image row text Image row text Image row text
+              <!-- Image row text Image row text Image row text Image row textx -->
+             %s
               </div>
+        </table>
+        ''' % (res[idx][2], res[idx][6], res[idx][6],
+                        res[idx][5], res[idx][3], res[idx][4])
 
-      </table>
-      ''' % "Image row Header"
+    #print("img", res[idx][6] )
+
     return sss
 
 

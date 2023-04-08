@@ -1,6 +1,6 @@
  #!/usr/bin/env python3
 
-import sys, uuid
+import sys, uuid, os
 import  wsgi_util, wsgi_func, wsgi_global, wsgi_data, wsgi_str
 
 from . import common
@@ -48,25 +48,54 @@ def got_editor(config, carry):
     if carry.query:
         print("editor carry.query", carry.query)
 
+    #carry.mydb = modname
+    carry.mydb = "proj-rows"
+
     if carry.request:
         print("editor carry.request", carry.request)
 
-        db = wsgi_data.soft_opendb(carry, modname)
+        for aa in carry.request:
+            if "db" == aa[0]:
+                mydbx = aa[1].strip('"')
+                # Check if DB is there
+                fname = wsgi_data.soft_dbfile(mydbx)
+                #print("File:", "'" + fname + "'")
+                if os.path.isfile(fname):
+                    print("File OK", fname)
+                    carry.mydb = mydbx
+
+        #print("op on", mydb)
+
+        db = wsgi_data.soft_opendb(carry, carry.mydb)
         #print("db", db)
 
         carry.cdata += "<table border=0 width=100%>"
 
-        if carry.request[0][1] == "Edit":
+        opcode = ""; opnum = 0
+        for aa in  carry.request:
+            #print("aa", aa)
+            if "add" in aa[0]:
+                opcode = aa[1]
+            elif aa[0][:3] == "ed_" or aa[0][:4] == "del_":
+                opcode = aa[1]
+                rq = aa[0].split("_")
+                if len(rq) > 1:
+                    opnum = int(rq[1])
+
+        print ("opcode", opcode, "opnum", opnum)
+
+        if opcode == "Edit":
             carry.xdata = []; carry.hdata = []
-            rq = carry.request[0][0].split("_")
             #print("rq edit data:", rq)
-            res = db.getbyord(rq[1])
+            res = db.getbyord(opnum)
             #print("res:", res)
+
+            carry.cdata += "<input type=hidden name=db value=%s" % carry.mydb + ">"
 
             carry.cdata += "<tr><td>Key:  "
             carry.cdata += "<td><font size=+1>"  +  res[0].decode() + "</font>"
             carry.cdata += "<tr><td>Record: "
-            carry.cdata += "<td> %d" % int(carry.request[0][0][3:])
+            carry.cdata += "<td> %d" % int(opnum)
 
             #macros.fill_data(carry, carry.localdb, rq[1])
             if not res:
@@ -99,7 +128,7 @@ def got_editor(config, carry):
             carry.cdata += "</table>"
             carry.cdata += "<br><center><input type=submit value=' Save Record '>"
 
-        elif carry.request[0][1] == "Add New":
+        elif opcode == "Add New":
             #print ("adding new data")
             uuidx = str(uuid.uuid4())
             carry.cdata += "<table border=0 width=100%>"
@@ -111,7 +140,9 @@ def got_editor(config, carry):
             # Name the text areas in ascending order, so the ...
             #  order is kept when saving; also the file field too;
 
-            carry.cdata += "<tr><td><textarea hidden cols=48 rows=1 name=aa1>"
+            carry.cdata += "<input type=hidden name=db value=%s" % carry.mydb + ">"
+
+            carry.cdata += "<tr><td><textarea hidden cols=48 rows=1 name=aa_1>"
             carry.cdata += uuidx
             carry.cdata +=  "</textarea><p>"
 
@@ -125,18 +156,22 @@ def got_editor(config, carry):
             carry.cdata += "</table>"
             carry.cdata += "<center><input type=submit value=' Create Record '>"
 
-        elif "Del" in carry.request[0][1]:
+        elif "Del" in opcode:
             carry.cdata += "<tr><td align=center><font size=+2><b>Delete Operation</b></font><p>"
 
-            rq = carry.request[0][0].split("_")
+            #rq = carry.request[0][0].split("_")
             #print("rq delete data %d " % (int(rq[1])))
 
-            db = wsgi_data.soft_opendb(carry, modname)
-            res = db.getbyord(rq[1])
+            carry.cdata += "<input type=hidden name=db value=%s" % carry.mydb + ">"
+
+            db = wsgi_data.soft_opendb(carry, carry.mydb)
+            res = db.getbyord(opnum)
+            if not res:
+                res = ("", "")
 
             carry.cdata += "<tr><td align=center>" + \
                             "Request to delete record %d <p>'%s'<p>" % \
-                                (int(rq[1]), res[1])
+                                (opnum, res[1])
 
             carry.cdata += "<input type=submit name=rm_%d value='  Cancel Delete  '>  &nbsp; " % int(rq[1])
             carry.cdata += "<input type=submit name=rm_%d value='  Confirm Delete  '>  "  % int(rq[1])
@@ -149,7 +184,7 @@ def got_editor(config, carry):
             print("Invalid (unimplemented) command code")
             carry.cdata += "</table>"
 
-    #wsgi_data.soft_closedb(carry, modname)
+    #wsgi_data.soft_closedb(carry, carry.mydb)
     carry.cdata += "</table>"
 
     carry.local_table = common.local_table

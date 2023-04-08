@@ -13,6 +13,15 @@ from  pydbase import pypacker
 
 USE_PYDB    = True
 
+def soft_dbfile(modname, suffix = ""):
+
+    if USE_PYDB:
+        dbname = "data/%s%s.pydb" % (modname, suffix)
+    else:
+        dbname = "data/%s%s.sqlt" % (modname, suffix)
+
+    return dbname
+
 # Do we have database handle already?
 # This is a regular function, however it interacts with objects ...
 # So object oriented paradigmes apply
@@ -21,10 +30,7 @@ def soft_opendb(carry, modname, suffix = ""):
 
     #print("softopen", carry, modname)
 
-    if USE_PYDB:
-        dbname = "data/%s%s.pydb" % (modname, suffix)
-    else:
-        dbname = "data/%s%s.sqlt" % (modname, suffix)
+    dbname = soft_dbfile(modname, suffix)
 
     try:
         if USE_PYDB:

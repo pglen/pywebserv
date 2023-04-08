@@ -63,8 +63,8 @@ def got_index(config, carry):
     # Load data (needs early load, so do the function)
     #<!-- needs to preload data before everything -->
 
-    # Call this before parse; if used as a macro it will not load as
-    # the parser is not multi pass parser (not practical in python)
+    # Call these before parse; if used as a macro it will not load
+    # as the parser is not a multi pass parser (not practical in python)
     wsgi_data.load_data_func("load_data proj-rows", carry)
     wsgi_data.load_data_func("load_data proj-edit", carry)
 

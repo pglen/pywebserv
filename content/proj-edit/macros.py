@@ -177,21 +177,41 @@ def mid_rows(strx, carryon):
 
     ret = "<table border=0 width=100%>"
 
-    ret += '''
-    <tr> <td colspan=7 align=center>
-            <p><font size=+3>Data Review (%s)</font>
-            <br>
-    ''' % (carryon.mydb)
+    if carryon.needpass:
+        ret += '''
+        <tr> <td colspan=7 align=center>
+                <p><font size=+3>Please Login</font>
+                <br>    '''
 
-    res = getattr(carryon, carryon.mydb).res
-    recs = len(res)
+        ret +=  "<form method=post action=index.html>"
+        ret += "<tr><td width=50% align=right>User: &nbsp; \
+                <td align=left> &nbsp; <input type=text width=12 name=user>"
+        ret += "<tr><td align=right>Pass: &nbsp; \
+                <td align=left> &nbsp; <input type=password width=12 name=pass>"
+        ret +=  "<tr><td height=4>"
 
-    if not recs:
-        ret += "<tr><td align=center>No Data / Empty Database"
+        if hasattr(carryon, "retry_cnt"):
+            if carryon.retry_cnt > 3:
+                ret +=  "<tr><td><td> &nbsp; Too many retries, delaying"
+
+        ret +=  "<tr><td><td align=left> &nbsp; <input type=submit value=Submit> "
+        ret +=  "</form>"
     else:
-        #carryon.xdata = carryon.localdb.getall(checker)
-        # Render it
-        ret +=  "{ row_data }"
+        ret += '''
+        <tr> <td colspan=7 align=center>
+                <p><font size=+3>Data Review (%s)</font>
+                <br>
+        ''' % (carryon.mydb)
+
+        res = getattr(carryon, carryon.mydb).res
+        recs = len(res)
+
+        if not recs:
+            ret += "<tr><td align=center>No Data / Empty Database"
+        else:
+            #carryon.xdata = carryon.localdb.getall(checker)
+            # Render it
+            ret +=  "{ row_data }"
 
     ret += "</table>\n"
 
@@ -213,18 +233,22 @@ _mac_nav = '''
 
 def add_new(strx, carry):
 
-    strx = '''
-    <table width=80%%>
-        <tr><td align=center>
-        <form action=editor.html method=post>
-        <input type=submit name='add_new' value='Add New'>
-        <input type=hidden name='db' value='%s'>
-        <hr>
-        <input type=submit name='exp' value='Export'>
-        <input type=submit name='imp' value='Import'>
-        </form>
-    </table>
-    ''' % (carry.mydb)
+    strx = "<table width=80%>"
+    if not carry.needpass:
+        strx += '''
+            <tr><td align=center>
+            <form action=editor.html method=post>
+            <input type=submit name='add_new' value='Add New'>
+            <input type=hidden name='db' value='%s'>
+            <hr>
+            <input type=submit name='exp' value='Export'>
+            <input type=submit name='imp' value='Import'>
+            <p><input type=submit name='logout' value='Logout''>
+            </form>
+        ''' % (carry.mydb)
+
+    strx += '''</table>'''
+
     return strx
 
 _mac_right = '''

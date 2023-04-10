@@ -50,6 +50,7 @@ def got_editor(config, carry):
 
     #carry.mydb = modname
     carry.mydb = "proj-rows"
+    opcode = ""; opnum = 0
 
     if carry.request:
         print("editor carry.request", carry.request)
@@ -63,6 +64,9 @@ def got_editor(config, carry):
                 if os.path.isfile(fname):
                     print("File OK", fname)
                     carry.mydb = mydbx
+            if "logout" == aa[0]:
+                print("logout button")
+                opcode = "logout"
 
         #print("op on", mydb)
 
@@ -71,7 +75,6 @@ def got_editor(config, carry):
 
         carry.cdata += "<table border=0 width=100%>"
 
-        opcode = ""; opnum = 0
         for aa in  carry.request:
             #print("aa", aa)
             if "add" in aa[0]:
@@ -176,11 +179,19 @@ def got_editor(config, carry):
             carry.cdata += "<input type=submit name=rm_%d value='  Cancel Delete  '>  &nbsp; " % int(rq[1])
             carry.cdata += "<input type=submit name=rm_%d value='  Confirm Delete  '>  "  % int(rq[1])
 
+        elif "logout" == opcode:
+            carry.cdata += "<table border=0 width=100%>"
+            carry.cdata += "<tr><td align=center colspan=2>"
+            carry.cdata += "<font size=+2>Logged Out</font><p>"
+            carry.cdata += "<a href=index.html> Back to Login</a>"
+            carry.cdata += "</table>"
+            carry.needpass = True
+            carry.mainclass.wanted_cookies.append(("Auth", "", 1))
         else:
-            carry.cdata += "<table>"
+            carry.cdata += "<table width=100%>"
             carry.cdata += "<tr><td align=center><font size=+2>" + \
-                            "Invalid / Unimplemented opcode</font><p> '%s'</b>" % \
-                                     carry.request[0][1]
+                            "Invalid / Unimplemented opcode '%s'</font><p> db='%s'</b>" % \
+                                     (opcode, carry.request[0][1])
             print("Invalid (unimplemented) command code")
             carry.cdata += "</table>"
 

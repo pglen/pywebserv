@@ -37,15 +37,18 @@ def got_index(config, carry):
 
     #carry.mydb =  modname #"prog-edit"
     carry.mydb =  "proj-rows"
-    print("carry cookies", carry.mainclass.good_cookies)
+
+    #print("carry cookies", carry.mainclass.good_cookies)
+    needauth = False
     if not "Auth" in carry.mainclass.good_cookies:
-        print("need auth")
-        try:
-            sess = str(uuid.uuid4())
-            carry.mainclass.wanted_cookies.append(("Auth", sess, 1))
-            pass
-        except:
-            wsgi_util.put_exception("Auth cookie")
+        needauth = True
+    elif carry.mainclass.good_cookies["Auth"] == "":
+        needauth = True
+    if needauth:
+        #print("need auth")
+        carry.needpass = True
+    else:
+        carry.needpass = False
 
     if carry.query:
         print("idx carry.query", carry.query)
@@ -58,25 +61,27 @@ def got_index(config, carry):
             if os.path.isfile(fname):
                 #print("File OK", fname)
                 carry.mydb = mydbx
+                print("db op on", carry.mydb)
         if "logout" in carry.query.keys():
-            print("logout", carry.mainclass.good_cookies)
-            delcookie = []
-            for aa in  carry.mainclass.good_cookies:
-                if aa[0] != "Auth":
-                    delcookie.append(aa)
-            carry.mainclass.good_cookies = delcookie
-            print("logout", carry.mainclass.good_cookies)
+            #print("logout", carry.mainclass.good_cookies)
+            if "Auth" in carry.mainclass.good_cookies:
+                carry.mainclass.good_cookies["Auth"] = ""
+            #print("logout", carry.mainclass.good_cookies)
+            carry.needpass = True
 
-    #print("op on", carry.mydb)
+    userx = ''  ; passx = ""; gotauth = 0
 
     if carry.request:
-        #print("idx carry.request", carry.request[:24])
+        print("idx carry.request", carry.request)
         rq = [] ; par = []
         for aa in carry.request:
-            if aa[0] != "db":
-                rq.append(aa[1])
-                par.append(aa[0])
-            else:
+            if aa[0] == "user":
+                userx = aa[1]
+                gotauth = True
+            elif aa[0] == "pass":
+                passx = aa[1]
+                gotauth = True
+            elif aa[0] == "db":
                 # Set the data base
                 mydbx = aa[1].strip('"')
                 # Check if DB is there
@@ -85,15 +90,47 @@ def got_index(config, carry):
                 if os.path.isfile(fname):
                     #print("File OK", fname)
                     carry.mydb = mydbx
+            else:
+                rq.append(aa[1])
+                par.append(aa[0])
 
         #print("data rq", rq)
-        if len(rq) == 1:
+        if gotauth :
+            import wsgi_pass
+            print ("login", userx, passx, wsgi_pass.modulus)
+            #if passx == '1234':
+
+            if wsgi_pass.passcheck(userx, passx, wsgi_pass.modulus):
+                #print("Auth OK")
+                try:
+                    sess = str(uuid.uuid4())
+                    carry.mainclass.wanted_cookies.append(("Auth", sess, 1))
+                    carry.needpass = False
+                except:
+                    wsgi_util.put_exception("Auth cookie")
+            else:
+                #print("Auth NOT OK")
+                carry.needpass = True
+                carry.mainclass.wanted_cookies.append(("Auth", "", 1))
+
+            cnt = carry.mainclass.good_cookies.get("Tries", 0)
+            sss = str(int(cnt) + 1)
+            print ("sss", sss)
+            carry.mainclass.wanted_cookies.append(("Tries", sss, 1))
+
+            # Delay if repeated too many times
+            if carry.needpass:
+                carry.retry_cnt = int(sss)
+                if carry.retry_cnt > 3:
+                    time.sleep(carry.retry_cnt // 3)
+
+        elif len(rq) == 1:
             if "Confirm" in rq[0]:
                 sss = par[0].split("_")
                 #print("rq del id: ", sss[1]);
                 db = wsgi_data.soft_opendb(carry, carry.mydb)
                 db.delrecall(sss[1])
-        else:
+        elif len(rq) > 4:
             try:
                 #startt = time.perf_counter()
                 #wsgi_data.load_data_func("load_data proj-edit", carry)

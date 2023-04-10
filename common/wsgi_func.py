@@ -193,8 +193,13 @@ def     image_func(strx, context):
      { image nnn }          --  Put an image tag nnn in the output
      { image nnn www }      --  Put an image tag in the output, resize width to requested
      { image nnn www hhh }  --  Put an image tag in the output, resize to parm
+
+    Mon 10.Apr.2023   Fixed aspect bug
+
     The first two forms of the { image } function will preserve the image's aspect ratio.
+
     '''
+
     #print("image_func", strx)
 
     sss = parse_args(strx, context)
@@ -229,13 +234,17 @@ def     image_func(strx, context):
             #print("Resizing", nnn2)
             try:
                 img = Image.open("." + iname)
-                wpercent = (basewidth / float(img.size[0]))
-                #print("wpercent", wpercent)
-                if  wpercent > 1.:
+                aspect = float(img.size[1]) / float(img.size[0])
+                #print("aspect", aspect)
+                if  aspect > 1.:
+                    wpercent = float(basewidth) / float(img.size[0])
                     vsize = int((float(img.size[0]) / float(wpercent)))
+                    #print("vsize", vsize)
                     img = img.resize((vsize, basewidth), Image.ANTIALIAS)
                 else:
+                    wpercent = float(basewidth) / float(img.size[0])
                     hsize = int((float(img.size[1]) * float(wpercent)))
+                    #print("hsize", hsize)
                     img = img.resize((basewidth, hsize), Image.ANTIALIAS)
 
                 img.save(nnn2)

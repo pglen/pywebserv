@@ -541,10 +541,10 @@ _glob_site_left = '''
     <table border=0 align=center width=100%>
         <tr>
         { headurl index.html Home&nbsp;Page }
-        { headurl index.html Blog&nbsp;Page }
-        { headurl index.html Personal&nbsp;Page }
+        { headurl index.html Documents&nbsp;Page }
         { headurl index.html About&nbsp;Page }
         <!--
+        {headurl index.html Personal&nbsp;Page }
         {headurl log.html Log&nbsp;Page }
         {headurl index.html Tech&nbsp;Page }
         {headurl index.html Another&nbsp;Page }
@@ -627,7 +627,7 @@ _mac_target_statement = '''
 
 def _func_calcwrap(strx, context):
 
-    res = getattr(context, "proj-edit").res
+    res = getattr(context, "proj-rows").res
     dbsize = len(res)
 
     if context.prog >= dbsize - 3:
@@ -649,7 +649,8 @@ _mac_center_body = '''
     <td>
      <table border=0>
         <tr><td align=center>
-        <font size=+2><b>{ header2 } </b></font>
+        { linemessage }
+        <font size=+2><b>{ subheader } </b></font>
 
         </div>
         <table border=0 width=100%>
@@ -687,27 +688,34 @@ _mac_center_body = '''
 
 '''
 
-_mac_nav = '''
-<table border=0 width=100%>
+def _func_nav(strx, context):
+
+    res = getattr(context, "proj-rows").res
+    dbsize = len(res)
+    bbb = max(0, context.prog -1)
+    eee = min(dbsize-1, context.prog +1)
+    strx = '''
+<table border=0 width=100%%>
     <tr align=center>
         <td align=right>
-            <a href=index.html?back=1>
-            &nbsp <img src=/siteicons/media-skip-backward.png title="Backward to start">
+            <a href=index.html?seek=%d>
+            &nbsp <img src=/siteicons/media-skip-backward.png title="Back to start">
             </a>
-            <a href=index.html?back=2>
+            <a href=index.html?seek=%d>
             &nbsp <img src=/siteicons/media-seek-backward.png title=Backward>
             </a>
             <td width=150px>
             &nbsp; Navigation &nbsp;
             <td align=left>
-            <a href=index.html?back=3>
+            <a href=index.html?seek=%d>
             &nbsp <img src=/siteicons/media-seek-forward.png title=Forward>
             </a>
-            <a href=index.html?back=4>
+            <a href=index.html?seek=%d>
             &nbsp <img src=/siteicons/media-skip-forward.png title="Forward to end">
             </a>
 </table>
-'''
+''' % (0, bbb, eee, dbsize -1)
+    return strx
 
 # This one is made global
 
@@ -722,9 +730,27 @@ _glob_site_right = '''
     <tr><td align=center>
         { app_fortune } <p>
         { app_one } <p>
-        { app_two } <p>
+        { calendar } <p>
 </table>
 '''
+
+def calcstep(ddd, context):
+
+    if not hasattr(context, "prog"):
+        context.prog = 0
+
+    res = getattr(context, "proj-rows").res
+
+    newval =  context.prog + int(ddd)
+    dbsize = len(res)
+    print("dbsize", dbsize)
+
+    if newval > dbsize - 1:
+        newval = dbsize - 1
+    if newval < 0:
+        newval = 0
+
+    context.prog = newval
 
 # Get new value of the step for
 
@@ -732,20 +758,7 @@ def _func_calcstep(strx, context):
 
     ddd = wsgi_func.parse_args(strx, context)
     #print("ddd", ddd)
-
-    res = getattr(context, "proj-edit").res
-
-    if hasattr(context, "prog"):
-        newval =  context.prog + int(ddd[1])
-        dbsize = len(res)
-        #print("dbsize", dbsize)
-        if newval > dbsize - 3:
-            newval = dbsize-3
-        if newval < 0:
-            newval = 0
-        return str(newval)
-    else:
-        return "0"
+    calcstep(ddd[1], context)
 
 #<!-- The Modal dialog -->
 
@@ -878,11 +891,11 @@ def _func_slider(strx, context):
 # Clear text box when the first char is space (empty)
 _mac_clr = ''' if(this.value[0]==' ')this.value='' '''
 
-_mac_header2 = '''
+_mac_subheader = '''
     <table width=100% border=0>
         <!--<form method=post>-->
             <tr><td>
-            <a href=index.html>
+            <a href=/index.html>
             <font size=+2><center><b>Welcome to UPP, &nbsp; </a> </center></font> <br>
 
             <!-- &nbsp; &nbsp; &nbsp; the site for United Planet Peace -->
@@ -890,7 +903,7 @@ _mac_header2 = '''
             <!-- (under construction, check back later) --!>
 
             <td align=right>
-                 <font size=-1>Quickx feedback:</font>  &nbsp;
+                <font size=-1>Quick feedback:</font>  &nbsp;
                 <input type=text name="feedname" onfocus="{ clr }" value=" Your Name" size=10>
                 <input type=text name="feedtit"  onfocus="{ clr }" value=" Feddback Title" size=10> <br>
                 <input type=text name="feedtxt"  onfocus="{ clr }" value=" Feedback Content" size=12>
@@ -901,6 +914,92 @@ _mac_header2 = '''
     </table>
 '''
 
+
+def     _glob_calendar(strx, context):
+
+    '''
+    Mock calendar. Does nothing but presents a calendar looking user interface,
+    and links the message on no cal
+    '''
+    import datetime
+    try:
+        content = '''<table width=100% border=0  bgcolor=#dddddd>
+            <tr><td align=center bgcolor=#cccccc colspan=7><b>Event Calendar</b><br>
+        '''
+        #        <tr><td>code for app 2 comes here
+        dt = datetime.datetime.now()
+
+        dt2 = datetime.datetime.now()
+        from calendar import monthrange
+        rrr = monthrange(dt2.year, dt2.month)
+
+        #anchor = dt.day % 7;
+        mon = rrr[0]
+        anchor =	 dt.weekday()
+
+        "day", dt.weekday(), #print("dt", dt.day, "mon", mon, "anchor", anchor, "rrr", rrr)
+
+        content += "<tr><td colspan=7>"
+        cnt = 0; cnt2 = 0;
+        wday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        content += "<tr>"
+        for cc in range(7):
+            content += "\n<td  align=center> <font size=-1>" + wday[cc]
+
+        for aa in range(5):
+            content += "<tr>"
+            for bb in range(7):
+                #prog = aa*7 + bb + 1
+                #if cnt2 >= rrr[1]:
+                #    break
+
+                cnt += 1
+                if cnt > mon and cnt2 < rrr[1]:
+                    cnt2 += 1
+
+                    if cnt2 == dt.day:
+                        #print("today")
+                        bgcolor="#eeeeee"
+                        color = "#888888"
+                    else:
+                        bgcolor="#dddddd"
+                        color = "#000000"
+
+                    content += "<td align=center nowrap=nowrap bgcolor=" + bgcolor + ">"
+                    decor = 0
+                    #if random.randint(0, 255) % 4 == 0:
+                    #    decor = 1;
+
+                    decor = cnt2 % 4 == 0
+                    content += "<font size=-1>"
+                    if decor:
+                        content += "<a href=/index.html?message=No%20Calendar%20Events>"
+                    else:
+                        content += " &nbsp; "
+
+                    content += "%2d" % cnt2
+
+                    if decor:
+                        content += "*</a>"
+                    else:
+                        content += " &nbsp; "
+
+                else:
+                    content += "<td align=center> "
+
+        content += "<tr><td colspan=7 align=center><font size=-2>"
+        content += "** Calendar events are subject to change"
+
+        content += "</table>\n"
+
+    except:
+        wsgi_util.put_exception("Exception on app_two_func")
+
+        # Note that we still complete the table, so the site keeps going
+        content += "</table>\n"
+
+    return content
+
 # ------------------------------------------------------------------------
 # Override main macros
 
@@ -909,20 +1008,23 @@ _glob_header = '''
     <table width=99% bgcolor={ sitecolor } border=0>
     <td align=center width=30%> &nbsp; &nbsp;
     <font size=+2>
-        <a href=index.html><b>{ CompanyName }</b></a>
+        <a href=/index.html><b>{ CompanyName }</b></a>
     </font><br>
-     <font color=red>
+     <!--<font color=red>
          Please Note, that Site is Under Construction
-     </font>
+     </font>   -->
             <td align=center>
                 <table width=100%  border=0>
                     <tr align=center>
                         <td>
-                        <td> <a href=index.html>
-                            <img src=/siteicons/go-home.png class=image title="Back to home page"> </a>
+                        <td> <a href=/index.html>
+                            <img src=/siteicons/go-home.png class=image title="Back to home page">
+                            </a>
                         <td> <img src=/siteicons/emblem-default.png class=image title="Go forward">
                         <td> <img src=/siteicons/emblem-unreadable.png class=image title="Blah Blah">
-                        <td> <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
+                        <td>  <a href=index.html?favorite>
+                        <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
+                            </a>
                         <td>
                 </table>
                 <td align=right width=18%>
@@ -957,13 +1059,14 @@ _glob_site_footer = '''
 def _func_imgrow(strx, context):
 
     ddd = wsgi_func.parse_args(strx, context)
-    #print("ddd", ddd)
 
-    if not hasattr(context, "prog2"):
-        context.prog2 = 0
+    if not hasattr(context, "prog"):
+        context.prog = 0
 
-    idx = context.prog2 + int(ddd[1])
+    idx = context.prog + int(ddd[1])
     res  = getattr(context, "proj-rows").res
+
+    #print("ddd", ddd, context.prog)
 
     if not res:
         # Patch in something
@@ -981,15 +1084,14 @@ def _func_imgrow(strx, context):
     <td width=10>
      <td align=center>
       <table border=0 width=100%%>
-          <tr><td align=center width=400>
+          <tr><td align=center colspan=3>
            <font size=+2> %s
+            </font>
+           <tr><td>
            <a href=/media/%s>
-           { image %s [ feedheight ] }
-           <br>
-           </font>
+           { image %s [ 500 ] }
            </a>
-           <!-- <center> Line Under Image  </center> -->
-           <center> %s </center>
+           <br> <center> %s </center>
 
           <td width=1>
           <td align=center>
@@ -1000,6 +1102,7 @@ def _func_imgrow(strx, context):
               <!-- Image row text Image row text Image row text Image row textx -->
              %s
               </div>
+              <p>
         </table>
         ''' % (res[idx][2], res[idx][6], res[idx][6],
                         res[idx][5], res[idx][3], res[idx][4])
@@ -1008,6 +1111,10 @@ def _func_imgrow(strx, context):
 
     return sss
 
+messagex = ""
+
+def _glob_linemessage(strx, context):
+    return messagex
 
 wsgi_util.add_all_vars(locals().copy(), common.local_table)
 

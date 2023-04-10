@@ -1,4 +1,4 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 
 import sys, uuid, os
 import  wsgi_util, wsgi_func, wsgi_global, wsgi_data, wsgi_str
@@ -65,8 +65,11 @@ def got_editor(config, carry):
                     print("File OK", fname)
                     carry.mydb = mydbx
             if "logout" == aa[0]:
-                print("logout button")
+                #print("logout button")
                 opcode = "logout"
+            if "exp" == aa[0]:
+                print("export button")
+                opcode = "export"
 
         #print("op on", mydb)
 
@@ -85,7 +88,7 @@ def got_editor(config, carry):
                 if len(rq) > 1:
                     opnum = int(rq[1])
 
-        print ("opcode", opcode, "opnum", opnum)
+        #print ("opcode", opcode, "opnum", opnum)
 
         if opcode == "Edit":
             carry.xdata = []; carry.hdata = []
@@ -115,21 +118,23 @@ def got_editor(config, carry):
             for aa in range(len(res)-1):
                 if aa == len(res)-2:
                     carry.cdata +=  "<tr><td><td align=center>"
-                    carry.cdata +=  "If image replacement is intended: &nbsp; &nbsp; "\
-                        "<input type=file id=myFile name=aa_5, accept:'image/png, image/jpeg'>"
+                    carry.cdata +=  \
+                     "Add if image replacement is intended, else old image preserved.<p>"
+                    carry.cdata += \
+                     "<input type=file id=myFile name=aa_5, accept:'image/png, image/jpeg'>"
                 elif aa == len(res)-4:
                     carry.cdata += \
                     "<tr><td> " + "%s" % (field_names[aa]) + "  " + \
                         "<td><textarea cols=64 rows=8 name='aa_%d'" % (aa+1) + ">" + \
-                            str(res[aa+1]) + "</textarea><p>"
+                            str(res[aa+1]) + "</textarea>"
                 else:
                     carry.cdata += \
                     "<tr><td> " + "%s" % (field_names[aa]) + "  " + \
                         "<td><textarea cols=64 rows=4 name='aa_%d'" % (aa+1) + ">" + \
-                            str(res[aa+1]) + "</textarea><p>"
+                            str(res[aa+1]) + "</textarea>"
 
             carry.cdata += "</table>"
-            carry.cdata += "<br><center><input type=submit value=' Save Record '>"
+            carry.cdata += "<center><input type=submit value=' Save Record '>"
 
         elif opcode == "Add New":
             #print ("adding new data")
@@ -187,6 +192,14 @@ def got_editor(config, carry):
             carry.cdata += "</table>"
             carry.needpass = True
             carry.mainclass.wanted_cookies.append(("Auth", "", 1))
+
+        elif "export" == opcode:
+            carry.cdata += "<table border=0 width=100%>"
+            carry.cdata += "<tr><td align=center colspan=2>"
+            carry.cdata += "<font size=+2>Exporting</font><p>"
+            carry.cdata += "<a href=index.html> Back to Login</a>"
+            carry.cdata += "</table>"
+
         else:
             carry.cdata += "<table width=100%>"
             carry.cdata += "<tr><td align=center><font size=+2>" + \

@@ -20,6 +20,6 @@ def passcheck(user, sss, modx):
     #print("sumx", sumx)
     return sumx % modx == 0 and sumx % 7 == 0 and sumx % 8 == 0
 
-        #!/usr/bin/env python3
+# EOF
 
 

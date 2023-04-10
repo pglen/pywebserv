@@ -56,14 +56,6 @@ _mac_edit_center = '''
 
 '''
 
-_mac_editrow = '''
-<tr align=center><td> Edit
-<td> Edit2
-<td> Edit3
-'''
-
-#<font Page Main size=+2>Edit Rows</font>
-
 def row_data(strx, context):
 
     #sss = wsgi_func.parse_args(strx, context)
@@ -251,7 +243,7 @@ def add_new(strx, carry):
 
     return strx
 
-_mac_right = '''
+_mac_rightx = '''
     <td valign=top width=20%>
         <table width=100% cellpadding=1 border=0>
             <tr><td bgcolor={ tabhead } height=36 align=center>
@@ -269,11 +261,11 @@ _mac_right = '''
 # Clear text box when the first char is space (empty)
 _mac_clr = ''' if(this.value[0]==' ')this.value='' '''
 
-_mac_edit_header = '''
+_mac_edit_headerx = '''
     <table width=100% bgcolor={ sitecolor } border=0>
         <form method=post>
             <tr><td>
-            <a href=index.html>
+            <a href=/index.html>
             <font size=+2><center><b>Welcome to UPP Site Editor, </a> </font> <br>
             <!-- &nbsp; &nbsp; &nbsp;  -->
             the editing site for United Planet Peace<br>

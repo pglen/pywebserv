@@ -264,7 +264,6 @@ class xWebServer():
             print("New Session:", sess)
             self.wanted_cookies.append(("Session", sess, 1))
 
-
         if self.configx.verbose > 2:
             print("process_request2", callme, template)
 

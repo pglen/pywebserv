@@ -46,7 +46,16 @@ def got_index(config, carry):
     #print("carry.query", carry.query)
 
     carry.prog = carry.prog2 = 0
+    macros.messagex = ""
+
     if carry.query:
+        if "message" in carry.query:
+            macros.messagex = "<font size=+1 color=red>" + \
+                                carry.query["message"][0] + "</font><br>"
+        elif "favorite" in carry.query:
+            macros.messagex = "<font size=+1 color=green> " \
+                                "Marked as favorite site.</font><br>"
+
         if "step" in carry.query:
             iii = wsgi_util.xint(carry.query['step'][0])
             carry.prog = iii
@@ -67,6 +76,11 @@ def got_index(config, carry):
     # as the parser is not a multi pass parser (not practical in python)
     wsgi_data.load_data_func("load_data proj-rows", carry)
     wsgi_data.load_data_func("load_data proj-edit", carry)
+
+    if carry.query:
+        if "seek" in carry.query:
+            iii = wsgi_util.xint(carry.query['seek'][0])
+            macros.calcstep(iii, carry)
 
     content += wsgi_util.process_default(config, carry)
     return content

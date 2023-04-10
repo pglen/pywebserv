@@ -72,7 +72,7 @@ def got_index(config, carry):
     userx = ''  ; passx = ""; gotauth = 0
 
     if carry.request:
-        print("idx carry.request", carry.request)
+        #print("idx carry.request", carry.request)
         rq = [] ; par = []
         for aa in carry.request:
             if aa[0] == "user":
@@ -97,9 +97,6 @@ def got_index(config, carry):
         #print("data rq", rq)
         if gotauth :
             import wsgi_pass
-            print ("login", userx, passx, wsgi_pass.modulus)
-            #if passx == '1234':
-
             if wsgi_pass.passcheck(userx, passx, wsgi_pass.modulus):
                 #print("Auth OK")
                 try:
@@ -115,7 +112,7 @@ def got_index(config, carry):
 
             cnt = carry.mainclass.good_cookies.get("Tries", 0)
             sss = str(int(cnt) + 1)
-            print ("sss", sss)
+            #print ("sss", sss)
             carry.mainclass.wanted_cookies.append(("Tries", sss, 1))
 
             # Delay if repeated too many times

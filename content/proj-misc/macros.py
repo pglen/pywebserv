@@ -1088,26 +1088,14 @@ def _func_imgrow(strx, context):
            <font size=+2> %s
             </font>
            <tr><td>
-           <a href=/media/%s>
-           { image %s [ 400 ] }
-           </a>
-
-          <td width=1>
-          <td align=center>
-          <!--Image description Image description -->
-            %s
-
-            <tr>  <td colspan=3> <center> %s </center>
-
-          <tr><td colspan=3>
-             <div class=textx>
-              <!-- Image row text Image row text Image row text Image row textx -->
-             %s
+            <div class=textx>
+            %s <br>
+            %s<br>
+           <center> %s </center>
               </div>
               <p>
         </table>
-        ''' % (res[idx][2], res[idx][6], res[idx][6],
-                        res[idx][5], res[idx][3], res[idx][4])
+        ''' % (res[idx][2], res[idx][4], res[idx][3], res[idx][5])
 
     #print("img", res[idx][6] )
 

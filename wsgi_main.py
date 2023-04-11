@@ -381,7 +381,11 @@ def application(environ, respond):
         else:
             content = "Error on presenting the '500' file. Please contact the admin."
 
+
+        #try:
         respond('500 Internal Server Error', [('Content-Type', "text/html" + ';charset=UTF-8')])
+        #except:
+        #    pass
         return [bytes(content, "utf-8"),]
 
 def xversion():

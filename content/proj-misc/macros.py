@@ -632,11 +632,11 @@ _mac_center_body = '''
 
     <td>
      <table border=0>
-        <tr><td align=center>
+        <tr><td r>
         { linemessage }
-        <font size=+2><b>{ subheader } </b></font>
-
+        <center><h1>Misc. Items</h1></center>
         </div>
+        <!--
         <table border=0 width=100%>
             <tr><td>
             Read our Mission Statement  / Founding Statement
@@ -653,8 +653,14 @@ _mac_center_body = '''
                     </div>
                 </div>
             </table>
-        </table>
+        -->
 
+        &nbsp; &nbsp; This page is for entertainment only. We collected wisdom from all
+        over the world, we wish to share here for all to enjoy. We attempted to
+        select wisdom and sayings on the light side; for entertainment.<p>
+        &nbsp; &nbsp; If you would like to add more, please email the admin. (see below)
+
+        </table>
 
         <table border=0>
             <tr valign=top>
@@ -674,7 +680,7 @@ _mac_center_body = '''
 
 def _func_nav(strx, context):
 
-    res = getattr(context, "proj-rows").res
+    res = getattr(context, "proj-misc").res
     dbsize = len(res)
     bbb = max(0, context.prog -1)
     eee = min(dbsize-1, context.prog +1)
@@ -723,7 +729,7 @@ def calcstep(ddd, context):
     if not hasattr(context, "prog"):
         context.prog = 0
 
-    res = getattr(context, "proj-rows").res
+    res = getattr(context, "proj-misc").res
 
     newval =  context.prog + int(ddd)
     dbsize = len(res)
@@ -1058,7 +1064,7 @@ def _func_imgrow(strx, context):
         context.prog = 0
 
     idx = context.prog + int(ddd[1])
-    res  = getattr(context, "proj-rows").res
+    res  = getattr(context, "proj-misc").res
 
     #print("ddd", ddd, context.prog)
 
@@ -1083,14 +1089,16 @@ def _func_imgrow(strx, context):
             </font>
            <tr><td>
            <a href=/media/%s>
-           { image %s [ 500 ] }
+           { image %s [ 400 ] }
            </a>
-           <br> <center> %s </center>
 
           <td width=1>
           <td align=center>
           <!--Image description Image description -->
             %s
+
+            <tr>  <td colspan=3> <center> %s </center>
+
           <tr><td colspan=3>
              <div class=textx>
               <!-- Image row text Image row text Image row text Image row textx -->

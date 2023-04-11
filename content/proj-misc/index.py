@@ -78,8 +78,8 @@ def got_index(config, carry):
 
     # Call these before parse; if used as a macro it will not load
     # as the parser is not a multi pass parser (not practical in python)
-    wsgi_data.load_data_func("load_data proj-rows", carry)
-    wsgi_data.load_data_func("load_data proj-edit", carry)
+    #wsgi_data.load_data_func("load_data proj-rows", carry)
+    wsgi_data.load_data_func("load_data proj-misc", carry)
 
     if carry.query:
         if "seek" in carry.query:
@@ -139,12 +139,11 @@ Initialize the current module
 
 try:
     # Add default enties to tables
-    wsgi_global.urlmap.add_one_url("/", got_index, "index.html", __file__)
-    wsgi_global.urlmap.add_one_url("/index.html", got_index, "index.html", __file__)
-    wsgi_global.urlmap.add_one_url("/log.html", got_log, "log.html", __file__)
+    wsgi_global.urlmap.add_one_url("/misc/", got_index, "index.html", __file__)
+    wsgi_global.urlmap.add_one_url("/misc/index.html", got_index, "index.html", __file__)
 
     #wsgi_global.urlmap.add_one_url("/test_resize.html", got_index, "test_resize.html", __file__)
-    wsgi_global.gl_table.add_one_func("show_submit", show_submit_func)
+    #wsgi_global.gl_table.add_one_func("show_submit", show_submit_func)
 
     wsgi_global.gl_table.add_one_func("CompanyName", "UPP, United Planet Peace")
     #wsgi_global.gl_table.add_one_func("fill_data", fill_data)

@@ -102,6 +102,7 @@ def got_index(config, carry):
                 try:
                     sess = str(uuid.uuid4())
                     carry.mainclass.wanted_cookies.append(("Auth", sess, 1))
+                    carry.mainclass.wanted_cookies.append(("Tries", "0", 1))
                     carry.needpass = False
                 except:
                     wsgi_util.put_exception("Auth cookie")
@@ -149,6 +150,9 @@ def got_index(config, carry):
                     wsgi_util.put_exception("padding field")
 
                 #print("Saving", rq[1])
+                for aa in range(5):
+                    rq[aa] = rq[aa].replace("\n", "<br>")
+
                 db.put(rq[0], rq[1], rq[2], rq[3], rq[4], rrr)
                 wsgi_data.soft_closedb(db)
 

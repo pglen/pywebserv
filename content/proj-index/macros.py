@@ -490,10 +490,17 @@ window.onclick = function(event) {
   }
 }
 
+// Clear text box when the first char is space (empty)
+function clr(zz) {
+
+    if(zz.value[0]==' ') zz.value=''
+}
+
 </script>
 
-
 '''
+# Clear text box when the first char is space (empty)
+_mac_clr = ''' if(this.value[0]==' ') this.value='' '''
 
 def _glob_headurl(strx, context):
 
@@ -793,88 +800,6 @@ def add_popup(img):
     '''  % img
     return sss
 
-# ------------------------------------------------------------------------
-# Present slider
-
-def _func_slider2(strx, context):
-
-    sss = ""
-    ddd = wsgi_func.parse_args(strx, context)
-
-    #print("ddd", ddd)
-
-    if not hasattr(context, "prog"):
-        context.prog = 0
-    idx = context.prog + int(ddd[1])
-    res  = getattr(context, "proj-edit").res
-
-    if not res:
-        # Patch in something
-                # ID Key  D1        Side Main                Under             Image
-        res = [
-                ["", "", "No Data", "", "Database is empty", "System Message", "X"],
-                ["", "", " &nbsp ", "", "", "", "X"],
-                ["", "", " &nbsp ", "", "", "", "X"],
-              ]
-
-    if idx > len(res):
-        #idx = 0
-        #print("Passed end of data")
-        #sss = "Passed end of data"
-        #return sss
-        pass
-    #print("res", res)
-
-    part = res[idx][4][:96] + " ... "
-    num = int(ddd[1])
-    try:
-        sss += '''
-        <td>
-            <table border=0 bgcolor=#dddddd>
-                <tr><td>
-                <tr><td colspan=2>
-                <font size=+3> %s</font>
-                <tr><td align=center>
-                <a href=/media/%s>
-                    { image %s [ thumbwidth ] }<br>
-                </a>
-                <td>%s
-                <tr><td colspan=2 align=center>
-                <tr><td colspan=2 style="text-alignment:justify">
-                <div id="displayText5_%d">
-                    %s<br>
-                </div>
-                <div id="toggleText5_%d" style="display: none">
-                %s
-                </div>
-                ''' % ( res[idx][2], res[idx][6], res[idx][6],
-                                 res[idx][3],  num, part,
-                                    num, res[idx][4])
-
-                #add_modal(res[idx][6], num),
-
-        rrr = '''
-                 <a id='displayText5a_%d' href="javascript:toggle3('displayText5_%d',
-                                'toggleText5_%d', 'displayText5a_%d'); ">
-                    <font size=-1>Show More ... </font></a>
-                ''' % (num, num, num, num,)
-
-        if  len(res[idx][4]) > 96:
-            sss += rrr
-
-        sss += '''
-            <tr><td colspan=2 align=right><font size=-1> %s</font<br>
-        </table>'''  % res[idx][5]
-
-    except:
-        # If there is not enough  data .. ignore it
-        wsgi_util.put_exception("In display slider")
-        pass
-    return sss
-
-# Clear text box when the first char is space (empty)
-_mac_clr = ''' if(this.value[0]==' ')this.value='' '''
-
 _mac_subheader = '''
     <table width=100% border=0>
         <form method=post>
@@ -888,10 +813,10 @@ _mac_subheader = '''
 
             <td align=right>
                 <font size=-1>Quick feedback:</font>  &nbsp;
-                <input type=text name="feedname" onfocus="{ clr }" value=" Your Name" size=10>
-                <input type=text name="feedtit"  onfocus="{ clr }" value=" Feddback Title" size=10> <br>
+                <input type=text name="feedname" onfocus="clr(this)" value=" Your Name" size=10>
+                <input type=text name="feedtit"  onfocus="{ clr }" value=" Feedback Title" size=10> <br>
                 <input type=text name="feedtxt"  onfocus="{ clr }" value=" Feedback Content" size=12>
-                <input type=submit name='feedSUB' value='Submit'>
+                <input type=submit name='submit' value='Submit'>
             <td>
         </form>
 

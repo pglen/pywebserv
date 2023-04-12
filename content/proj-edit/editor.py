@@ -93,8 +93,18 @@ def got_editor(config, carry):
         if opcode == "Edit":
             carry.xdata = []; carry.hdata = []
             #print("rq edit data:", rq)
-            res = db.getbyord(opnum)
+            res2 = db.getbyord(opnum)
             #print("res:", res)
+
+            res = []
+            for aa in range(len(res2)):
+                res.append(res2[aa]) #.decode())
+
+            for aa in range(5):
+                try:
+                    res[aa] = res[aa].replace("<br>", "\n")
+                except:
+                    pass
 
             carry.cdata += "<input type=hidden name=db value=%s" % carry.mydb + ">"
 
@@ -112,7 +122,7 @@ def got_editor(config, carry):
 
             #print("res", res)
 
-            carry.cdata += "<input type=hidden name=aa_0 value=%s" % res[0].decode() + ">"
+            carry.cdata += "<input type=hidden name=aa_0 value=%s" % res[0] + ">"
             carry.cdata += "<input type=hidden name=aa_6 value=%s" % rq[1] + ">"
 
             for aa in range(len(res)-1):

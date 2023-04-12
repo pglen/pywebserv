@@ -49,6 +49,8 @@ def got_index(config, carry):
     macros.messagex = ""
 
     if carry.query:
+        print("carry.query", carry.query)
+
         if "message" in carry.query:
             macros.messagex = "<font size=+1 color=red>" + \
                                 carry.query["message"][0] + "</font><br>"
@@ -68,7 +70,8 @@ def got_index(config, carry):
             carry.prog2 = iii
 
     if carry.request:
-        process_submit(carry.request)
+        print("carry.request", carry.request)
+        process_submit(carry, carry.request)
 
     # Decorate before calling main
     carry.local_table = common.local_table
@@ -106,7 +109,7 @@ def show_submit_func(strx, context):
     #eee = wsgi_util.getwenv(Config.mainclass.environ)
     return context, " ", eee
 
-def process_submit(request):
+def process_submit(carry, request):
 
     #print(Config.mainclass.request)
 
@@ -117,16 +120,11 @@ def process_submit(request):
         #print("de-sweared", bb)
         sss.append(bb)
 
-    #print("raw data", str(request), sss, type(sss))
-
-    try:
-        localdb = wsgi_data.wsgiSql("data/%s.sqlt" % modname)
-    except:
-        print("Could not create / open local data for %s", modname)
-
+    db = wsgi_data.soft_opendb(carry, "proj-index")
     #print("sss", sss)
-    localdb.put(sss[0], sss[1], sss[2], "", "")
-    localdb.close()
+    import uuid
+    db.put(str(uuid.uuid4()), sss[0], sss[1], sss[2], "", "")
+    db.close()
 
 # ------------------------------------------------------------------------
 # Add all the functions for the urls;

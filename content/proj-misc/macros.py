@@ -35,465 +35,8 @@ import wsgi_util, wsgi_func, wsgi_data, wsgi_global
 
 from . import common
 
-_glob_siteemail =   "admin@unitedplanetpeace.com"
-_glob_tabhead   =   "#ccffcc { tabhead }"
-_glob_misscol   =   "#eeeeee"
-
-# String parsed before function
-_glob_sitecolor = "#aaffbb"
-
 _mac_CompanyName = '''UPP the United Planet Peace'''
 
-_glob_sitestyle = '''
-
-<style>
-
-* {
-  box-sizing: border-box;
-}
-
-   div {
-    display: block;
-}
-
-body {
-  font-family: Arial;
-  padding: 10px;
-  background: #f1f1f1;
-}
-
-/* Header/Blog Titlefor(int aa = 0; aa < limx; aa++)
-    {
-    // Do stuff
-    }
- */
-.header {
-  /*padding: 30px;*/
-  text-align: center;
-  background: white;
-}
-
-.header h1 {
-  font-size: 50px;
-}
-
-/* Style the top navigation bar
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-*/
-
-/* Style the topnav links
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-*/
-
-/* Change color on hover
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-*/
-
-/* -------------------------------------------------------------------- */
-/* Column container */
-
-.row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
-
-/* Left column */
-.leftcolumn {
-  flex: 25%;
-  background-color: #f1f1f1;
-  padding-left: 20px;
-  /*visibility: collapse;*/
-  /*overflow: hidden;*/
-}
-/* Mid column */
-.midcolumn {
-  flex: 50%;
-  background-color: #f1f1f1;
-  padding-left: 20px;
-}
-/* Right column */
-.rightcolumn {
-  flex: 25%;
-  background-color: #f1f1f1;
-  padding-left: 20px;
-}
-
-/* -------------------------------------------------------------------- */
-
-.plain {
-    #border: 0;
-    #background-color: #333333;
-    border-radius: 0px;
-}
-
-.image {
-  opacity: 1;
-  display: inline;
-  height: auto;
-  transition: .5s ease;
-  backface-visibility: hidden;                                 
-  //corner-radius: 15px;
-}
-
-img {
-  opacity: 1;
-  display: inline;
-  height: auto;
-  transition: .5s ease;
-  backface-visibility: hidden;
-  border-radius: 15px;
-}
-.container {
-  position: relative;
-  width: 50%;
-}
-.container:hover .image {
-  opacity: 0.3;
-}
-.container:hover .middle {
-  opacity: 1;
-}
-a:link, a:visited {
-    //color: black;
-    text-decoration: none;
-    decoration: none;
-}
-.up-class {
-    writing-mode: sideways-lr;
-    text-orientation: mixed;
-    background-color:  #aaffaa;
-}
-.textx {
-    border-radius: 10px;
-    background-color:  #dddddd;
-    padding: 10px;
-    max-width: 800px;
-    text-align: justify;
-}
-
-/* The Modal Dialog ------------------------------------------------- */
-
-.Clicker {
-  cursor: pointer;
-}
-
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.3); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-  bottom: 0;
-  background-color: #fefefe;
-  width: 90%;
-  /* height: 100%; */
-}
-
-/* The Close Button */
-.closebutt {
-  color: black;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.closebutt:hover,
-.closebutt:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.modal-header {
-  padding: 2px 8px;
-  //background-color: #eeeeee;
-  //5cb85c;
-  color: black;
-}
-
-.modal-body {
-    padding: 2px 8px;
-    }
-
-.modal-footer {
-  padding: 2px 8px;
-  //background-color: #eeeeee
-  //5cb85c;
-  color: black;
-}
-
- /* Popup container ---------------------------------------- */
-
-.popup {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-}
-
-/* The actual popup (appears on top) */
-.popup .popuptext {
-  visibility: hidden;
-  width: 160px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -80px;
-}
-
-/* Popup arrow */
-.popup .popuptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-/* Toggle this class when clicking on the popup container (hide and show the popup) */
-.popup .show {
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s
-}
-
-/* Add animation (fade in the popup) */
-@-webkit-keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
-}
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity:1 ;}
-}
-
-/* Media ----------------------------------------------------------- */
-
-@media (max-width:600px) {
-
-    .row {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
-
-    .midcolumn {
-      flex: 100%;
-      order: 1;
-      background-color: white;
-      padding: 20px;
-    }
-    .leftcolumn {
-      flex: 100%;
-      order: 2;
-      background-color: #f1f1f1;
-      padding: 20px;
-    }
-    .rightcolumn {
-      order: 3;
-      flex: 100%;
-      background-color: white;
-      padding: 20px;
-    }
-}
-
-@media (min-width:600px) and (max-width:1000px) {
-
-  .row {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
-
-    .leftcolumn {
-      background-color: #f1f1f1;
-      padding: 20px;
-      flex: 25%;
-    }
-    .midcolumn {
-      background-color: white;
-      padding: 20px;
-      flex: 75%;
-    }
-    .rightcolumn {
-      background-color: white;
-      padding: 20px;
-      flex: 100%;
-    }
-}
-
-</style>
-
-<script language="javascript">
-function toggle(tt, dt) {
-    var ele = document.getElementById(tt);
-    var text = document.getElementById(dt);
-    if(ele.style.display == "block") {
-            ele.style.display = "none";
-        text.innerHTML = "<font size=-1>show again ...</font>";
-    }
-    else {
-        ele.style.display = "block";
-        text.innerHTML = "<font size=-1>hide</font>";
-    }
-}
-
-function toggle3(pp, tt, dt) {
-    var pre = document.getElementById(pp);
-    var ele = document.getElementById(tt);
-    var textx = document.getElementById(dt);
-    if(ele.style.display == "block") {
-        ele.style.display = "none";
-        pre.style.display = "block";
-        textx.innerHTML = "<font size=-1>Show More ...</font>";
-    }
-    else {
-        ele.style.display = "block";
-        pre.style.display = "none";
-        textx.innerHTML = "<font size=-1>Show Less ...</font>";
-    }
-}
-
-// When the user clicks on <div>, open the popup
-function myFunction() {
-  var popup = document.getElementById("myPopup");
-  popup.classList.toggle("show");
-}
-
-// Declare modal globals
-var mymodal_0, mymodal_1, mymodal_2
-
-window.onload = function  myLoad() {
-
-    mymodal_0 = document.getElementById("myModal_0")
-    mymodal_1 = document.getElementById("myModal_1")
-    mymodal_2 = document.getElementById("myModal_2")
-
-    /* console.log("myLoad") */
-
-    // Take care of closing
-    ccc = document.getElementById("myContent_0")
-    // When the user clicks on body of popup, close the modal
-    ccc.addEventListener("keydown", function(event)
-        {
-        /* console.log("key event listener" + event) */
-        mymodal_0.style.display = "none";
-        event.stopPropagation()
-        })
-    // The close triggers for click
-    ccc.addEventListener("click", function(event)
-        {
-        mymodal_0.style.display = "none";
-        event.stopPropagation()
-        })
-
-    ccc = document.getElementById("myContent_1")
-    // When the user clicks on body of popup, close the modal
-    ccc.addEventListener("keydown", function(event)
-        {
-        /* console.log("key event listener" + event) */
-        mymodal_1.style.display = "none";
-        event.stopPropagation()
-        })
-    // The close triggers for click
-    ccc.addEventListener("click", function(event)
-        {
-        mymodal_1.style.display = "none";
-        event.stopPropagation()
-        })
-    ccc = document.getElementById("myContent_2")
-    // When the user clicks on body of popup, close the modal
-    ccc.addEventListener("keydown", function(event)
-        {
-        /* console.log("key event listener" + event) */
-        mymodal_2.style.display = "none";
-        event.stopPropagation()
-        })
-    // The close triggers for click
-    ccc.addEventListener("click", function(event)
-        {
-        mymodal_2.style.display = "none";
-        event.stopPropagation()
-        })
-
-    // Take care of openining
-    ooo = document.getElementById("clicker_0")
-    ooo.addEventListener("click", function(event)
-        {
-        mymodal_0.style.display = "block";
-        fff = document.getElementById("txt_0");
-        fff.focus()
-        event.stopPropagation()
-        });
-    ooo = document.getElementById("clicker_1")
-    ooo.addEventListener("click", function(event)
-        {
-        mymodal_1.style.display = "block";
-        fff = document.getElementById("txt_1");
-        fff.focus()
-        event.stopPropagation()
-        });
-    ooo = document.getElementById("clicker_2")
-    ooo.addEventListener("click", function(event)
-        {
-        mymodal_2.style.display = "block";
-        fff = document.getElementById("txt_2");
-        fff.focus()
-        event.stopPropagation()
-        });
-    }
-
-//console.log("Loading page")
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == mymodal_0) {
-    mymodal_0.style.display = "none";
-    }
-  if (event.target == mymodal_1) {
-    mymodal_1.style.display = "none";
-    }
-  if (event.target == mymodal_2) {
-    mymodal_2.style.display = "none";
-  }
-}
-
-</script>
-
-
-'''
 
 def _glob_headurl(strx, context):
 
@@ -655,10 +198,13 @@ _mac_center_body = '''
             </table>
         -->
 
-        &nbsp; &nbsp; This page is for entertainment only. We collected wisdom from all
+        &nbsp; &nbsp; This page is for entertainment only. We collected wisdom
+        and humor from all
         over the world, we wish to share here for all to enjoy. We attempted to
-        select wisdom and sayings on the light side; for entertainment.<p>
-        &nbsp; &nbsp; If you would like to add more, please email the admin. (see below)
+        select wisdom and sayings on the light side; relevant to our theme.
+        <p>
+        &nbsp; &nbsp; If you would like to add more, please email the admin.
+        (See on page footer)
 
         </table>
 
@@ -798,88 +344,6 @@ def add_popup(img):
     </table>
     '''  % img
     return sss
-
-# ------------------------------------------------------------------------
-# Present slider
-
-def _func_slider2(strx, context):
-
-    sss = ""
-    ddd = wsgi_func.parse_args(strx, context)
-
-    #print("ddd", ddd)
-
-    if not hasattr(context, "prog"):
-        context.prog = 0
-    idx = context.prog + int(ddd[1])
-    res  = getattr(context, "proj-edit").res
-
-    if not res:
-        # Patch in something
-                # ID Key  D1        Side Main                Under             Image
-        res = [
-                ["", "", "No Data", "", "Database is empty", "System Message", "X"],
-                ["", "", " &nbsp ", "", "", "", "X"],
-                ["", "", " &nbsp ", "", "", "", "X"],
-              ]
-
-    if idx > len(res):
-        #idx = 0
-        #print("Passed end of data")
-        #sss = "Passed end of data"
-        #return sss
-        pass
-    #print("res", res)
-
-    part = res[idx][4][:96] + " ... "
-    num = int(ddd[1])
-    try:
-        sss += '''
-        <td>
-            <table border=0 bgcolor=#dddddd>
-                <tr><td>
-                <tr><td colspan=2>
-                <font size=+3> %s</font>
-                <tr><td align=center>
-                <a href=/media/%s>
-                    { image %s [ thumbwidth ] }<br>
-                </a>
-                <td>%s
-                <tr><td colspan=2 align=center>
-                <tr><td colspan=2 style="text-alignment:justify">
-                <div id="displayText5_%d">
-                    %s<br>
-                </div>
-                <div id="toggleText5_%d" style="display: none">
-                %s
-                </div>
-                ''' % ( res[idx][2], res[idx][6], res[idx][6],
-                                 res[idx][3],  num, part,
-                                    num, res[idx][4])
-
-                #add_modal(res[idx][6], num),
-
-        rrr = '''
-                 <a id='displayText5a_%d' href="javascript:toggle3('displayText5_%d',
-                                'toggleText5_%d', 'displayText5a_%d'); ">
-                    <font size=-1>Show More ... </font></a>
-                ''' % (num, num, num, num,)
-
-        if  len(res[idx][4]) > 96:
-            sss += rrr
-
-        sss += '''
-            <tr><td colspan=2 align=right><font size=-1> %s</font<br>
-        </table>'''  % res[idx][5]
-
-    except:
-        # If there is not enough  data .. ignore it
-        wsgi_util.put_exception("In display slider")
-        pass
-    return sss
-
-# Clear text box when the first char is space (empty)
-_mac_clr = ''' if(this.value[0]==' ')this.value='' '''
 
 _mac_subheader = '''
     <table width=100% border=0>
@@ -1078,28 +542,77 @@ def _func_imgrow(strx, context):
               ]
     #print("res", res)
 
-    sss =  '''
-    <tr> <td width=10>
-    <td width=20>
-    <td width=10>
-     <td align=center>
-      <table border=0 width=100%%>
+    sss = ""
+    try:
+        sss +=  '''
+         <tr> <td width=10>
+        <td width=20>
+        <td width=10>
+        <td align=center>
+        <table border=0 width=100%%>
           <tr><td align=center colspan=3>
            <font size=+2> %s
             </font>
-           <tr><td>
-            <div class=textx>
-            %s <br>
-            %s<br>
-           <center> %s </center>
+        '''   % (res[idx][2])
+
+        img = None
+        try:
+            img = res[idx][6]
+            if img == "none":
+                img = None
+        except:
+            pass
+
+        #print("img", img)
+        sss += "<tr><td>"
+
+        if img:
+            sss += '''
+               <a href=/media/%s>
+               { image %s [ 500 ] }
+               </a>
+               <br>
+               ''' %  (img, img)
+
+        sss += '''
+          <center> %s </center>
+
+          <td width=1>
+          <td align=center>
+          <!--Image description Image description -->
+            %s
+          <tr><td colspan=3>
+             <div class=textx>
+              <!-- Image row text Image row text Image row text Image row textx -->
+             %s
               </div>
               <p>
         </table>
-        ''' % (res[idx][2], res[idx][4], res[idx][3], res[idx][5])
+        ''' % (res[idx][5], res[idx][3], res[idx][4] )
+    except:
+        pass
 
     #print("img", res[idx][6] )
 
     return sss
+
+#'''<tr> <td width=10>
+#        <td width=20>
+#        <td width=10>
+#         <td align=center>
+#          <table border=0 width=100%%>
+#              <tr><td align=center colspan=3>
+#               <font size=+2> %s
+#                </font>
+#               <tr><td>
+#                <div class=textx>
+#                %s <br>
+#                %s<br>
+#               <center> %s </center>
+#                  </div>
+#                  <p>
+#            </table>
+#            ''' % (res[idx][2], res[idx][4], res[idx][3], res[idx][5])
 
 messagex = ""
 

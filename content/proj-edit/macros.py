@@ -236,6 +236,11 @@ def add_new(strx, carry):
             <input type=submit name='exp' value='Export'>
             <input type=submit name='imp' value='Import'>
             <p><input type=submit name='logout' value='Logout''>
+
+            <tr><td align=center>
+            <a href=index.html?db=proj-rows> [ Edit Main ] </a>
+            &nbsp;
+            <a href=index.html?db=proj-misc> [ Edit Misc ] </a>
             </form>
         ''' % (carry.mydb)
 

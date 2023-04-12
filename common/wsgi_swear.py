@@ -55,6 +55,8 @@ def filter_words(strx):
          V2 Sun 30.Oct.2022: the replacement is a random punctuation
          and spaced into one out of two chars.
     '''
+    if not strx:
+        return ""
 
     ret = ""; ret2 = ""; sw = 0
 

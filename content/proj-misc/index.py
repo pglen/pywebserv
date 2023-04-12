@@ -49,16 +49,16 @@ def got_index(config, carry):
     macros.messagex = ""
 
     if carry.query:
-        if "message" in carry.query:
-            macros.messagex = "<font size=+1 color=red>" + \
-                                carry.query["message"][0] + "</font><br>"
-        elif "favorite" in carry.query:
-            macros.messagex = "<font size=+1 color=green> " \
-                                "Marked as favorite site.</font><br>"
-
-        elif "exit" in carry.query:
-            macros.messagex = "<font size=+1 color=blue> " \
-                                "This is an internal function.</font><br>"
+        #if "message" in carry.query:
+        #    macros.messagex = "<font size=+1 color=red>" + \
+        #                        carry.query["message"][0] + "</font><br>"
+        #elif "favorite" in carry.query:
+        #    macros.messagex = "<font size=+1 color=green> " \
+        #                        "Marked as favorite site.</font><br>"
+        #
+        #elif "exit" in carry.query:
+        #    macros.messagex = "<font size=+1 color=blue> " \
+        #                        "This is an internal function.</font><br>"
 
         if "step" in carry.query:
             iii = wsgi_util.xint(carry.query['step'][0])

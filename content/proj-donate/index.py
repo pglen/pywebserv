@@ -40,7 +40,7 @@ def got_index(config, carry):
     if config.pgdebug > 3:
         print("got_index() url=%s"% carry.url, "query=%s" % carry.query,
                     "request=%s" % carry.request,
-                         "template=%s" % carry.template, "fname=%s" % carry.fname)
+"template=%s" % carry.template, "fname=%s" % carry.fname)
 
     #print("carry.request", carry.request)
     #print("carry.query", carry.query)
@@ -49,8 +49,50 @@ def got_index(config, carry):
     return content
 
 def _func_center_donate(strx, context):
-    contents = "<center><h1>Donations</h1></center>"
+
+    contents = '''<center><h1>Donations</h1></center>'''
+
+    contents += '''<table width=100%% border=0><tr><td>
+    &nbsp; &nbsp; As a new organization we need donations for many many aspects of our
+    operation. Resources for renting our home office, and all the expenses that
+    go along with the physical location. We already have some foundational
+    resources, but more needed to hire personnel. Of course, the largest
+    expense is letting our presence known in the world.
+    <p>
+    &nbsp; &nbsp; Establishing a legal department is also on the top of our organizational
+     list. Extending our
+    IT infrastructure to be more interactive to allow us to create the forum
+    that is global, and listen to ideas, collect them / implement them for the benefit
+    of all.
+    <p>
+    &nbsp; &nbsp; Please contact us with details of your donation at
+    admin@unitesplanetpeace.com. One may also donate to the founder of
+    unitedplanetpeace.com on Paypal Below:
+    <p>
+    <a href= https://www.paypal.com/donate/?hosted_button_id=B37Q8LJY5KZSY>
+    <center><font size=+1> [ Donate to United Planet Peace ] </font></center> </a>
+    </table>
+    <p>
+    &nbsp; &nbsp; ... or contact us with donation details:
+     <p>
+    <table width=100%% border=0>
+
+    <tr><td>&nbsp; &nbsp; <td> Peter Glen: <td>PeterGlen@unitedplanetpeace.com
+    <tr><td>&nbsp; &nbsp; <td> Administrator: <td>  admin@unitedplanetpeace.com
+    <tr><td>&nbsp; &nbsp; <td> Founder:    <td> peterglen99@gmail.com
+
+    </table>   <p>
+
+    <center><img src=%s> <center>
+
+    <p><center><a href=/index.html>
+     [ Back to Home Page ]</center></a> <p>
+
+     ''' %  "/static/QRCode.png"
+
     return contents
+
+#(context.configx.datapath + "static/QRCode.png")
 
 # ------------------------------------------------------------------------
 # Add all the functions for the urls;

@@ -621,29 +621,26 @@ _mac_target_statement = '''
     <div id="toggleText3" style="display: none">
         <font size=+1><center><b>Uniform Global Standards for Governance</b></center></font>
         <div style="text-align: justify;"><br>
-        &nbsp; &nbsp; There are plenty of organizations to help each other in
-        cooperating internationally; mostly aiding / controlling inter-governmental
+        &nbsp; &nbsp; There are plenty of organizations to help in
+        cooperating internationally; aiding / controlling inter-governmental
         affairs. And there are plenty of enforcement instruments.
         However, the most important instrument is missing: Containment of the
         Leadership. In the twenty first century, there should be standards of
         leadership, standards of govenance and especally, standards for justice.
         Term limits for every position. High standards for democracy, accountability and equality.
         UPP is set out to create a framework where these shortcomings are addressed.
-        Globally. The whole planet.<p>
+        Globally. For the whole planet.<p>
         </div>
     </div>
 '''
 
-
 _mac_center_body = '''
 
     <td>
-     <table border=0>
-        <tr><td align=center>
+     <table width=100% border=0>
+        <tr><td align=center colspan-2>
         { linemessage }
-        <font size=+2><b>{ subheader } </b></font>
-
-        </div>
+        { subheader }
         <table border=0 width=100%>
             <tr><td>
             Read our Mission Statement  / Founding Statement
@@ -802,15 +799,14 @@ def add_popup(img):
 
 _mac_subheader = '''
     <table width=100% border=0>
-        <form method=post>
-            <tr><td>
-            <a href=/index.html>
-            <font size=+2><center><b>Welcome to UPP, &nbsp; </a> </center></font> <br>
-
-            <!-- &nbsp; &nbsp; &nbsp; the site for United Planet Peace -->
+        <!-- <form method=post> -->
+            <tr><td align=center>
+            <font size=+3><b>Welcome to UPP</b></font>
+            <tr><td align=center>
+            <font size=+2>The site for Planetary Peace and Justice.</font>
 
             <!-- (under construction, check back later) --!>
-
+            <!--
             <td align=right>
                 <font size=-1>Quick feedback:</font>  &nbsp;
                 <input type=text name="feedname" onfocus="clr(this)" value=" Your Name" size=10>
@@ -818,7 +814,9 @@ _mac_subheader = '''
                 <input type=text name="feedtxt"  onfocus="{ clr }" value=" Feedback Content" size=12>
                 <input type=submit name='submit' value='Submit'>
             <td>
-        </form>
+            -->
+        <!-- </form> -->
+        <td height=12>
 
     </table>
 '''
@@ -935,24 +933,26 @@ _glob_header = '''
                         </a>
                         <td>
                         <a href=/about/index.html?subscribe>
-                        <img src=/siteicons/emblem-unreadable.png class=image title="Subscribe">
+                        <img src=/siteicons/emblem-unreadable.png class=image title="About">
                         </a>
                         <td>  <a href=/index.html?favorite>
                         <img src=/siteicons/emblem-favorite.png class=image title="Favorite">
                             </a>
                         <td>
                 </table>
+                <!--
                 <td align=right width=22%>
                 <form method=submit>
                 Search site: &nbsp; <input name=search type=text value="" size=12>
                 <input type=submit  value=Go></form>
+                -->
                 <td align=right width=7% >
-                <a href=index.html?contact>
+                <a href=mailto:admin@unitedplanepeace.com>
                 <img src=/siteicons/mail-forward.png class=image title="Mail / Contact Us">
                 </a>
                 <a href=index.html?exit> <img src=/siteicons/application-exit.png title="Enter / Exit"></a>
     </table>
-'''
+    '''
 
 _glob_site_footer = '''
     <table width=100%  border=0>

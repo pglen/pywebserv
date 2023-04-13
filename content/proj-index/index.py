@@ -113,15 +113,31 @@ def process_submit(carry, request):
 
     #print(Config.mainclass.request)
 
+    #[('feedname', ' Your Name'),
+    #('feedtit', ' Feedback Title'),
+    #('feedtxt', ' Feedback Content'), ('submit', 'Submit')]
+
     sss = []
     # Save it
     for aa in request[:-1]:  # do not post last (submit button entry)
-        bb = wsgi_swear.filter_words(aa[1])
+        cc = aa[1]
+        #Kill defaults
+        if aa[0] == 'feedname':
+            if aa[1] ==  ' Your Name':
+                cc = ""
+        if aa[0] == 'feedtit':
+            if aa[1] == ' Feedback Title':
+                cc = ""
+        if aa[0] == 'feedtxt':
+            if aa[1] ==  ' Feedback Content':
+                cc = ""
+
+        bb = wsgi_swear.filter_words(cc)
         #print("de-sweared", bb)
         sss.append(bb)
 
     db = wsgi_data.soft_opendb(carry, "proj-index")
-    #print("sss", sss)
+    print("sss", sss)
     import uuid
     db.put(str(uuid.uuid4()), sss[0], sss[1], sss[2], "", "")
     db.close()

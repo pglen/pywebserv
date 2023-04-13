@@ -178,7 +178,6 @@ _mac_center_body = '''
         <tr><td r>
         { linemessage }
         <center><h1>Misc. Items</h1></center>
-        </div>
         <!--
         <table border=0 width=100%>
             <tr><td>
@@ -200,9 +199,9 @@ _mac_center_body = '''
 
         &nbsp; &nbsp; This page is for entertainment only. We collected wisdom
         and humor from all
-        over the world, we wish to share here for all to enjoy. We attempted to
-        select wisdom and sayings on the light side; relevant to our theme.
-        <p>
+        over the world, and wish to share it here for all to enjoy. We attempted to
+        select items on the light side; relevant to our theme.
+        <br>
         &nbsp; &nbsp; If you would like to add more, please email the admin.
         (See on page footer)
 

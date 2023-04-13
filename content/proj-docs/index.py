@@ -49,7 +49,34 @@ def got_index(config, carry):
     return content
 
 def _func_center_docs(strx, context):
+
     contents = "<center><h1>Documents</h1></center>"
+    contents += "<table border=0><tr><td>"
+    contents += "<font size=+1>"
+    contents += '''&nbsp; &nbsp; Here you see a list of documents that are
+    submitted to the site.
+    Choose a link of interest. If you have a document that
+    you would like to include, please email the admin. <p>
+    '''
+
+    ddd = context.configx.datapath + "/docs/"
+    lll = os.listdir(ddd)
+    for aa in lll:
+        if aa[-3:] != "odt":
+            contents += "<a href=" + "/docs/" + os.sep + aa + ">"
+            contents += " [ " + aa + " ]  </a> &nbsp; &nbsp;"
+    contents += "<p>"
+    contents += "Originals in open document format:<p>"
+    for aa in lll:
+        if aa[-3:] == "odt":
+            contents += "<a href=" + "/docs/" + os.sep + aa + ">"
+            contents += " [ " + aa + " ]  </a> &nbsp; &nbsp;"
+    contents += "</font><p>"
+
+    contents += "<center><a href=/index.html>"
+    contents += " [ Back to Home Page ]</center> "
+    contents += "</table>"
+
     return contents
 # ------------------------------------------------------------------------
 # Add all the functions for the urls;

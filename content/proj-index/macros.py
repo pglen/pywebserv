@@ -146,10 +146,10 @@ body {
   height: auto;
   transition: .5s ease;
   backface-visibility: hidden;                                 
-  //corner-radius: 15px;
+  corner-radius: 0px;
 }
 
-img {
+.img_round {
   opacity: 1;
   display: inline;
   height: auto;
@@ -161,9 +161,11 @@ img {
   position: relative;
   width: 50%;
 }
-.container:hover .image {
-  opacity: 0.3;
-}
+
+//.container:hover .image {
+//  opacity: 0.3;
+//}
+
 .container:hover .middle {
   opacity: 1;
 }

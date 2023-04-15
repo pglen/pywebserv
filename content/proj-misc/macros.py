@@ -456,7 +456,7 @@ def     _glob_calendar(strx, context):
 # ------------------------------------------------------------------------
 # Override main macros
 
-_glob_header = '''
+_func_header = '''
 
     <table width=99% bgcolor={ sitecolor } border=0>
     <td align=center width=30%> &nbsp; &nbsp;

@@ -215,7 +215,7 @@ def     image_func(strx, context):
         #print("media image padded to default", iname)
 
     if len(sss) == 2:
-        return "<img src=" + iname + ">"
+        return "<img src=" + iname + " class=img_round>"
 
     elif len(sss) == 3:
         # Resize width; Size toward larger aspect ratio
@@ -223,7 +223,7 @@ def     image_func(strx, context):
             basewidth =  int(sss[2])
         except:
             print("Invalid parameters to image function (3)", sss)
-            return "<img src=" + iname + ">"
+            return "<img src=" + iname + " class=img_round>"
 
         nnn = "/tmp/res_" + sss[2] + "_" + str(sss[1])
         nnn2 = context.configx.datapath + nnn
@@ -253,7 +253,7 @@ def     image_func(strx, context):
         else:
             #print("Using cached version", nnn2)
             pass
-        return "<img src=" + nnn + " >"
+        return "<img src=" + nnn + " class=img_round>"
 
     elif len(sss) == 4:
         # Resize both width and height
@@ -262,7 +262,7 @@ def     image_func(strx, context):
             baseheight =  int(sss[3])
         except:
             print("Invalid parameters to image function (4)", sss)
-            return "<img src=" + iname + ">"
+            return "<img src=" + iname + " class=img_round>"
 
         nnn = "/tmp/res_" + sss[2] + "x" + sss[3] + "_" + str(sss[1])
         nnn2 = context.configx.datapath + nnn
@@ -282,9 +282,9 @@ def     image_func(strx, context):
             #print("Using cached version", nnn2)
             pass
         #return "<img src=" + sss[2] + " height=" + sss[3] + " width= " + sss[4] + " >"
-        return "<img src=" + nnn + " >"
+        return "<img src=" + nnn + " class=img_round>"
 
-    return "<img src=/media/broken.png>"
+    return "<img src=/media/broken.png class=img_round>"
 
 # ------------------------------------------------------------------------
 # I wish the http standard had this one command

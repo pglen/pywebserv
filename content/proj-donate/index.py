@@ -83,7 +83,7 @@ def _func_center_donate(strx, context):
 
     </table>   <p>
 
-    <center><img src=%s> <center>
+    <center><img src=%s class=image> <center>
 
     <p><center><a href=/index.html>
      [ Back to Home Page ]</center></a> <p>

@@ -615,7 +615,7 @@ def _func_imgrow(strx, context):
 
 messagex = ""
 
-def _glob_linemessage(strx, context):
+def _func_linemessage(strx, context):
     return messagex
 
 wsgi_util.add_all_vars(locals().copy(), common.local_table)

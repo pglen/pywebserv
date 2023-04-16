@@ -244,6 +244,9 @@ def     getprojects(mainclass):
 
     pdir = "proj"
     dirs = os.listdir(".")
+    # sort for consistent order
+    dirs.sort()
+    #print(dirs)
     for aa in dirs:
         if os.path.isdir(aa):
             if aa[:4] == pdir:

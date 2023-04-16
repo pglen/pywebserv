@@ -194,24 +194,25 @@ a:link, a:visited {
 }
 
 .modal {
-  display: none; /* Hidden by default */
+  //display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
+  //right: 0;
+  right: 0;
+  bottom: 0;
+  //width: 50%; /* Full width */
+  //height: 10%;
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.3); /* Black w/ opacity */
+  background-color: rgba(255,255,255,0.8); /* Black w/ opacity */
 }
 
 /* Modal Content */
 .modal-content {
-  bottom: 0;
-  background-color: #fefefe;
-  width: 90%;
+  //bottom: 0;
+  //background-color: #fefefe;
+  //width: 90%;
   /* height: 100%; */
+
 }
 
 /* The Close Button */
@@ -230,14 +231,19 @@ a:link, a:visited {
 }
 
 .modal-header {
-  padding: 2px 8px;
+  padding: 2px 2px;
   //background-color: #eeeeee;
   //5cb85c;
-  color: black;
+  //color: black;
+  //width = 100%
+
 }
 
 .modal-body {
-    padding: 2px 8px;
+    padding: 8px 8px;
+    display:inline;
+    float:left;
+    font-size: 18px;
     }
 
 .modal-footer {
@@ -394,6 +400,15 @@ function myFunction() {
   popup.classList.toggle("show");
 }
 
+function setCookie(c_name, value, exdays) {
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value = escape(value) + ((exdays == null) ? "" : \
+            "; expires=" + exdate.toUTCString() + ";SameSite=Strict");
+    document.cookie = c_name + "=" + c_value;
+    console.log(document.cookie)
+}
+
 // Declare modal globals
 var mymodal_0, mymodal_1, mymodal_2
 
@@ -402,6 +417,22 @@ window.onload = function  myLoad() {
     mymodal_0 = document.getElementById("myModal_0")
     mymodal_1 = document.getElementById("myModal_1")
     mymodal_2 = document.getElementById("myModal_2")
+
+    //var elements = document.getElementsByClassName("closebutt");
+    var element = document.getElementById("cbx");
+    //console.log("elem " + element)
+
+    var myFunction = function() {
+        // close it
+        var ddd = document.getElementById("modx");
+        console.log("ddd " + ddd)
+        ddd.style.display = "none"
+        //ddd.z-index = 1;
+        //alert(this);
+        setCookie("WasAck",  "OK", 1);
+
+    };
+    element.addEventListener('click', myFunction, false);
 
     /* console.log("myLoad") */
 
@@ -640,7 +671,7 @@ _mac_center_body = '''
 
     <td>
      <table width=100% border=0>
-        <tr><td align=center colspan-2>
+        <tr><td align=center colspan=2>
         { linemessage }
         { subheader }
         <table border=0 width=100%>
@@ -664,6 +695,7 @@ _mac_center_body = '''
 
         <table border=0>
             <tr valign=top>
+                { add_popup }
                 { nav }
                 { imgrow 0 }
                 { imgrow 1 }
@@ -784,19 +816,27 @@ def add_modal(img, num = 0):
     #print("sss", sss)
     return sss
 
-def add_popup(img):
+def _func_add_popup(strx, context):
+
+    #print("cooki seen", context.mainclass.good_cookies)
+
+    if  " WasAck" in context.mainclass.good_cookies:
+        #print("cooki seen")
+        return ""
 
     sss = '''
-    <table border=0>
-        <tr><td>
-        { image %s [ thumbwidth ] }
-        <tr><td align=center>
-        <div class="popup" onclick="myFunction()">
-            <font size=-2>Show Image</font>
-        <span class="popuptext" id="myPopup">{ image %s 400 } </span>
-       </div>
+       <div class="modal" id="modx">
+          <!-- Modal content -->
+          <div id=myContent_%d class="modal-content">
+                <div class="modal-body">
+                This site contains minimal, limited number of cookies.
+                Click to close. &nbsp;
+                 <span class="closebutt" id=cbx >&times;</span>
+                </div>
+            <div>
+        </div>
     </table>
-    '''  % img
+    ''' # % ("hello", "hello")
     return sss
 
 _mac_subheader = '''
@@ -999,6 +1039,11 @@ def _func_imgrow(strx, context):
               ]
     #print("res", res)
 
+    if not res[idx][6] or res[idx][6] == 'none':
+        imn =   "beach-hd.jpeg"
+    else:
+        imn = res[idx][6]
+
     sss =  '''
     <tr> <td width=10>
     <td width=20>
@@ -1025,17 +1070,36 @@ def _func_imgrow(strx, context):
               </div>
               <p>
         </table>
-        ''' % (res[idx][2], res[idx][6], res[idx][6],
+        ''' % (res[idx][2], imn, imn,
                         res[idx][5], res[idx][3], res[idx][4])
 
     #print("img", res[idx][6] )
 
     return sss
 
-messagex = ""
+messagex = "none"
 
-def _glob_linemessage(strx, context):
+def _func_linemessage(strx, context):
+    #print("messagexx", messagex)
     return messagex
+
+def     _glob_app_one(strx, context):
+
+    ''' Advert app function '''
+
+    content = '''<table width=100% border=0 bgcolor=#dddddd>
+        <tr><td align=center bgcolor=#cccccc><b>Sponsored</b><br>
+        <tr><td>
+        <tr><td  align=center>No Sponsors currently. Please become a sponsor, so
+                    you can tell future generations what you helped with.
+        <tr><td>
+        <tr><td align=center><font size=-2>
+            Contact admin for Advertising in this Space.
+
+        </table>
+
+        '''
+    return content
 
 wsgi_util.add_all_vars(locals().copy(), common.local_table)
 

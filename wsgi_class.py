@@ -100,6 +100,10 @@ class xWebServer():
                     print("QUERY_STRING", self.query)
 
         self.cookie = ""
+        self.remote = ""
+
+        if 'REMOTE_HOST' in environ:
+            self.remote = environ['REMOTE_HOST']
 
         if 'HTTP_COOKIE' in environ:
             self.cookie = environ['HTTP_COOKIE']
@@ -115,12 +119,16 @@ class xWebServer():
                 import wsgi_util
                 rrr = wsgi_util.decode_cookie_header(bb[0], bb[1])
                 #print("decoded cookie", rrr[0], rrr[1])
-                self.good_cookies.update( ((rrr[0], rrr[1]),) )
-                if self.configx.verbose > 1:
-                    if environ['PATH_INFO'][-1:] == "/":
-                        print("good cookies", self.good_cookies)
-                if self.configx.verbose > 2:
-                        print("good cookies", self.good_cookies)
+                if "-Damaged" in rrr[0] :
+                    self.good_cookies.update( ((bb[0], bb[1]),) )
+                else:
+                    self.good_cookies.update( ((rrr[0], rrr[1]),) )
+
+            if self.configx.verbose > 1:
+                if environ['PATH_INFO'][-1:] == "/":
+                    print("good cookies", self.good_cookies)
+            if self.configx.verbose > 2:
+                    print("good cookies", self.good_cookies)
 
         self.method = ""
         if 'REQUEST_METHOD' in environ:
@@ -261,8 +269,9 @@ class xWebServer():
         if "Session" not in self.good_cookies:
             import wsgi_data
             sess = str(uuid.uuid4())
-            print("New Session:", sess)
-            self.wanted_cookies.append(("Session", sess, 1))
+            print("New Session:", sess, self.remote)
+            # 5 minutes
+            self.wanted_cookies.append(("Session", sess, 300))
 
         if self.configx.verbose > 2:
             print("process_request2", callme, template)

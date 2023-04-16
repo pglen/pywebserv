@@ -49,11 +49,12 @@ def got_index(config, carry):
     macros.messagex = ""
 
     if carry.query:
-        print("carry.query", carry.query)
+        #print("carry.query", carry.query)
 
         if "message" in carry.query:
             macros.messagex = "<font size=+1 color=red>" + \
                                 carry.query["message"][0] + "</font><br>"
+
         elif "favorite" in carry.query:
             macros.messagex = "<font size=+1 color=green> " \
                                 "Marked as favorite site.</font><br>"
@@ -69,8 +70,9 @@ def got_index(config, carry):
             iii = wsgi_util.xint(carry.query['step2'][0])
             carry.prog2 = iii
 
+
     if carry.request:
-        print("carry.request", carry.request)
+        #print("carry.request", carry.request)
         process_submit(carry, carry.request)
 
     # Decorate before calling main

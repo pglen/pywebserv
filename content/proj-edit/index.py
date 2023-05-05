@@ -128,6 +128,9 @@ def got_index(config, carry):
                 #print("rq del id: ", sss[1]);
                 db = wsgi_data.soft_opendb(carry, carry.mydb)
                 db.delrecall(sss[1])
+                wsgi_data.soft_closedb(db)
+
+
         elif len(rq) > 4:
             try:
                 #startt = time.perf_counter()
@@ -170,7 +173,7 @@ def got_index(config, carry):
 
     wsgi_data.load_data_func("load_data " + carry.mydb, carry)
 
-    var = getattr(carry, carry.mydb)
+    #var = getattr(carry, carry.mydb)
     #for aa in var.res:
     #    print("res", aa[2], " - ", aa[4][:24] + "...")
 

@@ -53,7 +53,7 @@ def got_editor(config, carry):
     opcode = ""; opnum = 0
 
     if carry.request:
-        print("editor carry.request", carry.request)
+        #print("editor carry.request", carry.request)
 
         for aa in carry.request:
             if "db" == aa[0]:
@@ -62,7 +62,7 @@ def got_editor(config, carry):
                 fname = wsgi_data.soft_dbfile(mydbx)
                 #print("File:", "'" + fname + "'")
                 if os.path.isfile(fname):
-                    print("File OK", fname)
+                    #print("File OK", fname)
                     carry.mydb = mydbx
             if "logout" == aa[0]:
                 #print("logout button")
@@ -98,11 +98,15 @@ def got_editor(config, carry):
 
             res = []
             for aa in range(len(res2)):
-                res.append(res2[aa]) #.decode())
+                #print(aa, res2[aa])
+                #if type(res2[aa]) != str:
+                #    res.append(res2[aa].decode())
+                #else:
+                res.append(res2[aa])
 
-            for aa in range(5):
+            for aa in range(4):
                 try:
-                    res[aa] = res[aa].replace("<br>", "\n")
+                    res[aa+1] = res[aa+1].replace("<br>", "\n")
                 except:
                     pass
 
@@ -122,7 +126,7 @@ def got_editor(config, carry):
 
             #print("res", res)
 
-            carry.cdata += "<input type=hidden name=aa_0 value=%s" % res[0] + ">"
+            carry.cdata += "<input type=hidden name=aa_0 value=%s" % res[0].decode() + ">"
             carry.cdata += "<input type=hidden name=aa_6 value=%s" % rq[1] + ">"
 
             for aa in range(len(res)-1):
@@ -207,7 +211,14 @@ def got_editor(config, carry):
             carry.cdata += "<table border=0 width=100%>"
             carry.cdata += "<tr><td align=center colspan=2>"
             carry.cdata += "<font size=+2>Exporting</font><p>"
-            carry.cdata += "<a href=index.html> Back to Login</a>"
+            carry.local_table = []
+
+
+            wsgi_data.load_data_func("load_data " + carry.mydb, carry)
+            var = getattr(carry, carry.mydb)
+
+            carry.cdata +=  str(var.res)
+            carry.cdata += "<p><a href=index.html> Back to Login</a>"
             carry.cdata += "</table>"
 
         else:

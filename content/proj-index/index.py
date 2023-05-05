@@ -70,7 +70,6 @@ def got_index(config, carry):
             iii = wsgi_util.xint(carry.query['step2'][0])
             carry.prog2 = iii
 
-
     if carry.request:
         #print("carry.request", carry.request)
         process_submit(carry, carry.request)

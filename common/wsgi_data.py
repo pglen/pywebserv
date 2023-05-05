@@ -44,6 +44,8 @@ def soft_opendb(carry, modname, suffix = ""):
     return localdb
 
 def soft_closedb(db):
+
+    db.close()
     db = None
     pass
 
@@ -105,7 +107,7 @@ class wsgipydb():
     def delrecall(self, rec):
 
         # Delete all keys on this record
-        print("delete", rec)
+        #print("delete", rec)
         rec = self.getbyord(int(rec))
         if rec:
             #print("delrec", rec)
@@ -447,6 +449,7 @@ def     load_data_func(strx, context):
     var.fname   = ddd[1]        # Just for verification
     var.db      = None
     var.data    = None
+    var.res     = None
 
     # Get data from the editor project;
     # Careful, passing the wrong filename, it will be created

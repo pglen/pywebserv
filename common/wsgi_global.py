@@ -6,26 +6,15 @@ import sys, time, importlib
 
 # Get strings and functions
 
-from wsgi_style import *
-from wsgi_res   import *
+import wsgi_util
 from wsgi_func  import *
 
 # A list of variables and strings. Making an error here will down the site.
-# The newly defined local macro can override the global one. Make sure you do not expect
-# nested override, as the macro is expanded with locals first, globals second;
+# The newly defined local macro can override the global one. Make sure you do
+# not expect nested override, as the macro is expanded with locals first,
+# globals second;
 # The local macro will not override the macro that is uncovered by global
 # macro expansion;
-
-global_table = [
-    ["spacer",          "<table><tr><td></table>"],
-    ["linespacer",      "<tr><td height=8>"],
-    ["sitecolor",       "bgcolor=#aaffbb"],
-    ["feedwidth",       "400"],
-    ["feedheight",      "300"],
-    ["thumbwidth",      "120"],
-    ["thumbheight",     "80"],
-    ["nullcolor",       "#cccccc"],
-  ]
 
 # ------------------------------------------------------------------------
 # URL to function mapping
@@ -35,12 +24,22 @@ class UrlMap():
     ''' This class stores the URL to function mapping '''
 
     def __init__(self):
-
         self.urls = []
 
     def dump(self):
+        def ph(): pass
+        ret = ""
         for aa in self.urls:
-            print("url", aa)
+            if type(aa[1]) ==  type(ph):
+                #print("url F", wsgi_str.strpad(aa[0]),  \
+                #    wsgi_str.strpad(aa[1].__name__), aa[2])
+                bb = aa[1].__name__
+            else:
+                bb = aa[1]
+
+            ret += wsgi_str.strpad(str(aa[0])) + \
+                       wsgi_str.strpad(str(bb)) + str(aa[2]) + "\n"
+        return ret
 
     def add(self, url, func, page, fname):
         # Got one already?
@@ -50,14 +49,23 @@ class UrlMap():
         self.urls.append((url, func, page, fname))
 
     def lookup(self, url):
+
         #print("Looking up url", url)
+
         for aa in self.urls:
             #print("src url", aa[0], aa[1])
             if aa[0] == url:
                 return aa[1], aa[2], aa[3]
+
+        lenx = len(self.urls)
+        for cc in range(lenx-1, -1, -1):
+            if self.urls[cc] == url:
+                return aa[1], aa[2], aa[3]
+
+        # Not found ...
         return None, None, None
 
-    # find first level of URL
+    # Find first level of URL
     def revlookup(self, rev):
         rrr = rev.split(os.sep)
         for aa in self.urls:
@@ -71,18 +79,43 @@ class UrlMap():
                 pass
         return ""
 
-# ------------------------------------------------------------------------
-# URL to function table, global
+    # ------------------------------------------------------------------------
+    # Add functions to URL map
+    # One may override any file; in that case the values are filled in
 
-urlmap =  UrlMap()
+    # We build it dynamically, so error is flagged
+
+    def     add_one_url(self, url, mfunc, mpage = None, fname = ""):
+
+        '''
+        Add a url and a function here. Also, an optional template. The template
+        is assumed to be in the same directory as the script. If no template is
+        added, the following places will be searched:
+                the project "./" directory,
+                the /static/ directories.
+        If the template cannot be found, the return value of the function
+        output is delivered as it was generated without template substitution.
+        '''
+
+        if not mpage:
+            mpage = "index.html"
+
+        try:
+            self.add(url, mfunc, mpage, fname)
+        except:
+            wsgi_util.put_exception("Cannot add URL map")
+            #print("Cannot add url map", sys.exc_info())
+
+urlmap =  UrlMap()      # URL to function table, global
 
 # ------------------------------------------------------------------------
-# Add a new project function;
+# The main table template
 
 class Table():
 
     def __init__(self):
-        pass
+
+        self.mytable = []
 
     def add_one_func(self, mname, mfunc, mpage = None, fname=None):
         '''
@@ -103,63 +136,52 @@ class Table():
 
         #global global_table
         try:
-            #see if there is an entry already
-            for aa in global_table:
-                if aa[0] == mname:
-                    print("Duplicate macro:", mname)
-                    return 1
-            global_table.append([mname, mfunc])
+            #see if there is an entry already disabled: Sat 18.Feb.2023
+            #for aa in self.mytable:
+            #    if aa[0] == mname:
+            #        #print("Duplicate macro:", mname)
+            #        return 1
+
+            self.mytable.append([mname, mfunc])
         except:
-            print("Cannot add global table item", sys.exc_info())
+            #print("Cannot add global table item", sys.exc_info())
+            wsgi_util.put_exception("Cannot add global table item")
+
         return 0
 
     def lookup_item(self, item):
-        for aa in global_table:
+        for aa in self.mytable:
             if aa[0] == item:
                 return aa[1:]
         return ""
 
+    def _dump_rec(self, aa):
+        nnn = wsgi_str.strpad(str(aa[0]))
+        print(nnn, " = ", end = " ")
+        #print("type", type(aa[1]))
+
+        if type(aa[1]) == type(""):
+            print("'" + aa[1][:36].replace("\n", "\\n") + "'")
+        elif type(aa[1]) == type([]):
+            print("ARR ", aa[1][0])
+        else:
+            print("'" + aa[1].__name__ + "()" +"'")
+
     def dump_table(self):
-        for aa in global_table:
-            print("'" + aa[0] + "' = ", end = " ")
-            #print("type", type(aa[1]))
 
-            if type(aa[1]) == type(""):
-                print("'" + aa[1][:24].replace("\n", "\\n") + "'")
-            elif type(aa[1]) == type([]):
-                print("ARR ", aa[1][0])
-            else:
-                print("'" + aa[1].__name__ + "()" +"'")
+        #for aa in self.mytable:
+        #    self._dump_rec(aa)
+        #print("----")
 
-gltable = Table()
+        # Dump reverse
+        lenx = len(self.mytable)
+        for cc in range(lenx-1, -1, -1):
+            self._dump_rec(self.mytable[cc])
 
-# ------------------------------------------------------------------------
-# Add functions to URL map
-# One may override any file; in that case the values are filled in
-
-# We build it dynamically, so error is flagged
-
-def     add_one_url(url, mfunc, mpage = None, fname=""):
-
-    '''
-    Add a url and a function here. Also, an optional template. The template is assumed
-    to be in the same directory as the script. If no template is added, the following
-    places will be searched: the project "./" directory,  the /static/ directory.
-    If the template cannot be found, the return value of the function output is delivered as
-    it was generated without template substitution.
-    '''
-
-    global urlmap
-
-    if not mpage:
-        mpage = "index.html"
-
-    try:
-        urlmap.add(url, mfunc, mpage, fname)
-    except:
-        print("Cannot add url map", sys.exc_info())
+gl_table = Table()              # Decleare one global table
 
 # ------------------------------------------------------------------------
+# Worker for loading one project
 
 def  _load_project(pdir, mainclass):
 
@@ -187,7 +209,7 @@ def  _load_project(pdir, mainclass):
                         msg = "Module %s failed to load" % aa
                         #print("msg", msg)
                         ret = [msg.encode("utf-8"),]
-                        # Keep loading
+                        # Keep loading more
                         continue
 
                     ''' did not work
@@ -210,7 +232,7 @@ def  _load_project(pdir, mainclass):
     return ret
 
 # ------------------------------------------------------------------------
-# Load all projects from dirs starting with "proj"
+# Load all projects from subdirs starting with the name "proj"
 
 def     getprojects(mainclass):
 
@@ -222,6 +244,9 @@ def     getprojects(mainclass):
 
     pdir = "proj"
     dirs = os.listdir(".")
+    # sort for consistent order
+    dirs.sort()
+    #print(dirs)
     for aa in dirs:
         if os.path.isdir(aa):
             if aa[:4] == pdir:

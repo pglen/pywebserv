@@ -34,6 +34,15 @@ a:link, a:visited {
     decoration: none;
 }
 
+.img_round {
+  opacity: 1;
+  display: inline;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+  border-radius: 15px;
+}
+
 </style>
 '''
 

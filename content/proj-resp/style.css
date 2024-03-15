@@ -121,37 +121,28 @@ body {
   margin-top: 20px;
 }
 
+
 @media screen and (max-width: 500px)
     {
-       .leftcolumn, .midcolumn, .rightcolumn {
+       .leftcolumn {
         width: 100%;
         padding: 0;
+        order: 2;
         float: right;
-      }
+        }
+       .midcolumn {
+        width: 100%;
+        padding: 0;
+        order: 1;
+        float: right;
+        }
+      .rightcolumn {
+        padding: 0;
+        order:  3;
+        width: 100%;
+        }
     }
 
-/* Responsive layout - when the screen is less than 800px wide, make the two
-columns stack on top of each other instead of next to each other
-
-@media screen and (max-width: 400px) {
-  .leftcolumn {
-    padding: 0;
-    width: 100%;
-    float: right;
-  }
-  .midcolumn {
-    padding: 0;
-    width: 100%;
-    float: right;
-  }
-  .rightcolumn {
-    padding: 0;
-    width: 100%;
-    float: right;
-  }
-}
-
-*/
 
 </style>
 

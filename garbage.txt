@@ -1,0 +1,46 @@
+#class  wContext():
+#
+#    def __init__(self, config, url, query):
+#
+#        self.config = config
+#        self.url = url
+#        self.query = query
+#
+#        self.request = None
+#        self.template = None
+#        self.fname  = None
+#        self.local_table  = None
+#
+#    def printvals(self):
+#        #print("config", self.config)
+#        print("url=", self.url, end=" - ")
+#        print("query=", self.query, end=" - ")
+#        print("request=", self.request, end=" - ")
+#        print("template=", self.template, end=" - ")
+#        print("fname=", self.fname)
+#        #print("local_table len:", len(self.local_table))
+#
+#    def _fillarr(self, selfx):
+#        #def dummy(): pass
+#        arr = []
+#        for aa in dir(selfx):
+#            # Filter out all sys args and methods
+#            if aa[:2] == "__":
+#                continue
+#            #print(aa, type(getattr(self, aa)))
+#            if type(getattr(selfx, aa)) == \
+#                            type(getattr(self, "getvals")):
+#                continue
+#            #print(aa, getattr(self, 	aa))
+#            arr.append(aa)
+#        return arr
+#
+#    def getvals(self):
+#        sss = ""
+#        arr = self._fillarr(self)
+#        for aa in arr:
+#            sss += wsgi_util.strpad(str(aa), 14) + "  " + \
+#                  str(getattr(self, aa)) + "\n"
+#        return sss
+#
+

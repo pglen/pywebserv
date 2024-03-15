@@ -1,0 +1,41 @@
+
+def _func_calcwrap(strx, context):
+
+    res = getattr(context, "proj-rows").res
+    dbsize = len(res)
+
+    if context.prog >= dbsize - 3:
+        cont = "&nbsp; &nbsp; -- &nbsp; &nbsp;"
+    else:
+        cont = "&nbsp; << &nbsp;"
+    return cont
+
+def _func_calcwrap2(strx, context):
+
+    if context.prog <= 0:
+        cont = "&nbsp;&nbsp; -- &nbsp;&nbsp;"
+    else:
+        cont = "&nbsp; >> &nbsp;"
+    return cont
+
+          <!--
+        <table width=100% border=0>
+            <tr valign=top>
+             <td nowrap=nowrap valign=middle bgcolor=#cccccc
+                style="cursor:pointer"
+                    onclick="location.href='index.html?step={ calcstep 1 }'">
+                { calcwrap }
+
+            {slider 0 }
+            <td valign=middle bgcolor=#cccccc>
+            {slider 1 }
+            <td valign=middle bgcolor=#cccccc>
+            {slider 2 }
+
+             <td  nowrap=nowrap valign=middle bgcolor=#cccccc
+                style="cursor:pointer"
+                    onclick="location.href='index.html?step={ calcstep -1 }'">
+                { calcwrap2 }
+
+         </table>
+        -->

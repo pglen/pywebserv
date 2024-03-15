@@ -5,37 +5,19 @@
     recursively.
 '''
 
-import sys, os, time, re, traceback
-import wsgi_global, wsgi_parse
+import sys, os, time, re, traceback, datetime, base64
+import wsgi_global, wsgi_parse, wsgi_crypt, wsgi_str
 
-#try:
-#    import wsgi_global, wsgi_parse
-#except:
-#    print("Cannot import", sys.exc_info())
+def xint(val):
 
-verbose = 0
+    ''' Safe alternative to int() -- returns 0 if invalid number '''
 
-class  wContext():
-
-    def __init__(self, config, url, query):
-
-        self.config = config
-        self.url = url
-        self.query = query
-
-        self.request = None
-        self.template = None
-        self.fname  = None
-        self.local_table  = None
-
-    def printvals(self):
-        #print("config", self.config)
-        print("url=", self.url, end=" - ")
-        print("query=", self.query, end=" - ")
-        print("request=", self.request, end=" - ")
-        print("template=", self.template, end=" - ")
-        print("fname=", self.fname)
-        #print("local_table len:", len(self.local_table))
+    try:
+        ret = int(val)
+    except:
+        #print("Invalid number in parsing int", val)
+        ret = 0
+    return ret
 
 # ------------------------------------------------------------------------
 
@@ -53,17 +35,17 @@ def  resolve_template(config, fn, name):
     while True:
         fn1 =  os.path.dirname(name) + os.sep + fname2
         #print("test fn1", fn1)
-        if  os.path.exists(fn1):
+        if  os.path.isfile(fn1):
             found = fn1
             break
         fn2 = config.mypath + os.sep + "html"  + fn
         #print("test fn2", fn2)
-        if  os.path.exists(fn2):
+        if  os.path.isfile(fn2):
             found = fn2
             break
         fn3 = config.mypath + os.sep + "html" + fn + ".html"
         #print("test fn3", fn3)
-        if  os.path.exists(fn3):
+        if  os.path.isfile(fn3):
             found = fn3
             break
         break;
@@ -81,7 +63,7 @@ def put_exception(xstr):
     in the html output stream and the controlling terminal
     '''
 
-    cumm = xstr + " "
+    cumm = "Exception: " + xstr + " "
     a,b,c = sys.exc_info()
     if a != None:
         cumm += str(a) + " " + str(b) + "\n"
@@ -89,11 +71,12 @@ def put_exception(xstr):
             #cumm += str(traceback.format_tb(c, 10))
             ttt = traceback.extract_tb(c)
             for aa in ttt:
-                # do not print sys
+                # do not print sys related entries
                 if "importlib" not in aa[0]:
-                    cumm += "File: " + os.path.basename(aa[0]) + \
-                        " Line: " + str(aa[1]) + "\n" +  \
-                    "   Context: " + aa[2] + " -> " + aa[3] + "\n"
+                    sss = aa[0].split(os.sep); fname = os.sep.join(sss[-3:])
+                    cumm += " File: " + fname +  \
+                            "  Line: " + str(aa[1]) + "\n" +  \
+                            "   Context: " + aa[2] + " -> " + aa[3] + "\n"
         except:
             print( "Could not print trace stack. ", cumm, sys.exc_info())
 
@@ -112,7 +95,7 @@ def printobj(theobj):
         if aa[:2] != "__":
             ooo = getattr(theobj, aa)
             if "method" not in str(type(ooo)):
-                print(aa, "=", ooo)
+                print(aa, "=", wsgi_str.strupt(str(ooo)))
 
 def printenv(environ, all=False):
     print("-----------------")
@@ -189,30 +172,31 @@ def append_file(strx):
 # ------------------------------------------------------------------------
 # Resolve paths, read file, expand template
 
-def process_default(configx, context):
+def process_default(configx, carryon):
 
     #print("using template", context.template, "fname", context.fname)
 
-    if configx.verbose:
-        print("process_default() with local_table len ", len(context.local_table))
+    if configx.verbose > 3:
+        print("process_default() with local_table len ", len(carryon.local_table))
 
     if configx.pgdebug > 5:
-        if context.local_table:
-            #dump_table("Local Table:", context.local_table)
-            dump_table_funcs("Local Table Functs:", context.local_table)
+        if carryon.local_table:
+            dump_table("Local Table:", carryon.local_table)
+            #dump_table_funcs("Local Table Functs:", carryon.local_table)
+            pass
 
     try:
-        if not context.template:
-            template = resolve_template(context.config, context.url, context.fname)
+        if not carryon.template:
+            template = resolve_template(carryon.config, carryon.url, carryon.fname)
         else:
-            template = os.path.dirname(context.fname) + os.sep + context.template
+            template = os.path.dirname(carryon.fname) + os.sep + carryon.template
     except:
         put_exception("Cannot create / open template");
 
-    if configx.verbose:
+    if configx.verbose > 3:
         print("using template", template)
 
-    if template and os.path.exists(template):
+    if template and os.path.isfile(template):
         buff = ""
         try:
             with open(template, 'r') as fh:
@@ -221,41 +205,30 @@ def process_default(configx, context):
             print("Cannot read template", sys.exc_info())
 
         # Recursively process
-        content = wsgi_parse.recursive_parse(buff, context, context.local_table)
+        content = wsgi_parse.recursive_parse(buff, carryon, carryon.local_table)
     else:
-        content = "Index file (dyn) " + context.url + " " +  \
-                        context.template + " " + str(context.query) + " "
+        content = "Index file (dyn) " + carryon.url + " " +  \
+                        carryon.template + " " + str(carryon.query) + " "
 
     return content
 
 
-def dump_table(strx, tabx):
+def dump_local_table(tabx):
     ''' Dump named internal table '''
-    print (strx)
-    for aa in tabx:
-        print ("'" + aa[0] + "' = ", unescape(str(aa[1])[:24]), end="\n")
-    print()
 
-def dump_table_funcs(strx, tabx):
-    ''' Dump named internal table functions '''
-    print (strx)
+    print("Local Table:")
     for aa in tabx:
-        if type(aa[1]) == type(dump_table_funcs):
-            print ("'" + aa[0] + "' = ", str(aa[1]) + "'")
-    print()
+        print (wsgi_str.strpad(aa[0]) + " = ", wsgi_str.strunesc(str(aa[1])[:36]), end="\n")
+    print("Local Table End")
 
-def unescape(strx):
-    ''' expand new lines etc ... to \\n '''
-    ret = "'"
-    for aa in strx:
-        if aa == "\r":
-            ret += "\\r"
-        elif aa == "\n":
-            ret += "\\n"
-        else:
-            ret += aa
-    ret += "'"
-    return ret
+#def dump_table_funcs(strx, tabx):
+#    ''' Dump named internal table functions '''
+#    print (strx)
+#    for aa in tabx:
+#        if type(aa[1]) == type(dump_table_funcs):
+#            print ("'" + aa[0] + "' = ", str(aa[1]) + "'")
+#    print()
+
 
 def add_locals(locs, local_table):
 
@@ -288,7 +261,7 @@ def add_local_func(mname, mfunc, table):
         #see if there is an entry already
         for aa in table:
             if aa[0] == mname:
-                print("Duplicate function/macro", mname, mfunc)
+                #print("Duplicate function/macro", mname, mfunc)
                 return True
         table.append([mname, mfunc])
     except:
@@ -337,7 +310,7 @@ def add_global_funcs(locvars, table):
                 # Do not add hidden
                 if "_gfunc_" == aa[:7]:
                     #print("Adding global func2", aa)
-                    wsgi_global.gltable.add_one_func(aa[7:], locvars[aa])
+                    wsgi_global.gl_table.add_one_func(aa[7:], locvars[aa])
 
     except:
         print("Exception on add_global_funcs", sys.exc_info())
@@ -380,10 +353,16 @@ def add_global_vars(locvars, table):
             if "_glob_" in aa[:6]:
                 if _check_type(locvars, aa):
                     continue
-                wsgi_global.gltable.add_one_func(aa[6:], locvars[aa])
+                wsgi_global.gl_table.add_one_func(aa[6:], locvars[aa])
     except:
         print("Exception on add_local_vars", sys.exc_info())
         put_exception("loc")
+
+def dump_global_table():
+
+    print("Global Table:")
+    wsgi_global.gl_table.dump_table()
+    print("Global Table End")
 
 # ------------------------------------------------------------------------
 # This is a collection of all automatic var adds
@@ -397,5 +376,75 @@ def add_all_vars(locvars, table):
     # This adds global the variables pre - marked for a purpose
     add_global_vars(locvars, table)
     add_global_funcs(locvars, table)
+
+# ------------------------------------------------------------------------
+
+def hash32(strx):
+
+    ''' Deliver a 32 bit hash of the passed entity '''
+
+    #print("hashing", strx)
+    lenx = len(strx);  hashx = int(0)
+    for aa in strx:
+        aaa = ord(aa)
+        hashx +=  int( (aaa << 12) + aaa)
+        hashx &= 0xffffffff
+        hashx = int(hashx << 8) + int(hashx >> 8)
+        hashx &= 0xffffffff
+    return hashx
+
+def decode_cookie_header(name, value):
+
+    ''' Decode the encrypted cookie, verify '''
+    name = name.strip()
+    value = value.strip("; ")
+    # Test damage
+    #value = "a" + value
+
+    try:
+        #print("decode_cookie_header", name, value)
+        ddd     = base64.b64decode(value.encode())
+    except:
+         #put_exception("exception on decode_cookie_header")
+         return name + "-Damaged", "Damaged Cookie"
+
+    #print("after base", ddd)
+    deco    = wsgi_crypt.xdecrypt(ddd, "1234")
+    #print("deco", deco)
+    sss = deco.split(b"+", 1)
+    try:
+        hhh = "%08x" % hash32(sss[0].decode())
+        hhh = hhh.encode()
+    except:
+        # No hash arrived, add fake values to trigger damage control
+        hhh = "0"
+        sss = ("No Value", "No value")
+        pass
+    # Hash checks out?
+    if sss[0] !=  hhh:
+        #print("Damaged cookie", sss, hhh)
+        deco = b"Damaged Cookie"
+    try:
+        ddd = sss[1].decode()
+    except:
+        ddd = sss[1]
+
+    return name, ddd
+
+def set_cookie_header(name, value, minutes=60):
+
+    dt = datetime.datetime.utcnow() + datetime.timedelta(minutes=minutes)
+    fdt = dt.strftime('%a, %d %b %Y %H:%M:%S GMT')
+    secs = minutes * 60
+    vvv = "%08x" % hash32(value) + "+" + str(value)
+    vvvv = vvv.encode()
+    #print("vvvv", vvvv)
+    org2    = wsgi_crypt.xencrypt(vvvv, "1234")
+    enco        = base64.b64encode(org2).decode()
+    #print("enco", enco)
+    ccc = 'Set-Cookie', '{}={}; Expires={}; Max-Age={}; SameSite=Strict; Path=/' \
+                                            .format(name, enco, fdt, secs)
+    #print("cookie", ccc)
+    return ccc
 
 # EOF

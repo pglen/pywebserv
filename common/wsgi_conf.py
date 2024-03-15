@@ -5,7 +5,22 @@
     recursively.
 '''
 
-#import builtins
+import wsgi_util, wsgi_str
+
+def fillxarr(selfx):
+    arr = []
+    for aa in dir(selfx):
+        # Filter out all sys args and methods
+        if aa[:2] == "__":
+            continue
+        #print(aa, type(getattr(self, aa)))
+        if type(getattr(selfx, aa)) == \
+                        type(getattr(selfx, "__init__")):
+            continue
+        #print(aa, getattr(self, 	aa))
+        arr.append(aa)
+    return arr
+
 
 # Config global; After testing some crap, this was the simplest
 
@@ -16,55 +31,70 @@ class Configx:
     '''
 
     def __init__(self):
-        self.mypath      = ""
-        self.datapath    = ""
-        self.verbose     = 0
-        self.pgdebug     = 0
-        self.port        = 8000
-        self.server      = None
-        self.mainclass   = None
 
-    def __str__(self):
-        return "verb:"+ str(self.verbose) + " deb:" + str(self.pgdebug)
+        self.mypath     = ""
+        self.datapath   = ""
+        self.verbose    = 0
+        self.pgdebug    = 0
+        self.benchmark  = 0
+        self.port       = 8000
+        self.server     = None
+        self.mainclass  = None
 
-    # Return details of
+    def _fillarr(self, selfx):
+        arr = []
+        for aa in dir(selfx):
+            # Filter out all sys args and methods
+            if aa[:2] == "__":
+                continue
+            #print(aa, type(getattr(self, aa)))
+            if type(getattr(selfx, aa)) == \
+                            type(getattr(self, "getvals")):
+                continue
+            #print(aa, getattr(self, 	aa))
+            arr.append(aa)
+        return arr
+
+    # Return details of the config, filter all but vars
     def getvals(self):
         sss = ""
-        sss += "mypath: " +     self.mypath + "\n"
-        sss += "datapath: " +   self.datapath + "\n"
-        sss += "verbose: " +    str(self.verbose) + "\n"
-        sss += "pgdebug: " +    str(self.pgdebug) + "\n"
-        sss += "port: " +       str(self.port) + "\n"
-
+        arr = self._fillarr(self)
+        for aa in arr:
+            sss += wsgi_str.strpad(str(aa), 14) + "  " + \
+                  str(getattr(self, aa)) + "\n"
         return sss
 
-#builtins.Config = Configx
+    # Sync one class's extra methods to the other class
+    #   (in essence copy config)
+
+    def sync(self, syncto):
+        arr = self._fillarr(syncto)
+        for aa in arr:
+            #print("aa", aa)
+            setattr(self, aa, getattr(syncto, aa))
 
 class CarryOn:
 
     '''
     Parameters are going around all the way to processing
     '''
-    def __init__(self):
 
-        self.environ = None
-        self.mainclass = None
-
-    def tostr(self):
-        print("environ:", Carryon.environ, "mainclass:", Configx.pgdebug)
+    def __init__(self, mc):
+        self.environ    =   None
+        self.mainclass  =   mc
+        self.configx    =   mc.configx
+        self.template   =   ""
+        self.fname   =   ""
 
     def getvals(self):
         strx = ""
-        strx += "self.carryon.url " + self.url + "\n"
-        strx += "self.carryon.query " +   self.query + "\n"
-        strx += "self.carryon.request " +  self.request + "\n"
-        strx += "self.carryon.tmplate " + self.template + "\n"
-        strx += "self.carryon.fname " +   self.fname + "\n"
+        arr = fillxarr(self)
+        #print("arr", arr)
+        for aa in arr:
+            bb = str(getattr(self, aa))
+            bb  = wsgi_str.strtrim(bb, 36)
+            strx += wsgi_str.strpad(str(aa)) + \
+                         " = " + bb + "\n"
         return strx
-
-#def showvals():
-#
-#    return "Verb = " + str(Config.verbose),  "Deb = " + str(Config.pgdebug)
-#
 
 # EOF

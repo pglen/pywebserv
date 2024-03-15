@@ -16,7 +16,7 @@ modname = ppp[plen-2] + "-" + ppp[plen-1]
 
 import os, sys, random, datetime, time
 
-sys.path.append("../")
+sys.path.append(".." + os.sep)
 
 from . import common
 
@@ -120,16 +120,16 @@ def     got_index(config, carry):
 # Add all the functions for the urls; this function is called
 # When the url is accessed
 
-#wsgi_global.add_one_url("/resp/",  got_index, "index.html", __file__)
-wsgi_global.add_one_url("/resp/",  got_index, "resp.html", __file__)
-wsgi_global.add_one_url("/resp/index.html", got_index, "index.html", __file__)
-wsgi_global.add_one_url("/resp/resp.html", got_index, "resp.html", __file__)
+wsgi_global.urlmap.add_one_url("/resp/",  got_index, "index.html", __file__)
+#wsgi_global.urlmap.add_one_url("/resp/",  got_index, "resp.html", __file__)
+wsgi_global.urlmap.add_one_url("/resp/index.html", got_index, "index.html", __file__)
+wsgi_global.urlmap.add_one_url("/resp/resp.html", got_index, "resp.html", __file__)
 
 # ------------------------------------------------------------------------
 # Add all the functions and the macro names here
 # Simply refer to the macro in the html temple, and it will get called
 # and the output substituted
 
-wsgi_global.gltable.add_one_func("app3", mock_cal_func)
+wsgi_global.gl_table.add_one_func("app3", mock_cal_func)
 
 # EOF

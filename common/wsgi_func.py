@@ -13,7 +13,10 @@ except:
     print("Must install PIL");
 
 import wsgi_util, wsgi_style, wsgi_res, wsgi_global
-import wsgi_parse, wsgi_data
+import wsgi_parse, wsgi_data, wsgi_str
+
+sys.path.append("../pyfortune")
+import fortune
 
 # ------------------------------------------------------------------------
 
@@ -30,13 +33,12 @@ def     parse_args(strx, context):
     fff = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, context.local_table)[0]
     eee = ' '.join(fff)
 
+    #if context.configx.pgdebug > 5:
+    #    print("Args loc expanded:", eee)
 
-    if context.myconfx.pgdebug > 2:
-        print("Args loc expanded:", eee)
+    ssss = wsgi_parse.parse_buffer(eee, "\[ .*? \]", context, wsgi_global.gl_table.mytable)[0]
 
-    ssss = wsgi_parse.parse_buffer(eee, "\[ .*? \]", context, wsgi_global.global_table)[0]
-
-    if context.myconfx.pgdebug > 2:
+    if context.configx.pgdebug > 5:
         print("Args expanded:", ssss)
 
     ss = ""
@@ -44,12 +46,12 @@ def     parse_args(strx, context):
         # Filter delimiters
             ss += aa
 
-    if context.myconfx.pgdebug > 4:
+    if context.configx.pgdebug > 6:
         print("Args pre decoded:", ssss)
 
     sss = str.split(ss)
 
-    if context.myconfx.pgdebug > 1:
+    if context.configx.pgdebug > 5:
         print("Args decoded:", sss)
 
     ddd = []
@@ -59,28 +61,43 @@ def     parse_args(strx, context):
     #print("Args filtered:", ddd)
     return ddd
 
-#def     deep_func(strx, context):
-#    return "Deep from code"
-#
-#def     crap_func(strx, context):
-#    return "<b>crap</b> from code"
-#
-
 def     app_one_func(strx, context):
+
 
     ''' Example app function '''
 
-    content = '''<table width=100% border=0>
-        <tr><td align=center bgcolor=#cccccc><b>APP ONE</b><br>
+    content = '''<table width=100% border=0 bgcolor=#dddddd>
+        <tr><td align=center bgcolor=#cccccc><b>Sponsored</b><br>
         <tr><td>
-        <tr><td>code for app 1 comes here
-        <tr><td>code for app 1 comes here
-        <tr><td>code for app 1 comes here
-        <tr><td>code for app 1 comes here
-        <tr><td>code for app 1 comes here
+        <tr><td  align=center>No Sponsors currently
         <tr><td>
+        <tr><td align=center><font size=-2>
+            Contact sales for Advertising in this Space
+
         </table>
+
         '''
+    return content
+
+def     app_fortune(strx, context):
+
+    ''' Fortune app function '''
+
+    #print("dir",os.getcwd())
+
+    fff = fortune.randfortune("datfiles/", 0)
+
+    content = '''<table width=100%% border=0 bgcolor=#dddddd>
+        <tr><td align=center bgcolor=#cccccc><b>Fortunes</b><br>
+        <tr><td>
+        <tr><td  align=center>%s
+        <tr><td>
+        <tr><td align=center><font size=-2>
+            Please note that fortunes are for entertainment only.
+
+        </table>
+        ''' % fff
+
     return content
 
 # ------------------------------------------------------------------------
@@ -88,53 +105,86 @@ def     app_one_func(strx, context):
 
 def     app_two_func(strx, context):
 
-
     '''
     Mock calendar. Does nothing but presents a calendar looking user interface
     '''
 
-    content = "App2 here"
-    return content
-
     try:
-        content = '''<table width=100% border=1>
-            <tr><td align=center bgcolor=#cccccc colspan=7><b>APP TWO (Calendar?)</b><br>
+        content = '''<table width=100% border=0  bgcolor=#dddddd>
+            <tr><td align=center bgcolor=#cccccc colspan=7><b>Event calendar</b><br>
         '''
         #        <tr><td>code for app 2 comes here
         dt = datetime.datetime.now()
-        anchor = dt.day % 7;
-        mon = anchor - dt.weekday()
 
+        dt2 = datetime.datetime.now()
+        from calendar import monthrange
         rrr = monthrange(dt2.year, dt2.month)
-        print("dt", dt.weekday(), dt.day, mon, anchor, "rrr", rrr)
 
-        content += "<tr><td colspan=5>"
+        #anchor = dt.day % 7;
+        mon = rrr[0]
+        anchor =	 dt.weekday()
+
+        "day", dt.weekday(), #print("dt", dt.day, "mon", mon, "anchor", anchor, "rrr", rrr)
+
+        content += "<tr><td colspan=7>"
         cnt = 0; cnt2 = 0;
         wday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         content += "<tr>"
         for cc in range(7):
-            content += "<td> <font size=-1>" + wday[cc]
+            content += "\n<td  align=center> <font size=-1>" + wday[cc]
+
         for aa in range(5):
             content += "<tr>"
             for bb in range(7):
-                #aa*7 + bb + 1
-                if cnt > rrr:
-                    break
-                cnt += 1
-                if cnt > mon:
-                    content += "<td> <font size=-1>" + str(cnt2+1)
-                    cnt2 += 1
-                    if random.randint(0, 255) % 4 == 0:
-                        content += "*"
-                    else:
-                        content += "&nbsp;"
-                else:
-                    content += "<td> <font size=-1>" + "&nbsp;"
+                #prog = aa*7 + bb + 1
+                #if cnt2 >= rrr[1]:
+                #    break
 
-        content += "</table>"
+                cnt += 1
+                if cnt > mon and cnt2 < rrr[1]:
+                    cnt2 += 1
+
+                    if cnt2 == dt.day:
+                        #print("today")
+                        bgcolor="#eeeeee"
+                        color = "#888888"
+                    else:
+                        bgcolor="#dddddd"
+                        color = "#000000"
+
+                    content += "<td align=center nowrap=nowrap bgcolor=" + bgcolor + ">"
+                    decor = 0
+                    #if random.randint(0, 255) % 4 == 0:
+                    #    decor = 1;
+
+                    decor = cnt2 % 4 == 0
+                    content += "<font size=-1>"
+                    if decor:
+                        content += "<a href=noting>"
+                    else:
+                        content += " &nbsp; "
+
+                    content += "%2d" % cnt2
+
+                    if decor:
+                        content += "*</a>"
+                    else:
+                        content += " &nbsp; "
+
+                else:
+                    content += "<td align=center> "
+
+        content += "<tr><td colspan=7 align=center><font size=-2>"
+        content += "** Calendar events are subject to change"
+
+        content += "</table>\n"
 
     except:
-        print("Exception on app_two_func", sys.exc_info())
+        wsgi_util.put_exception("Exception on app_two_func")
+
+        # Note that we still complete the table, so the site keeps going
+        content += "</table>\n"
+
     return content
 
 def     image_func(strx, context):
@@ -143,57 +193,80 @@ def     image_func(strx, context):
      { image nnn }          --  Put an image tag nnn in the output
      { image nnn www }      --  Put an image tag in the output, resize width to requested
      { image nnn www hhh }  --  Put an image tag in the output, resize to parm
+
+    Mon 10.Apr.2023   Fixed aspect bug
+
     The first two forms of the { image } function will preserve the image's aspect ratio.
+
     '''
+
     #print("image_func", strx)
 
     sss = parse_args(strx, context)
     #print("Image args:", len(sss), sss)
 
-    iname = "/media/" + sss[1]
+    mmm = "/media/"
+    iname = mmm  + sss[1]
+
+    # See if file exists, else supply a default image
+    if not os.path.isfile(context.configx.datapath + iname):
+        sss[1] = "beach-hd.jpeg"
+        iname = mmm  + sss[1]
+        #print("media image padded to default", iname)
+
     if len(sss) == 2:
-        return "<img src=" + iname + ">"
+        return "<img src=" + iname + " class=imgflex>"
 
     elif len(sss) == 3:
+        # Resize width; Size toward larger aspect ratio
         try:
             basewidth =  int(sss[2])
         except:
             print("Invalid parameters to image function (3)", sss)
-            return "<img src=" + iname + ">"
+            return "<img src=" + iname + " class=imgflex>"
 
         nnn = "/tmp/res_" + sss[2] + "_" + str(sss[1])
-        cwd = os.getcwd();
-        nnn2 = cwd + nnn
-        iname2 = cwd + iname
+        nnn2 = context.configx.datapath + nnn
+        iname2 = context.configx.datapath + iname
 
         # Note: If resized is older, we generate
         if not os.path.exists(nnn2) or os.stat(nnn2).st_mtime < os.stat(iname2).st_mtime:
             #print("Resizing", nnn2)
             try:
                 img = Image.open("." + iname)
-                wpercent = (basewidth / float(img.size[0]))
-                hsize = int((float(img.size[1]) * float(wpercent)))
-                img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+                aspect = float(img.size[1]) / float(img.size[0])
+                #print("aspect", aspect)
+                if  aspect > 1.:
+                    wpercent = float(basewidth) / float(img.size[0])
+                    vsize = int((float(img.size[0]) / float(wpercent)))
+                    #print("vsize", vsize)
+                    img = img.resize((vsize, basewidth), Image.ANTIALIAS)
+                else:
+                    wpercent = float(basewidth) / float(img.size[0])
+                    hsize = int((float(img.size[1]) * float(wpercent)))
+                    #print("hsize", hsize)
+                    img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+
                 img.save(nnn2)
             except:
                 print("Exc Image proc.five:", nnn, sys.exc_info())
         else:
             #print("Using cached version", nnn2)
             pass
-        return "<img src=" + nnn + " >"
+        return "<img src=" + nnn + " class=imgflex>"
 
     elif len(sss) == 4:
+        # Resize both width and height
         try:
             basewidth  =  int(sss[2])
             baseheight =  int(sss[3])
         except:
             print("Invalid parameters to image function (4)", sss)
-            return "<img src=" + iname + ">"
+            return "<img src=" + iname + " class=img_round>"
 
-        cwd = os.getcwd();
         nnn = "/tmp/res_" + sss[2] + "x" + sss[3] + "_" + str(sss[1])
-        nnn2 = cwd + nnn
-        iname2 = cwd + iname
+        nnn2 = context.configx.datapath + nnn
+        iname2 = context.configx.datapath + iname
         #print("nnn", nnn2)
         #print("iname2", iname2)
         try:
@@ -204,127 +277,14 @@ def     image_func(strx, context):
                 img = img.resize((basewidth, baseheight), Image.ANTIALIAS)
                 img.save(nnn2)
         except:
-            print("Exc image proc.six:", iname2, sys.exc_info()[1])
+            print("Cannot open image:", iname2, sys.exc_info()[1])
         else:
             #print("Using cached version", nnn2)
             pass
         #return "<img src=" + sss[2] + " height=" + sss[3] + " width= " + sss[4] + " >"
-        return "<img src=" + nnn + " >"
+        return "<img src=" + nnn + " class=img_round>"
 
-    return "<img src=/media/broken.png>"
-
-def     load_data_func(strx, context):
-
-    '''
-    # ------------------------------------------------------------------------
-     Get a row's data; pre load database table as macros.
-
-       Arguments:
-           arg[0]      command name
-           arg[1]      name of module to get the data from
-           arg[2]      prefix of this set
-           arg[3]      optional: fist record
-           arg[4]      optional: record count
-
-     Example:
-               { loadData proj-edit xx }
-
-    '''
-
-    ddd = parse_args(strx, context)
-    if context.myconfx.pgdebug > 1:
-        print("load_data_func() ddd", ddd)
-
-    prefix = ""; first = 0; count = 0
-
-    if len(ddd) > 2:
-        prefix = ddd[2]
-    if len(ddd) > 3:
-        first = int(ddd[3])
-    if len(ddd) > 4:
-        count = int(ddd[4])
-
-    #print("cwd", os.getcwd())
-    #print("prefix", prefix, "first", first, "count", count)
-
-    # Get data from the editor;
-    # Careful, passing the wrong filename, it will be created
-    try:
-        fff = "./data/%s.sqlt" % ddd[1]
-        localdb = wsgi_data.wsgiSql(fff)
-    except Exception as e:
-        print("Could not create / open local data for '%s'" % fff, e)
-        wsgi_util.put_exception("get data")
-        return ""
-
-    #print("strx", strx, modname)
-    cnt = 0
-
-    if  count == 0:
-        res = localdb.getall()
-    else:
-        res = localdb.getrange(first, count)
-        if context.myconfx.pgdebug > 2:
-            print("res", res)
-
-    if not res:
-        res = []
-
-    # The data is returned as macros, the page can reference
-    wsgi_global.gltable.add_one_func(prefix + "DLen", str(len(res)))
-    wsgi_global.gltable.add_one_func(prefix + "Data", res )
-
-    #for aa in res:
-    #    cnt2 = 0
-    #    wsgi_global.add_one_func(prefix + "RecLen%d" % cnt2, str(len(aa)))
-    #    for bb in aa:
-    #        wsgi_global.gltable.add_one_func(prefix + "Dat%d-%d" % (cnt, cnt2), str(bb) )
-    #        cnt2 += 1
-    #    cnt += 1
-
-    localdb.close()
-
-    #wsgi_global.dump_table()
-
-    return ""
-
-
-def     get_data_func(strx, context):
-
-    '''!
-     ----------------------------------------------------------------
-     Retrieve from pre loaded table
-
-       Arguments:
-           arg[0]      command name
-           arg[1]      prefix of this set
-           arg[2]      index of row
-           arg[3]      index of col
-
-     Example:
-               { getData xx %s 5 }
-
-     Please note that the rendering engine will try to render within
-     HTML comments. The macro below is still expanded.
-
-              <!--  { getData xx %s 15 } -->
-    '''
-
-    ddd = parse_args(strx, context)
-    #wsgi_global.dump_table()
-    #print("ddd", ddd)
-
-    try:
-        item = wsgi_global.gltable.lookup_item(\
-                        ddd[1] + "Data")[0][int(ddd[2])][int(ddd[3])]
-        #print("item", item)
-    except IndexError:
-        #wsgi_util.put_exception("get data")
-        item = "No data at %s:%s" % (ddd[2], ddd[3])
-    except:
-        wsgi_util.put_exception("get data")
-        item = "Error"
-    return item
+    return "<img src=/media/broken.png class=img_round>"
 
 # ------------------------------------------------------------------------
 # I wish the http standard had this one command
@@ -337,7 +297,7 @@ def     include_func(strx, context):
     #print("include_func()", strx, context.fname)
 
     # Expand arguments
-    ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.global_table)[0]
+    ssss = wsgi_parse.parse_buffer(strx, "\[ .*? \]", context, wsgi_global.gl_table.mytable)[0]
     ss = ""
     for aa in ssss:
         ss += aa
@@ -364,7 +324,7 @@ def     include_func(strx, context):
             #print(sys.exc_info())
             wsgi_util.put_exception("find parsed file name")
 
-    if context.myconfx.pgdebug > 2:
+    if context.configx.pgdebug > 2:
         print("include fname", fname)
 
     try:
@@ -386,34 +346,56 @@ def     build_initial_table():
 
     try:
         # Built ins
-        wsgi_global.gltable.add_one_func("image",    image_func)
-        wsgi_global.gltable.add_one_func("getData",  get_data_func)
-        wsgi_global.gltable.add_one_func("loadData", load_data_func)
-        wsgi_global.gltable.add_one_func("include",  include_func)
-        #wsgi_global.gltable.add_one_func("deep",     deep_func)
+        wsgi_global.gl_table.add_one_func("image",      image_func)
+        wsgi_global.gl_table.add_one_func("include",    include_func)
+        wsgi_global.gl_table.add_one_func("load_data",  wsgi_data.load_data_func)
 
-        # Examples
-        wsgi_global.gltable.add_one_func("app_one",  app_one_func)
-        wsgi_global.gltable.add_one_func("app2",     app_two_func)
+        # Example apps
+        wsgi_global.gl_table.add_one_func("app_one",        app_one_func)
+        wsgi_global.gl_table.add_one_func("app_two",        app_two_func)
+        wsgi_global.gl_table.add_one_func("app_fortune",    app_fortune)
 
     except:
         #print("Cannot build global table", sys.exc_info())
         wsgi_util.put_exception("Cannot build global initital table")
 
+init_rc =  [   \
+
+    #("header",          wsgi_res.header),
+    #("bigtext",         wsgi_res.bigtext),
+    #("var",             wsgi_res.var),
+    #("imgrow",          wsgi_res.imgrow),
+    #("xarticle",        wsgi_res.article),
+    #("xarticle2",       wsgi_res.article2),
+    #("recursive",       wsgi_res.recursive),     # Do not add this, just for testing
+
+    ("footer",          wsgi_res.footer),
+    ("mystyle",          wsgi_style.mystyle),
+    ("site_top",          wsgi_res.site_top),
+    ("site_bottom",       wsgi_res.site_bottom),
+
+    ("nullcolor",        "#cccccc"),
+    ("sitecolor",        "#aaffbb"),
+
+    # This junk (above) added to parse time  2+ msec ... de activated it
+
+    ("spacer",          "<table><tr><td></table>"),
+    ("linespacer",      "<tr><td height=8>"),
+    ("feedwidth",       "400"),
+    ("feedheight",      "300"),
+    ("thumbwidth",      "120"),
+    ("thumbheight",     "80"),
+    ]
+
 def     build_initial_rc():
 
-    ''' The initial table for the global resource items
+    '''
+        The initial table for the global resource items
         The user resources may override any of this
     '''
     try:
-        wsgi_global.gltable.add_one_func("header",   wsgi_res.header)
-        wsgi_global.gltable.add_one_func("footer",   wsgi_res.footer)
-        wsgi_global.gltable.add_one_func("bigtext",  wsgi_res.bigtext)
-        wsgi_global.gltable.add_one_func("imgrow",   wsgi_res.imgrow)
-        wsgi_global.gltable.add_one_func("mystyle",  wsgi_style.mystyle)
-
-        wsgi_global.gltable.add_one_func("xarticle",  wsgi_res.article)
-        wsgi_global.gltable.add_one_func("xarticle2", wsgi_res.article2)
+        for aa in init_rc:
+            wsgi_global.gl_table.add_one_func(aa[0], aa[1])
 
     except:
         #print("Cannot build global rc", sys.exc_info())

@@ -215,11 +215,7 @@ def     image_func(strx, context):
         #print("media image padded to default", iname)
 
     if len(sss) == 2:
-<<<<<<< HEAD
         return "<img src=" + iname + " class=imgflex>"
-=======
-        return "<img src=" + iname + " class=img_round>"
->>>>>>> a31b822d9aaf1d709a5c4f999e7e55835f4283b5
 
     elif len(sss) == 3:
         # Resize width; Size toward larger aspect ratio

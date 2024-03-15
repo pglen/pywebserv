@@ -2,13 +2,16 @@
 
 ## WSGI compliant web server
 
- Web server with no dependencies (for security). One might say this is a framework-less framework.
+ Web server with no dependencies (for security). One might say this is a
+ framework-less framework.
 
 ###  Introduction
 
  This is a web server framework. To wet your apetite, here is how simple the
-HTML web page becomes. Below, is the source for the example pages. The macros can be crafted
-by you, so the simplicity is by no means a limitation.  (Helps to know html/python)
+HTML web page becomes. Below, is the source for the example pages. The macros
+can be crafted by you, so the simplicity is by no means a limitation.
+
+    (Helps to know html/python)
 
         { sitestyle }
         { header }

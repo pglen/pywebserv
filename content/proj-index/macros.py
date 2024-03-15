@@ -54,6 +54,7 @@ _glob_sitestyle = '''
 
    div {
     display: block;
+<<<<<<< HEAD
 }
 
 body {
@@ -133,10 +134,100 @@ body {
 }
 
 .imgflex {
+=======
+}
+
+body {
+  font-family: Arial;
+  padding: 10px;
+  background: #f1f1f1;
+}
+
+/* Header/Blog Titlefor(int aa = 0; aa < limx; aa++)
+    {
+    // Do stuff
+    }
+ */
+.header {
+  /*padding: 30px;*/
+  text-align: center;
+  background: white;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+/* Style the top navigation bar
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+*/
+
+/* Style the topnav links
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+*/
+
+/* Change color on hover
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+*/
+
+/* -------------------------------------------------------------------- */
+/* Column container */
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+/* Left column */
+.leftcolumn {
+  flex: 25%;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+  /*visibility: collapse;*/
+  /*overflow: hidden;*/
+}
+/* Mid column */
+.midcolumn {
+  flex: 50%;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+}
+/* Right column */
+.rightcolumn {
+  flex: 25%;
+  background-color: #f1f1f1;
+  padding-left: 20px;
+}
+
+/* -------------------------------------------------------------------- */
+
+.plain {
+    #border: 0;
+    #background-color: #333333;
+    border-radius: 0px;
+}
+
+.image {
+>>>>>>> a31b822d9aaf1d709a5c4f999e7e55835f4283b5
   opacity: 1;
   display: inline;
   height: auto;
   transition: .5s ease;
+<<<<<<< HEAD
   backface-visibility: hidden;
   border-radius: 15px;
   width: 600px;
@@ -155,6 +246,10 @@ body {
   height: auto;
   transition: .5s ease;
   backface-visibility: hidden;                                 
+  corner-radius: 0px;
+}
+
+  backface-visibility: hidden;
   corner-radius: 0px;
 }
 
@@ -318,7 +413,7 @@ a:link, a:visited {
 
 /* Media ----------------------------------------------------------- */
 
-@media (max-width:500px) {
+@media (max-width:600px) {
 
     .row {
       display: flex;
@@ -344,6 +439,7 @@ a:link, a:visited {
       background-color: white;
       padding: 20px;
     }
+<<<<<<< HEAD
     .imgflex {
       opacity: 1;
       display: inline;
@@ -355,7 +451,8 @@ a:link, a:visited {
       }
 }
 
-@media (min-width:500px) and (max-width:1000px) {
+
+@media (min-width:600px) and (max-width:1000px) {
 
   .row {
       display: flex;
@@ -378,15 +475,6 @@ a:link, a:visited {
       padding: 20px;
       flex: 100%;
     }
-    .imgflex {
-      opacity: 1;
-      display: inline;
-      height: auto;
-      transition: .5s ease;
-      backface-visibility: hidden;
-      border-radius: 15px;
-      width: 500px;
-      }
 }
 
 </style>
@@ -1077,21 +1165,20 @@ def _func_imgrow(strx, context):
     <td width=10>
      <td align=center>
       <table border=0 width=100%%>
-          <tr><td align=center colspan=1>
+          <tr><td align=center colspan=3>
            <font size=+2> %s
             </font>
-           <tr><td align=center>
-           <div>
+           <tr><td>
            <a href=/media/%s>
-           { image %s [ 600 ] }
+           { image %s [ 500 ] }
            </a>
            <br> <center> %s </center>
-           </div>
-           <tr>
-           <td align=center>
+
+          <td width=1>
+          <td align=center>
           <!--Image description Image description -->
             %s
-          <tr><td colspan=1>
+          <tr><td colspan=3>
              <div class=textx>
               <!-- Image row text Image row text Image row text Image row textx -->
              %s

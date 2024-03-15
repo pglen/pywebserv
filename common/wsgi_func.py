@@ -215,7 +215,11 @@ def     image_func(strx, context):
         #print("media image padded to default", iname)
 
     if len(sss) == 2:
+<<<<<<< HEAD
         return "<img src=" + iname + " class=imgflex>"
+=======
+        return "<img src=" + iname + " class=img_round>"
+>>>>>>> a31b822d9aaf1d709a5c4f999e7e55835f4283b5
 
     elif len(sss) == 3:
         # Resize width; Size toward larger aspect ratio
@@ -223,7 +227,7 @@ def     image_func(strx, context):
             basewidth =  int(sss[2])
         except:
             print("Invalid parameters to image function (3)", sss)
-            return "<img src=" + iname + " class=imgflex>"
+            return "<img src=" + iname + " class=img_round>"
 
         nnn = "/tmp/res_" + sss[2] + "_" + str(sss[1])
         nnn2 = context.configx.datapath + nnn
@@ -253,7 +257,7 @@ def     image_func(strx, context):
         else:
             #print("Using cached version", nnn2)
             pass
-        return "<img src=" + nnn + " class=imgflex>"
+        return "<img src=" + nnn + " class=img_round>"
 
     elif len(sss) == 4:
         # Resize both width and height

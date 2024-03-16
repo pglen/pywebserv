@@ -223,7 +223,7 @@ def     image_func(strx, context):
             basewidth =  int(sss[2])
         except:
             print("Invalid parameters to image function (3)", sss)
-            return "<img src=" + iname + " class=img_round>"
+            return "<img src=" + iname + " class=imgflex>"
 
         nnn = "/tmp/res_" + sss[2] + "_" + str(sss[1])
         nnn2 = context.configx.datapath + nnn
@@ -253,7 +253,7 @@ def     image_func(strx, context):
         else:
             #print("Using cached version", nnn2)
             pass
-        return "<img src=" + nnn + " class=img_round>"
+        return "<img src=" + nnn + " class=imgflex>"
 
     elif len(sss) == 4:
         # Resize both width and height

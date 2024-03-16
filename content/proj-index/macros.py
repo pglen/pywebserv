@@ -133,37 +133,13 @@ body {
 }
 
 .imgflex {
-}
-
-body {
-  font-family: Arial;
-  padding: 10px;
-  background: #f1f1f1;
-}
-
-/* Header/Blog Titlefor(int aa = 0; aa < limx; aa++)
-    {
-    // Do stuff
-    }
- */
-
-
-/* -------------------------------------------------------------------- */
-
-.plain {
-    #border: 0;
-    #background-color: #333333;
-    border-radius: 0px;
-}
-
-.image {
   opacity: 1;
   display: inline;
   height: auto;
   transition: .5s ease;
   backface-visibility: hidden;
   border-radius: 15px;
-  /*width: 600px;*/
+  width: 600px;
   }
 /* -------------------------------------------------------------------- */
 
@@ -178,11 +154,7 @@ body {
   display: inline;
   height: auto;
   transition: .5s ease;
-  backface-visibility: hidden;
-  corner-radius: 0px;
-}
-
-  backface-visibility: hidden;
+  backface-visibility: hidden;                                 
   corner-radius: 0px;
 }
 
@@ -346,7 +318,7 @@ a:link, a:visited {
 
 /* Media ----------------------------------------------------------- */
 
-@media (max-width:600px) {
+@media (max-width:500px) {
 
     .row {
       display: flex;
@@ -378,12 +350,12 @@ a:link, a:visited {
       height: auto;
       transition: .5s ease;
       backface-visibility: hidden;
-      /*width: 300px;*/
+      width: 300px;
       //border-radius: 0px;
       }
 }
 
-@media (min-width:600px) and (max-width:1000px) {
+@media (min-width:500px) and (max-width:1000px) {
 
   .row {
       display: flex;
@@ -406,6 +378,15 @@ a:link, a:visited {
       padding: 20px;
       flex: 100%;
     }
+    .imgflex {
+      opacity: 1;
+      display: inline;
+      height: auto;
+      transition: .5s ease;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      width: 500px;
+      }
 }
 
 </style>
@@ -1096,20 +1077,21 @@ def _func_imgrow(strx, context):
     <td width=10>
      <td align=center>
       <table border=0 width=100%%>
-          <tr><td align=center colspan=3>
+          <tr><td align=center colspan=1>
            <font size=+2> %s
             </font>
-           <tr><td>
+           <tr><td align=center>
+           <div>
            <a href=/media/%s>
-           { image %s [ 500 ] }
+           { image %s [ 600 ] }
            </a>
            <br> <center> %s </center>
-
-          <td width=1>
-          <td align=center>
+           </div>
+           <tr>
+           <td align=center>
           <!--Image description Image description -->
             %s
-          <tr><td colspan=3>
+          <tr><td colspan=1>
              <div class=textx>
               <!-- Image row text Image row text Image row text Image row textx -->
              %s

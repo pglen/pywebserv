@@ -85,7 +85,7 @@ body {
 
 /* -------------------------------------------------------------------- */
 
-@media (min-width:650px) {
+@media (max-width:850px) {
 
     .row {
         flex-direction: row;

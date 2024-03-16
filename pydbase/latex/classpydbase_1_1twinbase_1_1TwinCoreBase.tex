@@ -1,0 +1,222 @@
+\hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase}{}\doxysection{pydbase.\+twinbase.\+Twin\+Core\+Base Class Reference}
+\label{classpydbase_1_1twinbase_1_1TwinCoreBase}\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+
+
+Inheritance diagram for pydbase.\+twinbase.\+Twin\+Core\+Base\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=256pt]{classpydbase_1_1twinbase_1_1TwinCoreBase__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a11c42db8dede9e645ee318163b9b44dd}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self)
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a0835842e5abb47adc7665fe814895e17}{getsize}} (self, buffio)
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_ae2fdc54a62e59aaa8b34ddd88a474ab8}{getidxint}} (self, offs)
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a4e4eb650b018c7e094d2225b2b86c8c3}{putidxint}} (self, offs, val)
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_aae7cce97556bc4db878017d7893ca5c7}{getbuffint}} (self, offs)
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a9c2411be921435787cdcd3d118f3a851}{putbuffint}} (self, offs, val)
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a11ddb5a00b8001d6dc6397780fdf34d0}{getbuffstr}} (self, offs, xlen)
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a9a69e8650df7fecc4b4bd927ddfec707}{putbuffstr}} (self, offs, xstr)
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a6bbad3eea8507b12f3f69d07fe84bd95}{hash32}} (self, strx)
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_aa14c5da2813030e1db6d2d4e8e846b4d}{softcreate}} (self, \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a7432674fce6a1982934521175ae25adb}{fname}}, raisex=True)
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a4e9c958c489f87b97ca926cba2695cbf}{create\+\_\+data}} (self, \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_ae114f90ac46f501d16e1370b009a0cf2}{fp}})
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a214a07c32a61458ca077490678169a1c}{create\+\_\+idx}} (self, \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a494c132a241d62c2e8feaedd9bad9482}{ifp}})
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_ae114f90ac46f501d16e1370b009a0cf2}{fp}}
+\item 
+\mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a494c132a241d62c2e8feaedd9bad9482}{ifp}}
+\item 
+\mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_aee1cd00cab5933315672a2cba6c5f91a}{cnt}}
+\item 
+\mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a7432674fce6a1982934521175ae25adb}{fname}}
+\item 
+\mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a3ab8261eac7c4d9d9eb16c8700fff19c}{idxname}}
+\item 
+\mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a8ad9d5d24828e7437c17f8f0a0daa1f0}{lckname}}
+\item 
+\mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a3cdcce5663fc02a70733dfa6ff2712a0}{lasterr}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a0f8bdc6c2490a95efde4599c3b150789}{INTSIZE}} = 4
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a339166f00607419f8e0c6f57a0d0b739}{\+\_\+putint}} (self, \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase_a494c132a241d62c2e8feaedd9bad9482}{ifp}}, offs, val)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb} This class provides basic services to twincore  \end{DoxyVerb}
+ 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a11c42db8dede9e645ee318163b9b44dd}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a11c42db8dede9e645ee318163b9b44dd}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Reimplemented in \mbox{\hyperlink{classpydbase_1_1twincore_1_1TwinCore_ad2f8441fe12f88f4fab268702cf86331}{pydbase.\+twincore.\+Twin\+Core}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a339166f00607419f8e0c6f57a0d0b739}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a339166f00607419f8e0c6f57a0d0b739}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!\_putint@{\_putint}}
+\index{\_putint@{\_putint}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{\_putint()}{\_putint()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+\_\+putint (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{ifp,  }\item[{}]{offs,  }\item[{}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a4e9c958c489f87b97ca926cba2695cbf}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a4e9c958c489f87b97ca926cba2695cbf}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!create\_data@{create\_data}}
+\index{create\_data@{create\_data}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{create\_data()}{create\_data()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+create\+\_\+data (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{fp }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} Sub for initial DATA file \end{DoxyVerb}
+ \mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a214a07c32a61458ca077490678169a1c}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a214a07c32a61458ca077490678169a1c}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!create\_idx@{create\_idx}}
+\index{create\_idx@{create\_idx}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{create\_idx()}{create\_idx()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+create\+\_\+idx (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{ifp }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} Sub for initial INDEX file \end{DoxyVerb}
+ \mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_aae7cce97556bc4db878017d7893ca5c7}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_aae7cce97556bc4db878017d7893ca5c7}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!getbuffint@{getbuffint}}
+\index{getbuffint@{getbuffint}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{getbuffint()}{getbuffint()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+getbuffint (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{offs }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} get an integer value from offset \end{DoxyVerb}
+ \mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a11ddb5a00b8001d6dc6397780fdf34d0}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a11ddb5a00b8001d6dc6397780fdf34d0}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!getbuffstr@{getbuffstr}}
+\index{getbuffstr@{getbuffstr}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{getbuffstr()}{getbuffstr()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+getbuffstr (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{offs,  }\item[{}]{xlen }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_ae2fdc54a62e59aaa8b34ddd88a474ab8}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_ae2fdc54a62e59aaa8b34ddd88a474ab8}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!getidxint@{getidxint}}
+\index{getidxint@{getidxint}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{getidxint()}{getidxint()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+getidxint (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{offs }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} get an integer value from index offset \end{DoxyVerb}
+ \mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a0835842e5abb47adc7665fe814895e17}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a0835842e5abb47adc7665fe814895e17}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!getsize@{getsize}}
+\index{getsize@{getsize}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{getsize()}{getsize()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+getsize (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{buffio }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} get the dabase file size \end{DoxyVerb}
+ \mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a6bbad3eea8507b12f3f69d07fe84bd95}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a6bbad3eea8507b12f3f69d07fe84bd95}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!hash32@{hash32}}
+\index{hash32@{hash32}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{hash32()}{hash32()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+hash32 (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{strx }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} Deliver a 32 bit hash of the passed entity \end{DoxyVerb}
+ \mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a9c2411be921435787cdcd3d118f3a851}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a9c2411be921435787cdcd3d118f3a851}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!putbuffint@{putbuffint}}
+\index{putbuffint@{putbuffint}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{putbuffint()}{putbuffint()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+putbuffint (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{offs,  }\item[{}]{val }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a9a69e8650df7fecc4b4bd927ddfec707}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a9a69e8650df7fecc4b4bd927ddfec707}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!putbuffstr@{putbuffstr}}
+\index{putbuffstr@{putbuffstr}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{putbuffstr()}{putbuffstr()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+putbuffstr (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{offs,  }\item[{}]{xstr }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a4e4eb650b018c7e094d2225b2b86c8c3}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a4e4eb650b018c7e094d2225b2b86c8c3}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!putidxint@{putidxint}}
+\index{putidxint@{putidxint}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{putidxint()}{putidxint()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+putidxint (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{offs,  }\item[{}]{val }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} put an integer value to offset \end{DoxyVerb}
+ \mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_aa14c5da2813030e1db6d2d4e8e846b4d}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_aa14c5da2813030e1db6d2d4e8e846b4d}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!softcreate@{softcreate}}
+\index{softcreate@{softcreate}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{softcreate()}{softcreate()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+Twin\+Core\+Base.\+softcreate (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{fname,  }\item[{}]{raisex = {\ttfamily True} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} Open for read / write. Create if needed. \end{DoxyVerb}
+ 
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_aee1cd00cab5933315672a2cba6c5f91a}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_aee1cd00cab5933315672a2cba6c5f91a}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!cnt@{cnt}}
+\index{cnt@{cnt}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{cnt}{cnt}}
+{\footnotesize\ttfamily pydbase.\+twinbase.\+Twin\+Core\+Base.\+cnt}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a7432674fce6a1982934521175ae25adb}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a7432674fce6a1982934521175ae25adb}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!fname@{fname}}
+\index{fname@{fname}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{fname}{fname}}
+{\footnotesize\ttfamily pydbase.\+twinbase.\+Twin\+Core\+Base.\+fname}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_ae114f90ac46f501d16e1370b009a0cf2}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_ae114f90ac46f501d16e1370b009a0cf2}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!fp@{fp}}
+\index{fp@{fp}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{fp}{fp}}
+{\footnotesize\ttfamily pydbase.\+twinbase.\+Twin\+Core\+Base.\+fp}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a3ab8261eac7c4d9d9eb16c8700fff19c}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a3ab8261eac7c4d9d9eb16c8700fff19c}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!idxname@{idxname}}
+\index{idxname@{idxname}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{idxname}{idxname}}
+{\footnotesize\ttfamily pydbase.\+twinbase.\+Twin\+Core\+Base.\+idxname}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a494c132a241d62c2e8feaedd9bad9482}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a494c132a241d62c2e8feaedd9bad9482}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!ifp@{ifp}}
+\index{ifp@{ifp}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{ifp}{ifp}}
+{\footnotesize\ttfamily pydbase.\+twinbase.\+Twin\+Core\+Base.\+ifp}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a0f8bdc6c2490a95efde4599c3b150789}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a0f8bdc6c2490a95efde4599c3b150789}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!INTSIZE@{INTSIZE}}
+\index{INTSIZE@{INTSIZE}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{INTSIZE}{INTSIZE}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+Twin\+Core\+Base.\+INTSIZE = 4\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a3cdcce5663fc02a70733dfa6ff2712a0}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a3cdcce5663fc02a70733dfa6ff2712a0}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!lasterr@{lasterr}}
+\index{lasterr@{lasterr}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{lasterr}{lasterr}}
+{\footnotesize\ttfamily pydbase.\+twinbase.\+Twin\+Core\+Base.\+lasterr}
+
+\mbox{\Hypertarget{classpydbase_1_1twinbase_1_1TwinCoreBase_a8ad9d5d24828e7437c17f8f0a0daa1f0}\label{classpydbase_1_1twinbase_1_1TwinCoreBase_a8ad9d5d24828e7437c17f8f0a0daa1f0}} 
+\index{pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}!lckname@{lckname}}
+\index{lckname@{lckname}!pydbase.twinbase.TwinCoreBase@{pydbase.twinbase.TwinCoreBase}}
+\doxysubsubsection{\texorpdfstring{lckname}{lckname}}
+{\footnotesize\ttfamily pydbase.\+twinbase.\+Twin\+Core\+Base.\+lckname}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{twinbase_8py}{twinbase.\+py}}\end{DoxyCompactItemize}

@@ -5,11 +5,7 @@
 all:
 	@echo Targets: run git doc clean md5
 
-#doc:
-#	pdoc --logo /home/peterglen/pgpygtk/webserver/drawing.png \
-#                -o doc `find . -maxdepth 2 -name  \*.py`
-
-doc3:
+doc:
 	@pdoc3  --html --force -o doc3 `find . -maxdepth 2 -name  \*.py`
 
 # Auto Checkin

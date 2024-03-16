@@ -1,0 +1,205 @@
+\hypertarget{namespacepydbase_1_1twinbase}{}\doxysection{pydbase.\+twinbase Namespace Reference}
+\label{namespacepydbase_1_1twinbase}\index{pydbase.twinbase@{pydbase.twinbase}}
+
+
+twinbase -- extracted from twincore to make it eazier to read  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classpydbase_1_1twinbase_1_1TwinCoreBase}{Twin\+Core\+Base}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacepydbase_1_1twinbase_ade6943c83497c739f6001b7e6943a0b2}{create}} (fname, raisex=True)
+\item 
+def \mbox{\hyperlink{namespacepydbase_1_1twinbase_ae936f0efaf15803a5ff2a14d9a30846d}{truncs}} (strx, num=8)
+\item 
+def \mbox{\hyperlink{namespacepydbase_1_1twinbase_a3f317122694e4785caadb602b35f4d9d}{dellock}} (lockname)
+\item 
+def \mbox{\hyperlink{namespacepydbase_1_1twinbase_a3804c9c8ba37f4730a3df9e67aafbc3b}{waitlock}} (lockname)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_aeb2c78a12b8d5374f149c0c3b48d6a59}{HEADSIZE}} = 32
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_ab4e24c86c11ce70ca6bd7f0e26179946}{INT\+\_\+\+MAX}} = 0xffffffff
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_a48127c56645b69a3c62d29b163371061}{CURROFFS}} = 16
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_a3bb19357bfa91a2c95b245fc58360790}{FIRSTHASH}} = \mbox{\hyperlink{namespacepydbase_1_1twinbase_aeb2c78a12b8d5374f149c0c3b48d6a59}{HEADSIZE}}
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_ad1da9995477476d547e9d7b1d8ab8ae8}{FIRSTDATA}} = \mbox{\hyperlink{namespacepydbase_1_1twinbase_aeb2c78a12b8d5374f149c0c3b48d6a59}{HEADSIZE}}
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_a06dae95df32ee57c4be128be681234bc}{LOCK\+\_\+\+TIMEOUT}} = 20
+\item 
+b \mbox{\hyperlink{namespacepydbase_1_1twinbase_ac944231dd356d1fd37c38ad442f80a99}{FILESIG}} = b\char`\"{}\+PYDB\char`\"{}
+\begin{DoxyCompactList}\small\item\em These are all four bytes, one can read it like integers. \end{DoxyCompactList}\item 
+b \mbox{\hyperlink{namespacepydbase_1_1twinbase_a770467558913e967fd57bf4cb42bbd43}{IDXSIG}} = b\char`\"{}\+PYIX\char`\"{}
+\item 
+b \mbox{\hyperlink{namespacepydbase_1_1twinbase_a599a37b9925fd6ce5a336afb03be9d14}{RECSIG}} = b\char`\"{}\+RECB\char`\"{}
+\item 
+b \mbox{\hyperlink{namespacepydbase_1_1twinbase_a33a5e1d40463df80d7069bf71d2b9335}{RECDEL}} = b\char`\"{}\+RECX\char`\"{}
+\item 
+b \mbox{\hyperlink{namespacepydbase_1_1twinbase_a76662d5b114ee788c3761e46d9d147d4}{RECSEP}} = b\char`\"{}\+RECS\char`\"{}
+\item 
+b \mbox{\hyperlink{namespacepydbase_1_1twinbase_af6e88e8115a408de9a0b034faebb2599}{RECEND}} = b\char`\"{}\+RECE\char`\"{}
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_a0191ae7e4b97084192cb7cc44dc84c90}{core\+\_\+locktout}} = \mbox{\hyperlink{namespacepydbase_1_1twinbase_a06dae95df32ee57c4be128be681234bc}{LOCK\+\_\+\+TIMEOUT}}
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_a3dc70e4094382a6769a7b58d8db8c3ff}{core\+\_\+quiet}} = 0
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_ab1f45c59025ea3d645b374e0f8408a08}{core\+\_\+pgdebug}} = 0
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_a533ab16fd3d07d862f84e1e002cd869e}{core\+\_\+integrity}} = 0
+\item 
+int \mbox{\hyperlink{namespacepydbase_1_1twinbase_a54ba728f7e84df2963eb0e8f5cb86b4e}{core\+\_\+showdel}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+twinbase -- extracted from twincore to make it eazier to read 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_ade6943c83497c739f6001b7e6943a0b2}\label{namespacepydbase_1_1twinbase_ade6943c83497c739f6001b7e6943a0b2}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!create@{create}}
+\index{create@{create}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+create (\begin{DoxyParamCaption}\item[{}]{fname,  }\item[{}]{raisex = {\ttfamily True} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} Open for read / write. Create if needed. \end{DoxyVerb}
+ \mbox{\Hypertarget{namespacepydbase_1_1twinbase_a3f317122694e4785caadb602b35f4d9d}\label{namespacepydbase_1_1twinbase_a3f317122694e4785caadb602b35f4d9d}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!dellock@{dellock}}
+\index{dellock@{dellock}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{dellock()}{dellock()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+dellock (\begin{DoxyParamCaption}\item[{}]{lockname }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} Lock removal;
+    Test for stale lock;
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacepydbase_1_1twinbase_ae936f0efaf15803a5ff2a14d9a30846d}\label{namespacepydbase_1_1twinbase_ae936f0efaf15803a5ff2a14d9a30846d}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!truncs@{truncs}}
+\index{truncs@{truncs}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{truncs()}{truncs()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+truncs (\begin{DoxyParamCaption}\item[{}]{strx,  }\item[{}]{num = {\ttfamily 8} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} Truncate a string for printing nicely. Add '..' if truncated\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacepydbase_1_1twinbase_a3804c9c8ba37f4730a3df9e67aafbc3b}\label{namespacepydbase_1_1twinbase_a3804c9c8ba37f4730a3df9e67aafbc3b}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!waitlock@{waitlock}}
+\index{waitlock@{waitlock}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{waitlock()}{waitlock()}}
+{\footnotesize\ttfamily def pydbase.\+twinbase.\+waitlock (\begin{DoxyParamCaption}\item[{}]{lockname }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb} Wait for lock file to become available. \end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a533ab16fd3d07d862f84e1e002cd869e}\label{namespacepydbase_1_1twinbase_a533ab16fd3d07d862f84e1e002cd869e}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!core\_integrity@{core\_integrity}}
+\index{core\_integrity@{core\_integrity}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{core\_integrity}{core\_integrity}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+core\+\_\+integrity = 0}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a0191ae7e4b97084192cb7cc44dc84c90}\label{namespacepydbase_1_1twinbase_a0191ae7e4b97084192cb7cc44dc84c90}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!core\_locktout@{core\_locktout}}
+\index{core\_locktout@{core\_locktout}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{core\_locktout}{core\_locktout}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+core\+\_\+locktout = \mbox{\hyperlink{namespacepydbase_1_1twinbase_a06dae95df32ee57c4be128be681234bc}{LOCK\+\_\+\+TIMEOUT}}}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_ab1f45c59025ea3d645b374e0f8408a08}\label{namespacepydbase_1_1twinbase_ab1f45c59025ea3d645b374e0f8408a08}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!core\_pgdebug@{core\_pgdebug}}
+\index{core\_pgdebug@{core\_pgdebug}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{core\_pgdebug}{core\_pgdebug}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+core\+\_\+pgdebug = 0}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a3dc70e4094382a6769a7b58d8db8c3ff}\label{namespacepydbase_1_1twinbase_a3dc70e4094382a6769a7b58d8db8c3ff}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!core\_quiet@{core\_quiet}}
+\index{core\_quiet@{core\_quiet}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{core\_quiet}{core\_quiet}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+core\+\_\+quiet = 0}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a54ba728f7e84df2963eb0e8f5cb86b4e}\label{namespacepydbase_1_1twinbase_a54ba728f7e84df2963eb0e8f5cb86b4e}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!core\_showdel@{core\_showdel}}
+\index{core\_showdel@{core\_showdel}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{core\_showdel}{core\_showdel}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+core\+\_\+showdel = 0}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a48127c56645b69a3c62d29b163371061}\label{namespacepydbase_1_1twinbase_a48127c56645b69a3c62d29b163371061}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!CURROFFS@{CURROFFS}}
+\index{CURROFFS@{CURROFFS}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{CURROFFS}{CURROFFS}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+CURROFFS = 16}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_ac944231dd356d1fd37c38ad442f80a99}\label{namespacepydbase_1_1twinbase_ac944231dd356d1fd37c38ad442f80a99}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!FILESIG@{FILESIG}}
+\index{FILESIG@{FILESIG}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{FILESIG}{FILESIG}}
+{\footnotesize\ttfamily b pydbase.\+twinbase.\+FILESIG = b\char`\"{}\+PYDB\char`\"{}}
+
+
+
+These are all four bytes, one can read it like integers. 
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_ad1da9995477476d547e9d7b1d8ab8ae8}\label{namespacepydbase_1_1twinbase_ad1da9995477476d547e9d7b1d8ab8ae8}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!FIRSTDATA@{FIRSTDATA}}
+\index{FIRSTDATA@{FIRSTDATA}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{FIRSTDATA}{FIRSTDATA}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+FIRSTDATA = \mbox{\hyperlink{namespacepydbase_1_1twinbase_aeb2c78a12b8d5374f149c0c3b48d6a59}{HEADSIZE}}}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a3bb19357bfa91a2c95b245fc58360790}\label{namespacepydbase_1_1twinbase_a3bb19357bfa91a2c95b245fc58360790}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!FIRSTHASH@{FIRSTHASH}}
+\index{FIRSTHASH@{FIRSTHASH}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{FIRSTHASH}{FIRSTHASH}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+FIRSTHASH = \mbox{\hyperlink{namespacepydbase_1_1twinbase_aeb2c78a12b8d5374f149c0c3b48d6a59}{HEADSIZE}}}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_aeb2c78a12b8d5374f149c0c3b48d6a59}\label{namespacepydbase_1_1twinbase_aeb2c78a12b8d5374f149c0c3b48d6a59}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!HEADSIZE@{HEADSIZE}}
+\index{HEADSIZE@{HEADSIZE}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{HEADSIZE}{HEADSIZE}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+HEADSIZE = 32}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a770467558913e967fd57bf4cb42bbd43}\label{namespacepydbase_1_1twinbase_a770467558913e967fd57bf4cb42bbd43}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!IDXSIG@{IDXSIG}}
+\index{IDXSIG@{IDXSIG}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{IDXSIG}{IDXSIG}}
+{\footnotesize\ttfamily b pydbase.\+twinbase.\+IDXSIG = b\char`\"{}\+PYIX\char`\"{}}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_ab4e24c86c11ce70ca6bd7f0e26179946}\label{namespacepydbase_1_1twinbase_ab4e24c86c11ce70ca6bd7f0e26179946}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!INT\_MAX@{INT\_MAX}}
+\index{INT\_MAX@{INT\_MAX}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{INT\_MAX}{INT\_MAX}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+INT\+\_\+\+MAX = 0xffffffff}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a06dae95df32ee57c4be128be681234bc}\label{namespacepydbase_1_1twinbase_a06dae95df32ee57c4be128be681234bc}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!LOCK\_TIMEOUT@{LOCK\_TIMEOUT}}
+\index{LOCK\_TIMEOUT@{LOCK\_TIMEOUT}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{LOCK\_TIMEOUT}{LOCK\_TIMEOUT}}
+{\footnotesize\ttfamily int pydbase.\+twinbase.\+LOCK\+\_\+\+TIMEOUT = 20}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a33a5e1d40463df80d7069bf71d2b9335}\label{namespacepydbase_1_1twinbase_a33a5e1d40463df80d7069bf71d2b9335}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!RECDEL@{RECDEL}}
+\index{RECDEL@{RECDEL}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{RECDEL}{RECDEL}}
+{\footnotesize\ttfamily b pydbase.\+twinbase.\+RECDEL = b\char`\"{}\+RECX\char`\"{}}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_af6e88e8115a408de9a0b034faebb2599}\label{namespacepydbase_1_1twinbase_af6e88e8115a408de9a0b034faebb2599}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!RECEND@{RECEND}}
+\index{RECEND@{RECEND}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{RECEND}{RECEND}}
+{\footnotesize\ttfamily b pydbase.\+twinbase.\+RECEND = b\char`\"{}\+RECE\char`\"{}}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a76662d5b114ee788c3761e46d9d147d4}\label{namespacepydbase_1_1twinbase_a76662d5b114ee788c3761e46d9d147d4}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!RECSEP@{RECSEP}}
+\index{RECSEP@{RECSEP}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{RECSEP}{RECSEP}}
+{\footnotesize\ttfamily b pydbase.\+twinbase.\+RECSEP = b\char`\"{}\+RECS\char`\"{}}
+
+\mbox{\Hypertarget{namespacepydbase_1_1twinbase_a599a37b9925fd6ce5a336afb03be9d14}\label{namespacepydbase_1_1twinbase_a599a37b9925fd6ce5a336afb03be9d14}} 
+\index{pydbase.twinbase@{pydbase.twinbase}!RECSIG@{RECSIG}}
+\index{RECSIG@{RECSIG}!pydbase.twinbase@{pydbase.twinbase}}
+\doxysubsubsection{\texorpdfstring{RECSIG}{RECSIG}}
+{\footnotesize\ttfamily b pydbase.\+twinbase.\+RECSIG = b\char`\"{}\+RECB\char`\"{}}
+

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>wsgi_prod API documentation</title>
+<title>validate API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,72 +19,144 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>wsgi_prod</code></h1>
+<h1 class="title">Module <code>validate</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">#!/usr/bin/env python3
+<pre><code class="python">#!/usr/bin/python3
 
-# Test in production environment
+import os, sys, getopt, errno
+from common import wsgi_str
 
-import sys
-import os
-import mimetypes
-import time
-import multiprocessing
-from wsgiref import simple_server, util
+import gettext
+gettext.bindtextdomain(&#39;pyedpro&#39;, &#39;./locale/&#39;)
+gettext.textdomain(&#39;pyedpro&#39;)
+_ = gettext.gettext
+
+# Be sure to replace it with this exact string (or else in need parsing)
+SIGX = &#34;hashx signature&#34;
+
+def hexx(num):
+    return &#34;0x%08x&#34; % num
+
+def validate(fname):
+
+    fp = open(fname)
+    hashx = int(0);
+    old_hash = str(&#34;None&#34;)
+
+    old_tell = 0; sum_tell = 0
+
+    while True:
+        old_tell = fp.tell()
+        line = fp.readline()
+        if not line:
+            break
+
+        line = line.strip()
+        if not line:
+            continue
+        if line[0] == &#39;#&#39;:
+            if SIGX in line:
+                hhh = str.split(line)
+                for aa in hhh:
+                    if len(aa) &gt; 2:
+                        if aa[:2] == &#34;0x&#34;:
+                            #print(&#34;Old Hash:&#34;, aa)
+                            old_hash = aa
+                            sum_tell = old_tell
+            continue
 
 
-def application(environ, respond):
+        res = 0
+        for aa in line:
+            if not str.isspace(aa):
+                #print(aa, end=&#34;&#34;)
+                res += ord(aa)
+                aaa = ord(aa)
+                hashx +=  int( (aaa &lt;&lt; 12) + aaa)
+                hashx &amp;= 0xffffffff
+                hashx = int(hashx &lt;&lt; 8) + int(hashx &gt;&gt; 8)
+                hashx &amp;= 0xffffffff
+        #print()
 
-    print(&#34;arg&#34;, sys.argv)
-    path = os.path.dirname(os.path.realpath(__file__));
-    print(&#34;mypath&#34;, path)
-    #printenv(environ)
+    if not sum_tell:
+        print(&#34;seekng EOF&#34;)
+        sum_tell  = fp.tell()
 
-    #print(&#34;path&#34;, environ[&#39;PATH_INFO&#39;])
-    #print(&#34;qqq&#34;, environ[&#39;QUERY_STRING&#39;])
+    fp.close()
 
-    print(&#34;pwd&#34;, os.getcwd());
-    os.chdir(path)
-    print(&#34;pwd&#34;, os.getcwd());
+    return old_hash, hexx(hashx), sum_tell
 
-    #fn = os.path.join(path, environ[&#39;PATH_INFO&#39;][1:])
-    fn = environ[&#39;PATH_INFO&#39;][1:]
-    #print(&#34;Request:&#34;,  fn)
 
-    # Empty file name, index wanted
-    if(fn.split(os.path.sep)[-1] == &#34;&#34;):
-        fn = os.path.join(fn, &#39;index.html&#39;)
+def addhash(fname, hashx, stell):
+    #print(&#34;Adding hash to&#34;, fname, stell)
+    fp = open(fname, &#34;r+t&#34;)
+    fp.seek(stell)
+    fp.write(&#34;# &#34; + SIGX  + &#34; &#34; + hashx )
+    fp.close
 
-    #print(&#34;Calc Request:&#34;,  fn)
-
-    type = mimetypes.guess_type(fn)[0]
-    if not type:
-        type = &#34;text/plain&#34;
-
-    if os.path.exists(fn):
-        respond(&#39;200 OK&#39;, [(&#39;Content-Type&#39;, type + &#39;;charset=UTF-8&#39;)])
-        fp = util.FileWrapper(open(fn, &#34;rb&#34;))
-        return fp
-    else:
-        respond(&#39;404 Not Found&#39;, [(&#39;Content-Type&#39;, &#39;text/plain&#39;)])
-        return [b&#39;not found&#39;]
-
-def hello(aa, bb):
-    print(aa, bb)
+# ------------------------------------------------------------------------
 
 if __name__ == &#39;__main__&#39;:
 
-    env = dict(os.environ)
-    env.update ( {&#34;PATH_INFO&#34; : &#34;/&#34;})
-    env.update ( {&#34;QUERY_STRING&#34; : &#34;&#34;})
-    application(env, hello)
+    ret = 0
+    checksum = False;    verbose = False
+    myopts  = &#34;vm&#34;;      argopts = &#34;d:&#34;
 
-# EOF</code></pre>
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], myopts + argopts,
+                        [&#34;debug=&#34;, &#34;help&#34;, &#34;help&#34;, &#34;verbose&#34;, &#34;version&#34;, ])
+
+    except getopt.GetoptError as err:
+        print(_(&#34;Invalid option(s) on command line:&#34;), err)
+        sys.exit(1)
+
+    for aa in opts:
+        if aa[0] == &#34;-d&#34; or aa[0] == &#34;--debug&#34;:
+            pass
+        if aa[0] == &#34;-m&#34;:
+            #print(&#34;adding checksum&#34;)
+            checksum = True
+
+        if aa[0] == &#34;-v&#34;:
+            #print(&#34;adding checksum&#34;)
+            verbose = True
+
+    if len(args) &lt; 1:
+        print(&#34;use: validate.py filename [filename ... ]&#34;)
+        sys.exit(0)
+
+    for aa in args:
+
+        try:
+            ohashx, hashx, stell = validate(aa)
+            #print(&#34;ohashx:&#34;, ohashx, &#34;hashx:&#34;, hashx, &#34;stell:&#34;, stell)
+        except Exception as  ioex:
+            print(&#34;Cannot process&#34;, &#34;&#39;&#34; + aa + &#34;&#39;&#34;, os.strerror(ioex.errno))
+            continue
+
+        if checksum:
+            if ohashx != hashx:
+                if verbose:
+                    print(&#34;Adding hash:&#34;, hashx)
+                addhash(aa, hashx, stell)
+            else:
+                if verbose:
+                    print(&#34;Hash checks out at&#34;, hashx)
+
+        else:
+            if ohashx != hashx:
+                ret |= 1
+                ttt = &#34;  &#34;
+            else:
+                ttt = &#34;Un&#34;
+            print (&#34;%sModified file&#34; % ttt, wsgi_str.strpad(aa), &#34;Old hash:&#34;,
+                                    wsgi_str.strpad(ohashx, 10), &#34;New hash:&#34;,  hashx)
+    sys.exit(ret)</code></pre>
 </details>
 </section>
 <section>
@@ -94,8 +166,8 @@ if __name__ == &#39;__main__&#39;:
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="wsgi_prod.application"><code class="name flex">
-<span>def <span class="ident">application</span></span>(<span>environ, respond)</span>
+<dt id="validate.addhash"><code class="name flex">
+<span>def <span class="ident">addhash</span></span>(<span>fname, hashx, stell)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -103,45 +175,16 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def application(environ, respond):
-
-    print(&#34;arg&#34;, sys.argv)
-    path = os.path.dirname(os.path.realpath(__file__));
-    print(&#34;mypath&#34;, path)
-    #printenv(environ)
-
-    #print(&#34;path&#34;, environ[&#39;PATH_INFO&#39;])
-    #print(&#34;qqq&#34;, environ[&#39;QUERY_STRING&#39;])
-
-    print(&#34;pwd&#34;, os.getcwd());
-    os.chdir(path)
-    print(&#34;pwd&#34;, os.getcwd());
-
-    #fn = os.path.join(path, environ[&#39;PATH_INFO&#39;][1:])
-    fn = environ[&#39;PATH_INFO&#39;][1:]
-    #print(&#34;Request:&#34;,  fn)
-
-    # Empty file name, index wanted
-    if(fn.split(os.path.sep)[-1] == &#34;&#34;):
-        fn = os.path.join(fn, &#39;index.html&#39;)
-
-    #print(&#34;Calc Request:&#34;,  fn)
-
-    type = mimetypes.guess_type(fn)[0]
-    if not type:
-        type = &#34;text/plain&#34;
-
-    if os.path.exists(fn):
-        respond(&#39;200 OK&#39;, [(&#39;Content-Type&#39;, type + &#39;;charset=UTF-8&#39;)])
-        fp = util.FileWrapper(open(fn, &#34;rb&#34;))
-        return fp
-    else:
-        respond(&#39;404 Not Found&#39;, [(&#39;Content-Type&#39;, &#39;text/plain&#39;)])
-        return [b&#39;not found&#39;]</code></pre>
+<pre><code class="python">def addhash(fname, hashx, stell):
+    #print(&#34;Adding hash to&#34;, fname, stell)
+    fp = open(fname, &#34;r+t&#34;)
+    fp.seek(stell)
+    fp.write(&#34;# &#34; + SIGX  + &#34; &#34; + hashx )
+    fp.close</code></pre>
 </details>
 </dd>
-<dt id="wsgi_prod.hello"><code class="name flex">
-<span>def <span class="ident">hello</span></span>(<span>aa, bb)</span>
+<dt id="validate.hexx"><code class="name flex">
+<span>def <span class="ident">hexx</span></span>(<span>num)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -149,8 +192,67 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def hello(aa, bb):
-    print(aa, bb)</code></pre>
+<pre><code class="python">def hexx(num):
+    return &#34;0x%08x&#34; % num</code></pre>
+</details>
+</dd>
+<dt id="validate.validate"><code class="name flex">
+<span>def <span class="ident">validate</span></span>(<span>fname)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate(fname):
+
+    fp = open(fname)
+    hashx = int(0);
+    old_hash = str(&#34;None&#34;)
+
+    old_tell = 0; sum_tell = 0
+
+    while True:
+        old_tell = fp.tell()
+        line = fp.readline()
+        if not line:
+            break
+
+        line = line.strip()
+        if not line:
+            continue
+        if line[0] == &#39;#&#39;:
+            if SIGX in line:
+                hhh = str.split(line)
+                for aa in hhh:
+                    if len(aa) &gt; 2:
+                        if aa[:2] == &#34;0x&#34;:
+                            #print(&#34;Old Hash:&#34;, aa)
+                            old_hash = aa
+                            sum_tell = old_tell
+            continue
+
+
+        res = 0
+        for aa in line:
+            if not str.isspace(aa):
+                #print(aa, end=&#34;&#34;)
+                res += ord(aa)
+                aaa = ord(aa)
+                hashx +=  int( (aaa &lt;&lt; 12) + aaa)
+                hashx &amp;= 0xffffffff
+                hashx = int(hashx &lt;&lt; 8) + int(hashx &gt;&gt; 8)
+                hashx &amp;= 0xffffffff
+        #print()
+
+    if not sum_tell:
+        print(&#34;seekng EOF&#34;)
+        sum_tell  = fp.tell()
+
+    fp.close()
+
+    return old_hash, hexx(hashx), sum_tell</code></pre>
 </details>
 </dd>
 </dl>
@@ -166,8 +268,9 @@ if __name__ == &#39;__main__&#39;:
 <ul id="index">
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="wsgi_prod.application" href="#wsgi_prod.application">application</a></code></li>
-<li><code><a title="wsgi_prod.hello" href="#wsgi_prod.hello">hello</a></code></li>
+<li><code><a title="validate.addhash" href="#validate.addhash">addhash</a></code></li>
+<li><code><a title="validate.hexx" href="#validate.hexx">hexx</a></code></li>
+<li><code><a title="validate.validate" href="#validate.validate">validate</a></code></li>
 </ul>
 </li>
 </ul>

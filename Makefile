@@ -6,7 +6,10 @@ all:
 	@echo Targets: run git doc clean md5
 
 doc:
-	@pdoc3  --html --force -o doc3 `find . -maxdepth 2 -name  \*.py`
+	#echo `find .  -maxdepth 2 -name  \*.py`
+	#echo `find . -type d -maxdepth 2 `
+	@#pdoc  --html --force -o doc3 `find . -maxdepth 2 -name  \*.py`
+	./gendocs.py
 
 # Auto Checkin
 ifeq ("$(AUTOCHECK)","")

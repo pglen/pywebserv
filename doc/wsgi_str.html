@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>wsgi_parse API documentation</title>
+<title>wsgi_str API documentation</title>
 <meta name="description" content="The simplest web server, utilities module. This is where we parse the
 incoming (loaded) files for macros. The substitution occures in steps
 recursively." />
@@ -21,7 +21,7 @@ recursively." />
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>wsgi_parse</code></h1>
+<h1 class="title">Module <code>wsgi_str</code></h1>
 </header>
 <section id="section-intro">
 <p>The simplest web server, utilities module. This is where we parse the
@@ -38,139 +38,56 @@ recursively.</p>
     recursively.
 &#39;&#39;&#39;
 
-import sys, os, time, re, traceback
-import wsgi_global, wsgi_util
+def strpad(strx, pad = 18):
 
-_MAX_RECURSE = 10
-_regex = &#34;{ .*? }&#34;
-_regex2 = &#34;\[ .*? \]&#34;
+    &#39;&#39;&#39; pad string &#39;&#39;&#39;
 
-# ------------------------------------------------------------------------
-
-def _parse_items(item, context, table):
-
-    cccc = &#34;&#34;
-
-    #print(&#34;parse item&#34;, &#34;&#39;&#34; + item + &#34;\n&#39;&#34;)
-    item2 = item.split(&#34; &#34;)
-    #print (&#34;item2&#34;, item2)
-
-    # Scan backwards so items can be overridden
-    for ii in range(len(table)-1, -1, -1):
-        aa = table[ii]
-        #print(&#34;aa&#34;, aa)
-        #if item2[1][2:-2] == aa[0]:
-        if item2[1] == aa[0]:
-            if type(aa[1]) == str:
-                #print(&#34;item:&#34;, item, &#34;str =&#34;, wsgi_util.unescape(aa[1][:24]))
-                return aa[1]
-
-            if type(aa[1]) == type(_parse_items):
-                #print(&#34;item:&#34;, item, &#34;func=&#34;, aa[1])
-                try:
-                    cccc = aa[1](item, context)
-                except:
-                    wsgi_util.put_exception(&#34;Cannot exec: &#34; + str(item))
-                    #print(&#34;item&#34;, item, &#34;aa[1]&#34;, aa[1])
-                    pass
-                #print(&#34;cccc&#34;, cccc[:12])
-                return cccc
-    return item
-
-# Parse buffer
-
-def parse_buffer(buff, regex, context, table):
-
-    count = 0; prog = 0
-    rrr = re.compile(regex)
-    arr = []
-    while(True):
-        frag = re.search(rrr, buff[prog:])
-        if not frag:
-            arr.append(buff[prog:])
-            break
-        #print (&#34;match&#34;, frag)
-        bbb = prog+frag.start()
-        eee = prog+frag.end()
-        arr.append(buff[prog:bbb])
-        #print(&#34;match&#34;, buff[bbb:eee])
-        conv = _parse_items(buff[bbb:eee], context, table)
-        arr.append(conv)
-        prog += frag.end()
-        count += 1
-
-    #print(&#34;parsed&#34;, count)
-    #print (&#34;arr&#34;, arr)
-    return arr, count
-
-# ------------------------------------------------------------------------
-
-def _parse_one(buff, context, tablex, regex):
-
-    # Recursively process
-    content = buff
-    cnt2 = 0; old_cnt = 0
-
-    while(True):
-        arr, cnt = parse_buffer(content, regex, context, tablex)
-        content = &#34;&#34;
-        for aa in arr:
-            content += str(aa)
-        #print(&#34;recursive&#34;, cnt)
-        if cnt &lt;= 1:
-            break
-        # Maximun recurse exceeded
-        if cnt2 &gt;= _MAX_RECURSE:
-            break
-        cnt2 += 1
-
-        # No change, exit
-        if old_cnt == cnt:
-            break
-
-        old_cnt = cnt
-
-    return content
-
-# ------------------------------------------------------------------------
-# Parse buffer
-
-def recursive_parse(buff, context, local_table):
-
-    #if Config.pgdebug &gt; 3:
-    #    print(&#34;recursive_parse() buff:&#34;, wsgi_util.unescape(buff[:12]))
-
-    #if local_table:
-    #    wsgi_util.dump_table(&#34;Local Table:&#34;, local_table)
-
-    #if global_table:
-    #wsgi_util.dump_table(&#34;Global Table:&#34;, wsgi_global.global_table)
-
-    parsed2 = &#34;&#34;
-
-    # Do local table first, so it overrides global
-    if local_table:
-        #if Config.verbose:
-        #    print(&#34;local_table len: &#34;, len(local_table))
-
-        #print(&#34;LOCAL&#34;)
-        try:
-            parsed2 = _parse_one(buff, context,  local_table, _regex)
-        except:
-            wsgi_util.put_exception(&#34;exception in local parser&#34;, )
-            parsed2 = buff
+    if len(strx) &lt; pad:
+        dd =  pad - len(strx)
+        stry = strx + &#34; &#34; * dd
     else:
-        parsed2 = buff
+        stry = strx
 
-    # Recursively process
-    #print(&#34;GLOBAL&#34;)
-    try:
-        parsed3 = _parse_one(parsed2, context,  wsgi_global.global_table, _regex)
-    except:
-        wsgi_util.put_exception(&#34;exception in global parser&#34;, )
-        parsed3 = buff
+    return stry
 
-    return parsed3
+# ------------------------------------------------------------------------
+
+def strtrim(strx, trim = 18):
+
+    &#39;&#39;&#39; trim string ; adapt to bytes type &#39;&#39;&#39;
+
+    if type(strx) == str:
+        padd = &#34; ... &#34;
+    else:
+        padd = b&#34; ... &#34;
+
+    if len(strx) &gt; trim - 3:
+        hhh = trim // 2
+        stry = strx[:hhh] + padd + strx[-hhh:]
+    else:
+        stry = strx
+    return stry
+
+def strupt(strx, trim = 24):
+
+    &#39;&#39;&#39; Unescape, pad and trim string &#39;&#39;&#39;
+
+    strx2 = strunesc(strx)
+    strx2 = strtrim(strx2, trim)
+    return strx2
+
+def strunesc(strx):
+    &#39;&#39;&#39; expand new lines etc ... to \\n &#39;&#39;&#39;
+    ret = &#34;&#39;&#34;
+    for aa in strx:
+        if aa == &#34;\r&#34;:
+            ret += &#34;\\r&#34;
+        elif aa == &#34;\n&#34;:
+            ret += &#34;\\n&#34;
+        else:
+            ret += aa
+    ret += &#34;&#39;&#34;
+    return ret
 
 # EOF</code></pre>
 </details>
@@ -182,85 +99,93 @@ def recursive_parse(buff, context, local_table):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="wsgi_parse.parse_buffer"><code class="name flex">
-<span>def <span class="ident">parse_buffer</span></span>(<span>buff, regex, context, table)</span>
+<dt id="wsgi_str.strpad"><code class="name flex">
+<span>def <span class="ident">strpad</span></span>(<span>strx, pad=18)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>pad string</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def parse_buffer(buff, regex, context, table):
+<pre><code class="python">def strpad(strx, pad = 18):
 
-    count = 0; prog = 0
-    rrr = re.compile(regex)
-    arr = []
-    while(True):
-        frag = re.search(rrr, buff[prog:])
-        if not frag:
-            arr.append(buff[prog:])
-            break
-        #print (&#34;match&#34;, frag)
-        bbb = prog+frag.start()
-        eee = prog+frag.end()
-        arr.append(buff[prog:bbb])
-        #print(&#34;match&#34;, buff[bbb:eee])
-        conv = _parse_items(buff[bbb:eee], context, table)
-        arr.append(conv)
-        prog += frag.end()
-        count += 1
+    &#39;&#39;&#39; pad string &#39;&#39;&#39;
 
-    #print(&#34;parsed&#34;, count)
-    #print (&#34;arr&#34;, arr)
-    return arr, count</code></pre>
+    if len(strx) &lt; pad:
+        dd =  pad - len(strx)
+        stry = strx + &#34; &#34; * dd
+    else:
+        stry = strx
+
+    return stry</code></pre>
 </details>
 </dd>
-<dt id="wsgi_parse.recursive_parse"><code class="name flex">
-<span>def <span class="ident">recursive_parse</span></span>(<span>buff, context, local_table)</span>
+<dt id="wsgi_str.strtrim"><code class="name flex">
+<span>def <span class="ident">strtrim</span></span>(<span>strx, trim=18)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>trim string ; adapt to bytes type</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def recursive_parse(buff, context, local_table):
+<pre><code class="python">def strtrim(strx, trim = 18):
 
-    #if Config.pgdebug &gt; 3:
-    #    print(&#34;recursive_parse() buff:&#34;, wsgi_util.unescape(buff[:12]))
+    &#39;&#39;&#39; trim string ; adapt to bytes type &#39;&#39;&#39;
 
-    #if local_table:
-    #    wsgi_util.dump_table(&#34;Local Table:&#34;, local_table)
-
-    #if global_table:
-    #wsgi_util.dump_table(&#34;Global Table:&#34;, wsgi_global.global_table)
-
-    parsed2 = &#34;&#34;
-
-    # Do local table first, so it overrides global
-    if local_table:
-        #if Config.verbose:
-        #    print(&#34;local_table len: &#34;, len(local_table))
-
-        #print(&#34;LOCAL&#34;)
-        try:
-            parsed2 = _parse_one(buff, context,  local_table, _regex)
-        except:
-            wsgi_util.put_exception(&#34;exception in local parser&#34;, )
-            parsed2 = buff
+    if type(strx) == str:
+        padd = &#34; ... &#34;
     else:
-        parsed2 = buff
+        padd = b&#34; ... &#34;
 
-    # Recursively process
-    #print(&#34;GLOBAL&#34;)
-    try:
-        parsed3 = _parse_one(parsed2, context,  wsgi_global.global_table, _regex)
-    except:
-        wsgi_util.put_exception(&#34;exception in global parser&#34;, )
-        parsed3 = buff
+    if len(strx) &gt; trim - 3:
+        hhh = trim // 2
+        stry = strx[:hhh] + padd + strx[-hhh:]
+    else:
+        stry = strx
+    return stry</code></pre>
+</details>
+</dd>
+<dt id="wsgi_str.strunesc"><code class="name flex">
+<span>def <span class="ident">strunesc</span></span>(<span>strx)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>expand new lines etc &hellip; to \n</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def strunesc(strx):
+    &#39;&#39;&#39; expand new lines etc ... to \\n &#39;&#39;&#39;
+    ret = &#34;&#39;&#34;
+    for aa in strx:
+        if aa == &#34;\r&#34;:
+            ret += &#34;\\r&#34;
+        elif aa == &#34;\n&#34;:
+            ret += &#34;\\n&#34;
+        else:
+            ret += aa
+    ret += &#34;&#39;&#34;
+    return ret</code></pre>
+</details>
+</dd>
+<dt id="wsgi_str.strupt"><code class="name flex">
+<span>def <span class="ident">strupt</span></span>(<span>strx, trim=24)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Unescape, pad and trim string</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def strupt(strx, trim = 24):
 
-    return parsed3</code></pre>
+    &#39;&#39;&#39; Unescape, pad and trim string &#39;&#39;&#39;
+
+    strx2 = strunesc(strx)
+    strx2 = strtrim(strx2, trim)
+    return strx2</code></pre>
 </details>
 </dd>
 </dl>
@@ -276,8 +201,10 @@ def recursive_parse(buff, context, local_table):
 <ul id="index">
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="wsgi_parse.parse_buffer" href="#wsgi_parse.parse_buffer">parse_buffer</a></code></li>
-<li><code><a title="wsgi_parse.recursive_parse" href="#wsgi_parse.recursive_parse">recursive_parse</a></code></li>
+<li><code><a title="wsgi_str.strpad" href="#wsgi_str.strpad">strpad</a></code></li>
+<li><code><a title="wsgi_str.strtrim" href="#wsgi_str.strtrim">strtrim</a></code></li>
+<li><code><a title="wsgi_str.strunesc" href="#wsgi_str.strunesc">strunesc</a></code></li>
+<li><code><a title="wsgi_str.strupt" href="#wsgi_str.strupt">strupt</a></code></li>
 </ul>
 </li>
 </ul>

@@ -6,4 +6,5 @@ rm -f content/data/*.log
 # Remove generated docs
 rm -rf html
 rm -rf latex
+rm -f content/tmp/*
 

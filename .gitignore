@@ -5,7 +5,7 @@ __pycache__/
 *.pydb
 *.pidx
 # Pass related
-#passgen.py
+passgen.py
 modulus.py
 
 # C extensions

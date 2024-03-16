@@ -19,10 +19,11 @@ endif
 
 git:
 	rm -f test/*
+	make clean
 	git add .
 	git commit -m "$(AUTOCHECK)"
 	git push
-	git push local
+	#git push local
 
 run:
 	./mock_server.py
@@ -42,15 +43,4 @@ clean:
 md5:
 	echo doing md5
 
-
-
-
-
-
-
-
-
-
-
-
-
+# EOF
